@@ -103,12 +103,4 @@ npm run deploy   # Deploy to GitHub Pages
 
 This portfolio is for **personal and professional showcasing**.
 Do not reuse projects or designs without permission.
-- [2025-05-10T17:09:16] style: enhance README formatting and badge definitions
-- [2025-07-24T13:14:15] style: enhance README formatting and badge definitions
-- [2025-09-09T20:27:00] docs(readme): improve documentation notes and usage guidelines
-- [2025-10-22T10:58:53] docs(readme): improve documentation notes and usage guidelines
-- [2025-10-28T22:48:17] style: enhance README formatting and badge definitions
-- [2025-12-05T21:23:17] docs(readme): improve documentation notes and usage guidelines
-- [2025-12-14T09:26:54] docs(readme): improve documentation notes and usage guidelines
-- [2026-03-06T09:12:14] docs(readme): improve documentation notes and usage guidelines
-- [2026-07-07T16:32:13] docs(readme): improve documentation notes and usage guidelines
+<!-- [2024-09-17T18:27:26] style: improve formatting and badge alignment -->
