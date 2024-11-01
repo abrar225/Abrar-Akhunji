@@ -104,3 +104,4 @@ npm run deploy   # Deploy to GitHub Pages
 This portfolio is for **personal and professional showcasing**.
 Do not reuse projects or designs without permission.
 <!-- [2024-09-17T18:27:26] style: improve formatting and badge alignment -->
+<!-- [2024-11-01T15:23:59] style: improve formatting and badge alignment -->
