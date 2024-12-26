@@ -1,15 +1,1 @@
-- [2025-02-11T21:59:14] docs(changelog): update release notes and revision log
-- [2025-02-26T13:31:16] fix: resolve minor edge cases in configuration parsing
-- [2025-02-26T20:37:52] fix: resolve minor edge cases in configuration parsing
-- [2025-03-31T12:26:34] docs(changelog): update release notes and revision log
-- [2025-05-28T14:53:36] docs(changelog): update release notes and revision log
-- [2025-07-28T13:02:02] fix: resolve minor edge cases in configuration parsing
-- [2025-07-30T21:31:01] fix: resolve minor edge cases in configuration parsing
-- [2025-09-02T20:59:35] fix: resolve minor edge cases in configuration parsing
-- [2025-12-02T10:25:03] fix: resolve minor edge cases in configuration parsing
-- [2025-12-02T15:51:05] fix: resolve minor edge cases in configuration parsing
-- [2026-01-31T19:17:08] docs(changelog): update release notes and revision log
-- [2026-03-16T15:40:58] fix: resolve minor edge cases in configuration parsing
-- [2026-04-09T21:52:20] fix: resolve minor edge cases in configuration parsing
-- [2026-05-30T12:12:13] fix: resolve minor edge cases in configuration parsing
-- [2026-06-03T11:25:29] fix: resolve minor edge cases in configuration parsing
+<!-- [2024-12-26T09:51:11] fix: minor edge case handling in config parser -->
