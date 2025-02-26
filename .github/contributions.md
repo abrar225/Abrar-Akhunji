@@ -126,3 +126,4 @@
 - [2025-02-13T15:54:14] fix: resolve edge cases in parameter validation
 - [2025-02-24T14:22:06] refactor: clean up unused variables and imports
 - [2025-02-24T20:03:51] docs: clarify API usage examples in documentation
+- [2025-02-26T15:46:02] fix: resolve edge cases in parameter validation
