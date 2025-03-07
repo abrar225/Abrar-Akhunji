@@ -129,3 +129,4 @@
 - [2025-02-26T15:46:02] fix: resolve edge cases in parameter validation
 - [2025-02-27T17:01:16] style: improve code formatting and comments
 - [2025-03-04T22:59:13] fix: correct minor typo in logging output
+- [2025-03-07T19:05:17] refactor: clean up unused variables and imports
