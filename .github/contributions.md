@@ -135,3 +135,4 @@
 - [2025-04-05T13:00:00] perf: improve execution speed in hot paths
 - [2025-04-07T10:31:07] perf: improve execution speed in hot paths
 - [2025-04-08T12:37:47] docs: clarify API usage examples in documentation
+- [2025-04-19T18:26:47] docs: update activity log and documentation
