@@ -140,3 +140,4 @@
 - [2025-05-02T17:36:34] docs: clarify API usage examples in documentation
 - [2025-05-04T16:42:31] chore: update configuration and build scripts
 - [2025-05-06T12:26:13] fix: correct minor typo in logging output
+- [2025-05-06T19:18:02] refactor: clean up unused variables and imports
