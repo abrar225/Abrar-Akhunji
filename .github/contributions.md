@@ -139,3 +139,4 @@
 - [2025-04-21T11:46:28] fix: resolve edge cases in parameter validation
 - [2025-05-02T17:36:34] docs: clarify API usage examples in documentation
 - [2025-05-04T16:42:31] chore: update configuration and build scripts
+- [2025-05-06T12:26:13] fix: correct minor typo in logging output
