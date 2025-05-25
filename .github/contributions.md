@@ -144,3 +144,4 @@
 - [2025-05-07T11:18:35] docs: update activity log and documentation
 - [2025-05-08T18:16:38] fix: correct minor typo in logging output
 - [2025-05-16T15:00:57] docs: update activity log and documentation
+- [2025-05-25T11:25:42] chore: update configuration and build scripts
