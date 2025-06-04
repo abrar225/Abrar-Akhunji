@@ -147,3 +147,4 @@
 - [2025-05-25T11:25:42] chore: update configuration and build scripts
 - [2025-05-25T21:00:12] chore: update dependencies and environment config
 - [2025-05-30T20:22:04] chore: update dependencies and environment config
+- [2025-06-04T18:44:46] chore: update configuration and build scripts
