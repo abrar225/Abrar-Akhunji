@@ -152,3 +152,4 @@
 - [2025-06-14T12:23:27] feat: add utility methods for state management
 - [2025-06-14T22:47:19] fix: correct minor typo in logging output
 - [2025-06-24T16:37:42] chore: update dependencies and environment config
+- [2025-06-26T20:33:11] feat: add utility methods for state management
