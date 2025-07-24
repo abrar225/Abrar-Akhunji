@@ -104,3 +104,4 @@ npm run deploy   # Deploy to GitHub Pages
 This portfolio is for **personal and professional showcasing**.
 Do not reuse projects or designs without permission.
 - [2025-05-10T17:09:16] style: enhance README formatting and badge definitions
+- [2025-07-24T13:14:15] style: enhance README formatting and badge definitions
