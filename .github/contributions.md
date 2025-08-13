@@ -1,1 +1,2 @@
 - [2025-08-11T14:33:25] chore: update dependencies and environment config
+- [2025-08-13T12:52:28] refactor: optimize internal helper functions
