@@ -1,3 +1,4 @@
 - [2025-08-11T14:33:25] chore: update dependencies and environment config
 - [2025-08-13T12:52:28] refactor: optimize internal helper functions
 - [2025-08-25T10:17:17] chore: update dependencies and environment config
+- [2025-08-25T18:39:05] fix: correct minor typo in logging output
