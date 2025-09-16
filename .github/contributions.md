@@ -6,3 +6,4 @@
 - [2025-09-06T15:42:12] docs: update activity log and documentation
 - [2025-09-08T11:36:37] perf: improve execution speed in hot paths
 - [2025-09-10T12:09:12] feat: add utility methods for state management
+- [2025-09-16T16:14:02] docs: clarify API usage examples in documentation
