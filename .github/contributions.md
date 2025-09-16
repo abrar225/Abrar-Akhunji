@@ -7,3 +7,4 @@
 - [2025-09-08T11:36:37] perf: improve execution speed in hot paths
 - [2025-09-10T12:09:12] feat: add utility methods for state management
 - [2025-09-16T16:14:02] docs: clarify API usage examples in documentation
+- [2025-09-16T18:26:00] perf: improve execution speed in hot paths
