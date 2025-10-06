@@ -14,3 +14,4 @@
 - [2025-09-23T09:23:43] docs: update activity log and documentation
 - [2025-09-24T19:21:14] chore: update dependencies and environment config
 - [2025-09-29T12:07:07] test: expand test coverage for utility modules
+- [2025-10-06T15:15:25] fix: resolve edge cases in parameter validation
