@@ -20,3 +20,4 @@
 - [2025-10-11T11:48:51] perf: improve execution speed in hot paths
 - [2025-10-11T14:23:33] refactor: optimize internal helper functions
 - [2025-10-21T21:35:28] chore: update dependencies and environment config
+- [2025-10-28T15:17:46] style: improve code formatting and comments
