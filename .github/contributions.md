@@ -26,3 +26,4 @@
 - [2025-11-03T15:17:35] docs: update activity log and documentation
 - [2025-11-04T17:42:45] chore: update dependencies and environment config
 - [2025-11-04T19:21:09] fix: correct minor typo in logging output
+- [2025-11-07T16:26:04] fix: resolve edge cases in parameter validation
