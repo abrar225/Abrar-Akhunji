@@ -28,3 +28,4 @@
 - [2025-11-04T19:21:09] fix: correct minor typo in logging output
 - [2025-11-07T16:26:04] fix: resolve edge cases in parameter validation
 - [2025-11-13T11:40:39] fix: resolve edge cases in parameter validation
+- [2025-11-13T12:01:23] test: expand test coverage for utility modules
