@@ -34,3 +34,4 @@
 - [2025-11-28T19:07:17] docs: update activity log and documentation
 - [2025-11-28T19:13:24] docs: update activity log and documentation
 - [2025-12-03T11:30:28] fix: resolve edge cases in parameter validation
+- [2025-12-08T14:37:51] test: expand test coverage for utility modules
