@@ -38,3 +38,4 @@
 - [2025-12-08T21:55:58] docs: update activity log and documentation
 - [2025-12-12T15:55:20] fix: correct minor typo in logging output
 - [2025-12-16T14:55:11] fix: correct minor typo in logging output
+- [2025-12-16T22:41:10] fix: resolve edge cases in parameter validation
