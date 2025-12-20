@@ -42,3 +42,4 @@
 - [2025-12-19T09:12:13] refactor: optimize internal helper functions
 - [2025-12-20T14:08:23] fix: correct minor typo in logging output
 - [2025-12-20T17:07:01] test: expand test coverage for utility modules
+- [2025-12-20T18:02:24] chore: update configuration and build scripts
