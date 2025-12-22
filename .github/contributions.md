@@ -44,3 +44,4 @@
 - [2025-12-20T17:07:01] test: expand test coverage for utility modules
 - [2025-12-20T18:02:24] chore: update configuration and build scripts
 - [2025-12-21T15:52:52] docs: clarify API usage examples in documentation
+- [2025-12-22T15:44:14] feat: add utility methods for state management
