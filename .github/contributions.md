@@ -46,3 +46,4 @@
 - [2025-12-21T15:52:52] docs: clarify API usage examples in documentation
 - [2025-12-22T15:44:14] feat: add utility methods for state management
 - [2025-12-22T16:46:17] perf: improve execution speed in hot paths
+- [2025-12-23T17:08:13] docs: clarify API usage examples in documentation
