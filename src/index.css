@@ -1,1 +1,53 @@
 @import "tailwindcss";
+
+@theme {
+    --color-background-dark: #030303;
+    --color-foreground-dark: #ffffff;
+    --color-background-light: #f8f9fa;
+    --color-foreground-light: #1a1a1a;
+    --color-accent: #8b5cf6;
+    --color-accent-hover: #7c3aed;
+}
+
+:root {
+    --background: var(--color-background-dark);
+    --foreground: var(--color-foreground-dark);
+    --accent: var(--color-accent);
+}
+
+.light {
+    --background: var(--color-background-light);
+    --foreground: var(--color-foreground-light);
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background);
+    color: var(--foreground);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+html.lenis,
+html.lenis body {
+    height: auto;
+}
+
+.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+    overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+    pointer-events: none;
+}
