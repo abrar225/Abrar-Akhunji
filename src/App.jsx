@@ -209,8 +209,9 @@ const SectionWrapper = ({ children, className = "", delay = 0 }) => {
 
   useEffect(() => {
     const el = elementRef.current;
+    if (!el) return;
 
-    gsap.fromTo(el,
+    const animation = gsap.fromTo(el,
       {
         opacity: 0,
         y: 40,
@@ -230,6 +231,13 @@ const SectionWrapper = ({ children, className = "", delay = 0 }) => {
         }
       }
     );
+
+    return () => {
+      if (animation.scrollTrigger) {
+        animation.scrollTrigger.kill();
+      }
+      animation.kill();
+    };
   }, [delay]);
 
   return (
