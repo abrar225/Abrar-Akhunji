@@ -41,27 +41,108 @@ import Lenis from 'lenis';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Replaced local import with a placeholder URL for the environment
+// ============================================
+// 🔑 SECURE API CONFIGURATION
+// ============================================
+// On GitHub Pages, we inject this via GitHub Secrets during build
+const OPENROUTER_API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY;
+const OPENROUTER_MODEL = "liquid/lfm-2.5-1.2b-instruct:free";
 
-// --- Gemini API Integration ---
-const apiKey = "AIzaSyDuTixRZDgYqkCkJReZTy_WvBbToUKzrtw"; // API Key provided by environment
+// ============================================
+// 📚 KNOWLEDGE BASE - Predefined Answers
+// ============================================
+const KNOWLEDGE_BASE = {
+  // Quick Questions with Predefined Answers
+  "what are abrar's main skills?": {
+    answer: "Abrar specializes in AI/ML and Full-Stack Development. His core skills include Python, Django, Flask, OpenCV, Pandas, NumPy for AI/ML work, and JavaScript, React for web development. He's also proficient with Git, GitHub, Android Studio, and has experience with Kali Linux for cybersecurity tasks.",
+    tags: ["skills", "technical"]
+  },
 
+  "tell me about his projects": {
+    answer: "Abrar has built impressive projects including: 1) Library Management System (Django, MySQL) - a full-stack solution for inventory and payments, 2) Cattle Breed Identification System - AI model recognizing 41 Indian cattle breeds using Vision Transformers, 3) Brain Tumor Detection - MRI-based detection using Computer Vision, 4) Real vs AI Image Detector - deep learning system to identify AI-generated images, and 5) Kid's Space Android App - educational app for children.",
+    tags: ["projects", "portfolio"]
+  },
+
+  "what's his educational background?": {
+    answer: "Abrar is currently pursuing a Bachelor of Engineering in Information Technology (2023-Present) at Kalol Institute of Technology & Research Center. He previously completed his Diploma in Information Technology (2020-2023) from Government Polytechnic, Himmatnagar with a strong foundation in programming and software development.",
+    tags: ["education", "background"]
+  },
+
+  "what technologies does he work with?": {
+    answer: "Abrar works with a diverse tech stack: Python (Django, Flask), JavaScript, Java, PHP for programming; OpenCV, TensorFlow/PyTorch, NumPy, Pandas for AI/ML; MySQL for databases; HTML, CSS, React for frontend; Git/GitHub for version control; and Android Studio for mobile development. He's experienced with both backend systems and modern web frameworks.",
+    tags: ["technologies", "stack"]
+  },
+
+  "does he have any certifications?": {
+    answer: "Yes! Abrar holds the Google Cybersecurity Professional Certificate and was a participant in Smart India Hackathon 2022. He's also completed various AI/ML workshops including AI/ML Basics Workshop. He continuously upskills through certifications and hands-on projects.",
+    tags: ["certifications", "achievements"]
+  },
+
+  // Additional Common Questions
+  "contact": {
+    answer: "You can reach Abrar at moabrarakhunji@gmail.com. He's based in Gujarat, India and is actively looking for opportunities in AI/ML and Full-Stack Development roles.",
+    tags: ["contact", "email"]
+  },
+
+  "experience": {
+    answer: "Abrar is currently working as a Full-Stack Python Intern at BrainyBeam (Jan 2026 - Present), focusing on advanced Django and Python development. Previously, he worked as a Python Django Intern (July 2025) and Web Developer & Designer Intern (Jun-Aug 2024), gaining hands-on experience in backend architecture, REST APIs, and responsive UI design.",
+    tags: ["experience", "work"]
+  },
+
+  "location": {
+    answer: "Abrar is based in Gujarat, India (PIN: 383001). He's open to remote opportunities and relocation for the right role.",
+    tags: ["location", "india"]
+  }
+};
+
+// Portfolio context for AI
 const PORTFOLIO_CONTEXT = `
 You are an AI Assistant for Abrar Akhunji's portfolio website.
 Key Information:
 - Name: Abrar Akhunji
 - Tagline: "I constantly try to improve."
+- Current Role: Full-Stack Python Intern at BrainyBeam (Jan 2026 - Present)
 - Education: 
   1. B.E. in Information Technology (2023-Present) at Kalol Institute of Technology & Research Center.
   2. Diploma in IT (2020-2023) at Government Polytechnic, Himmatnagar.
 - Skills: 
-  - AI/ML: Numpy, Pandas, OpenCV, Basic Model Training, Data Preprocessing.
-  - Languages: Python, Java, PHP, JavaScript.
-  - Web: Django, Flask, HTML, CSS.
-  - Tools: Git, GitHub, Android Studio, VSCode, Kali Linux.
-- Projects: Lyra Music AI, CivicEye, TerraFlow, NeuroVision.
-- Certifications: Google Cybersecurity Professional, Smart India Hackathon 2022.
+  - AI/ML: NumPy, Pandas, OpenCV, TensorFlow/PyTorch, Vision Transformers, Model Training, Data Preprocessing
+  - Languages: Python, Java, PHP, JavaScript
+  - Web: Django, Flask, React, HTML, CSS, REST APIs
+  - Tools: Git, GitHub, Android Studio, VSCode, Kali Linux, MySQL
+- Projects: 
+  1. Library Management System (Django, MySQL)
+  2. Cattle Breed Identification (Vision Transformers, 41 breeds)
+  3. Brain Tumor Detection (MRI, Computer Vision)
+  4. Real vs AI Image Detector (Deep Learning)
+  5. Kid's Space Android App
+- Certifications: Google Cybersecurity Professional, Smart India Hackathon 2022, AI/ML Workshops
+- Contact: moabrarakhunji@gmail.com
+- Location: Gujarat, India
 `;
+
+// ============================================
+// 🤖 SMART ANSWER FUNCTION
+// ============================================
+const getSmartAnswer = (question) => {
+  const normalizedQuestion = question.toLowerCase().trim();
+
+  // Check for exact matches in knowledge base
+  if (KNOWLEDGE_BASE[normalizedQuestion]) {
+    return { answer: KNOWLEDGE_BASE[normalizedQuestion].answer, source: 'knowledge_base' };
+  }
+
+  // Check for keyword matches
+  for (const [key, value] of Object.entries(KNOWLEDGE_BASE)) {
+    if (normalizedQuestion.includes(key) ||
+      value.tags.some(tag => normalizedQuestion.includes(tag))) {
+      return { answer: value.answer, source: 'knowledge_base' };
+    }
+  }
+
+  // If no match found, return null (will use Gemini API)
+  return null;
+};
 
 // --- Theme Toggle Component ---
 const ThemeToggle = ({ theme, toggleTheme }) => (
@@ -255,7 +336,74 @@ const ChatBot = ({ theme }) => {
   ]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [messageLimit, setMessageLimit] = useState({ count: 0, resetTime: null });
+  const [showQuickQuestions, setShowQuickQuestions] = useState(true);
   const messagesEndRef = useRef(null);
+
+  const MESSAGE_LIMIT = 10; // Rate limit: 10 messages per 24 hours
+  const LIMIT_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+  // Message limit management with 24-hour reset
+  const initializeMessageLimit = () => {
+    try {
+      const stored = localStorage.getItem('chatbot_message_limit');
+      if (stored) {
+        const data = JSON.parse(stored);
+        const now = Date.now();
+
+        // Check if 24 hours have passed
+        if (now >= data.resetTime) {
+          // Reset the limit
+          const newData = { count: 0, resetTime: now + LIMIT_DURATION };
+          localStorage.setItem('chatbot_message_limit', JSON.stringify(newData));
+          return newData;
+        }
+        return data;
+      } else {
+        // First time - initialize
+        const newData = { count: 0, resetTime: Date.now() + LIMIT_DURATION };
+        localStorage.setItem('chatbot_message_limit', JSON.stringify(newData));
+        return newData;
+      }
+    } catch (error) {
+      // Fallback if localStorage is not available
+      return { count: 0, resetTime: Date.now() + LIMIT_DURATION };
+    }
+  };
+
+  const incrementMessageCount = () => {
+    try {
+      const current = initializeMessageLimit();
+      current.count += 1;
+      localStorage.setItem('chatbot_message_limit', JSON.stringify(current));
+      setMessageLimit(current);
+      return current.count;
+    } catch (error) {
+      return 0;
+    }
+  };
+
+  const getRemainingMessages = () => {
+    const current = messageLimit.count > 0 ? messageLimit : initializeMessageLimit();
+    return MESSAGE_LIMIT - current.count;
+  };
+
+  const getTimeUntilReset = () => {
+    const current = messageLimit.resetTime ? messageLimit : initializeMessageLimit();
+    const remaining = current.resetTime - Date.now();
+    const hours = Math.floor(remaining / (60 * 60 * 1000));
+    const minutes = Math.floor((remaining % (60 * 60 * 1000)) / (60 * 1000));
+    return { hours, minutes, milliseconds: remaining };
+  };
+
+  // Quick question suggestions
+  const quickQuestions = [
+    "What are Abrar's main skills?",
+    "Tell me about his projects",
+    "What's his educational background?",
+    "What technologies does he work with?",
+    "Does he have any certifications?"
+  ];
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -265,28 +413,149 @@ const ChatBot = ({ theme }) => {
     scrollToBottom();
   }, [messages, isOpen]);
 
-  const handleSendMessage = async () => {
-    if (!inputValue.trim()) return;
+  // Initialize message limit when chatbot opens
+  useEffect(() => {
+    if (isOpen) {
+      const limit = initializeMessageLimit();
+      setMessageLimit(limit);
+    }
+  }, [isOpen]);
 
-    const userMessage = { role: 'user', text: inputValue };
+  const handleQuickQuestion = (question) => {
+    setInputValue(question);
+    setShowQuickQuestions(false);
+    handleSendMessage(question);
+  };
+
+  const handleSendMessage = async (quickQuestion = null) => {
+    const messageText = quickQuestion || inputValue.trim();
+    if (!messageText) return;
+
+    // Check 24-hour limit
+    const currentLimit = initializeMessageLimit();
+    if (currentLimit.count >= MESSAGE_LIMIT) {
+      const timeLeft = getTimeUntilReset();
+      setMessages(prev => [...prev, {
+        role: 'ai',
+        text: `You've reached the daily limit of ${MESSAGE_LIMIT} messages. Limit resets in ${timeLeft.hours}h ${timeLeft.minutes}m. 🔄`
+      }]);
+      return;
+    }
+
+    const userMessage = { role: 'user', text: messageText };
     setMessages(prev => [...prev, userMessage]);
     setInputValue("");
     setIsLoading(true);
+    setShowQuickQuestions(false);
+
+    // Increment the count in localStorage
+    incrementMessageCount();
 
     try {
-      const prompt = `System Context: ${PORTFOLIO_CONTEXT}\nUser Question: ${userMessage.text}\nAnswer:`;
+      // 🔍 STEP 1: Check Knowledge Base First
+      const knowledgeBaseAnswer = getSmartAnswer(messageText);
 
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-      });
+      if (knowledgeBaseAnswer) {
+        // Answer found in knowledge base - instant response!
+        await new Promise(resolve => setTimeout(resolve, 500)); // Simulate thinking
+        setMessages(prev => [...prev, {
+          role: 'ai',
+          text: knowledgeBaseAnswer.answer + " 💡"
+        }]);
+        setIsLoading(false);
+        return;
+      }
+
+      // 🤖 STEP 2: Use OpenRouter API for out-of-the-box questions
+
+      // Check if API key is configured
+      if (!OPENROUTER_API_KEY || OPENROUTER_API_KEY === "YOUR_API_KEY_HERE") {
+        setMessages(prev => [...prev, {
+          role: 'ai',
+          text: "⚠️ API key not configured. I can only answer predefined questions right now. Try asking about Abrar's skills, projects, education, or experience!"
+        }]);
+        setIsLoading(false);
+        return;
+      }
+
+      // Call OpenRouter API with Liquid Model
+      const systemPrompt = `You are Abrar Akhunji's personal AI assistant on his portfolio website.
+
+Context about Abrar:
+${PORTFOLIO_CONTEXT}
+
+IMPORTANT INSTRUCTIONS:
+- Keep responses concise (2-3 sentences max)
+- Be friendly and professional
+- Focus on Abrar's skills, projects, and experience
+- If asked about contact, mention: moabrarakhunji@gmail.com
+- If asked about location: Gujarat, India
+- Highlight his expertise in AI/ML and Full-Stack Development
+- Mention he's currently working as a Full-Stack Python Intern at BrainyBeam`;
+
+      const response = await fetch(
+        'https://openrouter.ai/api/v1/chat/completions',
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+            'Content-Type': 'application/json',
+            'HTTP-Referer': window.location.origin,
+            'X-Title': 'Abrar Portfolio Chatbot'
+          },
+          body: JSON.stringify({
+            model: OPENROUTER_MODEL,
+            messages: [
+              {
+                role: 'system',
+                content: systemPrompt
+              },
+              {
+                role: 'user',
+                content: messageText
+              }
+            ],
+            temperature: 0.7,
+            max_tokens: 300
+          })
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status}`);
+      }
 
       const data = await response.json();
-      const aiResponseText = data.candidates?.[0]?.content?.parts?.[0]?.text || "I'm having trouble connecting right now.";
-      setMessages(prev => [...prev, { role: 'ai', text: aiResponseText }]);
+
+      if (data.error) {
+        throw new Error(data.error.message || 'API Error');
+      }
+
+      const aiResponseText = data.choices?.[0]?.message?.content;
+
+      if (aiResponseText) {
+        setMessages(prev => [...prev, { role: 'ai', text: aiResponseText + " 🤖" }]);
+      } else {
+        throw new Error("No response from AI");
+      }
+
     } catch (error) {
-      setMessages(prev => [...prev, { role: 'ai', text: "Sorry, error connecting to AI." }]);
+      console.error('AI Error:', error);
+
+      // Provide helpful error messages
+      let errorMessage = "Sorry, I'm experiencing technical difficulties. ";
+
+      if (error.message.includes('API Error: 400')) {
+        errorMessage += "The API key might be invalid. Please check the configuration. 🔑";
+      } else if (error.message.includes('API Error: 429')) {
+        errorMessage += "Too many requests. Please try again in a moment. ⏳";
+      } else if (error.message.includes('Failed to fetch')) {
+        errorMessage += "Network error. Please check your internet connection. 🌐";
+      } else {
+        errorMessage += "Try asking about Abrar's skills, projects, or experience! 💡";
+      }
+
+      setMessages(prev => [...prev, { role: 'ai', text: errorMessage }]);
     } finally {
       setIsLoading(false);
     }
@@ -294,46 +563,219 @@ const ChatBot = ({ theme }) => {
 
   return (
     <>
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className={`fixed bottom-28 right-6 md:right-12 z-[70] p-4 ${theme === 'dark' ? 'bg-white text-black' : 'bg-black text-white'} rounded-full shadow-2xl hover:scale-110 transition-transform duration-300 flex items-center justify-center group`}
-      >
-        {isOpen ? <X size={24} /> : <Sparkles size={24} className="text-purple-500" />}
-        {!isOpen && (
-          <span className={`absolute right-full mr-4 ${theme === 'dark' ? 'bg-white/10' : 'bg-black/10'} backdrop-blur-md ${theme === 'dark' ? 'text-white' : 'text-black'} text-xs px-3 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-white/10`}>
-            Ask AI about me
-          </span>
-        )}
-      </button>
+      <div className="fixed bottom-24 md:bottom-28 right-6 md:right-10 z-[70]">
+        <AnimatePresence>
+          {!isOpen && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{
+                opacity: [0.3, 0.6, 0.3],
+                scale: [1, 1.2, 1],
+              }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="absolute inset-0 rounded-full bg-purple-500/30 blur-xl -z-10"
+            />
+          )}
+        </AnimatePresence>
 
-      {isOpen && (
-        <div className={`fixed bottom-44 right-6 md:right-12 z-[70] w-[90vw] md:w-[380px] h-[500px] ${theme === 'dark' ? 'bg-black/90' : 'bg-white/95'} backdrop-blur-xl border ${theme === 'dark' ? 'border-white/10' : 'border-black/5'} rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-10 duration-300`}>
-          <div className={`p-4 border-b ${theme === 'dark' ? 'border-white/10 bg-white/5' : 'border-black/5 bg-black/5'} flex items-center gap-3`}>
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 to-pink-500 flex items-center justify-center">
-              <Bot size={18} className="text-white" />
-            </div>
-            <div>
-              <h3 className={`text-sm font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>Abrar's Assistant</h3>
-              <p className="text-[10px] text-green-400 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>Powered by Gemini</p>
-            </div>
-          </div>
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
-            {messages.map((msg, idx) => (
-              <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed ${msg.role === 'user' ? 'bg-purple-600 text-white rounded-tr-sm' : `${theme === 'dark' ? 'bg-white/10 text-gray-200' : 'bg-black/5 text-gray-800'} rounded-tl-sm border ${theme === 'dark' ? 'border-white/5' : 'border-black/5'}`}`}>{msg.text}</div>
+        <motion.button
+          onClick={() => setIsOpen(!isOpen)}
+          whileHover={{ scale: 1.1, y: -2 }}
+          whileTap={{ scale: 0.9 }}
+          className={`p-3.5 md:p-4 ${theme === 'dark' ? 'bg-white text-black' : 'bg-black text-white'} rounded-full shadow-[0_0_20px_rgba(139,92,246,0.3)] flex items-center justify-center group relative overflow-hidden transition-all duration-300`}
+        >
+          {/* Animated Gradient Background */}
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-tr from-purple-500/20 via-transparent to-pink-500/20"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+          />
+
+          <AnimatePresence mode="wait">
+            {isOpen ? (
+              <motion.div
+                key="close"
+                initial={{ rotate: -90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: 90, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="relative z-10"
+              >
+                <X size={20} className="md:w-6 md:h-6" />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="open"
+                initial={{ scale: 0, rotate: 45 }}
+                animate={{ scale: 1, rotate: 0 }}
+                exit={{ scale: 0, rotate: -45 }}
+                transition={{ duration: 0.2 }}
+                className="relative z-10"
+              >
+                <Sparkles size={20} className="md:w-6 md:h-6 text-purple-600" />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Tooltip - Hidden on mobile for better UX */}
+          <AnimatePresence>
+            {!isOpen && (
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileHover={{ opacity: 1, x: 0 }}
+                className={`absolute right-full mr-4 pointer-events-none hidden lg:block`}
+              >
+                <div className={`
+                  ${theme === 'dark' ? 'bg-black/80 border-white/10' : 'bg-white/80 border-black/10'}
+                  backdrop-blur-md text-[10px] font-mono tracking-widest px-4 py-2 rounded-full
+                  opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0
+                  border shadow-2xl flex items-center gap-3 whitespace-nowrap
+                `}>
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
+                  </span>
+                  ASK AI ASSISTANT
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.button>
+      </div>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.95, filter: "blur(10px)" }}
+            animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+            exit={{ opacity: 0, y: 20, scale: 0.95, filter: "blur(10px)" }}
+            transition={{ type: "spring", damping: 25, stiffness: 400 }}
+            className={`fixed bottom-20 md:bottom-28 right-4 md:right-6 z-[70] w-[calc(100vw-2rem)] sm:w-[360px] md:w-[400px] max-w-[min(400px,calc(100vw-2rem))] h-[calc(100vh-10rem)] sm:h-[480px] md:h-[550px] max-h-[min(600px,calc(100vh-8rem))] ${theme === 'dark' ? 'bg-black/90' : 'bg-white/95'} backdrop-blur-xl border ${theme === 'dark' ? 'border-white/10' : 'border-black/5'} rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] flex flex-col overflow-hidden`}
+          >
+            {/* Header */}
+            <div className={`p-4 border-b ${theme === 'dark' ? 'border-white/10 bg-white/5' : 'border-black/5 bg-black/5'} flex items-center justify-between`}>
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 to-pink-500 flex items-center justify-center">
+                  <Bot size={18} className="text-white" />
+                </div>
+                <div>
+                  <h3 className={`text-sm font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>Abrar's Assistant</h3>
+                  <p className="text-[10px] text-purple-400 flex items-center gap-1 uppercase tracking-tighter font-mono">
+                    <span className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse"></span>
+                    POWERED BY FIREHOX
+                  </p>
+                  {/* API Status Indicator */}
+                  <p className={`text-[9px] font-mono mt-0.5 ${OPENROUTER_API_KEY && OPENROUTER_API_KEY !== "YOUR_API_KEY_HERE" ? 'text-green-400' : 'text-orange-400'}`}>
+                    {OPENROUTER_API_KEY && OPENROUTER_API_KEY !== "YOUR_API_KEY_HERE" ? '✓ AI Enabled (Liquid)' : '⚠ KB Mode'}
+                  </p>
+                </div>
               </div>
-            ))}
-            {isLoading && <div className="text-xs text-gray-500 animate-pulse">Thinking...</div>}
-            <div ref={messagesEndRef} />
-          </div>
-          <div className={`p-4 border-t ${theme === 'dark' ? 'border-white/10 bg-black/50' : 'border-black/5 bg-white/50'}`}>
-            <form onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} className="flex gap-2">
-              <input type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Ask about skills..." className={`flex-1 ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white focus:border-purple-500' : 'bg-black/5 border-black/10 text-black focus:border-purple-500'} rounded-xl px-4 py-2 text-sm transition-colors focus:outline-none`} />
-              <button type="submit" disabled={isLoading} className="p-2 bg-purple-600 text-white rounded-xl hover:bg-purple-500 transition-colors"><Send size={18} /></button>
-            </form>
-          </div>
-        </div>
-      )}
+              {/* Close button - visible on all devices */}
+              <button
+                onClick={() => setIsOpen(false)}
+                className={`p-2 rounded-full ${theme === 'dark' ? 'hover:bg-white/10 text-gray-400' : 'hover:bg-black/10 text-gray-600'} transition-colors`}
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Messages */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar" style={{ scrollBehavior: 'smooth' }}>
+              {messages.map((msg, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div className={`max-w-[85%] p-3 rounded-2xl text-sm leading-relaxed ${msg.role === 'user'
+                    ? 'bg-purple-600 text-white rounded-tr-sm'
+                    : `${theme === 'dark' ? 'bg-white/10 text-gray-200' : 'bg-black/5 text-gray-800'} rounded-tl-sm border ${theme === 'dark' ? 'border-white/5' : 'border-black/5'}`
+                    }`}>
+                    {msg.text}
+                  </div>
+                </motion.div>
+              ))}
+
+              {/* Quick Questions - Show only at start */}
+              {showQuickQuestions && messages.length === 1 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="space-y-2"
+                >
+                  <p className={`text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'} font-mono`}>Quick questions:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {quickQuestions.slice(0, window.innerWidth < 640 ? 3 : 5).map((question, idx) => (
+                      <motion.button
+                        key={idx}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => handleQuickQuestion(question)}
+                        className={`text-xs px-3 py-2 rounded-full ${theme === 'dark' ? 'bg-purple-500/20 text-purple-300 hover:bg-purple-500/30' : 'bg-purple-100 text-purple-700 hover:bg-purple-200'} transition-colors border ${theme === 'dark' ? 'border-purple-500/30' : 'border-purple-300'}`}
+                      >
+                        {question}
+                      </motion.button>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+
+              {isLoading && (
+                <div className="flex items-center gap-2 text-xs text-purple-500 animate-pulse font-mono pl-1">
+                  <span className="w-1 h-1 bg-purple-500 rounded-full animate-bounce"></span>
+                  <span className="w-1 h-1 bg-purple-500 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+                  <span className="w-1 h-1 bg-purple-500 rounded-full animate-bounce [animation-delay:-0.5s]"></span>
+                  THINKING...
+                </div>
+              )}
+              <div ref={messagesEndRef} />
+            </div>
+
+            {/* Input Form */}
+            <div className={`p-4 border-t ${theme === 'dark' ? 'border-white/10 bg-black/50' : 'border-black/5 bg-white/50'}`}>
+              {/* Rate Limit Indicator */}
+              <div className="mb-2 flex items-center justify-between">
+                <span className={`text-[10px] font-mono ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>
+                  Messages: {messageLimit.count}/{MESSAGE_LIMIT}
+                </span>
+                {messageLimit.count >= MESSAGE_LIMIT ? (
+                  <span className="text-[10px] text-red-400 font-mono animate-pulse">
+                    Resets in {getTimeUntilReset().hours}h {getTimeUntilReset().minutes}m
+                  </span>
+                ) : getRemainingMessages() <= 2 ? (
+                  <span className="text-[10px] text-orange-400 font-mono">
+                    {getRemainingMessages()} left
+                  </span>
+                ) : null}
+              </div>
+              <form onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} className="flex gap-2">
+                <input
+                  type="text"
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  placeholder={messageLimit.count >= MESSAGE_LIMIT ? "Daily limit reached..." : "Ask about skills..."}
+                  disabled={messageLimit.count >= MESSAGE_LIMIT}
+                  className={`flex-1 ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white focus:border-purple-500' : 'bg-black/5 border-black/10 text-black focus:border-purple-500'} rounded-xl px-4 py-2.5 text-sm transition-colors focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed border`}
+                />
+                <button
+                  type="submit"
+                  disabled={isLoading || !inputValue.trim() || messageLimit.count >= MESSAGE_LIMIT}
+                  className={`p-2.5 bg-purple-600 text-white rounded-xl transition-all ${isLoading || !inputValue.trim() || messageLimit.count >= MESSAGE_LIMIT ? 'opacity-50 cursor-not-allowed' : 'hover:bg-purple-500 active:scale-95'}`}
+                >
+                  <Send size={18} />
+                </button>
+              </form>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };
