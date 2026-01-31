@@ -468,11 +468,11 @@ const ChatBot = ({ theme }) => {
 
       // 🤖 STEP 2: Use OpenRouter API for out-of-the-box questions
 
-      // Check if API key is configured
-      if (!OPENROUTER_API_KEY || OPENROUTER_API_KEY === "YOUR_API_KEY_HERE") {
+      // Check if API key is configured (Injected via GitHub Actions)
+      if (!OPENROUTER_API_KEY || OPENROUTER_API_KEY.includes("YOUR_API_KEY")) {
         setMessages(prev => [...prev, {
           role: 'ai',
-          text: "⚠️ API key not configured. I can only answer predefined questions right now. Try asking about Abrar's skills, projects, education, or experience!"
+          text: "⚠️ API key not detected. Please make sure VITE_OPENROUTER_API_KEY is set in GitHub Secrets and the build has finished! 🚀"
         }]);
         setIsLoading(false);
         return;
@@ -655,7 +655,8 @@ IMPORTANT INSTRUCTIONS:
             animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
             exit={{ opacity: 0, y: 20, scale: 0.95, filter: "blur(10px)" }}
             transition={{ type: "spring", damping: 25, stiffness: 400 }}
-            className={`fixed bottom-20 md:bottom-28 right-4 md:right-6 z-[70] w-[calc(100vw-2rem)] sm:w-[360px] md:w-[400px] max-w-[min(400px,calc(100vw-2rem))] h-[calc(100vh-10rem)] sm:h-[480px] md:h-[550px] max-h-[min(600px,calc(100vh-8rem))] ${theme === 'dark' ? 'bg-black/90' : 'bg-white/95'} backdrop-blur-xl border ${theme === 'dark' ? 'border-white/10' : 'border-black/5'} rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] flex flex-col overflow-hidden`}
+            data-chatbot-container
+            className={`fixed bottom-16 md:bottom-24 right-4 md:right-6 z-[70] w-[calc(100vw-2rem)] sm:w-[350px] md:w-[400px] max-w-[min(400px,calc(100vw-2rem))] h-[calc(100vh-12rem)] sm:h-[480px] md:h-[550px] max-h-[min(600px,calc(100vh-8rem))] ${theme === 'dark' ? 'bg-black/95' : 'bg-white/95'} backdrop-blur-2xl border ${theme === 'dark' ? 'border-white/10' : 'border-black/5'} rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.4)] flex flex-col overflow-hidden`}
           >
             {/* Header */}
             <div className={`p-4 border-b ${theme === 'dark' ? 'border-white/10 bg-white/5' : 'border-black/5 bg-black/5'} flex items-center justify-between`}>
@@ -670,8 +671,8 @@ IMPORTANT INSTRUCTIONS:
                     POWERED BY FIREHOX
                   </p>
                   {/* API Status Indicator */}
-                  <p className={`text-[9px] font-mono mt-0.5 ${OPENROUTER_API_KEY && OPENROUTER_API_KEY !== "YOUR_API_KEY_HERE" ? 'text-green-400' : 'text-orange-400'}`}>
-                    {OPENROUTER_API_KEY && OPENROUTER_API_KEY !== "YOUR_API_KEY_HERE" ? '✓ AI Enabled (Liquid)' : '⚠ KB Mode'}
+                  <p className={`text-[9px] font-mono mt-0.5 ${OPENROUTER_API_KEY ? 'text-green-400' : 'text-orange-400'}`}>
+                    {OPENROUTER_API_KEY ? '✓ AI Enabled (Liquid)' : '⚠ KB Mode'}
                   </p>
                 </div>
               </div>
@@ -685,7 +686,7 @@ IMPORTANT INSTRUCTIONS:
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar" style={{ scrollBehavior: 'smooth' }}>
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar" style={{ scrollBehavior: 'smooth', position: 'relative' }}>
               {messages.map((msg, idx) => (
                 <motion.div
                   key={idx}
