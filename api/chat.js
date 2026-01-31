@@ -52,7 +52,9 @@ export default async function handler(req, res) {
         'http://localhost:5173',
         'http://localhost:3000',
         'https://abrar225.github.io',
-        'https://abrar225.github.io/Abrar-Akhunji'
+        'https://abrar225.github.io/Abrar-Akhunji',
+        'https://abrar-akhunji.vercel.app',
+        'https://abrar-portfolio-secure.vercel.app'
     ];
 
     const origin = req.headers.origin;
