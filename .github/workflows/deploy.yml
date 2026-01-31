@@ -21,7 +21,7 @@ jobs:
           npm install
           npm run build
         env:
-          VITE_OPENROUTER_API_KEY: ${{ secrets.VITE_OPENROUTER_API_KEY }}
+          VITE_API_URL: ${{ secrets.VITE_API_URL }} # Optional: Point to your Vercel backend
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4

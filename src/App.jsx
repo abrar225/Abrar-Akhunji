@@ -42,11 +42,11 @@ import Lenis from 'lenis';
 gsap.registerPlugin(ScrollTrigger);
 
 // ============================================
-// 🔑 SECURE API CONFIGURATION
+// 🔒 SECURE API CONFIGURATION
 // ============================================
-// On GitHub Pages, we inject this via GitHub Secrets during build
-const OPENROUTER_API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY;
-const OPENROUTER_MODEL = "liquid/lfm-2.5-1.2b-instruct:free";
+// The API URL should point to your backend proxy (e.g., Vercel)
+// In development, this uses localhost. In production, it uses VITE_API_URL.
+const API_URL = import.meta.env.VITE_API_URL || '/api/chat';
 
 // ============================================
 // 📚 KNOWLEDGE BASE - Predefined Answers
@@ -466,60 +466,18 @@ const ChatBot = ({ theme }) => {
         return;
       }
 
-      // 🤖 STEP 2: Use OpenRouter API for out-of-the-box questions
+      // 🤖 STEP 2: Use Backend Proxy API for AI questions
+      // This is secure because the API key stays on the server
 
-      // Check if API key is configured (Injected via GitHub Actions)
-      if (!OPENROUTER_API_KEY || OPENROUTER_API_KEY.includes("YOUR_API_KEY")) {
-        setMessages(prev => [...prev, {
-          role: 'ai',
-          text: "⚠️ API key not detected. Please make sure VITE_OPENROUTER_API_KEY is set in GitHub Secrets and the build has finished! 🚀"
-        }]);
-        setIsLoading(false);
-        return;
-      }
-
-      // Call OpenRouter API with Liquid Model
-      const systemPrompt = `You are Abrar Akhunji's personal AI assistant on his portfolio website.
-
-Context about Abrar:
-${PORTFOLIO_CONTEXT}
-
-IMPORTANT INSTRUCTIONS:
-- Keep responses concise (2-3 sentences max)
-- Be friendly and professional
-- Focus on Abrar's skills, projects, and experience
-- If asked about contact, mention: moabrarakhunji@gmail.com
-- If asked about location: Gujarat, India
-- Highlight his expertise in AI/ML and Full-Stack Development
-- Mention he's currently working as a Full-Stack Python Intern at BrainyBeam`;
-
-      const response = await fetch(
-        'https://openrouter.ai/api/v1/chat/completions',
-        {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-            'Content-Type': 'application/json',
-            'HTTP-Referer': window.location.origin,
-            'X-Title': 'Abrar Portfolio Chatbot'
-          },
-          body: JSON.stringify({
-            model: OPENROUTER_MODEL,
-            messages: [
-              {
-                role: 'system',
-                content: systemPrompt
-              },
-              {
-                role: 'user',
-                content: messageText
-              }
-            ],
-            temperature: 0.7,
-            max_tokens: 300
-          })
-        }
-      );
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: messageText
+        })
+      });
 
       if (!response.ok) {
         throw new Error(`API Error: ${response.status}`);
@@ -528,10 +486,10 @@ IMPORTANT INSTRUCTIONS:
       const data = await response.json();
 
       if (data.error) {
-        throw new Error(data.error.message || 'API Error');
+        throw new Error(data.message || data.error);
       }
 
-      const aiResponseText = data.choices?.[0]?.message?.content;
+      const aiResponseText = data.response;
 
       if (aiResponseText) {
         setMessages(prev => [...prev, { role: 'ai', text: aiResponseText + " 🤖" }]);
@@ -670,9 +628,8 @@ IMPORTANT INSTRUCTIONS:
                     <span className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse"></span>
                     POWERED BY FIREHOX
                   </p>
-                  {/* API Status Indicator */}
-                  <p className={`text-[9px] font-mono mt-0.5 ${OPENROUTER_API_KEY ? 'text-green-400' : 'text-orange-400'}`}>
-                    {OPENROUTER_API_KEY ? '✓ AI Enabled (Liquid)' : '⚠ KB Mode'}
+                  <p className={`text-[9px] font-mono mt-0.5 text-green-400`}>
+                    ✓ Secure AI Proxy Enabled
                   </p>
                 </div>
               </div>
