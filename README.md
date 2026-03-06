@@ -110,3 +110,4 @@ Do not reuse projects or designs without permission.
 - [2025-10-28T22:48:17] style: enhance README formatting and badge definitions
 - [2025-12-05T21:23:17] docs(readme): improve documentation notes and usage guidelines
 - [2025-12-14T09:26:54] docs(readme): improve documentation notes and usage guidelines
+- [2026-03-06T09:12:14] docs(readme): improve documentation notes and usage guidelines
