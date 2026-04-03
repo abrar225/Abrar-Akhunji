@@ -64,3 +64,4 @@
 - [2026-03-09T13:07:36] chore: update configuration and build scripts
 - [2026-03-12T14:06:51] perf: improve execution speed in hot paths
 - [2026-03-30T13:00:13] fix: correct minor typo in logging output
+- [2026-04-03T22:02:04] refactor: clean up unused variables and imports
