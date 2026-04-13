@@ -69,3 +69,4 @@
 - [2026-04-05T17:25:36] style: improve code formatting and comments
 - [2026-04-07T09:00:04] fix: correct minor typo in logging output
 - [2026-04-10T16:36:34] docs: clarify API usage examples in documentation
+- [2026-04-13T13:12:59] chore: update configuration and build scripts
