@@ -72,3 +72,4 @@
 - [2026-04-13T13:12:59] chore: update configuration and build scripts
 - [2026-04-13T20:27:31] refactor: optimize internal helper functions
 - [2026-04-17T20:22:07] style: improve code formatting and comments
+- [2026-04-22T15:40:28] docs: clarify API usage examples in documentation
