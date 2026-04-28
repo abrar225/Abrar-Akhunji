@@ -18,6 +18,15 @@ Key Information:
 - Certifications: Google Cybersecurity Professional, Smart India Hackathon 2022.
 `;
 
+const AVAILABLE_MODELS = [
+  { id: "minimax/minimax-m2.5:free", name: "Minimax M2.5 (Fast)" },
+  { id: "google/gemma-3-27b-it:free", name: "Google Gemma 3" },
+  { id: "openai/gpt-oss-120b:free", name: "GPT OSS 120B" },
+  { id: "nvidia/nemotron-nano-9b-v2:free", name: "Nvidia Nemotron" },
+  { id: "liquid/lfm-2.5-1.2b-thinking:free", name: "Liquid LFM Thinking" },
+  { id: "inclusionai/ling-2.6-flash:free", name: "Ling Flash 2.6" }
+];
+
 const ChatBot = ({ theme }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
@@ -25,6 +34,7 @@ const ChatBot = ({ theme }) => {
   ]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedModel, setSelectedModel] = useState(AVAILABLE_MODELS[0].id);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -55,7 +65,7 @@ const ChatBot = ({ theme }) => {
           'X-Title': 'Abrar Akhunji Portfolio', // Optional
         },
         body: JSON.stringify({
-          model: "minimax/minimax-m2.5:free",
+          model: selectedModel,
           messages: [
             { role: "system", content: PORTFOLIO_CONTEXT },
             { role: "user", content: userMessage.text }
@@ -89,14 +99,29 @@ const ChatBot = ({ theme }) => {
 
       {isOpen && (
         <div className={`fixed bottom-44 right-6 md:right-12 z-[70] w-[90vw] md:w-[380px] h-[500px] ${theme === 'dark' ? 'bg-black/90' : 'bg-white/95'} backdrop-blur-xl border ${theme === 'dark' ? 'border-white/10' : 'border-black/5'} rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-10 duration-300`}>
-          <div className={`p-4 border-b ${theme === 'dark' ? 'border-white/10 bg-white/5' : 'border-black/5 bg-black/5'} flex items-center gap-3`}>
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 to-pink-500 flex items-center justify-center">
-              <Bot size={18} className="text-white" />
+          <div className={`p-4 border-b ${theme === 'dark' ? 'border-white/10 bg-white/5' : 'border-black/5 bg-black/5'} flex items-center justify-between`}>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 to-pink-500 flex items-center justify-center">
+                <Bot size={18} className="text-white" />
+              </div>
+              <div>
+                <h3 className={`text-sm font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>FixO</h3>
+                <p className="text-[10px] text-green-400 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>Powered by Firehox</p>
+              </div>
             </div>
-            <div>
-              <h3 className={`text-sm font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>FixO</h3>
-              <p className="text-[10px] text-green-400 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>Powered by Firehox</p>
-            </div>
+            <select
+              value={selectedModel}
+              onChange={(e) => setSelectedModel(e.target.value)}
+              className={`text-[10px] p-1.5 rounded-lg border focus:outline-none appearance-none cursor-pointer ${
+                theme === 'dark' 
+                  ? 'bg-white/10 border-white/20 text-gray-300 hover:border-purple-500' 
+                  : 'bg-black/5 border-black/10 text-gray-700 hover:border-purple-500'
+              }`}
+            >
+              {AVAILABLE_MODELS.map(model => (
+                <option key={model.id} value={model.id} className="bg-black text-white">{model.name}</option>
+              ))}
+            </select>
           </div>
 
           <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
