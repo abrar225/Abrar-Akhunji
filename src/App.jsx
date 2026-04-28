@@ -41,6 +41,40 @@ export default function App() {
   const heroTextRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+  const [heroStyle, setHeroStyle] = useState('spatial');
+
+  const HERO_STYLES = {
+    cyber: {
+      top: "font-script opacity-40 tracking-widest text-3xl",
+      bottom: "font-script text-white/90 tracking-tight text-5xl",
+      pressure: "font-custom text-purple-500"
+    },
+    minimal: {
+      top: "font-display font-light tracking-[0.2em] text-xl opacity-60",
+      bottom: "font-display font-bold tracking-tighter text-6xl",
+      pressure: ""
+    },
+    chaos: {
+      top: "font-custom text-2xl opacity-50",
+      bottom: "font-custom text-6xl text-purple-400 rotate-1",
+      pressure: "font-custom"
+    },
+    glass: {
+      top: "font-display uppercase tracking-[0.5em] text-sm opacity-30",
+      bottom: "font-display font-black text-7xl text-transparent [-webkit-text-stroke:1px_rgba(255,255,255,0.2)]",
+      pressure: "opacity-80"
+    },
+    serif: {
+      top: "font-serif italic text-2xl opacity-70",
+      bottom: "font-serif italic text-7xl text-purple-300",
+      pressure: "font-serif"
+    },
+    spatial: {
+      top: "font-display text-xl sm:text-2xl md:text-3xl font-light tracking-[0.4em] uppercase text-white/30",
+      bottom: "font-custom text-5xl sm:text-6xl md:text-8xl bg-clip-text text-transparent bg-gradient-to-r from-violet-400 via-fuchsia-400 to-purple-600 drop-shadow-[0_0_30px_rgba(139,92,246,0.3)]",
+      pressure: ""
+    }
+  };
 
   useEffect(() => {
     document.documentElement.className = theme;
@@ -131,6 +165,23 @@ export default function App() {
               <span className={`font-bold tracking-tighter text-xl ${theme === 'dark' ? 'text-white' : 'text-black'}`}>ABRAR<span className="text-purple-500">.</span></span>
             </div>
             <div className="flex items-center gap-4 md:gap-6 pointer-events-auto">
+              {/* STYLE SWITCHER */}
+              <div className="relative group/switcher">
+                <button className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-[10px] font-mono tracking-wider uppercase transition-all ${theme === 'dark' ? 'border-white/10 bg-white/5 text-white/40 hover:text-white' : 'border-black/10 bg-black/5 text-black/40 hover:text-black'}`}>
+                  Style: {heroStyle}
+                </button>
+                <div className={`absolute top-full right-0 mt-2 w-48 rounded-2xl border p-2 opacity-0 translate-y-2 pointer-events-none group-hover/switcher:opacity-100 group-hover/switcher:translate-y-0 group-hover/switcher:pointer-events-auto transition-all duration-300 z-[100] backdrop-blur-3xl ${theme === 'dark' ? 'bg-black/80 border-white/10' : 'bg-white/80 border-black/10'}`}>
+                  {Object.keys(HERO_STYLES).map((style) => (
+                    <button
+                      key={style}
+                      onClick={() => setHeroStyle(style)}
+                      className={`w-full text-left px-4 py-2 rounded-xl text-[10px] font-mono uppercase tracking-widest transition-colors ${heroStyle === style ? 'bg-purple-500 text-white' : (theme === 'dark' ? 'text-white/40 hover:bg-white/5' : 'text-black/40 hover:bg-black/5')}`}
+                    >
+                      {style}
+                    </button>
+                  ))}
+                </div>
+              </div>
               <div className="hidden md:flex items-center gap-6">
                 <a href="https://github.com/abrar225" target="_blank" rel="noopener noreferrer" className={`text-xs font-mono ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'} hover:text-purple-500 transition-colors`}>GH</a>
                 <a href="https://www.linkedin.com/in/abrar-akhunji/" target="_blank" rel="noopener noreferrer" className={`text-xs font-mono ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'} hover:text-purple-500 transition-colors`}>LI</a>
@@ -154,14 +205,14 @@ export default function App() {
                   <span className={`text-[10px] font-mono ${theme === 'dark' ? 'text-purple-300' : 'text-purple-700'} tracking-widest uppercase`}>Open to work</span>
                 </div>
                 <h1 ref={heroTextRef} className={`text-5xl sm:text-6xl md:text-8xl font-bold tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'} leading-[1.1] md:leading-[0.9] flex flex-col items-center overflow-visible`}>
-                  <span className={`font-display inline-block text-xl sm:text-2xl md:text-3xl font-light tracking-[0.4em] uppercase ${theme === 'dark' ? 'text-white/30' : 'text-black/30'}`}>Engineer of</span>
+                  <span className={`inline-block ${HERO_STYLES[heroStyle].top}`}>Engineer of</span>
                   <TextPressure 
                     text="Intelligent" 
                     height="auto"
                     proximity={250}
-                    className="py-2" 
+                    className={`py-2 ${HERO_STYLES[heroStyle].pressure}`}
                   />
-                  <span className="font-custom inline-block text-5xl sm:text-6xl md:text-8xl bg-clip-text text-transparent bg-gradient-to-r from-violet-400 via-fuchsia-400 to-purple-600 drop-shadow-[0_0_30px_rgba(139,92,246,0.3)]">Systems.</span>
+                  <span className={`inline-block ${HERO_STYLES[heroStyle].bottom}`}>Systems.</span>
                 </h1>
                 <p className={`max-w-lg text-base md:text-lg ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'} leading-relaxed pt-4`}>
                   I bridge the gap between <span className={theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}>complex AI models</span> and <span className={theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}>scalable web architectures</span>. Building the next generation of digital products.
