@@ -28,6 +28,7 @@ import FloatingDock from './components/FloatingDock';
 import SectionHeader from './components/SectionHeader';
 import SectionWrapper from './components/SectionWrapper';
 import ProjectCard from './components/ProjectCard';
+import HeroDissolve from './components/HeroDissolve';
 
 // Constants
 import { PROJECTS, EXPERIENCE, SKILLS, EDUCATION, CERTIFICATIONS } from './constants/portfolio';
@@ -70,18 +71,13 @@ export default function App() {
       };
       gsap.ticker.add(updateLenis);
 
-      // 2. Hero Entrance Animation (Revealer Pattern)
-      const heroElements = heroTextRef.current?.querySelectorAll('.revealer-span');
-      if (heroElements && heroElements.length > 0) {
-        gsap.set(heroElements, { y: "110%" });
+      // 2. Hero Animations
+      const heroElements = heroTextRef.current?.children;
+      if (heroElements) {
         const tl = gsap.timeline();
-        tl.to(heroElements, {
-          y: "0%",
-          duration: 2,
-          stagger: 0.2,
-          ease: "power4.inOut",
-          delay: 0.5
-        });
+        tl.fromTo(heroElements[0], { x: -50, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, 0.2)
+          .fromTo(heroElements[2], { x: 50, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, 0.4)
+          .fromTo(heroElements[3], { x: -50, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, 0.6);
       }
 
       // 3. Responsive Scroll
@@ -150,37 +146,8 @@ export default function App() {
           <ChatBot theme={theme} />
 
           <main className="relative z-10">
-            {/* Hero Section */}
-            <section id="home" className="min-h-[90vh] flex flex-col justify-center items-center text-center max-w-5xl mx-auto px-6 pt-32 pb-20 relative z-10">
-              <SectionWrapper className="space-y-6 flex flex-col items-center">
-                <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border ${theme === 'dark' ? 'border-purple-500/20 bg-purple-500/10' : 'border-purple-500/30 bg-purple-100/50'} backdrop-blur-md`}>
-                  <span className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse"></span>
-                  <span className={`text-[10px] font-mono ${theme === 'dark' ? 'text-purple-300' : 'text-purple-700'} tracking-widest uppercase`}>Open to work</span>
-                </div>
-                <h1 ref={heroTextRef} className={`text-5xl sm:text-6xl md:text-8xl font-bold tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'} leading-[1.1] md:leading-[0.9]`}>
-                  <div className="overflow-hidden mb-1 md:mb-2">
-                    <span className="font-museo inline-block revealer-span">Engineer of</span>
-                  </div>
-                  <div className="overflow-hidden mb-1 md:mb-2">
-                    <span className="font-custom text-purple-500 text-6xl sm:text-7xl md:text-9xl inline-block mt-2 mb-2 revealer-span">Intelligent</span>
-                  </div>
-                  <div className="overflow-hidden">
-                    <span className="font-museo inline-block revealer-span">Systems.</span>
-                  </div>
-                </h1>
-                <p className={`max-w-lg text-base md:text-lg ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'} leading-relaxed pt-4`}>
-                  I bridge the gap between <span className={theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}>complex AI models</span> and <span className={theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}>scalable web architectures</span>. Building the next generation of digital products.
-                </p>
-              </SectionWrapper>
-              <SectionWrapper delay={0.2} className="mt-16 md:mt-24 w-full grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-8 border-t border-white/10 sm:border-t pt-8">
-                {['Experience', 'Focus', 'Stack'].map((label, i) => (
-                  <div key={i} className="text-center sm:text-left">
-                    <p className={`text-[10px] md:text-xs font-mono ${theme === 'dark' ? 'text-gray-600' : 'text-gray-500'} uppercase mb-1`}>{label}</p>
-                    <p className={`text-xs md:text-sm ${theme === 'dark' ? 'text-white' : 'text-black'} font-medium`}>{['Early Career — AI & Web Development', 'AI/ML & Full Stack', 'Python • React • Java'][i]}</p>
-                  </div>
-                ))}
-              </SectionWrapper>
-            </section>
+            {/* High-End Hero Section with Dissolve Effect */}
+            <HeroDissolve theme={theme} />
 
             {/* About Me */}
             <section id="about-me" className="py-24 md:py-40 max-w-6xl mx-auto px-6 relative z-20">
