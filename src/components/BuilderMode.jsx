@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Download, ChevronLeft, Code, Square, Cpu, Layout, FileCode2, Paintbrush, Loader2, Zap, Monitor, Smartphone, Tablet, Copy, Check, Terminal, Menu, X } from 'lucide-react';
+import { Send, Download, ChevronLeft, Code, Square, Cpu, Layout, FileCode2, Paintbrush, Zap, Monitor, Smartphone, Tablet, Copy, Check, Terminal, Play, Maximize, Columns } from 'lucide-react';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 
@@ -23,7 +23,11 @@ const AVAILABLE_MODELS = [
   { id: "inclusionai/ling-2.6-flash:free", name: "Ling Flash 2.6" }
 ];
 
-const PRESETS = ["Minimal", "Futuristic", "Glassmorphic"];
+const PRESETS = [
+  "Build a SaaS landing page",
+  "Create a dark-mode dashboard",
+  "Design a glassmorphic hero section"
+];
 
 const BuilderMode = ({ theme, initialModel, onExit }) => {
   const [messages, setMessages] = useState([
@@ -39,26 +43,25 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
   const [deviceView, setDeviceView] = useState('desktop'); 
   const [codeTab, setCodeTab] = useState('html'); 
   const [isCopied, setIsCopied] = useState(false);
+  const [hasGenerated, setHasGenerated] = useState(false);
   
-  // Responsive states
-  const [showRightPanel, setShowRightPanel] = useState(false);
-  const [mobileTab, setMobileTab] = useState('prompt'); // prompt, preview, code
-
+  // Responsive / Panel states
+  const [activeView, setActiveView] = useState('split'); // 'preview', 'code', 'split'
+  const [mobileTab, setMobileTab] = useState('prompt'); // 'prompt', 'preview', 'code'
+  
   const messagesEndRef = useRef(null);
   const abortControllerRef = useRef(null);
+  const inputRef = useRef(null);
 
-  // Desktop check
-  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
   useEffect(() => {
     const handleResize = () => {
-      const desktop = window.innerWidth >= 1024;
-      setIsDesktop(desktop);
-      if (desktop) setShowRightPanel(true);
+      if (window.innerWidth < 1024 && activeView === 'split') {
+        setActiveView('preview');
+      }
     };
     window.addEventListener('resize', handleResize);
-    handleResize();
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [activeView]);
 
   useEffect(() => {
     const resetTime = localStorage.getItem('fixo_builder_reset');
@@ -81,6 +84,14 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
   useEffect(() => {
     scrollToBottom();
   }, [messages, generationStep]);
+
+  // Expandable textarea logic
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.style.height = 'auto';
+      inputRef.current.style.height = Math.min(inputRef.current.scrollHeight, 120) + 'px';
+    }
+  }, [inputValue]);
 
   useEffect(() => {
     if (previewCode.html || previewCode.css || previewCode.js) {
@@ -106,6 +117,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
       const blob = new Blob([combinedCode], { type: 'text/html' });
       const url = URL.createObjectURL(blob);
       setPreviewUrl(url);
+      setHasGenerated(true);
       
       return () => URL.revokeObjectURL(url);
     }
@@ -140,9 +152,9 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
 
   const simulateProgress = () => {
     setGenerationStep(1);
-    setTimeout(() => { if (abortControllerRef.current) setGenerationStep(2) }, 1500);
-    setTimeout(() => { if (abortControllerRef.current) setGenerationStep(3) }, 4000);
-    setTimeout(() => { if (abortControllerRef.current) setGenerationStep(4) }, 6500);
+    setTimeout(() => { if (abortControllerRef.current) setGenerationStep(2) }, 1000);
+    setTimeout(() => { if (abortControllerRef.current) setGenerationStep(3) }, 3000);
+    setTimeout(() => { if (abortControllerRef.current) setGenerationStep(4) }, 5000);
   };
 
   const handleSendMessage = async (overrideText = null) => {
@@ -157,6 +169,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
     setMessages(prev => [...prev, { role: 'user', text: textToSend }]);
     setInputValue("");
     setIsLoading(true);
+    setHasGenerated(false);
     
     abortControllerRef.current = new AbortController();
     const signal = abortControllerRef.current.signal;
@@ -262,6 +275,13 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
     setTimeout(() => setIsCopied(false), 2000);
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
+
   const steps = [
     { step: 1, text: "Analyzing context...", icon: <Cpu size={14} className="animate-pulse text-violet-400" /> },
     { step: 2, text: "Structuring layout...", icon: <Layout size={14} className="animate-pulse text-fuchsia-400" /> },
@@ -273,7 +293,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
     <div className={`flex flex-col md:flex-row h-full w-full overflow-hidden ${theme === 'dark' ? 'bg-[#050505] text-white' : 'bg-[#fcfcfc] text-black'}`}>
       
       {/* 1. LEFT PANEL (Prompt & Controls) */}
-      <div className={`${mobileTab === 'prompt' ? 'flex' : 'hidden'} md:flex w-full md:w-[320px] flex-col flex-shrink-0 border-r ${theme === 'dark' ? 'border-white/[0.05] bg-white/[0.01]' : 'border-black/[0.05] bg-black/[0.01]'} backdrop-blur-3xl z-10 relative h-full md:h-auto`}>
+      <div className={`${mobileTab === 'prompt' ? 'flex' : 'hidden'} md:flex w-full md:w-[300px] lg:w-[320px] flex-col flex-shrink-0 border-r transition-colors duration-300 ${theme === 'dark' ? 'border-white/[0.05] bg-white/[0.01]' : 'border-black/[0.05] bg-black/[0.01]'} backdrop-blur-3xl z-10 relative h-full md:h-auto`}>
         {/* Header */}
         <div className={`p-4 border-b flex-shrink-0 flex items-center justify-between ${theme === 'dark' ? 'border-white/[0.05]' : 'border-black/[0.05]'}`}>
           <div className="flex items-center gap-3">
@@ -308,17 +328,6 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
               ))}
             </select>
           </div>
-
-          <div>
-            <label className={`text-[11px] font-medium uppercase tracking-wider mb-2 block ${theme === 'dark' ? 'text-white/50' : 'text-black/50'}`}>Quick Presets</label>
-            <div className="flex flex-wrap gap-2">
-              {PRESETS.map(preset => (
-                <button key={preset} onClick={() => setInputValue(`Build a ${preset.toLowerCase()} hero section`)} className={`text-xs px-4 py-2 rounded-full border transition-all hover:scale-105 active:scale-95 ${theme === 'dark' ? 'bg-white/[0.03] border-white/[0.08] text-white/70 hover:text-white hover:border-white/30' : 'bg-black/[0.03] border-black/[0.08] text-black/70 hover:text-black hover:border-black/30'}`}>
-                  {preset}
-                </button>
-              ))}
-            </div>
-          </div>
           
           <div className={`p-3.5 rounded-xl border flex items-center justify-between ${builderCredits > 0 ? (theme === 'dark' ? 'bg-violet-500/10 border-violet-500/20 text-violet-300' : 'bg-violet-500/10 border-violet-500/20 text-violet-700') : 'bg-rose-500/10 border-rose-500/20 text-rose-400'}`}>
             <span className="text-xs font-medium">Daily Limit</span>
@@ -333,7 +342,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
         <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar relative min-h-0">
           <div className="absolute inset-x-0 top-0 h-4 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none z-10 opacity-50"></div>
           {messages.map((msg, idx) => (
-            <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+            <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-2 duration-300`}>
               <div className={`max-w-[90%] p-3.5 rounded-2xl text-[13px] leading-relaxed shadow-lg ${
                 msg.role === 'user' 
                   ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-br-sm' 
@@ -345,7 +354,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
           ))}
           
           {isLoading && generationStep > 0 && (
-            <div className={`flex justify-start`}>
+            <div className={`flex justify-start animate-in fade-in duration-300`}>
               <div className={`w-full p-5 rounded-2xl rounded-bl-sm border backdrop-blur-md ${theme === 'dark' ? 'bg-white/[0.02] border-white/[0.05] text-white/80' : 'bg-black/[0.02] border-black/[0.05] text-black/80'}`}>
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-5 h-5 rounded-full border-2 border-violet-500 border-t-transparent animate-spin"></div>
@@ -366,22 +375,24 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
         </div>
 
         {/* Input Area */}
-        <div className={`p-4 border-t flex-shrink-0 ${theme === 'dark' ? 'border-white/[0.05] bg-black/20' : 'border-black/[0.05] bg-white/20'} backdrop-blur-xl`}>
-          <div className={`relative flex items-end gap-2 p-1.5 rounded-2xl border transition-all ${theme === 'dark' ? 'bg-white/[0.03] border-white/[0.1] focus-within:border-violet-500/50 focus-within:bg-white/[0.05]' : 'bg-white border-black/[0.1] focus-within:border-violet-500/50 focus-within:bg-white'}`}>
+        <div className={`p-4 border-t flex-shrink-0 ${theme === 'dark' ? 'border-white/[0.05] bg-[#0a0a0c]/80' : 'border-black/[0.05] bg-white/80'} backdrop-blur-xl`}>
+          <div className={`relative flex items-end gap-2 p-1.5 rounded-2xl border transition-all duration-300 shadow-sm ${theme === 'dark' ? 'bg-white/[0.02] border-white/[0.1] focus-within:border-violet-500/50 focus-within:bg-white/[0.04] focus-within:shadow-[0_0_20px_rgba(139,92,246,0.1)]' : 'bg-white border-black/[0.1] focus-within:border-violet-500/40 focus-within:shadow-[0_0_20px_rgba(139,92,246,0.1)]'}`}>
             <textarea 
+              ref={inputRef}
               value={inputValue} 
               onChange={(e) => setInputValue(e.target.value)} 
+              onKeyDown={handleKeyDown}
               placeholder="Describe the UI..." 
               disabled={isLoading || builderCredits <= 0}
-              rows={2}
-              className="flex-1 bg-transparent text-[13px] p-3 resize-none focus:outline-none custom-scrollbar disabled:opacity-50 min-h-[60px]" 
+              rows={1}
+              className="flex-1 bg-transparent text-[13px] p-3 resize-none focus:outline-none custom-scrollbar disabled:opacity-50 min-h-[44px] max-h-[120px]" 
             />
             {isLoading ? (
               <button onClick={handleStop} className="p-2.5 mb-1 mr-1 bg-rose-500/10 text-rose-500 rounded-xl hover:bg-rose-500/20 border border-rose-500/20 transition-all active:scale-95 flex-shrink-0" title="Stop">
                 <Square size={18} className="fill-current" />
               </button>
             ) : (
-              <button onClick={() => handleSendMessage()} disabled={!inputValue.trim() || builderCredits <= 0} className="p-2.5 mb-1 mr-1 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-xl hover:from-violet-500 hover:to-fuchsia-500 transition-all disabled:opacity-30 disabled:scale-100 active:scale-95 shadow-[0_0_15px_rgba(139,92,246,0.3)] disabled:shadow-none flex-shrink-0">
+              <button onClick={() => handleSendMessage()} disabled={!inputValue.trim() || builderCredits <= 0} className="p-2.5 mb-1 mr-1 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-xl hover:scale-105 transition-all disabled:opacity-30 disabled:scale-100 active:scale-95 shadow-[0_0_15px_rgba(139,92,246,0.3)] disabled:shadow-none flex-shrink-0">
                 <Send size={18} />
               </button>
             )}
@@ -389,119 +400,152 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
         </div>
       </div>
 
-      {/* 2. CENTER PANEL (Live Preview) */}
-      <div className={`${mobileTab === 'preview' ? 'flex' : 'hidden'} md:flex flex-1 flex-col relative z-0 h-full`}>
-        <div className={`flex items-center justify-between px-3 md:px-4 py-3 border-b flex-shrink-0 ${theme === 'dark' ? 'border-white/[0.05] bg-[#0a0a0c]' : 'border-black/[0.05] bg-white'}`}>
-          <div className="flex items-center gap-2">
-            <button onClick={() => { setShowRightPanel(!showRightPanel); if(window.innerWidth < 1024) setMobileTab('code'); }} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-medium transition-all ${showRightPanel || mobileTab === 'code' ? 'bg-violet-500/20 text-violet-400' : (theme === 'dark' ? 'hover:bg-white/5 text-white/50 hover:text-white' : 'hover:bg-black/5 text-black/50 hover:text-black')}`}>
-              <Terminal size={16} /> <span className="hidden sm:inline">Code</span>
-            </button>
-          </div>
-          
-          {/* Fake Browser URL Bar */}
-          <div className={`flex-1 max-w-sm mx-3 flex items-center justify-center px-4 py-2 rounded-full border text-[11px] font-mono tracking-wide truncate ${theme === 'dark' ? 'bg-white/[0.02] border-white/[0.05] text-white/40' : 'bg-black/[0.02] border-black/[0.05] text-black/50'}`}>
-            <span className="opacity-50">https://</span>fixo.build/preview
-          </div>
-
-          <div className="flex items-center gap-1 bg-black/10 dark:bg-black/20 p-1 rounded-lg border border-black/5 dark:border-white/5 hidden md:flex">
-            <button onClick={() => setDeviceView('desktop')} className={`p-1.5 rounded-md transition-all ${deviceView === 'desktop' ? (theme === 'dark' ? 'bg-white/10 text-white shadow-sm' : 'bg-white text-black shadow-sm') : 'text-gray-400 hover:text-gray-600 dark:hover:text-white/80'}`}><Monitor size={16} /></button>
-            <button onClick={() => setDeviceView('tablet')} className={`p-1.5 rounded-md transition-all ${deviceView === 'tablet' ? (theme === 'dark' ? 'bg-white/10 text-white shadow-sm' : 'bg-white text-black shadow-sm') : 'text-gray-400 hover:text-gray-600 dark:hover:text-white/80'}`}><Tablet size={16} /></button>
-            <button onClick={() => setDeviceView('mobile')} className={`p-1.5 rounded-md transition-all ${deviceView === 'mobile' ? (theme === 'dark' ? 'bg-white/10 text-white shadow-sm' : 'bg-white text-black shadow-sm') : 'text-gray-400 hover:text-gray-600 dark:hover:text-white/80'}`}><Smartphone size={16} /></button>
-          </div>
-        </div>
-
-        {/* Browser Canvas */}
-        <div className={`flex-1 p-0 md:p-6 lg:p-8 overflow-hidden flex items-center justify-center relative ${theme === 'dark' ? 'bg-[#050505]' : 'bg-[#f5f5f5]'}`}>
-          {/* Noise overlay */}
-          <div className="absolute inset-0 opacity-[0.015] pointer-events-none mix-blend-overlay" style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")'}}></div>
-          
-          <div className={`relative transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] flex flex-col overflow-hidden shadow-2xl md:rounded-xl border ${theme === 'dark' ? 'border-white/[0.1] bg-[#0a0a0c]' : 'border-black/[0.1] bg-white'} ${
-            window.innerWidth < 768 ? 'w-full h-full' :
-            deviceView === 'desktop' ? 'w-full h-full' :
-            deviceView === 'tablet' ? 'w-[768px] h-full shadow-[0_0_50px_rgba(0,0,0,0.5)]' :
-            'w-[375px] h-[812px] max-h-full shadow-[0_0_50px_rgba(0,0,0,0.5)]'
-          }`}>
+      {/* RIGHT WORKSPACE (Preview + Code) */}
+      <div className={`${mobileTab !== 'prompt' ? 'flex' : 'hidden'} md:flex flex-1 flex-row relative z-0 h-full overflow-hidden`}>
+        
+        {/* PREVIEW PANEL */}
+        <div className={`flex flex-col relative h-full transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${
+          window.innerWidth < 768 
+            ? (mobileTab === 'preview' ? 'w-full opacity-100' : 'w-0 opacity-0 hidden')
+            : activeView === 'code' ? 'w-0 opacity-0 overflow-hidden flex-none border-0' : 'flex-1 opacity-100'
+        }`}>
+          <div className={`flex items-center justify-between px-3 md:px-4 py-3 border-b flex-shrink-0 ${theme === 'dark' ? 'border-white/[0.05] bg-[#0a0a0c]' : 'border-black/[0.05] bg-white'}`}>
+            <div className="flex items-center gap-1.5 hidden md:flex">
+              <button onClick={() => setActiveView('preview')} className={`p-1.5 rounded-lg transition-all ${activeView === 'preview' ? 'bg-violet-500/20 text-violet-400' : (theme === 'dark' ? 'hover:bg-white/5 text-white/50 hover:text-white' : 'hover:bg-black/5 text-black/50 hover:text-black')}`} title="Preview Only">
+                <Maximize size={16} />
+              </button>
+              <button onClick={() => setActiveView('split')} className={`p-1.5 rounded-lg transition-all ${activeView === 'split' ? 'bg-violet-500/20 text-violet-400' : (theme === 'dark' ? 'hover:bg-white/5 text-white/50 hover:text-white' : 'hover:bg-black/5 text-black/50 hover:text-black')}`} title="Split View">
+                <Columns size={16} />
+              </button>
+              <button onClick={() => setActiveView('code')} className={`p-1.5 rounded-lg transition-all ${activeView === 'code' ? 'bg-violet-500/20 text-violet-400' : (theme === 'dark' ? 'hover:bg-white/5 text-white/50 hover:text-white' : 'hover:bg-black/5 text-black/50 hover:text-black')}`} title="Code Only">
+                <Terminal size={16} />
+              </button>
+            </div>
+            <div className="md:hidden flex font-semibold text-xs items-center gap-2">
+              <Layout size={16} className="text-violet-500"/> Live Preview
+            </div>
             
-            {/* Fake macOS Window Controls (hidden on mobile) */}
-            <div className={`hidden md:flex h-10 w-full flex-shrink-0 border-b items-center px-4 gap-2.5 ${theme === 'dark' ? 'bg-[#1a1a1c] border-white/5' : 'bg-[#fcfcfc] border-black/5'}`}>
-              <div className="w-3 h-3 rounded-full bg-rose-500/90 shadow-sm"></div>
-              <div className="w-3 h-3 rounded-full bg-amber-500/90 shadow-sm"></div>
-              <div className="w-3 h-3 rounded-full bg-emerald-500/90 shadow-sm"></div>
+            {/* Fake Browser URL Bar */}
+            <div className={`flex-1 max-w-sm mx-3 flex items-center justify-center px-4 py-2 rounded-full border text-[11px] font-mono tracking-wide truncate ${theme === 'dark' ? 'bg-white/[0.02] border-white/[0.05] text-white/40' : 'bg-black/[0.02] border-black/[0.05] text-black/50'}`}>
+              <span className="opacity-50">https://</span>fixo.build/preview
             </div>
 
-            {previewUrl ? (
-              <iframe 
-                src={previewUrl} 
-                className={`w-full h-full flex-1 border-none transition-opacity duration-700 ${isLoading ? 'opacity-30' : 'opacity-100'} bg-white`}
-                title="Live Preview"
-                sandbox="allow-scripts allow-same-origin"
-              />
-            ) : (
-              <div className="flex-1 flex items-center justify-center flex-col gap-5">
-                <div className={`w-20 h-20 rounded-3xl ${theme === 'dark' ? 'bg-white/[0.02] border-white/[0.05]' : 'bg-black/[0.02] border-black/[0.05]'} border flex items-center justify-center shadow-inner`}>
-                  <Layout size={32} className={theme === 'dark' ? 'text-white/20' : 'text-black/20'} />
+            <div className="flex items-center gap-1 bg-black/10 dark:bg-black/20 p-1 rounded-lg border border-black/5 dark:border-white/5 hidden lg:flex">
+              <button onClick={() => setDeviceView('desktop')} className={`p-1.5 rounded-md transition-all ${deviceView === 'desktop' ? (theme === 'dark' ? 'bg-white/10 text-white shadow-sm' : 'bg-white text-black shadow-sm') : 'text-gray-400 hover:text-gray-600 dark:hover:text-white/80'}`}><Monitor size={16} /></button>
+              <button onClick={() => setDeviceView('tablet')} className={`p-1.5 rounded-md transition-all ${deviceView === 'tablet' ? (theme === 'dark' ? 'bg-white/10 text-white shadow-sm' : 'bg-white text-black shadow-sm') : 'text-gray-400 hover:text-gray-600 dark:hover:text-white/80'}`}><Tablet size={16} /></button>
+              <button onClick={() => setDeviceView('mobile')} className={`p-1.5 rounded-md transition-all ${deviceView === 'mobile' ? (theme === 'dark' ? 'bg-white/10 text-white shadow-sm' : 'bg-white text-black shadow-sm') : 'text-gray-400 hover:text-gray-600 dark:hover:text-white/80'}`}><Smartphone size={16} /></button>
+            </div>
+          </div>
+
+          {/* Browser Canvas */}
+          <div className={`flex-1 p-0 md:p-6 lg:p-8 overflow-hidden flex items-center justify-center relative ${theme === 'dark' ? 'bg-[#050505]' : 'bg-[#f5f5f5]'}`}>
+            <div className="absolute inset-0 opacity-[0.015] pointer-events-none mix-blend-overlay" style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")'}}></div>
+            
+            {hasGenerated || isLoading ? (
+              <div className={`relative transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] flex flex-col overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.1)] md:rounded-xl border ${hasGenerated && !isLoading ? 'scale-100 opacity-100' : 'scale-95 opacity-50'} ${theme === 'dark' ? 'border-white/[0.1] bg-[#0a0a0c]' : 'border-black/[0.1] bg-white'} ${
+                window.innerWidth < 768 ? 'w-full h-full' :
+                deviceView === 'desktop' ? 'w-full h-full' :
+                deviceView === 'tablet' ? 'w-[768px] h-full shadow-[0_0_50px_rgba(0,0,0,0.3)]' :
+                'w-[375px] h-[812px] max-h-full shadow-[0_0_50px_rgba(0,0,0,0.3)]'
+              }`}>
+                <div className={`hidden md:flex h-10 w-full flex-shrink-0 border-b items-center px-4 gap-2.5 ${theme === 'dark' ? 'bg-[#1a1a1c] border-white/5' : 'bg-[#fcfcfc] border-black/5'}`}>
+                  <div className="w-3 h-3 rounded-full bg-rose-500/90 shadow-sm"></div>
+                  <div className="w-3 h-3 rounded-full bg-amber-500/90 shadow-sm"></div>
+                  <div className="w-3 h-3 rounded-full bg-emerald-500/90 shadow-sm"></div>
                 </div>
-                <div className="text-center">
-                  <p className={`text-sm font-medium ${theme === 'dark' ? 'text-white/60' : 'text-black/60'} mb-1`}>Canvas Empty</p>
-                  <p className={`text-xs ${theme === 'dark' ? 'text-white/30' : 'text-black/30'}`}>Describe a UI component in the prompt panel to get started.</p>
+                {isLoading ? (
+                  <div className="w-full h-full flex items-center justify-center bg-white dark:bg-[#0a0a0c]">
+                     <div className="w-10 h-10 rounded-full border-4 border-violet-500 border-t-transparent animate-spin"></div>
+                  </div>
+                ) : (
+                  <iframe 
+                    src={previewUrl} 
+                    className={`w-full h-full flex-1 border-none bg-white`}
+                    title="Live Preview"
+                    sandbox="allow-scripts allow-same-origin"
+                  />
+                )}
+              </div>
+            ) : (
+              <div className="flex-1 flex items-center justify-center flex-col max-w-lg mx-auto text-center px-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                <div className="relative mb-6">
+                  <div className="absolute inset-0 bg-gradient-to-tr from-violet-600 to-fuchsia-600 rounded-3xl blur-2xl opacity-20"></div>
+                  <div className={`w-24 h-24 rounded-3xl ${theme === 'dark' ? 'bg-white/[0.02] border-white/[0.05]' : 'bg-black/[0.02] border-black/[0.05]'} border flex items-center justify-center shadow-inner relative z-10 backdrop-blur-xl`}>
+                    <Layout size={40} className="text-violet-500" />
+                  </div>
+                </div>
+                <h2 className={`text-2xl font-bold mb-3 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>Start building something amazing</h2>
+                <p className={`text-sm mb-8 ${theme === 'dark' ? 'text-white/50' : 'text-black/50'}`}>Describe your desired UI in the prompt panel, or try one of these suggestions to see FixO in action.</p>
+                <div className="flex flex-col gap-3 w-full max-w-sm">
+                  {PRESETS.map((preset, idx) => (
+                     <button 
+                      key={idx}
+                      onClick={() => handleSendMessage(preset)}
+                      className={`px-5 py-3.5 rounded-xl border flex items-center gap-3 text-sm transition-all hover:scale-[1.02] active:scale-95 ${theme === 'dark' ? 'bg-white/[0.02] border-white/[0.05] text-white/70 hover:bg-white/[0.05] hover:text-white' : 'bg-black/[0.02] border-black/[0.05] text-black/70 hover:bg-black/[0.05] hover:text-black'}`}
+                    >
+                      <Play size={14} className="text-violet-500" /> {preset}
+                    </button>
+                  ))}
                 </div>
               </div>
             )}
           </div>
         </div>
-      </div>
 
-      {/* 3. RIGHT PANEL (Code Output) */}
-      <div className={`${mobileTab === 'code' ? 'flex w-full h-full' : 'hidden'} md:flex md:absolute lg:relative right-0 h-full w-full md:w-[360px] flex-shrink-0 flex-col border-l transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${showRightPanel || mobileTab === 'code' ? 'translate-x-0' : 'translate-x-full md:shadow-[0_0_50px_rgba(0,0,0,0.3)] lg:shadow-none'} ${theme === 'dark' ? 'border-white/[0.05] bg-[#0a0a0c]' : 'border-black/[0.05] bg-[#fcfcfc]'} z-20`}>
-        
-        {/* Code Tabs Header */}
-        <div className={`flex items-center justify-between p-2 md:p-3 border-b flex-shrink-0 ${theme === 'dark' ? 'border-white/[0.05]' : 'border-black/[0.05]'}`}>
-          <div className="flex gap-1.5">
-            {['html', 'css', 'js'].map(tab => (
-               <button 
-                key={tab} 
-                onClick={() => setCodeTab(tab)} 
-                className={`px-4 py-2 rounded-lg text-xs font-mono tracking-wider uppercase transition-all ${
-                  codeTab === tab 
-                    ? (theme === 'dark' ? 'bg-white/10 text-white shadow-sm' : 'bg-black/5 text-black shadow-sm border border-black/5') 
-                    : (theme === 'dark' ? 'text-white/40 hover:bg-white/5 hover:text-white/70' : 'text-black/40 hover:bg-black/5 hover:text-black/70')
-                }`}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
-          <div className="flex items-center gap-1.5 pr-1">
-            <button onClick={copyToClipboard} className={`p-2 rounded-lg transition-all ${theme === 'dark' ? 'text-white/50 hover:bg-white/10 hover:text-white' : 'text-black/50 hover:bg-black/5 hover:text-black'}`} title="Copy Code">
-              {isCopied ? <Check size={16} className="text-green-500" /> : <Copy size={16} />}
-            </button>
-            <button onClick={handleDownload} disabled={!previewUrl} className={`p-2 rounded-lg transition-all disabled:opacity-30 ${theme === 'dark' ? 'text-white/50 hover:bg-white/10 hover:text-white' : 'text-black/50 hover:bg-black/5 hover:text-black'}`} title="Download ZIP">
-              <Download size={16} />
-            </button>
-            {/* Close button for tablet drawer view */}
-            <button onClick={() => { setShowRightPanel(false); if(window.innerWidth < 1024) setMobileTab('preview'); }} className={`md:flex lg:hidden p-2 rounded-lg transition-all ${theme === 'dark' ? 'text-white/50 hover:bg-white/10 hover:text-white' : 'text-black/50 hover:bg-black/5 hover:text-black'}`} title="Close Code Panel">
-              <X size={16} />
-            </button>
-          </div>
-        </div>
-
-        {/* Code View */}
-        <div className={`flex-1 overflow-y-auto p-5 custom-scrollbar min-h-0 ${theme === 'dark' ? 'bg-[#050505]' : 'bg-[#f0f0f0]'}`}>
-          {previewCode[codeTab] ? (
-            <pre className={`text-[12px] font-mono leading-relaxed whitespace-pre-wrap ${
-              codeTab === 'html' ? (theme === 'dark' ? 'text-blue-400' : 'text-blue-700') :
-              codeTab === 'css' ? (theme === 'dark' ? 'text-pink-400' : 'text-pink-700') :
-              (theme === 'dark' ? 'text-yellow-400' : 'text-yellow-700')
-            }`}>
-              {previewCode[codeTab]}
-            </pre>
-          ) : (
-            <div className="h-full flex flex-col items-center justify-center gap-3">
-              <Code size={24} className={theme === 'dark' ? 'text-white/10' : 'text-black/10'} />
-              <p className={`text-xs font-mono uppercase tracking-widest ${theme === 'dark' ? 'text-white/20' : 'text-black/30'}`}>No code yet</p>
+        {/* CODE PANEL */}
+        <div className={`flex flex-col h-full border-l transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${theme === 'dark' ? 'border-white/[0.05] bg-[#0a0a0c]' : 'border-black/[0.05] bg-[#fcfcfc]'} z-20 ${
+           window.innerWidth < 768 
+            ? (mobileTab === 'code' ? 'w-full opacity-100' : 'w-0 opacity-0 hidden')
+            : activeView === 'preview' ? 'w-0 opacity-0 overflow-hidden flex-none border-0' 
+            : activeView === 'split' ? 'w-[360px] lg:w-[450px] flex-none' 
+            : 'flex-1 opacity-100'
+        }`}>
+          {/* Code Tabs Header */}
+          <div className={`flex items-center justify-between p-2 md:p-3 border-b flex-shrink-0 ${theme === 'dark' ? 'border-white/[0.05]' : 'border-black/[0.05]'}`}>
+            <div className="flex gap-1.5">
+              {['html', 'css', 'js'].map(tab => (
+                 <button 
+                  key={tab} 
+                  onClick={() => setCodeTab(tab)} 
+                  className={`px-4 py-2 rounded-lg text-xs font-mono tracking-wider uppercase transition-all ${
+                    codeTab === tab 
+                      ? (theme === 'dark' ? 'bg-white/10 text-white shadow-sm' : 'bg-black/5 text-black shadow-sm border border-black/5') 
+                      : (theme === 'dark' ? 'text-white/40 hover:bg-white/5 hover:text-white/70' : 'text-black/40 hover:bg-black/5 hover:text-black/70')
+                  }`}
+                >
+                  {tab}
+                </button>
+              ))}
             </div>
-          )}
+            <div className="flex items-center gap-1.5 pr-1">
+              <button onClick={copyToClipboard} className={`p-2 rounded-lg transition-all ${theme === 'dark' ? 'text-white/50 hover:bg-white/10 hover:text-white' : 'text-black/50 hover:bg-black/5 hover:text-black'}`} title="Copy Code">
+                {isCopied ? <Check size={16} className="text-green-500" /> : <Copy size={16} />}
+              </button>
+              <button onClick={handleDownload} disabled={!previewUrl} className={`p-2 rounded-lg transition-all disabled:opacity-30 ${theme === 'dark' ? 'text-white/50 hover:bg-white/10 hover:text-white' : 'text-black/50 hover:bg-black/5 hover:text-black'}`} title="Download ZIP">
+                <Download size={16} />
+              </button>
+            </div>
+          </div>
+
+          {/* Code View */}
+          <div className={`flex-1 overflow-y-auto p-5 custom-scrollbar min-h-0 ${theme === 'dark' ? 'bg-[#050505]' : 'bg-[#f0f0f0]'}`}>
+            {previewCode[codeTab] ? (
+              <pre className={`text-[12px] md:text-[13px] font-mono leading-relaxed whitespace-pre-wrap ${
+                codeTab === 'html' ? (theme === 'dark' ? 'text-blue-400' : 'text-blue-700') :
+                codeTab === 'css' ? (theme === 'dark' ? 'text-pink-400' : 'text-pink-700') :
+                (theme === 'dark' ? 'text-yellow-400' : 'text-yellow-700')
+              }`}>
+                {previewCode[codeTab]}
+              </pre>
+            ) : (
+              <div className="h-full flex flex-col items-center justify-center gap-3">
+                <Code size={24} className={theme === 'dark' ? 'text-white/10' : 'text-black/10'} />
+                <p className={`text-xs font-mono uppercase tracking-widest ${theme === 'dark' ? 'text-white/20' : 'text-black/30'}`}>No code generated yet</p>
+              </div>
+            )}
+          </div>
         </div>
+
       </div>
 
       {/* MOBILE BOTTOM NAVIGATION */}

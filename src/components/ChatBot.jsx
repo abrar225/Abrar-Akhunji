@@ -43,6 +43,14 @@ const ChatBot = ({ theme }) => {
   const [chatCredits, setChatCredits] = useState(10);
   const messagesEndRef = useRef(null);
   const abortControllerRef = useRef(null);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.style.height = 'auto';
+      inputRef.current.style.height = Math.min(inputRef.current.scrollHeight, 120) + 'px';
+    }
+  }, [inputValue]);
 
   useEffect(() => {
     const resetTime = localStorage.getItem('fixo_chat_reset');
@@ -283,10 +291,11 @@ const ChatBot = ({ theme }) => {
                   >
                     <Trash2 size={16} />
                   </button>
-                  {/* Close button for Mobile only */}
+                  {/* Close button */}
                   <button 
                     onClick={() => setIsOpen(false)} 
-                    className={`p-2 rounded-full transition-all active:scale-95 md:hidden ${theme === 'dark' ? 'bg-white/10 text-white' : 'bg-black/5 text-black'}`}
+                    className={`p-2 rounded-full transition-all active:scale-95 ${theme === 'dark' ? 'text-white/40 hover:text-white hover:bg-white/10' : 'text-black/40 hover:text-black hover:bg-black/5'}`}
+                    title="Close Chat"
                   >
                     <X size={18} />
                   </button>
@@ -312,12 +321,12 @@ const ChatBot = ({ theme }) => {
                 
                 {isLoading && (
                   <div className="flex justify-start animate-in fade-in relative z-10">
-                    <div className={`px-4 py-4 rounded-2xl rounded-tl-sm border backdrop-blur-xl flex flex-col gap-2 ${theme === 'dark' ? 'bg-white/[0.04] border-white/[0.08]' : 'bg-black/[0.03] border-black/[0.05]'}`}>
-                      <div className="flex items-center gap-3">
-                        <div className="w-1.5 h-1.5 bg-violet-500 rounded-full animate-pulse"></div>
-                        <div className={`h-2 w-24 rounded-full ${theme === 'dark' ? 'bg-white/10' : 'bg-black/10'} animate-pulse`}></div>
+                    <div className={`px-4 py-3.5 rounded-2xl rounded-tl-sm border backdrop-blur-xl flex flex-col gap-2 shadow-sm ${theme === 'dark' ? 'bg-white/[0.04] border-white/[0.08]' : 'bg-black/[0.03] border-black/[0.05]'}`}>
+                      <div className="flex items-center gap-1.5 h-5">
+                        <div className={`w-1.5 h-1.5 rounded-full animate-bounce ${theme === 'dark' ? 'bg-violet-400' : 'bg-violet-600'}`} style={{animationDelay: '0ms'}}></div>
+                        <div className={`w-1.5 h-1.5 rounded-full animate-bounce ${theme === 'dark' ? 'bg-fuchsia-400' : 'bg-fuchsia-600'}`} style={{animationDelay: '150ms'}}></div>
+                        <div className={`w-1.5 h-1.5 rounded-full animate-bounce ${theme === 'dark' ? 'bg-pink-400' : 'bg-pink-600'}`} style={{animationDelay: '300ms'}}></div>
                       </div>
-                      <div className={`h-2 w-16 rounded-full ml-4 ${theme === 'dark' ? 'bg-white/10' : 'bg-black/10'} animate-pulse`} style={{animationDelay: '150ms'}}></div>
                     </div>
                   </div>
                 )}
@@ -364,38 +373,45 @@ const ChatBot = ({ theme }) => {
                   </div>
                 )}
 
-                <form onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} className={`relative flex items-center p-1.5 rounded-[2rem] border transition-all duration-300 shadow-sm hover:shadow-md ${
+                <div className={`relative flex items-end p-1.5 rounded-[2rem] border transition-all duration-300 shadow-sm hover:shadow-md ${
                   theme === 'dark' 
                     ? 'bg-white/[0.02] border-white/[0.1] focus-within:border-violet-500/50 focus-within:bg-white/[0.04] focus-within:shadow-[0_0_20px_rgba(139,92,246,0.1)]' 
                     : 'bg-white border-black/[0.1] focus-within:border-violet-500/40 focus-within:shadow-[0_0_20px_rgba(139,92,246,0.1)]'
                 }`}>
-                  <div className={`p-2 ml-1 rounded-full ${theme === 'dark' ? 'text-white/30' : 'text-black/30'}`}>
+                  <div className={`p-2 ml-1 mb-1 rounded-full ${theme === 'dark' ? 'text-white/30' : 'text-black/30'}`}>
                     <Paperclip size={18} />
                   </div>
                   
-                  <input 
-                    type="text" 
+                  <textarea 
+                    ref={inputRef}
                     value={inputValue} 
                     onChange={(e) => setInputValue(e.target.value)} 
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSendMessage();
+                      }
+                    }}
                     placeholder="Ask Fixo anything..." 
                     disabled={isLoading || chatCredits <= 0} 
-                    className="flex-1 bg-transparent px-2 py-3 text-[14px] md:text-sm transition-colors focus:outline-none disabled:opacity-50 w-full min-w-0" 
+                    rows={1}
+                    className="flex-1 bg-transparent px-2 py-3 text-[14px] md:text-sm transition-colors focus:outline-none disabled:opacity-50 w-full min-w-0 resize-none custom-scrollbar min-h-[44px] max-h-[120px]" 
                   />
                   
                   {isLoading ? (
-                    <button type="button" onClick={handleStop} className="p-2.5 mr-1 rounded-full bg-rose-500/10 text-rose-500 hover:bg-rose-500/20 border border-rose-500/20 transition-all active:scale-95 flex-shrink-0" title="Stop">
+                    <button type="button" onClick={handleStop} className="p-2.5 mr-1 mb-1 rounded-full bg-rose-500/10 text-rose-500 hover:bg-rose-500/20 border border-rose-500/20 transition-all active:scale-95 flex-shrink-0" title="Stop">
                       <Square size={16} className="fill-current" />
                     </button>
                   ) : (
                     <button 
-                      type="submit" 
+                      onClick={() => handleSendMessage()} 
                       disabled={!inputValue.trim() || chatCredits <= 0} 
-                      className="p-2.5 mr-1 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white transition-all duration-300 disabled:opacity-30 disabled:scale-100 hover:scale-105 active:scale-95 shadow-[0_0_15px_rgba(139,92,246,0.3)] disabled:shadow-none flex-shrink-0"
+                      className="p-2.5 mr-1 mb-1 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white transition-all duration-300 disabled:opacity-30 disabled:scale-100 hover:scale-105 active:scale-95 shadow-[0_0_15px_rgba(139,92,246,0.3)] disabled:shadow-none flex-shrink-0"
                     >
                       <ChevronRight size={18} strokeWidth={2.5} />
                     </button>
                   )}
-                </form>
+                </div>
               </div>
             </>
           )}
