@@ -10,13 +10,14 @@ import {
   Download,
   Instagram,
   FileCode,
-  Music,
-  Cpu
+  Music
 } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
+
+gsap.registerPlugin(ScrollTrigger);
 
 // Components
 import CustomCursor from './components/CustomCursor';
@@ -66,17 +67,17 @@ export default function App() {
       lenis.on('scroll', ScrollTrigger.update);
 
       updateLenis = (time) => {
-        lenis.raf(time * 1000);
+        if (lenis) lenis.raf(time * 1000);
       };
       gsap.ticker.add(updateLenis);
 
       // 2. Hero Animations
       const heroElements = heroTextRef.current?.children;
-      if (heroElements) {
+      if (heroElements && heroElements.length >= 4) {
         const tl = gsap.timeline();
-        tl.fromTo(heroElements[0], { x: -50, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, 0.2)
-          .fromTo(heroElements[2], { x: 50, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, 0.4)
-          .fromTo(heroElements[3], { x: -50, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, 0.6);
+        if (heroElements[0]) tl.fromTo(heroElements[0], { x: -50, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, 0.2);
+        if (heroElements[2]) tl.fromTo(heroElements[2], { x: 50, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, 0.4);
+        if (heroElements[3]) tl.fromTo(heroElements[3], { x: -50, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, 0.6);
       }
 
       // 3. Responsive Scroll
@@ -84,18 +85,20 @@ export default function App() {
       mm.add("(min-width: 768px)", () => {
         if (sectionRef.current && scrollRef.current) {
           const amountToScroll = scrollRef.current.scrollWidth - window.innerWidth;
-          gsap.to(scrollRef.current, {
-            x: -amountToScroll,
-            ease: "none",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top top",
-              end: () => `+=${amountToScroll}`,
-              pin: true,
-              scrub: 1,
-              invalidateOnRefresh: true,
-            }
-          });
+          if (amountToScroll > 0) {
+            gsap.to(scrollRef.current, {
+              x: -amountToScroll,
+              ease: "none",
+              scrollTrigger: {
+                trigger: sectionRef.current,
+                start: "top top",
+                end: () => `+=${amountToScroll}`,
+                pin: true,
+                scrub: 1,
+                invalidateOnRefresh: true,
+              }
+            });
+          }
         }
       });
     });
@@ -115,7 +118,7 @@ export default function App() {
   return (
     <div className={`min-h-screen ${theme === 'dark' ? 'bg-[#030303] text-gray-300' : 'bg-[#f8f9fa] text-gray-800'} font-sans selection:bg-purple-500/30 selection:text-purple-200 transition-colors duration-300`}>
       <CustomCursor />
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} theme={theme} />}
       </AnimatePresence>
 
@@ -333,6 +336,7 @@ export default function App() {
                 </div>
               </div>
             </section>
+
 
             {/* Footer */}
             <footer id="contact" className={`py-12 md:py-24 border-t ${theme === 'dark' ? 'border-white/5 bg-[#030303]' : 'border-black/5 bg-[#f8f9fa]'} max-w-5xl mx-auto px-6 relative z-50`}>
