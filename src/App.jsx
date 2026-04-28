@@ -29,6 +29,8 @@ import SectionHeader from './components/SectionHeader';
 import SectionWrapper from './components/SectionWrapper';
 import ProjectCard from './components/ProjectCard';
 import TextPressure from './components/TextPressure';
+import MagneticText from './components/MagneticText';
+import PerspectiveText from './components/PerspectiveText';
 
 // Constants
 import { PROJECTS, EXPERIENCE, SKILLS, EDUCATION, CERTIFICATIONS } from './constants/portfolio';
@@ -153,30 +155,22 @@ export default function App() {
                   <span className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse"></span>
                   <span className={`text-[10px] font-mono ${theme === 'dark' ? 'text-purple-300' : 'text-purple-700'} tracking-widest uppercase`}>Open to work</span>
                 </div>
-                <h1 ref={heroTextRef} className={`text-5xl sm:text-6xl md:text-8xl font-bold tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'} leading-[1.1] md:leading-[0.9] flex flex-col items-center overflow-visible w-full`}>
-                  <TextPressure 
+                <h1 ref={heroTextRef} className={`text-5xl sm:text-6xl md:text-8xl font-bold tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'} leading-[1.1] md:leading-[0.9] flex flex-col items-center overflow-visible`}>
+                  <MagneticText 
                     text="Engineer of" 
-                    fontSize="clamp(2rem, 8vw, 4rem)"
-                    minWeight={200}
-                    maxWeight={500}
-                    proximity={200}
-                    className="py-1"
+                    className="font-mono text-sm md:text-base tracking-[0.3em] uppercase opacity-60 mb-2"
+                    theme={theme}
                   />
                   <TextPressure 
                     text="Intelligent" 
-                    fontSize="clamp(4rem, 15vw, 11rem)"
-                    minWeight={100}
-                    maxWeight={900}
-                    proximity={300}
-                    className="py-1" 
-                  />
-                  <TextPressure 
-                    text="Systems." 
-                    fontSize="clamp(3rem, 10vw, 6rem)"
-                    minWeight={300}
-                    maxWeight={700}
+                    height="auto"
                     proximity={250}
-                    className="py-1" 
+                    className="py-2" 
+                  />
+                  <PerspectiveText 
+                    text="Systems." 
+                    className="font-museo text-4xl sm:text-5xl md:text-7xl mt-4"
+                    theme={theme}
                   />
                 </h1>
                 <p className={`max-w-lg text-base md:text-lg ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'} leading-relaxed pt-4`}>
