@@ -2,20 +2,20 @@ import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 
 /**
- * TextPressure - A high-performance interactive typography component
- * Uses Variable Fonts to react to mouse proximity.
+ * TextPressure - Elite Interactive Typography
+ * Uses 'Fraunces' Variable Font for a fancy, high-end look.
  */
 const TextPressure = ({ 
   text = "FIXO", 
-  fontFamily = "'Roboto Flex', sans-serif",
-  minWidth = 25,
-  maxWidth = 151,
+  fontFamily = "'Fraunces', serif",
+  minWidth = 50,
+  maxWidth = 100,
   minWeight = 100,
-  maxWeight = 1000,
+  maxWeight = 900,
   minItalic = 0,
   maxItalic = 1,
   proximity = 300,
-  height = '100%',
+  height = 'auto',
   className = ""
 }) => {
   const containerRef = useRef(null);
@@ -25,7 +25,6 @@ const TextPressure = ({
   const cursorRef = useRef({ x: 0, y: 0 });
   const [chars, setChars] = useState([]);
 
-  // Split text into characters
   useEffect(() => {
     setChars(text.toUpperCase().split(''));
   }, [text]);
@@ -33,13 +32,11 @@ const TextPressure = ({
   useEffect(() => {
     if (!chars.length || !titleRef.current) return;
 
-    // 1. Initial GSAP Entrance
     gsap.fromTo(titleRef.current, 
-      { opacity: 0, y: 20 }, 
-      { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }
+      { opacity: 0, scale: 0.9 }, 
+      { opacity: 1, scale: 1, duration: 1.5, ease: 'expo.out' }
     );
 
-    // 2. Mouse Tracking with Lerp
     const handleMouseMove = (e) => {
       cursorRef.current.x = e.clientX;
       cursorRef.current.y = e.clientY;
@@ -55,7 +52,6 @@ const TextPressure = ({
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
     window.addEventListener('touchmove', handleTouchMove, { passive: true });
 
-    // 3. Cache Bounding Boxes for Performance
     let charData = [];
     const updateCache = () => {
       charData = spansRef.current.map(span => {
@@ -69,39 +65,40 @@ const TextPressure = ({
       }).filter(Boolean);
     };
 
-    // Debounced Resize
     let resizeTimer;
     const handleResize = () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(updateCache, 200);
     };
     window.addEventListener('resize', handleResize);
-    
-    // Initial cache after layout
-    setTimeout(updateCache, 200);
+    setTimeout(updateCache, 500);
 
-    // 4. Interaction Loop
     let rafId;
     const loop = () => {
-      // Linear Interpolation for Smooth Cursor
-      mouseRef.current.x += (cursorRef.current.x - mouseRef.current.x) / 15;
-      mouseRef.current.y += (cursorRef.current.y - mouseRef.current.y) / 15;
+      mouseRef.current.x += (cursorRef.current.x - mouseRef.current.x) / 10;
+      mouseRef.current.y += (cursorRef.current.y - mouseRef.current.y) / 10;
 
       charData.forEach(data => {
         const dx = data.centerX - mouseRef.current.x;
         const dy = data.centerY - mouseRef.current.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
-
-        // Value Mapping: Inverse Proximity
         const influence = Math.max(0, 1 - distance / proximity);
         
-        // Map values to axes (clamped to Roboto Flex limits)
-        const wdth = Math.min(151, Math.max(25, minWidth + (maxWidth - minWidth) * influence));
-        const wght = Math.min(1000, Math.max(100, minWeight + (maxWeight - minWeight) * influence));
-        const ital = Math.min(1, Math.max(0, minItalic + (maxItalic - minItalic) * influence));
+        // Advanced Mapping for Fraunces
+        const wdth = minWidth + (maxWidth - minWidth) * influence;
+        const wght = minWeight + (maxWeight - minWeight) * influence;
+        const ital = minItalic + (maxItalic - minItalic) * influence;
+        
+        // Interactive visual feedback
+        const opacity = 0.4 + (0.6 * influence);
+        const colorScale = influence * 100;
 
-        // Apply Font Variation Settings
-        data.element.style.fontVariationSettings = `'wdth' ${wdth}, 'wght' ${wght}, 'ital' ${ital}`;
+        data.element.style.fontVariationSettings = `'wdth' ${wdth}, 'wght' ${wght}, 'ital' ${ital}, 'SOFT' ${influence * 100}, 'WONK' ${influence}`;
+        data.element.style.opacity = opacity;
+        data.element.style.color = influence > 0.1 
+          ? `color-mix(in srgb, #a855f7 ${colorScale}%, currentColor)` 
+          : 'currentColor';
+        data.element.style.filter = `drop-shadow(0 0 ${influence * 20}px rgba(168, 85, 247, 0.4))`;
       });
 
       rafId = requestAnimationFrame(loop);
@@ -109,7 +106,6 @@ const TextPressure = ({
 
     rafId = requestAnimationFrame(loop);
 
-    // Cleanup
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('touchmove', handleTouchMove);
@@ -121,18 +117,13 @@ const TextPressure = ({
 
   return (
     <div className={`stage ${className}`} style={{ ...stageStyles, height }}>
-      <div 
-        ref={containerRef}
-        className="pressure" 
-        data-text={text}
-        style={pressureStyles}
-      >
+      <div ref={containerRef} className="pressure" style={pressureStyles}>
         <h1 ref={titleRef} className="pressure-title" style={titleStyles}>
           {chars.map((char, index) => (
             <span 
               key={index} 
               ref={el => spansRef.current[index] = el}
-              style={{ display: 'inline-block', willChange: 'font-variation-settings' }}
+              style={spanStyles}
             >
               {char === ' ' ? '\u00A0' : char}
             </span>
@@ -141,44 +132,58 @@ const TextPressure = ({
       </div>
       
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:ital,wdth,wght@0,25..151,100..1000;1,25..151,100..1000&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,100..900,0..100,0..1;1,9..144,100..900,0..100,0..1&display=swap');
         
-        .pressure-title span {
-          user-select: none;
-          white-space: nowrap;
-          text-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+        .pressure-title {
           font-family: ${fontFamily};
-          line-height: 1.1;
+          white-space: nowrap !important;
+          display: flex !important;
+          flex-wrap: nowrap !important;
+          justify-content: center;
+          align-items: center;
+          width: fit-content;
+          margin: 0 auto;
+        }
+
+        .pressure-title span {
+          display: inline-block;
+          user-select: none;
+          transition: color 0.3s ease, opacity 0.3s ease;
+          will-change: font-variation-settings, opacity, color, filter;
         }
       `}</style>
     </div>
   );
 };
 
-// Inline Styles
 const stageStyles = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   background: 'transparent',
-  overflow: 'hidden',
-  width: '100%'
+  overflow: 'visible', // Allow font growth to breathe
+  width: '100%',
+  zIndex: 10
 };
 
 const pressureStyles = {
   position: 'relative',
   textAlign: 'center',
-  width: '100%'
+  width: '100%',
+  overflow: 'visible'
 };
 
 const titleStyles = {
-  fontSize: 'clamp(4rem, 15vw, 12rem)',
-  fontWeight: 100,
+  fontSize: 'clamp(3rem, 12vw, 10rem)',
   margin: 0,
-  padding: 0,
+  padding: '1rem 0',
   lineHeight: 1,
-  color: 'inherit',
   cursor: 'default'
+};
+
+const spanStyles = {
+  display: 'inline-block',
+  transition: 'none' // We handle animation in RAF for maximum performance
 };
 
 export default TextPressure;

@@ -153,13 +153,13 @@ export default function App() {
                   <span className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse"></span>
                   <span className={`text-[10px] font-mono ${theme === 'dark' ? 'text-purple-300' : 'text-purple-700'} tracking-widest uppercase`}>Open to work</span>
                 </div>
-                <h1 ref={heroTextRef} className={`text-5xl sm:text-6xl md:text-8xl font-bold tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'} leading-[1.1] md:leading-[0.9] flex flex-col items-center`}>
+                <h1 ref={heroTextRef} className={`text-5xl sm:text-6xl md:text-8xl font-bold tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'} leading-[1.1] md:leading-[0.9] flex flex-col items-center overflow-visible`}>
                   <span className="font-museo inline-block">Engineer of</span>
                   <TextPressure 
                     text="Intelligent" 
                     height="auto"
                     proximity={250}
-                    className="font-custom text-purple-500 py-4" 
+                    className="py-2" 
                   />
                   <span className="font-museo inline-block">Systems.</span>
                 </h1>
