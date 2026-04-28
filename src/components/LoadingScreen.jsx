@@ -1,69 +1,201 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useRef } from 'react';
+import gsap from 'gsap';
 
 const LoadingScreen = ({ onComplete, theme }) => {
-  const [progress, setProgress] = useState(0);
-  const [text, setText] = useState("INITIALIZING_SYSTEM");
-
-  const loadingTexts = [
-    "LOADING_ASSETS",
-    "COMPILING_SHADERS",
-    "CONNECTING_NEURAL_NET",
-    "FETCHING_DATA",
-    "SYSTEM_READY"
-  ];
+  const containerRef = useRef(null);
+  const counterRef = useRef(null);
+  const counter1Ref = useRef(null);
+  const counter2Ref = useRef(null);
+  const counter3Ref = useRef(null);
+  const loaderRef = useRef(null);
+  const bar1Ref = useRef(null);
+  const bar2Ref = useRef(null);
+  const brandingRef = useRef(null);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(timer);
-          setTimeout(onComplete, 500);
-          return 100;
+    // 1. Setup Numbers for the counter
+    const setupNumbers = (el, count = 10) => {
+      for (let i = 0; i < 2; i++) {
+        for (let j = 0; j < 10; j++) {
+          const div = document.createElement('div');
+          div.className = 'num';
+          div.textContent = j;
+          div.style.height = '100px';
+          el.appendChild(div);
         }
-        // Change text based on progress milestones
-        const index = Math.floor((prev / 100) * loadingTexts.length);
-        setText(loadingTexts[Math.min(index, loadingTexts.length - 1)]);
-        return prev + Math.floor(Math.random() * 5) + 1;
-      });
-    }, 50);
+      }
+      const finalDiv = document.createElement('div');
+      finalDiv.className = 'num';
+      finalDiv.textContent = '0';
+      finalDiv.style.height = '100px';
+      el.appendChild(finalDiv);
+    };
 
-    return () => clearInterval(timer);
+    setupNumbers(counter3Ref.current);
+    
+    // Counter 2 setup (0-9)
+    for (let j = 0; j < 10; j++) {
+      const div = document.createElement('div');
+      div.className = 'num';
+      div.textContent = j;
+      div.style.height = '100px';
+      counter2Ref.current.appendChild(div);
+    }
+    const finalDiv2 = document.createElement('div');
+    finalDiv2.className = 'num';
+    finalDiv2.textContent = '0';
+    finalDiv2.style.height = '100px';
+    counter2Ref.current.appendChild(finalDiv2);
+
+    // Timeline
+    const tl = gsap.timeline({
+      onComplete: () => {
+        onComplete();
+      }
+    });
+
+    const numHeight = 100;
+
+    // Animate Counters
+    tl.to(counter3Ref.current, {
+      y: -(counter3Ref.current.children.length - 1) * numHeight,
+      duration: 5,
+      ease: 'power2.inOut',
+    }, 0);
+
+    tl.to(counter2Ref.current, {
+      y: -(counter2Ref.current.children.length - 1) * numHeight,
+      duration: 6,
+      ease: 'power2.inOut',
+    }, 0);
+
+    tl.to(counter1Ref.current, {
+      y: -numHeight,
+      duration: 2,
+      delay: 4,
+      ease: 'power2.inOut',
+    }, 0);
+
+    // Progress Bars
+    tl.from(bar1Ref.current, {
+      width: 0,
+      duration: 6,
+      ease: 'power2.inOut',
+    }, 0);
+
+    tl.from(bar2Ref.current, {
+      width: 0,
+      duration: 2,
+      delay: 1.9,
+      ease: 'power2.inOut',
+    }, 0);
+
+    // Split and Rotate
+    tl.to(loaderRef.current, {
+      background: 'none',
+      duration: 0.1,
+    }, 6);
+
+    tl.to(bar1Ref.current, {
+      rotate: 90,
+      y: -50,
+      duration: 0.5,
+      ease: 'power2.out'
+    }, 6);
+
+    tl.to(bar2Ref.current, {
+      x: -75,
+      y: 75,
+      duration: 0.5,
+      ease: 'power2.out'
+    }, 6);
+
+    // Final Scale Reveal
+    tl.to(loaderRef.current, {
+      scale: 60,
+      duration: 1.5,
+      ease: 'power4.inOut',
+    }, 7);
+
+    tl.to(loaderRef.current, {
+      rotate: 45,
+      y: 500,
+      x: 2000,
+      duration: 1.5,
+      ease: 'power4.inOut',
+    }, 7);
+
+    // Branding Reveal
+    tl.to('.reveal-text', {
+      y: 0,
+      duration: 1,
+      stagger: 0.1,
+      ease: 'power4.out'
+    }, 7.2);
+
+    tl.to(containerRef.current, {
+      opacity: 0,
+      duration: 0.8,
+      ease: 'power1.inOut'
+    }, 8.2);
+
+    return () => {
+      tl.kill();
+    };
   }, [onComplete]);
 
   return (
-    <motion.div
-      className={`fixed inset-0 z-[999] flex flex-col items-center justify-center ${theme === 'dark' ? 'bg-[#030303] text-white' : 'bg-[#f8f9fa] text-black'}`}
-      initial={{ opacity: 1 }}
-      exit={{ opacity: 0, y: -50 }}
-      transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+    <div 
+      ref={containerRef}
+      className={`fixed inset-0 z-[999] overflow-hidden flex items-center justify-center ${theme === 'dark' ? 'bg-[#030303]' : 'bg-white'}`}
     >
-      <div className="w-[300px] font-mono text-xs md:text-sm">
-        <div className="flex justify-between mb-2 text-gray-500">
-          <span>STATUS</span>
-          <span className="text-purple-500 animate-pulse">PROCESSING</span>
-        </div>
+      {/* Visual Loader Elements */}
+      <div ref={loaderRef} className="absolute top-1/2 left-1/2 w-[300px] h-[50px] -translate-x-1/2 -translate-y-1/2 flex bg-white/10 z-10">
+        <div ref={bar1Ref} className="h-full bg-purple-600 w-[200px]"></div>
+        <div ref={bar2Ref} className="h-full bg-fuchsia-500 w-[100px]"></div>
+      </div>
 
-        {/* Progress Bar Container */}
-        <div className="w-full h-1 bg-white/10 mb-4 relative overflow-hidden">
-          <motion.div
-            className="h-full bg-purple-500"
-            initial={{ width: 0 }}
-            animate={{ width: `${progress}%` }}
-            transition={{ ease: "linear" }}
-          />
+      {/* Large Counter - Bottom Left Style */}
+      <div className="absolute left-12 bottom-12 h-[100px] flex overflow-hidden clip-path-counter font-bold text-[100px] leading-[100px] tracking-tighter mix-blend-difference z-20">
+        <div ref={counter1Ref} className="relative transition-colors">
+          <div className="h-[100px]">0</div>
+          <div className="h-[100px]">1</div>
         </div>
+        <div ref={counter2Ref} className="relative">
+          {/* Numbers generated by JS */}
+        </div>
+        <div ref={counter3Ref} className="relative">
+          {/* Numbers generated by JS */}
+        </div>
+        <div className="ml-2 text-purple-500">%</div>
+      </div>
 
-        <div className="flex justify-between items-center">
-          <span className="text-gray-400">
-            {`> ${text}...`}
-          </span>
-          <span className="font-bold text-purple-400 text-xl">
-            {progress}%
-          </span>
+      {/* Branding Reveal Text */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-30">
+        <div className="overflow-hidden flex gap-4">
+          <h1 className="text-4xl md:text-7xl font-bold tracking-tight text-white uppercase flex overflow-hidden">
+            <span className="reveal-text translate-y-full inline-block">Fix</span>
+            <span className="reveal-text translate-y-full inline-block text-purple-500">O</span>
+          </h1>
+          <h1 className="text-4xl md:text-7xl font-bold tracking-tight text-white/20 uppercase flex overflow-hidden">
+            <span className="reveal-text translate-y-full inline-block">Studio</span>
+          </h1>
         </div>
       </div>
-    </motion.div>
+
+      <style jsx>{`
+        .clip-path-counter {
+          clip-path: polygon(0 0, 100% 0, 100% 100px, 0 100px);
+        }
+        .num {
+          height: 100px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+        }
+      `}</style>
+    </div>
   );
 };
 
