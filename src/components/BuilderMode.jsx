@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Download, ChevronLeft, Code, Square, Cpu, Layout, FileCode2, Paintbrush, Zap, Monitor, Smartphone, Tablet, Copy, Check, Terminal, Play, Maximize, Columns } from 'lucide-react';
+import { Send, Download, ChevronLeft, Code, Square, Cpu, Layout, FileCode2, Paintbrush, Zap, Monitor, Smartphone, Tablet, Copy, Check, Terminal, Play, Maximize, Columns, Settings, Lock, CheckCircle2, AlertCircle, X } from 'lucide-react';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 
@@ -14,7 +14,7 @@ When the user asks you to build or design something, you must return EXACTLY THR
 DO NOT return any other text, explanations, or conversational filler. ONLY the code blocks.
 `;
 
-const AVAILABLE_MODELS = [
+const DEFAULT_MODELS = [
   { id: "minimax/minimax-m2.5:free", name: "Minimax M2.5 (Fast)" },
   { id: "google/gemma-3-27b-it:free", name: "Google Gemma 3" },
   { id: "openai/gpt-oss-120b:free", name: "GPT OSS 120B" },
@@ -38,7 +38,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
   const [generationStep, setGenerationStep] = useState(0); 
   const [previewCode, setPreviewCode] = useState({ html: '', css: '', js: '' });
   const [previewUrl, setPreviewUrl] = useState('');
-  const [selectedModel, setSelectedModel] = useState(initialModel || AVAILABLE_MODELS[0].id);
+  
   const [builderCredits, setBuilderCredits] = useState(1);
   const [deviceView, setDeviceView] = useState('desktop'); 
   const [codeTab, setCodeTab] = useState('html'); 
@@ -49,6 +49,23 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
   const [activeView, setActiveView] = useState('split'); // 'preview', 'code', 'split'
   const [mobileTab, setMobileTab] = useState('prompt'); // 'prompt', 'preview', 'code'
   
+  // API Key & Provider Settings
+  const [showSettings, setShowSettings] = useState(false);
+  const [provider, setProvider] = useState(localStorage.getItem('fixo_custom_provider') || 'openrouter');
+  const [apiKey, setApiKey] = useState(localStorage.getItem('fixo_custom_api_key') || '');
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [verificationStatus, setVerificationStatus] = useState(null);
+  const [fetchedModels, setFetchedModels] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem('fixo_custom_models')) || [];
+    } catch {
+      return [];
+    }
+  });
+  
+  const activeModels = fetchedModels.length > 0 ? fetchedModels : DEFAULT_MODELS;
+  const [selectedModel, setSelectedModel] = useState(initialModel || activeModels[0].id);
+
   const messagesEndRef = useRef(null);
   const abortControllerRef = useRef(null);
   const inputRef = useRef(null);
@@ -85,7 +102,6 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
     scrollToBottom();
   }, [messages, generationStep]);
 
-  // Expandable textarea logic
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.style.height = 'auto';
@@ -157,9 +173,71 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
     setTimeout(() => { if (abortControllerRef.current) setGenerationStep(4) }, 5000);
   };
 
+  const handleVerifyAndFetch = async () => {
+    if (!apiKey.trim()) return;
+    setIsVerifying(true);
+    setVerificationStatus(null);
+    try {
+      let url = '';
+      let headers = { 'Authorization': `Bearer ${apiKey}` };
+      
+      if (provider === 'openrouter') {
+        url = 'https://openrouter.ai/api/v1/models';
+      } else if (provider === 'openai') {
+        url = 'https://api.openai.com/v1/models';
+      } else if (provider === 'gemini') {
+        url = `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`;
+        headers = {}; 
+      }
+
+      if (url) {
+        const res = await fetch(url, { headers });
+        if (!res.ok) throw new Error("Invalid Key");
+        const data = await res.json();
+        
+        let modelsList = [];
+        if (provider === 'openrouter' || provider === 'openai') {
+          modelsList = data.data.map(m => ({ id: m.id, name: m.id })).filter(m => !m.id.includes('embedding') && !m.id.includes('dall-e') && !m.id.includes('tts') && !m.id.includes('whisper'));
+        } else if (provider === 'gemini') {
+          modelsList = data.models.map(m => ({ id: m.name, name: m.displayName || m.name })).filter(m => m.id.includes('gemini'));
+        }
+        
+        setFetchedModels(modelsList);
+        if (modelsList.length > 0) setSelectedModel(modelsList[0].id);
+        
+        localStorage.setItem('fixo_custom_provider', provider);
+        localStorage.setItem('fixo_custom_api_key', apiKey);
+        localStorage.setItem('fixo_custom_models', JSON.stringify(modelsList));
+      } else {
+        localStorage.setItem('fixo_custom_provider', provider);
+        localStorage.setItem('fixo_custom_api_key', apiKey);
+      }
+      
+      setVerificationStatus('success');
+      setTimeout(() => setShowSettings(false), 1500);
+    } catch (error) {
+      setVerificationStatus('error');
+      setFetchedModels([]);
+    }
+    setIsVerifying(false);
+  };
+
+  const handleClearKey = () => {
+    setApiKey('');
+    setFetchedModels([]);
+    setVerificationStatus(null);
+    localStorage.removeItem('fixo_custom_provider');
+    localStorage.removeItem('fixo_custom_api_key');
+    localStorage.removeItem('fixo_custom_models');
+    setSelectedModel(DEFAULT_MODELS[0].id);
+  };
+
   const handleSendMessage = async (overrideText = null) => {
-    if (builderCredits <= 0) {
-      setMessages(prev => [...prev, { role: 'ai', text: "You have reached your daily limit of 1 builder generation. Please come back tomorrow!" }]);
+    const isUsingCustomKey = !!localStorage.getItem('fixo_custom_api_key');
+    
+    if (!isUsingCustomKey && builderCredits <= 0) {
+      setMessages(prev => [...prev, { role: 'ai', text: "You have reached your daily limit of 1 free generation. Please add your own API Key in Settings to continue building!" }]);
+      setShowSettings(true);
       return;
     }
 
@@ -180,37 +258,49 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
       let response;
       let data;
       
-      const requestBody = JSON.stringify({
+      const requestBody = {
         model: selectedModel,
         messages: [
           { role: "system", content: BUILDER_CONTEXT },
           ...messages.filter(m => m.role === 'user').slice(-3),
           { role: "user", content: textToSend }
-        ],
-        mode: "builder"
-      });
+        ]
+      };
 
-      if (import.meta.env.DEV) {
-        const apiKey = import.meta.env.VITE_OPENROUTER_API_KEY;
-        response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      const customKey = localStorage.getItem('fixo_custom_api_key');
+      const customProvider = localStorage.getItem('fixo_custom_provider');
+
+      if (customKey && customProvider === 'openrouter') {
+         response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKey}`,
-          },
-          body: requestBody,
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${customKey}` },
+          body: JSON.stringify(requestBody),
           signal
         });
-        data = await response.json();
+      } else if (customKey && customProvider === 'openai') {
+         response = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${customKey}` },
+          body: JSON.stringify(requestBody),
+          signal
+        });
+      } else if (import.meta.env.DEV) {
+        response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${import.meta.env.VITE_OPENROUTER_API_KEY}` },
+          body: JSON.stringify(requestBody),
+          signal
+        });
       } else {
         response = await fetch("/api/chat", {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: requestBody,
+          body: JSON.stringify({...requestBody, mode: "builder"}),
           signal
         });
-        data = await response.json();
       }
+
+      data = await response.json();
 
       if (response.status === 429) {
         setMessages(prev => [...prev, { role: 'ai', text: "Rate limit exceeded. Please wait a minute." }]);
@@ -219,13 +309,24 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
         return;
       }
 
+      if (response.status === 401 || response.status === 403) {
+        setMessages(prev => [...prev, { role: 'ai', text: "API Key Error. Your custom key might be invalid or out of credits." }]);
+        setIsLoading(false);
+        setGenerationStep(0);
+        setShowSettings(true);
+        return;
+      }
+
       const aiResponseText = data.choices?.[0]?.message?.content || "";
       if (aiResponseText) {
         setMessages(prev => [...prev, { role: 'ai', text: "Render complete." }]);
         parseCodeBlocks(aiResponseText);
-        const newCredits = builderCredits - 1;
-        setBuilderCredits(newCredits);
-        localStorage.setItem('fixo_builder_credits', newCredits.toString());
+        
+        if (!isUsingCustomKey) {
+          const newCredits = builderCredits - 1;
+          setBuilderCredits(newCredits);
+          localStorage.setItem('fixo_builder_credits', newCredits.toString());
+        }
       } else {
         setMessages(prev => [...prev, { role: 'ai', text: "Generation failed." }]);
       }
@@ -289,9 +390,81 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
     { step: 4, text: "Injecting logic...", icon: <FileCode2 size={14} className="animate-pulse text-rose-400" /> }
   ];
 
+  const isUsingCustomKey = !!localStorage.getItem('fixo_custom_api_key');
+
   return (
     <div className={`flex flex-col md:flex-row h-full w-full overflow-hidden ${theme === 'dark' ? 'bg-[#050505] text-white' : 'bg-[#fcfcfc] text-black'}`}>
       
+      {/* SETTINGS MODAL */}
+      {showSettings && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowSettings(false)}></div>
+          <div className={`relative w-full max-w-md p-6 rounded-2xl shadow-2xl border ${theme === 'dark' ? 'bg-[#0a0a0c] border-white/10' : 'bg-white border-black/10'} animate-in fade-in zoom-in-95 duration-200`}>
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-2">
+                <Settings className="text-violet-500" size={20} />
+                <h3 className="font-bold text-lg">Provider Settings</h3>
+              </div>
+              <button onClick={() => setShowSettings(false)} className={`p-1 rounded-md transition-all ${theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-black/5'}`}>
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className={`text-xs font-semibold uppercase tracking-wider mb-2 block ${theme === 'dark' ? 'text-white/60' : 'text-black/60'}`}>Provider</label>
+                <select value={provider} onChange={(e) => setProvider(e.target.value)} className={`w-full p-3 rounded-xl border focus:outline-none transition-all ${theme === 'dark' ? 'bg-white/[0.03] border-white/10 focus:border-violet-500/50' : 'bg-black/[0.02] border-black/10 focus:border-violet-500/50'}`}>
+                  <option value="openrouter" className="bg-black text-white">OpenRouter</option>
+                  <option value="openai" className="bg-black text-white">OpenAI</option>
+                  <option value="gemini" className="bg-black text-white">Google Gemini</option>
+                </select>
+              </div>
+
+              <div>
+                <label className={`text-xs font-semibold uppercase tracking-wider mb-2 block ${theme === 'dark' ? 'text-white/60' : 'text-black/60'}`}>API Key</label>
+                <div className={`relative flex items-center p-1 rounded-xl border focus-within:border-violet-500/50 transition-all ${theme === 'dark' ? 'bg-white/[0.03] border-white/10' : 'bg-black/[0.02] border-black/10'}`}>
+                  <div className="pl-3 text-violet-500"><Lock size={16} /></div>
+                  <input 
+                    type="password" 
+                    value={apiKey} 
+                    onChange={(e) => setApiKey(e.target.value)} 
+                    placeholder="sk-..." 
+                    className="flex-1 bg-transparent p-2 text-sm focus:outline-none min-w-0"
+                  />
+                </div>
+              </div>
+
+              {verificationStatus === 'success' && (
+                <div className="flex items-center gap-2 text-green-500 text-sm font-medium bg-green-500/10 p-3 rounded-xl border border-green-500/20">
+                  <CheckCircle2 size={16} /> API Key Verified & Models Loaded
+                </div>
+              )}
+              {verificationStatus === 'error' && (
+                <div className="flex items-center gap-2 text-rose-500 text-sm font-medium bg-rose-500/10 p-3 rounded-xl border border-rose-500/20">
+                  <AlertCircle size={16} /> Invalid API Key or Network Error
+                </div>
+              )}
+
+              <div className="flex gap-3 pt-2">
+                <button 
+                  onClick={handleClearKey} 
+                  className={`flex-1 p-3 rounded-xl border text-sm font-medium transition-all ${theme === 'dark' ? 'border-white/10 hover:bg-white/5' : 'border-black/10 hover:bg-black/5'}`}
+                >
+                  Clear Key
+                </button>
+                <button 
+                  onClick={handleVerifyAndFetch} 
+                  disabled={isVerifying || !apiKey}
+                  className="flex-1 p-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                >
+                  {isVerifying ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div> : "Verify & Save"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* 1. LEFT PANEL (Prompt & Controls) */}
       <div className={`${mobileTab === 'prompt' ? 'flex' : 'hidden'} md:flex w-full md:w-[300px] lg:w-[320px] flex-col flex-shrink-0 border-r transition-colors duration-300 ${theme === 'dark' ? 'border-white/[0.05] bg-white/[0.01]' : 'border-black/[0.05] bg-black/[0.01]'} backdrop-blur-3xl z-10 relative h-full md:h-auto`}>
         {/* Header */}
@@ -308,12 +481,18 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
             </div>
             <span className={`text-sm font-bold tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-fuchsia-400`}>FixO IDE</span>
           </div>
+          <button onClick={() => setShowSettings(true)} className={`p-1.5 rounded-lg transition-all hover:scale-105 ${theme === 'dark' ? 'bg-white/5 hover:bg-white/10 text-white/70 hover:text-white' : 'bg-black/5 hover:bg-black/10 text-black/70 hover:text-black'} ${isUsingCustomKey ? 'ring-1 ring-violet-500/50 text-violet-400' : ''}`} title="API Settings">
+             <Settings size={16} className={isUsingCustomKey ? "text-violet-500" : ""} />
+          </button>
         </div>
 
         {/* Settings / Controls */}
         <div className="p-4 space-y-5 flex-shrink-0">
           <div>
-            <label className={`text-[11px] font-medium uppercase tracking-wider mb-2 block ${theme === 'dark' ? 'text-white/50' : 'text-black/50'}`}>AI Model</label>
+            <label className={`text-[11px] font-medium uppercase tracking-wider mb-2 flex items-center justify-between ${theme === 'dark' ? 'text-white/50' : 'text-black/50'}`}>
+              <span>AI Model</span>
+              {isUsingCustomKey && <span className="text-[9px] text-violet-500 font-bold bg-violet-500/10 px-1.5 py-0.5 rounded">CUSTOM</span>}
+            </label>
             <select
               value={selectedModel}
               onChange={(e) => setSelectedModel(e.target.value)}
@@ -323,17 +502,17 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
                   : 'bg-black/[0.02] border-black/[0.05] text-black/90 hover:border-violet-500/50 hover:bg-black/[0.05]'
               }`}
             >
-              {AVAILABLE_MODELS.map(model => (
+              {activeModels.map(model => (
                 <option key={model.id} value={model.id} className="bg-black text-white">{model.name}</option>
               ))}
             </select>
           </div>
           
-          <div className={`p-3.5 rounded-xl border flex items-center justify-between ${builderCredits > 0 ? (theme === 'dark' ? 'bg-violet-500/10 border-violet-500/20 text-violet-300' : 'bg-violet-500/10 border-violet-500/20 text-violet-700') : 'bg-rose-500/10 border-rose-500/20 text-rose-400'}`}>
-            <span className="text-xs font-medium">Daily Limit</span>
+          <div className={`p-3.5 rounded-xl border flex items-center justify-between ${isUsingCustomKey ? (theme === 'dark' ? 'bg-green-500/10 border-green-500/20 text-green-400' : 'bg-green-50 border-green-200 text-green-700') : builderCredits > 0 ? (theme === 'dark' ? 'bg-violet-500/10 border-violet-500/20 text-violet-300' : 'bg-violet-500/10 border-violet-500/20 text-violet-700') : 'bg-rose-500/10 border-rose-500/20 text-rose-400'}`}>
+            <span className="text-xs font-medium">{isUsingCustomKey ? "Unlimited Usage" : "Free Daily Limit"}</span>
             <div className="flex items-center gap-1.5 font-mono text-sm">
-              <Zap size={14} className={builderCredits > 0 ? "fill-current" : ""} />
-              {builderCredits}/1
+              {isUsingCustomKey ? <CheckCircle2 size={14} /> : <Zap size={14} className={builderCredits > 0 ? "fill-current" : ""} />}
+              {isUsingCustomKey ? '∞' : `${builderCredits}/1`}
             </div>
           </div>
         </div>
@@ -383,7 +562,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
               onChange={(e) => setInputValue(e.target.value)} 
               onKeyDown={handleKeyDown}
               placeholder="Describe the UI..." 
-              disabled={isLoading || builderCredits <= 0}
+              disabled={isLoading || (!isUsingCustomKey && builderCredits <= 0)}
               rows={1}
               className="flex-1 bg-transparent text-[13px] p-3 resize-none focus:outline-none custom-scrollbar disabled:opacity-50 min-h-[44px] max-h-[120px]" 
             />
@@ -392,7 +571,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
                 <Square size={18} className="fill-current" />
               </button>
             ) : (
-              <button onClick={() => handleSendMessage()} disabled={!inputValue.trim() || builderCredits <= 0} className="p-2.5 mb-1 mr-1 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-xl hover:scale-105 transition-all disabled:opacity-30 disabled:scale-100 active:scale-95 shadow-[0_0_15px_rgba(139,92,246,0.3)] disabled:shadow-none flex-shrink-0">
+              <button onClick={() => handleSendMessage()} disabled={!inputValue.trim()} className="p-2.5 mb-1 mr-1 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-xl hover:scale-105 transition-all disabled:opacity-30 disabled:scale-100 active:scale-95 shadow-[0_0_15px_rgba(139,92,246,0.3)] disabled:shadow-none flex-shrink-0">
                 <Send size={18} />
               </button>
             )}
@@ -400,152 +579,155 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
         </div>
       </div>
 
-      {/* RIGHT WORKSPACE (Preview + Code) */}
-      <div className={`${mobileTab !== 'prompt' ? 'flex' : 'hidden'} md:flex flex-1 flex-row relative z-0 h-full overflow-hidden`}>
+      {/* RIGHT WORKSPACE (Global Wrapper for Preview + Code) */}
+      <div className={`${mobileTab !== 'prompt' ? 'flex' : 'hidden'} md:flex flex-1 flex-col relative z-0 h-full overflow-hidden`}>
         
-        {/* PREVIEW PANEL */}
-        <div className={`flex flex-col relative h-full transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${
-          window.innerWidth < 768 
-            ? (mobileTab === 'preview' ? 'w-full opacity-100' : 'w-0 opacity-0 hidden')
-            : activeView === 'code' ? 'w-0 opacity-0 overflow-hidden flex-none border-0' : 'flex-1 opacity-100'
-        }`}>
-          <div className={`flex items-center justify-between px-3 md:px-4 py-3 border-b flex-shrink-0 ${theme === 'dark' ? 'border-white/[0.05] bg-[#0a0a0c]' : 'border-black/[0.05] bg-white'}`}>
-            <div className="flex items-center gap-1.5 hidden md:flex">
-              <button onClick={() => setActiveView('preview')} className={`p-1.5 rounded-lg transition-all ${activeView === 'preview' ? 'bg-violet-500/20 text-violet-400' : (theme === 'dark' ? 'hover:bg-white/5 text-white/50 hover:text-white' : 'hover:bg-black/5 text-black/50 hover:text-black')}`} title="Preview Only">
-                <Maximize size={16} />
-              </button>
-              <button onClick={() => setActiveView('split')} className={`p-1.5 rounded-lg transition-all ${activeView === 'split' ? 'bg-violet-500/20 text-violet-400' : (theme === 'dark' ? 'hover:bg-white/5 text-white/50 hover:text-white' : 'hover:bg-black/5 text-black/50 hover:text-black')}`} title="Split View">
-                <Columns size={16} />
-              </button>
-              <button onClick={() => setActiveView('code')} className={`p-1.5 rounded-lg transition-all ${activeView === 'code' ? 'bg-violet-500/20 text-violet-400' : (theme === 'dark' ? 'hover:bg-white/5 text-white/50 hover:text-white' : 'hover:bg-black/5 text-black/50 hover:text-black')}`} title="Code Only">
-                <Terminal size={16} />
-              </button>
-            </div>
-            <div className="md:hidden flex font-semibold text-xs items-center gap-2">
-              <Layout size={16} className="text-violet-500"/> Live Preview
-            </div>
-            
-            {/* Fake Browser URL Bar */}
-            <div className={`flex-1 max-w-sm mx-3 flex items-center justify-center px-4 py-2 rounded-full border text-[11px] font-mono tracking-wide truncate ${theme === 'dark' ? 'bg-white/[0.02] border-white/[0.05] text-white/40' : 'bg-black/[0.02] border-black/[0.05] text-black/50'}`}>
-              <span className="opacity-50">https://</span>fixo.build/preview
-            </div>
-
-            <div className="flex items-center gap-1 bg-black/10 dark:bg-black/20 p-1 rounded-lg border border-black/5 dark:border-white/5 hidden lg:flex">
-              <button onClick={() => setDeviceView('desktop')} className={`p-1.5 rounded-md transition-all ${deviceView === 'desktop' ? (theme === 'dark' ? 'bg-white/10 text-white shadow-sm' : 'bg-white text-black shadow-sm') : 'text-gray-400 hover:text-gray-600 dark:hover:text-white/80'}`}><Monitor size={16} /></button>
-              <button onClick={() => setDeviceView('tablet')} className={`p-1.5 rounded-md transition-all ${deviceView === 'tablet' ? (theme === 'dark' ? 'bg-white/10 text-white shadow-sm' : 'bg-white text-black shadow-sm') : 'text-gray-400 hover:text-gray-600 dark:hover:text-white/80'}`}><Tablet size={16} /></button>
-              <button onClick={() => setDeviceView('mobile')} className={`p-1.5 rounded-md transition-all ${deviceView === 'mobile' ? (theme === 'dark' ? 'bg-white/10 text-white shadow-sm' : 'bg-white text-black shadow-sm') : 'text-gray-400 hover:text-gray-600 dark:hover:text-white/80'}`}><Smartphone size={16} /></button>
-            </div>
+        {/* GLOBAL WORKSPACE TOP BAR */}
+        <div className={`flex items-center justify-between px-3 md:px-4 py-3 border-b flex-shrink-0 ${theme === 'dark' ? 'border-white/[0.05] bg-[#0a0a0c]' : 'border-black/[0.05] bg-white'}`}>
+          <div className="flex items-center gap-1.5 hidden md:flex">
+            <button onClick={() => setActiveView('preview')} className={`p-1.5 rounded-lg transition-all ${activeView === 'preview' ? 'bg-violet-500/20 text-violet-400' : (theme === 'dark' ? 'hover:bg-white/5 text-white/50 hover:text-white' : 'hover:bg-black/5 text-black/50 hover:text-black')}`} title="Preview Only">
+              <Maximize size={16} />
+            </button>
+            <button onClick={() => setActiveView('split')} className={`p-1.5 rounded-lg transition-all ${activeView === 'split' ? 'bg-violet-500/20 text-violet-400' : (theme === 'dark' ? 'hover:bg-white/5 text-white/50 hover:text-white' : 'hover:bg-black/5 text-black/50 hover:text-black')}`} title="Split View">
+              <Columns size={16} />
+            </button>
+            <button onClick={() => setActiveView('code')} className={`p-1.5 rounded-lg transition-all ${activeView === 'code' ? 'bg-violet-500/20 text-violet-400' : (theme === 'dark' ? 'hover:bg-white/5 text-white/50 hover:text-white' : 'hover:bg-black/5 text-black/50 hover:text-black')}`} title="Code Only">
+              <Terminal size={16} />
+            </button>
+          </div>
+          <div className="md:hidden flex font-semibold text-xs items-center gap-2">
+            <Layout size={16} className="text-violet-500"/> Live Preview
+          </div>
+          
+          {/* Fake Browser URL Bar */}
+          <div className={`flex-1 max-w-sm mx-3 flex items-center justify-center px-4 py-2 rounded-full border text-[11px] font-mono tracking-wide truncate ${theme === 'dark' ? 'bg-white/[0.02] border-white/[0.05] text-white/40' : 'bg-black/[0.02] border-black/[0.05] text-black/50'}`}>
+            <span className="opacity-50">https://</span>fixo.build/preview
           </div>
 
-          {/* Browser Canvas */}
-          <div className={`flex-1 p-0 md:p-6 lg:p-8 overflow-hidden flex items-center justify-center relative ${theme === 'dark' ? 'bg-[#050505]' : 'bg-[#f5f5f5]'}`}>
-            <div className="absolute inset-0 opacity-[0.015] pointer-events-none mix-blend-overlay" style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")'}}></div>
-            
-            {hasGenerated || isLoading ? (
-              <div className={`relative transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] flex flex-col overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.1)] md:rounded-xl border ${hasGenerated && !isLoading ? 'scale-100 opacity-100' : 'scale-95 opacity-50'} ${theme === 'dark' ? 'border-white/[0.1] bg-[#0a0a0c]' : 'border-black/[0.1] bg-white'} ${
-                window.innerWidth < 768 ? 'w-full h-full' :
-                deviceView === 'desktop' ? 'w-full h-full' :
-                deviceView === 'tablet' ? 'w-[768px] h-full shadow-[0_0_50px_rgba(0,0,0,0.3)]' :
-                'w-[375px] h-[812px] max-h-full shadow-[0_0_50px_rgba(0,0,0,0.3)]'
-              }`}>
-                <div className={`hidden md:flex h-10 w-full flex-shrink-0 border-b items-center px-4 gap-2.5 ${theme === 'dark' ? 'bg-[#1a1a1c] border-white/5' : 'bg-[#fcfcfc] border-black/5'}`}>
-                  <div className="w-3 h-3 rounded-full bg-rose-500/90 shadow-sm"></div>
-                  <div className="w-3 h-3 rounded-full bg-amber-500/90 shadow-sm"></div>
-                  <div className="w-3 h-3 rounded-full bg-emerald-500/90 shadow-sm"></div>
-                </div>
-                {isLoading ? (
-                  <div className="w-full h-full flex items-center justify-center bg-white dark:bg-[#0a0a0c]">
-                     <div className="w-10 h-10 rounded-full border-4 border-violet-500 border-t-transparent animate-spin"></div>
-                  </div>
-                ) : (
-                  <iframe 
-                    src={previewUrl} 
-                    className={`w-full h-full flex-1 border-none bg-white`}
-                    title="Live Preview"
-                    sandbox="allow-scripts allow-same-origin"
-                  />
-                )}
-              </div>
-            ) : (
-              <div className="flex-1 flex items-center justify-center flex-col max-w-lg mx-auto text-center px-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
-                <div className="relative mb-6">
-                  <div className="absolute inset-0 bg-gradient-to-tr from-violet-600 to-fuchsia-600 rounded-3xl blur-2xl opacity-20"></div>
-                  <div className={`w-24 h-24 rounded-3xl ${theme === 'dark' ? 'bg-white/[0.02] border-white/[0.05]' : 'bg-black/[0.02] border-black/[0.05]'} border flex items-center justify-center shadow-inner relative z-10 backdrop-blur-xl`}>
-                    <Layout size={40} className="text-violet-500" />
-                  </div>
-                </div>
-                <h2 className={`text-2xl font-bold mb-3 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>Start building something amazing</h2>
-                <p className={`text-sm mb-8 ${theme === 'dark' ? 'text-white/50' : 'text-black/50'}`}>Describe your desired UI in the prompt panel, or try one of these suggestions to see FixO in action.</p>
-                <div className="flex flex-col gap-3 w-full max-w-sm">
-                  {PRESETS.map((preset, idx) => (
-                     <button 
-                      key={idx}
-                      onClick={() => handleSendMessage(preset)}
-                      className={`px-5 py-3.5 rounded-xl border flex items-center gap-3 text-sm transition-all hover:scale-[1.02] active:scale-95 ${theme === 'dark' ? 'bg-white/[0.02] border-white/[0.05] text-white/70 hover:bg-white/[0.05] hover:text-white' : 'bg-black/[0.02] border-black/[0.05] text-black/70 hover:bg-black/[0.05] hover:text-black'}`}
-                    >
-                      <Play size={14} className="text-violet-500" /> {preset}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+          <div className="flex items-center gap-1 bg-black/10 dark:bg-black/20 p-1 rounded-lg border border-black/5 dark:border-white/5 hidden lg:flex">
+            <button onClick={() => setDeviceView('desktop')} className={`p-1.5 rounded-md transition-all ${deviceView === 'desktop' ? (theme === 'dark' ? 'bg-white/10 text-white shadow-sm' : 'bg-white text-black shadow-sm') : 'text-gray-400 hover:text-gray-600 dark:hover:text-white/80'}`}><Monitor size={16} /></button>
+            <button onClick={() => setDeviceView('tablet')} className={`p-1.5 rounded-md transition-all ${deviceView === 'tablet' ? (theme === 'dark' ? 'bg-white/10 text-white shadow-sm' : 'bg-white text-black shadow-sm') : 'text-gray-400 hover:text-gray-600 dark:hover:text-white/80'}`}><Tablet size={16} /></button>
+            <button onClick={() => setDeviceView('mobile')} className={`p-1.5 rounded-md transition-all ${deviceView === 'mobile' ? (theme === 'dark' ? 'bg-white/10 text-white shadow-sm' : 'bg-white text-black shadow-sm') : 'text-gray-400 hover:text-gray-600 dark:hover:text-white/80'}`}><Smartphone size={16} /></button>
           </div>
         </div>
 
-        {/* CODE PANEL */}
-        <div className={`flex flex-col h-full border-l transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${theme === 'dark' ? 'border-white/[0.05] bg-[#0a0a0c]' : 'border-black/[0.05] bg-[#fcfcfc]'} z-20 ${
-           window.innerWidth < 768 
-            ? (mobileTab === 'code' ? 'w-full opacity-100' : 'w-0 opacity-0 hidden')
-            : activeView === 'preview' ? 'w-0 opacity-0 overflow-hidden flex-none border-0' 
-            : activeView === 'split' ? 'w-[360px] lg:w-[450px] flex-none' 
-            : 'flex-1 opacity-100'
-        }`}>
-          {/* Code Tabs Header */}
-          <div className={`flex items-center justify-between p-2 md:p-3 border-b flex-shrink-0 ${theme === 'dark' ? 'border-white/[0.05]' : 'border-black/[0.05]'}`}>
-            <div className="flex gap-1.5">
-              {['html', 'css', 'js'].map(tab => (
-                 <button 
-                  key={tab} 
-                  onClick={() => setCodeTab(tab)} 
-                  className={`px-4 py-2 rounded-lg text-xs font-mono tracking-wider uppercase transition-all ${
-                    codeTab === tab 
-                      ? (theme === 'dark' ? 'bg-white/10 text-white shadow-sm' : 'bg-black/5 text-black shadow-sm border border-black/5') 
-                      : (theme === 'dark' ? 'text-white/40 hover:bg-white/5 hover:text-white/70' : 'text-black/40 hover:bg-black/5 hover:text-black/70')
-                  }`}
-                >
-                  {tab}
+        {/* PANELS CONTAINER (Preview + Code) */}
+        <div className="flex-1 flex flex-row relative min-h-0 overflow-hidden">
+          
+          {/* PREVIEW PANEL */}
+          <div className={`flex flex-col relative h-full transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${
+            window.innerWidth < 768 
+              ? (mobileTab === 'preview' ? 'w-full opacity-100' : 'w-0 opacity-0 hidden')
+              : activeView === 'code' ? 'w-0 opacity-0 overflow-hidden flex-none border-0' : 'flex-1 opacity-100'
+          }`}>
+            <div className={`flex-1 p-0 md:p-6 lg:p-8 overflow-hidden flex items-center justify-center relative ${theme === 'dark' ? 'bg-[#050505]' : 'bg-[#f5f5f5]'}`}>
+              <div className="absolute inset-0 opacity-[0.015] pointer-events-none mix-blend-overlay" style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")'}}></div>
+              
+              {hasGenerated || isLoading ? (
+                <div className={`relative transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] flex flex-col overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.1)] md:rounded-xl border ${hasGenerated && !isLoading ? 'scale-100 opacity-100' : 'scale-95 opacity-50'} ${theme === 'dark' ? 'border-white/[0.1] bg-[#0a0a0c]' : 'border-black/[0.1] bg-white'} ${
+                  window.innerWidth < 768 ? 'w-full h-full' :
+                  deviceView === 'desktop' ? 'w-full h-full' :
+                  deviceView === 'tablet' ? 'w-[768px] h-full shadow-[0_0_50px_rgba(0,0,0,0.3)]' :
+                  'w-[375px] h-[812px] max-h-full shadow-[0_0_50px_rgba(0,0,0,0.3)]'
+                }`}>
+                  <div className={`hidden md:flex h-10 w-full flex-shrink-0 border-b items-center px-4 gap-2.5 ${theme === 'dark' ? 'bg-[#1a1a1c] border-white/5' : 'bg-[#fcfcfc] border-black/5'}`}>
+                    <div className="w-3 h-3 rounded-full bg-rose-500/90 shadow-sm"></div>
+                    <div className="w-3 h-3 rounded-full bg-amber-500/90 shadow-sm"></div>
+                    <div className="w-3 h-3 rounded-full bg-emerald-500/90 shadow-sm"></div>
+                  </div>
+                  {isLoading ? (
+                    <div className="w-full h-full flex items-center justify-center bg-white dark:bg-[#0a0a0c]">
+                       <div className="w-10 h-10 rounded-full border-4 border-violet-500 border-t-transparent animate-spin"></div>
+                    </div>
+                  ) : (
+                    <iframe 
+                      src={previewUrl} 
+                      className={`w-full h-full flex-1 border-none bg-white`}
+                      title="Live Preview"
+                      sandbox="allow-scripts allow-same-origin"
+                    />
+                  )}
+                </div>
+              ) : (
+                <div className="flex-1 flex items-center justify-center flex-col max-w-lg mx-auto text-center px-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                  <div className="relative mb-6">
+                    <div className="absolute inset-0 bg-gradient-to-tr from-violet-600 to-fuchsia-600 rounded-3xl blur-2xl opacity-20"></div>
+                    <div className={`w-24 h-24 rounded-3xl ${theme === 'dark' ? 'bg-white/[0.02] border-white/[0.05]' : 'bg-black/[0.02] border-black/[0.05]'} border flex items-center justify-center shadow-inner relative z-10 backdrop-blur-xl`}>
+                      <Layout size={40} className="text-violet-500" />
+                    </div>
+                  </div>
+                  <h2 className={`text-2xl font-bold mb-3 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>Start building something amazing</h2>
+                  <p className={`text-sm mb-8 ${theme === 'dark' ? 'text-white/50' : 'text-black/50'}`}>Describe your desired UI in the prompt panel, or try one of these suggestions to see FixO in action.</p>
+                  <div className="flex flex-col gap-3 w-full max-w-sm">
+                    {PRESETS.map((preset, idx) => (
+                       <button 
+                        key={idx}
+                        onClick={() => handleSendMessage(preset)}
+                        className={`px-5 py-3.5 rounded-xl border flex items-center gap-3 text-sm transition-all hover:scale-[1.02] active:scale-95 ${theme === 'dark' ? 'bg-white/[0.02] border-white/[0.05] text-white/70 hover:bg-white/[0.05] hover:text-white' : 'bg-black/[0.02] border-black/[0.05] text-black/70 hover:bg-black/[0.05] hover:text-black'}`}
+                      >
+                        <Play size={14} className="text-violet-500" /> {preset}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* CODE PANEL */}
+          <div className={`flex flex-col h-full border-l transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${theme === 'dark' ? 'border-white/[0.05] bg-[#0a0a0c]' : 'border-black/[0.05] bg-[#fcfcfc]'} z-20 ${
+             window.innerWidth < 768 
+              ? (mobileTab === 'code' ? 'w-full opacity-100' : 'w-0 opacity-0 hidden')
+              : activeView === 'preview' ? 'w-0 opacity-0 overflow-hidden flex-none border-0' 
+              : activeView === 'split' ? 'w-[360px] lg:w-[450px] flex-none' 
+              : 'flex-1 opacity-100'
+          }`}>
+            {/* Code Tabs Header */}
+            <div className={`flex items-center justify-between p-2 md:p-3 border-b flex-shrink-0 ${theme === 'dark' ? 'border-white/[0.05]' : 'border-black/[0.05]'}`}>
+              <div className="flex gap-1.5">
+                {['html', 'css', 'js'].map(tab => (
+                   <button 
+                    key={tab} 
+                    onClick={() => setCodeTab(tab)} 
+                    className={`px-4 py-2 rounded-lg text-xs font-mono tracking-wider uppercase transition-all ${
+                      codeTab === tab 
+                        ? (theme === 'dark' ? 'bg-white/10 text-white shadow-sm' : 'bg-black/5 text-black shadow-sm border border-black/5') 
+                        : (theme === 'dark' ? 'text-white/40 hover:bg-white/5 hover:text-white/70' : 'text-black/40 hover:bg-black/5 hover:text-black/70')
+                    }`}
+                  >
+                    {tab}
+                  </button>
+                ))}
+              </div>
+              <div className="flex items-center gap-1.5 pr-1">
+                <button onClick={copyToClipboard} className={`p-2 rounded-lg transition-all ${theme === 'dark' ? 'text-white/50 hover:bg-white/10 hover:text-white' : 'text-black/50 hover:bg-black/5 hover:text-black'}`} title="Copy Code">
+                  {isCopied ? <Check size={16} className="text-green-500" /> : <Copy size={16} />}
                 </button>
-              ))}
-            </div>
-            <div className="flex items-center gap-1.5 pr-1">
-              <button onClick={copyToClipboard} className={`p-2 rounded-lg transition-all ${theme === 'dark' ? 'text-white/50 hover:bg-white/10 hover:text-white' : 'text-black/50 hover:bg-black/5 hover:text-black'}`} title="Copy Code">
-                {isCopied ? <Check size={16} className="text-green-500" /> : <Copy size={16} />}
-              </button>
-              <button onClick={handleDownload} disabled={!previewUrl} className={`p-2 rounded-lg transition-all disabled:opacity-30 ${theme === 'dark' ? 'text-white/50 hover:bg-white/10 hover:text-white' : 'text-black/50 hover:bg-black/5 hover:text-black'}`} title="Download ZIP">
-                <Download size={16} />
-              </button>
-            </div>
-          </div>
-
-          {/* Code View */}
-          <div className={`flex-1 overflow-y-auto p-5 custom-scrollbar min-h-0 ${theme === 'dark' ? 'bg-[#050505]' : 'bg-[#f0f0f0]'}`}>
-            {previewCode[codeTab] ? (
-              <pre className={`text-[12px] md:text-[13px] font-mono leading-relaxed whitespace-pre-wrap ${
-                codeTab === 'html' ? (theme === 'dark' ? 'text-blue-400' : 'text-blue-700') :
-                codeTab === 'css' ? (theme === 'dark' ? 'text-pink-400' : 'text-pink-700') :
-                (theme === 'dark' ? 'text-yellow-400' : 'text-yellow-700')
-              }`}>
-                {previewCode[codeTab]}
-              </pre>
-            ) : (
-              <div className="h-full flex flex-col items-center justify-center gap-3">
-                <Code size={24} className={theme === 'dark' ? 'text-white/10' : 'text-black/10'} />
-                <p className={`text-xs font-mono uppercase tracking-widest ${theme === 'dark' ? 'text-white/20' : 'text-black/30'}`}>No code generated yet</p>
+                <button onClick={handleDownload} disabled={!previewUrl} className={`p-2 rounded-lg transition-all disabled:opacity-30 ${theme === 'dark' ? 'text-white/50 hover:bg-white/10 hover:text-white' : 'text-black/50 hover:bg-black/5 hover:text-black'}`} title="Download ZIP">
+                  <Download size={16} />
+                </button>
               </div>
-            )}
+            </div>
+
+            {/* Code View */}
+            <div className={`flex-1 overflow-y-auto p-5 custom-scrollbar min-h-0 ${theme === 'dark' ? 'bg-[#050505]' : 'bg-[#f0f0f0]'}`}>
+              {previewCode[codeTab] ? (
+                <pre className={`text-[12px] md:text-[13px] font-mono leading-relaxed whitespace-pre-wrap ${
+                  codeTab === 'html' ? (theme === 'dark' ? 'text-blue-400' : 'text-blue-700') :
+                  codeTab === 'css' ? (theme === 'dark' ? 'text-pink-400' : 'text-pink-700') :
+                  (theme === 'dark' ? 'text-yellow-400' : 'text-yellow-700')
+                }`}>
+                  {previewCode[codeTab]}
+                </pre>
+              ) : (
+                <div className="h-full flex flex-col items-center justify-center gap-3">
+                  <Code size={24} className={theme === 'dark' ? 'text-white/10' : 'text-black/10'} />
+                  <p className={`text-xs font-mono uppercase tracking-widest ${theme === 'dark' ? 'text-white/20' : 'text-black/30'}`}>No code generated yet</p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-
       </div>
 
       {/* MOBILE BOTTOM NAVIGATION */}
