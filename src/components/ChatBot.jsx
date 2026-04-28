@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Bot, Send, Sparkles, X } from 'lucide-react';
+import { Bot, Send, Sparkles, X, Volume2, VolumeX } from 'lucide-react';
 
 const PORTFOLIO_CONTEXT = `
 You are an AI Assistant for Abrar Akhunji's portfolio website.
@@ -27,6 +27,13 @@ const AVAILABLE_MODELS = [
   { id: "inclusionai/ling-2.6-flash:free", name: "Ling Flash 2.6" }
 ];
 
+const SUGGESTIONS = [
+  "Who is Abrar?",
+  "What are your skills?",
+  "Tell me about your projects",
+  "Can you code?"
+];
+
 const ChatBot = ({ theme }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
@@ -35,6 +42,7 @@ const ChatBot = ({ theme }) => {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [selectedModel, setSelectedModel] = useState(AVAILABLE_MODELS[0].id);
+  const [isMuted, setIsMuted] = useState(false);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -45,39 +53,125 @@ const ChatBot = ({ theme }) => {
     scrollToBottom();
   }, [messages, isOpen]);
 
-  const handleSendMessage = async () => {
-    if (!inputValue.trim()) return;
+  const speakText = (text) => {
+    if (isMuted || !('speechSynthesis' in window)) return;
+    
+    // Cancel any ongoing speech
+    window.speechSynthesis.cancel();
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    // Optional: Try to find a good English voice
+    const voices = window.speechSynthesis.getVoices();
+    const englishVoice = voices.find(v => v.lang.includes('en-GB') || v.lang.includes('en-US'));
+    if (englishVoice) utterance.voice = englishVoice;
+    
+    utterance.rate = 1.0;
+    utterance.pitch = 1.0;
+    window.speechSynthesis.speak(utterance);
+  };
 
-    const userMessage = { role: 'user', text: inputValue };
+  const handleSendMessage = async (customText) => {
+    const textToSend = typeof customText === 'string' ? customText : inputValue;
+    if (!textToSend.trim()) return;
+
+    const userMessage = { role: 'user', text: textToSend };
     setMessages(prev => [...prev, userMessage]);
     setInputValue("");
     setIsLoading(true);
 
+    const lowerText = textToSend.toLowerCase();
+
+    // --- STATIC ROUTING / PROMPT GUARD (Client-side for speed) ---
+    const unethicalKeywords = ['bomb', 'kill', 'hack', 'steal', 'murder', 'weapon', 'drugs', 'illegal'];
+    if (unethicalKeywords.some(keyword => lowerText.includes(keyword))) {
+      const responseText = "I'm a portfolio bot, not a Bond villain! Try asking about Abrar's projects instead. 🕵️‍♂️";
+      setMessages(prev => [...prev, { role: 'ai', text: responseText }]);
+      speakText(responseText);
+      setIsLoading(false);
+      return;
+    }
+
+    const adultKeywords = ['sex', 'porn', 'nude', 'nsfw', 'hookup'];
+    if (adultKeywords.some(keyword => lowerText.includes(keyword))) {
+      const responseText = "Control majnu control! 🎬 Let's keep it professional.";
+      setMessages(prev => [...prev, { role: 'ai', text: responseText }]);
+      speakText(responseText);
+      setIsLoading(false);
+      return;
+    }
+
+    const faqMap = {
+      'who are you': "I am FixO, Abrar's personal AI Assistant. I can tell you about his projects, skills, and experience!",
+      'what are you': "I am FixO, an AI Assistant built by Abrar. I'm here to help you navigate his portfolio and learn about his work.",
+      'who is abrar': "Abrar Akhunji is a passionate developer constantly trying to improve. He holds a Diploma in IT and is currently pursuing a B.E. in Information Technology. He loves building AI/ML solutions and web applications!",
+      'tell me about abrar': "Abrar Akhunji is a passionate developer constantly trying to improve. He holds a Diploma in IT and is currently pursuing a B.E. in Information Technology. He loves building AI/ML solutions and web applications!",
+      'projects': "Abrar has built several cool projects including Lyra Music AI, CivicEye (AI crime detection), TerraFlow, and NeuroVision. Would you like to know more about a specific one?",
+      'skills': "Abrar is skilled in Python, Java, JavaScript, AI/ML (Pandas, OpenCV), and web frameworks like Django and React. He's a versatile full-stack developer!",
+      'can you code': "I can definitely talk about code! For writing code, ask Abrar to unlock my Phase 2 Builder Mode."
+    };
+
+    for (const [key, answer] of Object.entries(faqMap)) {
+      if (lowerText.includes(key)) {
+        setMessages(prev => [...prev, { role: 'ai', text: answer }]);
+        speakText(answer);
+        setIsLoading(false);
+        return;
+      }
+    }
+
+    // --- LLM API CALL ---
     try {
-      const apiKey = import.meta.env.VITE_OPENROUTER_API_KEY;
+      let response;
+      let data;
+      
+      // In development, call OpenRouter directly to avoid needing Vercel CLI
+      if (import.meta.env.DEV) {
+        const apiKey = import.meta.env.VITE_OPENROUTER_API_KEY;
+        response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`,
+          },
+          body: JSON.stringify({
+            model: selectedModel,
+            messages: [
+              { role: "system", content: PORTFOLIO_CONTEXT },
+              { role: "user", content: textToSend }
+            ]
+          })
+        });
+        data = await response.json();
+      } else {
+        // In production, call our secure Vercel Serverless Function
+        response = await fetch("/api/chat", {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: selectedModel,
+            messages: [
+              { role: "system", content: PORTFOLIO_CONTEXT },
+              { role: "user", content: textToSend }
+            ]
+          })
+        });
+        data = await response.json();
+      }
 
-      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`,
-          'HTTP-Referer': window.location.origin, // Optional, for OpenRouter analytics
-          'X-Title': 'Abrar Akhunji Portfolio', // Optional
-        },
-        body: JSON.stringify({
-          model: selectedModel,
-          messages: [
-            { role: "system", content: PORTFOLIO_CONTEXT },
-            { role: "user", content: userMessage.text }
-          ]
-        })
-      });
+      if (response.status === 429) {
+        const text = "Too Many Requests. Please slow down and try again later.";
+        setMessages(prev => [...prev, { role: 'ai', text }]);
+        speakText(text);
+        return;
+      }
 
-      const data = await response.json();
       const aiResponseText = data.choices?.[0]?.message?.content || "I'm having trouble connecting right now.";
       setMessages(prev => [...prev, { role: 'ai', text: aiResponseText }]);
+      speakText(aiResponseText);
     } catch (error) {
-      setMessages(prev => [...prev, { role: 'ai', text: "Sorry, error connecting to AI." }]);
+      const errorText = "Sorry, error connecting to AI.";
+      setMessages(prev => [...prev, { role: 'ai', text: errorText }]);
+      speakText(errorText);
     } finally {
       setIsLoading(false);
     }
@@ -109,19 +203,28 @@ const ChatBot = ({ theme }) => {
                 <p className="text-[10px] text-green-400 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>Powered by Firehox</p>
               </div>
             </div>
-            <select
-              value={selectedModel}
-              onChange={(e) => setSelectedModel(e.target.value)}
-              className={`text-[10px] p-1.5 rounded-lg border focus:outline-none appearance-none cursor-pointer ${
-                theme === 'dark' 
-                  ? 'bg-white/10 border-white/20 text-gray-300 hover:border-purple-500' 
-                  : 'bg-black/5 border-black/10 text-gray-700 hover:border-purple-500'
-              }`}
-            >
-              {AVAILABLE_MODELS.map(model => (
-                <option key={model.id} value={model.id} className="bg-black text-white">{model.name}</option>
-              ))}
-            </select>
+            <div className="flex items-center gap-2">
+              <button 
+                onClick={() => setIsMuted(!isMuted)} 
+                className={`p-1.5 rounded-lg border transition-colors ${theme === 'dark' ? 'bg-white/10 border-white/20 text-gray-300 hover:text-white' : 'bg-black/5 border-black/10 text-gray-700 hover:text-black'}`}
+                title={isMuted ? "Unmute Voice" : "Mute Voice"}
+              >
+                {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
+              </button>
+              <select
+                value={selectedModel}
+                onChange={(e) => setSelectedModel(e.target.value)}
+                className={`text-[10px] p-1.5 rounded-lg border focus:outline-none appearance-none cursor-pointer ${
+                  theme === 'dark' 
+                    ? 'bg-white/10 border-white/20 text-gray-300 hover:border-purple-500' 
+                    : 'bg-black/5 border-black/10 text-gray-700 hover:border-purple-500'
+                }`}
+              >
+                {AVAILABLE_MODELS.map(model => (
+                  <option key={model.id} value={model.id} className="bg-black text-white">{model.name}</option>
+                ))}
+              </select>
+            </div>
           </div>
 
           <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
@@ -133,10 +236,27 @@ const ChatBot = ({ theme }) => {
             {isLoading && <div className="text-xs text-gray-500 animate-pulse">Thinking...</div>}
             <div ref={messagesEndRef} />
           </div>
+          
           <div className={`p-4 border-t ${theme === 'dark' ? 'border-white/10 bg-black/50' : 'border-black/5 bg-white/50'}`}>
+            <div className="flex gap-2 overflow-x-auto custom-scrollbar pb-2 mb-2">
+              {SUGGESTIONS.map((suggestion, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => handleSendMessage(suggestion)}
+                  disabled={isLoading}
+                  className={`whitespace-nowrap text-[10px] px-3 py-1.5 rounded-full border transition-colors ${
+                    theme === 'dark' 
+                      ? 'border-white/20 text-gray-300 hover:bg-white/10 hover:border-white/40' 
+                      : 'border-black/20 text-gray-700 hover:bg-black/5 hover:border-black/40'
+                  }`}
+                >
+                  {suggestion}
+                </button>
+              ))}
+            </div>
             <form onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} className="flex gap-2">
               <input type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Ask about skills..." className={`flex-1 ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white focus:border-purple-500' : 'bg-black/5 border-black/10 text-black focus:border-purple-500'} rounded-xl px-4 py-2 text-sm transition-colors focus:outline-none`} />
-              <button type="submit" disabled={isLoading} className="p-2 bg-purple-600 text-white rounded-xl hover:bg-purple-500 transition-colors"><Send size={18} /></button>
+              <button type="submit" disabled={isLoading} className="p-2 bg-purple-600 text-white rounded-xl hover:bg-purple-500 transition-colors disabled:opacity-50"><Send size={18} /></button>
             </form>
           </div>
         </div>
