@@ -153,15 +153,31 @@ export default function App() {
                   <span className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse"></span>
                   <span className={`text-[10px] font-mono ${theme === 'dark' ? 'text-purple-300' : 'text-purple-700'} tracking-widest uppercase`}>Open to work</span>
                 </div>
-                <h1 ref={heroTextRef} className={`text-5xl sm:text-6xl md:text-8xl font-bold tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'} leading-[1.1] md:leading-[0.9] flex flex-col items-center overflow-visible`}>
-                  <span className="font-museo inline-block">Engineer of</span>
+                <h1 ref={heroTextRef} className={`text-5xl sm:text-6xl md:text-8xl font-bold tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'} leading-[1.1] md:leading-[0.9] flex flex-col items-center overflow-visible w-full`}>
+                  <TextPressure 
+                    text="Engineer of" 
+                    fontSize="clamp(2rem, 8vw, 4rem)"
+                    minWeight={200}
+                    maxWeight={500}
+                    proximity={200}
+                    className="py-1"
+                  />
                   <TextPressure 
                     text="Intelligent" 
-                    height="auto"
-                    proximity={250}
-                    className="py-2" 
+                    fontSize="clamp(4rem, 15vw, 11rem)"
+                    minWeight={100}
+                    maxWeight={900}
+                    proximity={300}
+                    className="py-1" 
                   />
-                  <span className="font-museo inline-block">Systems.</span>
+                  <TextPressure 
+                    text="Systems." 
+                    fontSize="clamp(3rem, 10vw, 6rem)"
+                    minWeight={300}
+                    maxWeight={700}
+                    proximity={250}
+                    className="py-1" 
+                  />
                 </h1>
                 <p className={`max-w-lg text-base md:text-lg ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'} leading-relaxed pt-4`}>
                   I bridge the gap between <span className={theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}>complex AI models</span> and <span className={theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}>scalable web architectures</span>. Building the next generation of digital products.
