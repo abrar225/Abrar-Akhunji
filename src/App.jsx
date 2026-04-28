@@ -540,7 +540,7 @@ export default function App() {
         const tl = gsap.timeline();
         tl.fromTo(heroElements[0], { x: -50, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, 0.2)
           .fromTo(heroElements[2], { x: 50, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, 0.4)
-          .fromTo(heroElements[4], { x: -50, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, 0.6);
+          .fromTo(heroElements[3], { x: -50, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, 0.6);
       }
 
       // 3. Responsive Scroll (Horizontal on Desktop, Vertical on Mobile)
