@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Bot, Send, Sparkles, X, Volume2, VolumeX, Wrench } from 'lucide-react';
+import { Bot, Send, Sparkles, X, Volume2, VolumeX, Wrench, Square } from 'lucide-react';
 import PuzzleGate from './PuzzleGate';
 import BuilderMode from './BuilderMode';
 
@@ -47,6 +47,7 @@ const ChatBot = ({ theme }) => {
   const [selectedModel, setSelectedModel] = useState(AVAILABLE_MODELS[0].id);
   const [isMuted, setIsMuted] = useState(false);
   const messagesEndRef = useRef(null);
+  const abortControllerRef = useRef(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -66,6 +67,15 @@ const ChatBot = ({ theme }) => {
     utterance.rate = 1.0;
     utterance.pitch = 1.0;
     window.speechSynthesis.speak(utterance);
+  };
+
+  const handleStop = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+      setIsLoading(false);
+      setMessages(prev => [...prev, { role: 'ai', text: "Generation stopped." }]);
+    }
   };
 
   const handleSendMessage = async (customText) => {
@@ -117,10 +127,21 @@ const ChatBot = ({ theme }) => {
       }
     }
 
+    abortControllerRef.current = new AbortController();
+    const signal = abortControllerRef.current.signal;
+
     try {
       let response;
       let data;
       
+      const requestBody = JSON.stringify({
+        model: selectedModel,
+        messages: [
+          { role: "system", content: PORTFOLIO_CONTEXT },
+          { role: "user", content: textToSend }
+        ]
+      });
+
       if (import.meta.env.DEV) {
         const apiKey = import.meta.env.VITE_OPENROUTER_API_KEY;
         response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
@@ -129,26 +150,16 @@ const ChatBot = ({ theme }) => {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${apiKey}`,
           },
-          body: JSON.stringify({
-            model: selectedModel,
-            messages: [
-              { role: "system", content: PORTFOLIO_CONTEXT },
-              { role: "user", content: textToSend }
-            ]
-          })
+          body: requestBody,
+          signal
         });
         data = await response.json();
       } else {
         response = await fetch("/api/chat", {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            model: selectedModel,
-            messages: [
-              { role: "system", content: PORTFOLIO_CONTEXT },
-              { role: "user", content: textToSend }
-            ]
-          })
+          body: requestBody,
+          signal
         });
         data = await response.json();
       }
@@ -164,11 +175,16 @@ const ChatBot = ({ theme }) => {
       setMessages(prev => [...prev, { role: 'ai', text: aiResponseText }]);
       speakText(aiResponseText);
     } catch (error) {
-      const errorText = "Sorry, error connecting to AI.";
-      setMessages(prev => [...prev, { role: 'ai', text: errorText }]);
-      speakText(errorText);
+      if (error.name === 'AbortError') {
+        console.log("Fetch aborted");
+      } else {
+        const errorText = "Sorry, error connecting to AI.";
+        setMessages(prev => [...prev, { role: 'ai', text: errorText }]);
+        speakText(errorText);
+      }
     } finally {
       setIsLoading(false);
+      abortControllerRef.current = null;
     }
   };
 
@@ -178,7 +194,7 @@ const ChatBot = ({ theme }) => {
         onClick={() => setIsOpen(!isOpen)}
         className={`fixed bottom-28 right-6 md:right-12 z-[70] p-4 ${theme === 'dark' ? 'bg-white text-black' : 'bg-black text-white'} rounded-full shadow-2xl hover:scale-110 transition-transform duration-300 flex items-center justify-center group`}
       >
-        {isOpen ? <X size={24} /> : <Sparkles size={24} className={chatMode === 'builder' ? 'text-orange-500' : 'text-purple-500'} />}
+        {isOpen ? <X size={24} /> : <Sparkles size={24} className={chatMode === 'builder' ? 'text-pink-500' : 'text-purple-500'} />}
         {!isOpen && (
           <span className={`absolute right-full mr-4 ${theme === 'dark' ? 'bg-white/10' : 'bg-black/10'} backdrop-blur-md ${theme === 'dark' ? 'text-white' : 'text-black'} text-xs px-3 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-white/10`}>
             {chatMode === 'builder' ? 'Open Builder' : 'Ask AI about me'}
@@ -187,7 +203,7 @@ const ChatBot = ({ theme }) => {
       </button>
 
       {isOpen && (
-        <div className={`fixed bottom-44 right-6 md:right-12 z-[70] ${chatMode === 'builder' ? 'w-[90vw] md:w-[800px] h-[600px] max-h-[80vh]' : 'w-[90vw] md:w-[380px] h-[500px]'} ${theme === 'dark' ? 'bg-black/90' : 'bg-white/95'} backdrop-blur-xl border ${theme === 'dark' ? 'border-white/10' : 'border-black/5'} rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-10 duration-300 transition-all`}>
+        <div className={`fixed bottom-44 right-6 md:right-12 z-[70] ${chatMode === 'builder' ? 'w-[90vw] md:w-[900px] h-[650px] max-h-[85vh]' : 'w-[90vw] md:w-[380px] h-[500px]'} ${theme === 'dark' ? 'bg-black/90' : 'bg-white/95'} backdrop-blur-xl border ${theme === 'dark' ? 'border-white/10' : 'border-black/5'} rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-10 duration-300 transition-all`}>
           
           {chatMode === 'puzzle' && (
             <PuzzleGate 
@@ -200,7 +216,7 @@ const ChatBot = ({ theme }) => {
           {chatMode === 'builder' ? (
             <BuilderMode 
               theme={theme} 
-              selectedModel={selectedModel} 
+              initialModel={selectedModel} 
               onExit={() => setChatMode('normal')} 
             />
           ) : (
@@ -208,18 +224,18 @@ const ChatBot = ({ theme }) => {
               {/* NORMAL CHAT MODE */}
               <div className={`p-4 border-b ${theme === 'dark' ? 'border-white/10 bg-white/5' : 'border-black/5 bg-black/5'} flex items-center justify-between`}>
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 to-pink-500 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-600 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
                     <Bot size={18} className="text-white" />
                   </div>
                   <div>
-                    <h3 className={`text-sm font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>FixO</h3>
+                    <h3 className={`text-sm font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400`}>FixO</h3>
                     <p className="text-[10px] text-green-400 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>Powered by Firehox</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <button 
                     onClick={() => setChatMode('puzzle')} 
-                    className={`p-1.5 rounded-lg border transition-colors ${theme === 'dark' ? 'bg-white/10 border-orange-500/50 text-orange-400 hover:bg-orange-500/20' : 'bg-orange-50 border-orange-200 text-orange-600 hover:bg-orange-100'}`}
+                    className={`p-1.5 rounded-lg border transition-colors ${theme === 'dark' ? 'bg-white/10 border-pink-500/50 text-pink-400 hover:bg-pink-500/20' : 'bg-pink-50 border-pink-200 text-pink-600 hover:bg-pink-100'}`}
                     title="Unlock Builder Mode"
                   >
                     <Wrench size={14} />
@@ -250,10 +266,10 @@ const ChatBot = ({ theme }) => {
               <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
                 {messages.map((msg, idx) => (
                   <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed ${msg.role === 'user' ? 'bg-purple-600 text-white rounded-tr-sm' : `${theme === 'dark' ? 'bg-white/10 text-gray-200' : 'bg-black/5 text-gray-800'} rounded-tl-sm border ${theme === 'dark' ? 'border-white/5' : 'border-black/5'}`}`}>{msg.text}</div>
+                    <div className={`max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed shadow-sm ${msg.role === 'user' ? 'bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-tr-sm' : `${theme === 'dark' ? 'bg-white/10 text-gray-200' : 'bg-black/5 text-gray-800'} rounded-tl-sm border ${theme === 'dark' ? 'border-white/5' : 'border-black/5'}`}`}>{msg.text}</div>
                   </div>
                 ))}
-                {isLoading && <div className="text-xs text-gray-500 animate-pulse">Thinking...</div>}
+                {isLoading && <div className="text-xs text-purple-400 animate-pulse font-medium">FixO is thinking...</div>}
                 <div ref={messagesEndRef} />
               </div>
               
@@ -275,8 +291,15 @@ const ChatBot = ({ theme }) => {
                   ))}
                 </div>
                 <form onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} className="flex gap-2">
-                  <input type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Ask about skills..." className={`flex-1 ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white focus:border-purple-500' : 'bg-black/5 border-black/10 text-black focus:border-purple-500'} rounded-xl px-4 py-2 text-sm transition-colors focus:outline-none`} />
-                  <button type="submit" disabled={isLoading} className="p-2 bg-purple-600 text-white rounded-xl hover:bg-purple-500 transition-colors disabled:opacity-50"><Send size={18} /></button>
+                  <input type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Ask about skills..." disabled={isLoading} className={`flex-1 ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white focus:border-purple-500' : 'bg-black/5 border-black/10 text-black focus:border-purple-500'} rounded-xl px-4 py-2 text-sm transition-colors focus:outline-none disabled:opacity-50`} />
+                  
+                  {isLoading ? (
+                    <button type="button" onClick={handleStop} className="p-2 bg-red-600/20 text-red-500 border border-red-500/50 rounded-xl hover:bg-red-600/40 transition-colors" title="Stop Generation">
+                      <Square size={18} className="fill-current" />
+                    </button>
+                  ) : (
+                    <button type="submit" disabled={!inputValue.trim()} className="p-2 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-xl hover:from-purple-500 hover:to-pink-400 transition-colors disabled:opacity-50 shadow-lg shadow-purple-500/20"><Send size={18} /></button>
+                  )}
                 </form>
               </div>
             </>

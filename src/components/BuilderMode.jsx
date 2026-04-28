@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Download, RefreshCw, ChevronLeft, Bot, Code } from 'lucide-react';
+import { Send, Download, RefreshCw, ChevronLeft, Code, Square, Cpu, Layout, FileCode2, Paintbrush, Loader2 } from 'lucide-react';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 
@@ -14,15 +14,28 @@ When the user asks you to build or design something, you must return EXACTLY THR
 DO NOT return any other text, explanations, or conversational filler. ONLY the code blocks.
 `;
 
-const BuilderMode = ({ theme, selectedModel, onExit }) => {
+const AVAILABLE_MODELS = [
+  { id: "minimax/minimax-m2.5:free", name: "Minimax M2.5 (Fast)" },
+  { id: "google/gemma-3-27b-it:free", name: "Google Gemma 3" },
+  { id: "openai/gpt-oss-120b:free", name: "GPT OSS 120B" },
+  { id: "nvidia/nemotron-nano-9b-v2:free", name: "Nvidia Nemotron" },
+  { id: "liquid/lfm-2.5-1.2b-thinking:free", name: "Liquid LFM Thinking" },
+  { id: "inclusionai/ling-2.6-flash:free", name: "Ling Flash 2.6" }
+];
+
+const BuilderMode = ({ theme, initialModel, onExit }) => {
   const [messages, setMessages] = useState([
     { role: 'ai', text: "I am FixO The Builder. Describe what you want me to build (e.g., 'A modern login form with glassmorphism') and I will generate the code and live preview!" }
   ]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [generationStep, setGenerationStep] = useState(0); // 0=none, 1=analyzing, 2=html, 3=css, 4=js
   const [previewCode, setPreviewCode] = useState({ html: '', css: '', js: '' });
   const [previewUrl, setPreviewUrl] = useState('');
+  const [activeTab, setActiveTab] = useState('preview'); // 'preview', 'code'
+  const [selectedModel, setSelectedModel] = useState(initialModel || AVAILABLE_MODELS[0].id);
   const messagesEndRef = useRef(null);
+  const abortControllerRef = useRef(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -30,7 +43,7 @@ const BuilderMode = ({ theme, selectedModel, onExit }) => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, generationStep]);
 
   useEffect(() => {
     if (previewCode.html || previewCode.css || previewCode.js) {
@@ -75,6 +88,23 @@ const BuilderMode = ({ theme, selectedModel, onExit }) => {
     }
   };
 
+  const handleStop = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+      setIsLoading(false);
+      setGenerationStep(0);
+      setMessages(prev => [...prev, { role: 'ai', text: "Generation stopped by user." }]);
+    }
+  };
+
+  const simulateProgress = () => {
+    setGenerationStep(1);
+    setTimeout(() => { if (abortControllerRef.current) setGenerationStep(2) }, 2000);
+    setTimeout(() => { if (abortControllerRef.current) setGenerationStep(3) }, 5000);
+    setTimeout(() => { if (abortControllerRef.current) setGenerationStep(4) }, 8000);
+  };
+
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
 
@@ -82,11 +112,25 @@ const BuilderMode = ({ theme, selectedModel, onExit }) => {
     setMessages(prev => [...prev, userMessage]);
     setInputValue("");
     setIsLoading(true);
+    
+    abortControllerRef.current = new AbortController();
+    const signal = abortControllerRef.current.signal;
+
+    simulateProgress();
 
     try {
       let response;
       let data;
       
+      const requestBody = JSON.stringify({
+        model: selectedModel,
+        messages: [
+          { role: "system", content: BUILDER_CONTEXT },
+          ...messages.filter(m => m.role === 'user').slice(-3),
+          { role: "user", content: userMessage.text }
+        ]
+      });
+
       if (import.meta.env.DEV) {
         const apiKey = import.meta.env.VITE_OPENROUTER_API_KEY;
         response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
@@ -95,34 +139,24 @@ const BuilderMode = ({ theme, selectedModel, onExit }) => {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${apiKey}`,
           },
-          body: JSON.stringify({
-            model: selectedModel,
-            messages: [
-              { role: "system", content: BUILDER_CONTEXT },
-              ...messages.filter(m => m.role === 'user').slice(-3), // Keep last 3 user messages for context
-              { role: "user", content: userMessage.text }
-            ]
-          })
+          body: requestBody,
+          signal
         });
         data = await response.json();
       } else {
         response = await fetch("/api/chat", {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            model: selectedModel,
-            messages: [
-              { role: "system", content: BUILDER_CONTEXT },
-              ...messages.filter(m => m.role === 'user').slice(-3),
-              { role: "user", content: userMessage.text }
-            ]
-          })
+          body: requestBody,
+          signal
         });
         data = await response.json();
       }
 
       if (response.status === 429) {
         setMessages(prev => [...prev, { role: 'ai', text: "Rate limit exceeded. Please wait a minute." }]);
+        setIsLoading(false);
+        setGenerationStep(0);
         return;
       }
 
@@ -134,17 +168,21 @@ const BuilderMode = ({ theme, selectedModel, onExit }) => {
         setMessages(prev => [...prev, { role: 'ai', text: "Failed to generate code." }]);
       }
     } catch (error) {
-      setMessages(prev => [...prev, { role: 'ai', text: "Error connecting to the Builder API." }]);
+      if (error.name === 'AbortError') {
+        console.log("Fetch aborted");
+      } else {
+        setMessages(prev => [...prev, { role: 'ai', text: "Error connecting to the Builder API." }]);
+      }
     } finally {
       setIsLoading(false);
+      setGenerationStep(0);
+      abortControllerRef.current = null;
     }
   };
 
   const handleDownload = async () => {
     if (!previewCode.html && !previewCode.css && !previewCode.js) return;
-
     const zip = new JSZip();
-    
     const indexHtml = `
 <!DOCTYPE html>
 <html lang="en">
@@ -168,61 +206,136 @@ const BuilderMode = ({ theme, selectedModel, onExit }) => {
     saveAs(content, "fixo-generated-ui.zip");
   };
 
+  const steps = [
+    { step: 1, text: "Analyzing Request...", icon: <Cpu size={12} className="animate-pulse text-blue-400" /> },
+    { step: 2, text: "Writing HTML Structure...", icon: <Layout size={12} className="animate-bounce text-orange-400" /> },
+    { step: 3, text: "Designing CSS Styles...", icon: <Paintbrush size={12} className="animate-bounce text-pink-400" /> },
+    { step: 4, text: "Adding Interactive Logic...", icon: <FileCode2 size={12} className="animate-bounce text-yellow-400" /> }
+  ];
+
   return (
     <div className="flex flex-col md:flex-row h-full w-full overflow-hidden">
       {/* Left Chat Pane */}
-      <div className={`w-full md:w-80 flex flex-col border-r ${theme === 'dark' ? 'border-white/10 bg-black/90' : 'border-black/10 bg-white/95'}`}>
-        <div className={`p-3 border-b flex items-center gap-2 ${theme === 'dark' ? 'border-white/10' : 'border-black/10'}`}>
-          <button onClick={onExit} className={`p-1.5 rounded-lg hover:bg-black/10 ${theme === 'dark' ? 'hover:bg-white/10 text-gray-400 hover:text-white' : 'text-gray-600 hover:text-black'} transition-colors`}>
-            <ChevronLeft size={18} />
-          </button>
-          <div className="w-6 h-6 rounded-md bg-gradient-to-tr from-yellow-500 to-orange-500 flex items-center justify-center">
-            <Code size={12} className="text-white" />
+      <div className={`w-full md:w-80 flex flex-col border-r ${theme === 'dark' ? 'border-white/10 bg-black/90' : 'border-black/10 bg-white/95'} backdrop-blur-xl`}>
+        <div className={`p-3 border-b flex items-center justify-between ${theme === 'dark' ? 'border-white/10 bg-white/5' : 'border-black/10 bg-black/5'}`}>
+          <div className="flex items-center gap-2">
+            <button onClick={onExit} className={`p-1.5 rounded-lg hover:bg-black/10 ${theme === 'dark' ? 'hover:bg-white/10 text-gray-400 hover:text-white' : 'text-gray-600 hover:text-black'} transition-colors`}>
+              <ChevronLeft size={18} />
+            </button>
+            <div className="w-6 h-6 rounded-md bg-gradient-to-tr from-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
+              <Code size={12} className="text-white" />
+            </div>
+            <span className={`text-xs font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400`}>The Builder</span>
           </div>
-          <span className={`text-xs font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>The Builder</span>
+          
+          <select
+            value={selectedModel}
+            onChange={(e) => setSelectedModel(e.target.value)}
+            className={`text-[9px] max-w-[100px] truncate p-1 rounded-md border focus:outline-none appearance-none cursor-pointer ${
+              theme === 'dark' 
+                ? 'bg-black/50 border-white/20 text-gray-300 hover:border-purple-500' 
+                : 'bg-white/50 border-black/10 text-gray-700 hover:border-purple-500'
+            }`}
+          >
+            {AVAILABLE_MODELS.map(model => (
+              <option key={model.id} value={model.id} className="bg-black text-white">{model.name}</option>
+            ))}
+          </select>
         </div>
 
         <div className="flex-1 overflow-y-auto p-3 space-y-3 custom-scrollbar">
           {messages.map((msg, idx) => (
             <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-[85%] p-2.5 rounded-xl text-xs leading-relaxed ${msg.role === 'user' ? 'bg-orange-600 text-white rounded-tr-sm' : `${theme === 'dark' ? 'bg-white/10 text-gray-200' : 'bg-black/5 text-gray-800'} rounded-tl-sm border ${theme === 'dark' ? 'border-white/5' : 'border-black/5'}`}`}>{msg.text}</div>
+              <div className={`max-w-[85%] p-2.5 rounded-xl text-xs leading-relaxed ${msg.role === 'user' ? 'bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-tr-sm shadow-md' : `${theme === 'dark' ? 'bg-white/5 text-gray-200' : 'bg-black/5 text-gray-800'} rounded-tl-sm border ${theme === 'dark' ? 'border-white/5' : 'border-black/5'}`}`}>{msg.text}</div>
             </div>
           ))}
-          {isLoading && <div className="text-[10px] text-gray-500 animate-pulse flex items-center gap-1"><RefreshCw size={10} className="animate-spin" /> Generating UI...</div>}
+          
+          {isLoading && generationStep > 0 && (
+            <div className={`flex justify-start`}>
+              <div className={`max-w-[85%] p-3 rounded-xl rounded-tl-sm border text-xs ${theme === 'dark' ? 'bg-white/5 border-white/10 text-gray-300' : 'bg-black/5 border-black/10 text-gray-700'}`}>
+                <div className="flex items-center gap-2 mb-2">
+                  <Loader2 size={14} className="animate-spin text-purple-500" />
+                  <span className="font-semibold text-[10px] text-purple-400 uppercase tracking-wider">FixO is working</span>
+                </div>
+                <div className="space-y-2">
+                  {steps.map(s => (
+                    <div key={s.step} className={`flex items-center gap-2 text-[10px] ${generationStep >= s.step ? 'opacity-100' : 'opacity-30'}`}>
+                      {s.icon}
+                      <span className={generationStep === s.step ? 'text-white' : ''}>{s.text}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
           <div ref={messagesEndRef} />
         </div>
 
-        <div className={`p-3 border-t ${theme === 'dark' ? 'border-white/10' : 'border-black/10'}`}>
+        <div className={`p-3 border-t ${theme === 'dark' ? 'border-white/10 bg-black/50' : 'border-black/10 bg-white/50'}`}>
           <form onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} className="flex gap-2">
-            <input type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Build a hero section..." className={`flex-1 ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white focus:border-orange-500' : 'bg-black/5 border-black/10 text-black focus:border-orange-500'} rounded-lg px-3 py-1.5 text-xs transition-colors focus:outline-none`} />
-            <button type="submit" disabled={isLoading} className="p-1.5 bg-orange-600 text-white rounded-lg hover:bg-orange-500 transition-colors disabled:opacity-50"><Send size={14} /></button>
+            <input 
+              type="text" 
+              value={inputValue} 
+              onChange={(e) => setInputValue(e.target.value)} 
+              placeholder="Build a hero section..." 
+              disabled={isLoading}
+              className={`flex-1 ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white focus:border-purple-500' : 'bg-black/5 border-black/10 text-black focus:border-purple-500'} rounded-lg px-3 py-1.5 text-xs transition-colors focus:outline-none disabled:opacity-50`} 
+            />
+            {isLoading ? (
+              <button type="button" onClick={handleStop} className="p-1.5 bg-red-600/20 text-red-500 border border-red-500/50 rounded-lg hover:bg-red-600/40 transition-colors" title="Stop Generation">
+                <Square size={14} className="fill-current" />
+              </button>
+            ) : (
+              <button type="submit" disabled={!inputValue.trim()} className="p-1.5 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-lg hover:from-purple-500 hover:to-pink-400 transition-colors disabled:opacity-50">
+                <Send size={14} />
+              </button>
+            )}
           </form>
         </div>
       </div>
 
       {/* Right Preview Pane */}
-      <div className="flex-1 flex flex-col bg-gray-900 relative">
+      <div className={`flex-1 flex flex-col relative ${theme === 'dark' ? 'bg-[#0f0f11]' : 'bg-gray-100'}`}>
+        <div className="absolute top-3 left-3 z-10 flex gap-2 bg-black/50 backdrop-blur-md p-1 rounded-lg border border-white/10">
+          <button onClick={() => setActiveTab('preview')} className={`text-[10px] px-3 py-1 rounded-md transition-colors ${activeTab === 'preview' ? 'bg-white/20 text-white' : 'text-gray-400 hover:text-white'}`}>Preview</button>
+          <button onClick={() => setActiveTab('code')} className={`text-[10px] px-3 py-1 rounded-md transition-colors ${activeTab === 'code' ? 'bg-white/20 text-white' : 'text-gray-400 hover:text-white'}`}>Code</button>
+        </div>
+
         <div className="absolute top-3 right-3 z-10 flex gap-2">
           <button 
             onClick={handleDownload}
             disabled={!previewUrl}
-            className="flex items-center gap-1 bg-zinc-800 hover:bg-zinc-700 disabled:opacity-50 text-white text-[10px] px-3 py-1.5 rounded-lg border border-white/10 shadow-lg transition-colors"
+            className="flex items-center gap-1 bg-black/50 hover:bg-black/80 backdrop-blur-md disabled:opacity-50 text-white text-[10px] px-3 py-1.5 rounded-lg border border-white/10 shadow-lg transition-colors"
           >
             <Download size={12} /> ZIP
           </button>
         </div>
         
-        {previewUrl ? (
-          <iframe 
-            src={previewUrl} 
-            className="w-full h-full border-none bg-white"
-            title="Live Preview"
-            sandbox="allow-scripts allow-same-origin"
-          />
+        {activeTab === 'preview' ? (
+          previewUrl ? (
+            <iframe 
+              src={previewUrl} 
+              className="w-full h-full border-none bg-white rounded-r-2xl"
+              title="Live Preview"
+              sandbox="allow-scripts allow-same-origin"
+            />
+          ) : (
+            <div className="flex-1 flex items-center justify-center text-gray-500 flex-col gap-3">
+              <Code size={48} className="opacity-20" />
+              <p className="text-sm font-mono opacity-50">Preview will appear here</p>
+            </div>
+          )
         ) : (
-          <div className="flex-1 flex items-center justify-center text-gray-500 flex-col gap-3">
-            <Code size={48} className="opacity-20" />
-            <p className="text-sm font-mono opacity-50">Preview will appear here</p>
+          <div className="flex-1 overflow-y-auto p-6 pt-16 bg-[#1e1e1e] text-gray-300 font-mono text-xs custom-scrollbar rounded-r-2xl">
+            {previewCode.html || previewCode.css || previewCode.js ? (
+              <div className="space-y-6">
+                {previewCode.html && (<div><h4 className="text-blue-400 mb-2 border-b border-white/10 pb-1">HTML</h4><pre className="overflow-x-auto text-[10px] whitespace-pre-wrap">{previewCode.html}</pre></div>)}
+                {previewCode.css && (<div><h4 className="text-pink-400 mb-2 border-b border-white/10 pb-1">CSS</h4><pre className="overflow-x-auto text-[10px] whitespace-pre-wrap">{previewCode.css}</pre></div>)}
+                {previewCode.js && (<div><h4 className="text-yellow-400 mb-2 border-b border-white/10 pb-1">JavaScript</h4><pre className="overflow-x-auto text-[10px] whitespace-pre-wrap">{previewCode.js}</pre></div>)}
+              </div>
+            ) : (
+              <p className="text-center text-gray-500 mt-20">Code will appear here</p>
+            )}
           </div>
         )}
       </div>
