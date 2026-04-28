@@ -1,8 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const SectionWrapper = ({ children, className = "", delay = 0 }) => {
   const elementRef = useRef(null);
