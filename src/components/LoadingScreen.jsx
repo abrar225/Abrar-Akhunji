@@ -1,170 +1,257 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 
-const LoadingScreen = ({ onComplete, theme }) => {
+/**
+ * LoadingScreen - Elite Frontend Creative Preloader
+ * Orchestrates a complex sequence: Odometer -> Dual Progress -> Climax -> Scale Out -> Content Reveal
+ */
+const LoadingScreen = ({ onComplete }) => {
   const counter3Ref = useRef(null);
-  const loadingScreenRef = useRef(null);
   const loader1Ref = useRef(null);
   const loader2Ref = useRef(null);
+  const loadingScreenRef = useRef(null);
   const loaderContainerRef = useRef(null);
-  const counter1Ref = useRef(null);
-  const counter2Ref = useRef(null);
+  const websiteContentRef = useRef(null);
+  const timelineRef = useRef(null);
 
-  useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      // 1. Dynamic DOM Injection for counter-3
-      if (counter3Ref.current) {
-        for (let i = 0; i < 2; i++) {
-          for (let j = 0; j <= 9; j++) {
-            const div = document.createElement("div");
-            div.className = "num";
-            div.textContent = j;
-            counter3Ref.current.appendChild(div);
-          }
+  useEffect(() => {
+    // 1. Dynamic Odometer Number Generation
+    const c3 = counter3Ref.current;
+    if (c3 && c3.children.length === 0) {
+      for (let i = 0; i < 2; i++) {
+        for (let j = 0; j < 10; j++) {
+          const div = document.createElement('div');
+          div.className = 'num';
+          div.textContent = j;
+          c3.appendChild(div);
         }
-        const finalDiv = document.createElement("div");
-        finalDiv.className = "num";
-        finalDiv.textContent = "0";
-        counter3Ref.current.appendChild(finalDiv);
       }
+      const finalDiv = document.createElement('div');
+      finalDiv.className = 'num';
+      finalDiv.textContent = '0';
+      c3.appendChild(finalDiv);
+    }
 
-      // Helper function to animate counter columns
-      const animateCounter = (selector, duration, delay = 0) => {
-        const numHeight = selector.querySelector(".num").offsetHeight;
-        const totalDistance = (selector.querySelectorAll(".num").length - 1) * numHeight;
-        gsap.to(selector, {
-          y: -totalDistance,
-          duration: duration,
-          delay: delay,
-          ease: "power2.inOut",
-        });
-      };
-
-      // Odometer Animations (Faster & Smoother)
-      if (counter3Ref.current) animateCounter(counter3Ref.current, 3);
-      if (counter2Ref.current) animateCounter(counter2Ref.current, 3.5);
-      if (counter1Ref.current) animateCounter(counter1Ref.current, 1.2, 2.3);
-
-      // Progress Bars (Faster)
-      gsap.to(loader1Ref.current, {
-        width: "100%",
-        duration: 3.5,
-        ease: "expo.inOut",
-      });
-
-      gsap.to(loader2Ref.current, {
-        width: "100%",
-        duration: 1.5,
-        delay: 1.2,
-        ease: "expo.inOut",
-      });
-
-      // The Climax & Layout Transition (Snappier)
-      const tl = gsap.timeline({
-        onComplete: onComplete
-      });
-
-      tl.to({}, { duration: 3.5 }) // Absolute 3.5s mark (End of main progress)
-        .to(loaderContainerRef.current, {
-          background: "none",
-          duration: 0.1
-        })
-        .to(loader1Ref.current, {
-          rotate: 90,
-          y: -50,
-          duration: 0.4,
-          ease: "back.out(2)"
-        }, "+=0.05")
-        .to(loader2Ref.current, {
-          x: -50,
-          y: 50,
-          duration: 0.4,
-          ease: "back.out(2)"
-        }, "<")
-        .to(loaderContainerRef.current, {
-          scale: 45,
-          rotate: 45,
-          x: 2500,
-          y: 700,
-          duration: 1.2,
-          ease: "expo.in"
-        }, 4) // Precise 4s mark
-        .to(loadingScreenRef.current, {
+    const tl = gsap.timeline({
+      onComplete: () => {
+        // Final handoff to parent App
+        gsap.to(loadingScreenRef.current, {
           opacity: 0,
-          pointerEvents: "none",
-          duration: 0.6,
-          ease: "power2.inOut"
-        }, 4.2); // Precise 4.2s mark
+          duration: 0.5,
+          onComplete: onComplete
+        });
+      }
     });
+    timelineRef.current = tl;
 
-    return () => ctx.revert();
+    // 2. Odometer Motion Logic
+    tl.to('.counter-3', {
+      y: '-95.23%', 
+      duration: 5,
+      ease: "power2.inOut",
+    }, 0);
+
+    tl.to('.counter-2', {
+      y: '-90.9%',
+      duration: 6,
+      ease: "power2.inOut",
+    }, 0);
+
+    tl.to('.counter-1', {
+      y: '-50%',
+      duration: 2,
+      delay: 4,
+      ease: "power2.inOut",
+    }, 0);
+
+    // 3. Progress Bar Logic
+    tl.to(loader1Ref.current, {
+      width: '100%',
+      duration: 6,
+      ease: "power2.inOut",
+    }, 0);
+
+    tl.to(loader2Ref.current, {
+      width: '100%',
+      duration: 2,
+      delay: 1.9,
+      ease: "power2.inOut",
+    }, 0);
+
+    // 4. THE CLIMAX (6s)
+    tl.to(loaderContainerRef.current, {
+      background: 'transparent',
+      duration: 0.1
+    }, 6);
+
+    tl.to(loader1Ref.current, {
+      rotate: 90,
+      y: -50,
+      duration: 0.5,
+      ease: "power2.inOut"
+    }, 6);
+
+    tl.to(loader2Ref.current, {
+      x: -50,
+      y: 50,
+      duration: 0.5,
+      ease: "power2.inOut"
+    }, 6);
+
+    // 5. THE SCALE THROW (7s)
+    tl.to(loaderContainerRef.current, {
+      scale: 60,
+      rotate: 45,
+      x: 2500,
+      y: 800,
+      duration: 1.2,
+      ease: "power4.inOut"
+    }, 7);
+
+    // 6. FADE OUT & REVEAL (7.5s)
+    tl.to(loadingScreenRef.current, {
+      backgroundColor: 'transparent',
+      duration: 0.5
+    }, 7.5);
+
+    tl.from('.header h1', {
+      y: 300,
+      stagger: 0.2,
+      duration: 1.5,
+      ease: "power4.inOut",
+      skewY: 10
+    }, 7.2);
+
+    return () => tl.kill();
   }, [onComplete]);
 
   return (
-    <div 
-      ref={loadingScreenRef}
-      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden font-['Montserrat',sans-serif] ${theme === 'dark' ? 'bg-[#030303] text-white' : 'bg-[#fcfcfc] text-black'}`}
-    >
+    <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
-        
-        .num {
-          height: 100px;
+
+        .preloader-root {
+          position: fixed;
+          inset: 0;
+          z-index: 10000;
+          font-family: 'Montserrat', sans-serif;
+          background: #000;
+          overflow: hidden;
+        }
+
+        .loading-screen {
+          position: absolute;
+          inset: 0;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 80px;
-          font-weight: 900;
-          line-height: 1;
+          z-index: 2;
         }
 
-        .counter-col {
+        .loader {
+          position: absolute;
+          width: 300px;
+          height: 40px;
           display: flex;
           flex-direction: column;
-          transition: transform 0.1s;
+          justify-content: space-between;
+          padding: 8px;
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-blur: 5px;
         }
 
-        .loader-bar {
-          height: 100%;
-          background: currentColor;
+        .loader-1, .loader-2 {
           width: 0;
+          height: 3px;
+          background: #fff;
+          box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .counter {
+          position: absolute;
+          bottom: 40px;
+          left: 40px;
+          height: 120px;
+          display: flex;
+          font-size: 120px;
+          font-weight: 900;
+          line-height: 120px;
+          color: #fff;
+          clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+          letter-spacing: -5px;
+        }
+
+        .counter-1, .counter-2, .counter-3 {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .num {
+          height: 120px;
+          text-align: center;
+          min-width: 80px;
+        }
+
+        .website-content {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1;
+        }
+
+        .header {
+          position: relative;
+          overflow: hidden;
+          text-align: center;
+        }
+
+        .header h1 {
+          font-size: 10vw;
+          font-weight: 900;
+          color: #fff;
+          margin: -2vw 0;
+          text-transform: uppercase;
+          line-height: 1;
+          letter-spacing: -0.05em;
         }
       `}</style>
 
-      {/* Counter Odometer */}
-      <div className="absolute bottom-10 left-10 h-[100px] overflow-hidden flex" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)' }}>
-        <div ref={counter1Ref} className="counter-col">
-          <div className="num">0</div>
-          <div className="num">1</div>
-        </div>
-        <div ref={counter2Ref} className="counter-col">
-          {[0,1,2,3,4,5,6,7,8,9,0].map((n, i) => <div key={i} className="num">{n}</div>)}
-        </div>
-        <div ref={counter3Ref} className="counter-col">
-          {/* Dynamically populated */}
-        </div>
-      </div>
+      <div className="preloader-root" ref={loadingScreenRef}>
+        <div className="loading-screen">
+          <div className="loader" ref={loaderContainerRef}>
+            <div className="loader-1" ref={loader1Ref}></div>
+            <div className="loader-2" ref={loader2Ref}></div>
+          </div>
 
-      {/* Progress Bars Loader */}
-      <div 
-        ref={loaderContainerRef}
-        className={`relative w-[300px] h-[40px] border flex flex-col gap-1 p-1 ${theme === 'dark' ? 'border-white/10 bg-white/5' : 'border-black/10 bg-black/5'}`}
-      >
-        <div className="flex-1 overflow-hidden relative">
-          <div ref={loader1Ref} className="loader-bar"></div>
+          <div className="counter">
+            <div className="counter-1">
+              <div className="num">0</div>
+              <div className="num">1</div>
+            </div>
+            <div className="counter-2">
+              {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((n, i) => (
+                <div key={i} className="num">{n}</div>
+              ))}
+            </div>
+            <div className="counter-3" ref={counter3Ref}>
+              {/* Injected */}
+            </div>
+          </div>
         </div>
-        <div className="flex-1 overflow-hidden relative">
-          <div ref={loader2Ref} className="loader-bar"></div>
-        </div>
-      </div>
 
-      {/* Subtle branding */}
-      <div className="absolute top-10 right-10 flex flex-col items-end opacity-20">
-        <span className="text-[10px] tracking-[0.3em] font-bold uppercase">System Initializing</span>
-        <span className="text-[10px] tracking-[0.3em] font-bold uppercase">FixO Intelligence v4.0</span>
+        <div className="website-content" ref={websiteContentRef}>
+          <div className="header">
+            <h1>FIXO</h1>
+            <h1>STUDIO</h1>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
 export default LoadingScreen;
+
