@@ -17,6 +17,8 @@ Key Information:
 const AVAILABLE_MODELS = [
   { id: "minimax/minimax-m2.5:free", name: "Minimax M2.5 (Fast)" },
   { id: "google/gemma-3-27b-it:free", name: "Google Gemma 3" },
+  { id: "meta-llama/llama-3.1-8b-instruct:free", name: "Llama 3.1 8B" },
+  { id: "mistralai/pixtral-12b:free", name: "Pixtral 12B" },
   { id: "openai/gpt-oss-120b:free", name: "GPT OSS 120B" },
   { id: "nvidia/nemotron-nano-9b-v2:free", name: "Nvidia Nemotron" },
   { id: "liquid/lfm-2.5-1.2b-thinking:free", name: "Liquid LFM Thinking" },
@@ -43,6 +45,7 @@ const ChatBot = ({ theme }) => {
   const [isMuted, setIsMuted] = useState(false);
   const [chatCredits, setChatCredits] = useState(10);
   const [generationStatus, setGenerationStatus] = useState('');
+  const [showModelMenu, setShowModelMenu] = useState(false);
   const messagesEndRef = useRef(null);
   const abortControllerRef = useRef(null);
   const inputRef = useRef(null);
@@ -241,11 +244,55 @@ const ChatBot = ({ theme }) => {
                       <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_5px_rgba(34,197,94,0.5)]"></div>
                     </div>
                   </div>
-                  <div>
+                  <div 
+                    className="cursor-pointer group/model relative" 
+                    onClick={() => setShowModelMenu(!showModelMenu)}
+                  >
                     <h3 className={`text-base font-bold tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-fuchsia-400`}>FixO</h3>
-                    <p className={`text-[10px] uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>
-                      {isLoading ? generationStatus : activeModelName}
-                    </p>
+                    <div className="flex items-center gap-1.5">
+                      <p className={`text-[10px] uppercase tracking-widest transition-colors ${theme === 'dark' ? 'text-white/40 group-hover/model:text-white/70' : 'text-black/40 group-hover/model:text-black/70'}`}>
+                        {isLoading ? generationStatus : activeModelName}
+                      </p>
+                      <ChevronRight size={10} className={`transition-transform duration-300 ${theme === 'dark' ? 'text-white/30' : 'text-black/30'} ${showModelMenu ? 'rotate-90' : 'group-hover/model:translate-x-0.5'}`} />
+                    </div>
+
+                    {/* MODEL SELECTION DROPDOWN */}
+                    {showModelMenu && (
+                      <div className={`absolute top-full left-0 mt-2 w-56 rounded-xl border shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 z-[100] ${theme === 'dark' ? 'bg-[#121214] border-white/10' : 'bg-white border-black/10'}`}>
+                        <div className={`px-3 py-2 text-[10px] uppercase tracking-wider font-bold ${theme === 'dark' ? 'text-white/30 bg-white/5' : 'text-black/30 bg-black/5'}`}>
+                          Select Intelligence
+                        </div>
+                        <div className="py-1 max-h-[300px] overflow-y-auto custom-scrollbar">
+                          {AVAILABLE_MODELS.map((m) => (
+                            <button
+                              key={m.id}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedModel(m.id);
+                                setShowModelMenu(false);
+                              }}
+                              className={`w-full px-4 py-2.5 text-left text-xs transition-colors flex items-center justify-between group/item ${
+                                selectedModel === m.id 
+                                  ? (theme === 'dark' ? 'bg-violet-500/20 text-violet-400' : 'bg-violet-50 text-violet-600') 
+                                  : (theme === 'dark' ? 'text-white/60 hover:bg-white/5 hover:text-white' : 'text-black/60 hover:bg-black/5 hover:text-black')
+                              }`}
+                            >
+                              <div className="flex flex-col">
+                                <span className="font-medium">{m.name}</span>
+                                <span className={`text-[9px] opacity-50 ${selectedModel === m.id ? 'block' : 'hidden group-hover/item:block'}`}>
+                                  {m.id.split('/')[0]}
+                                </span>
+                              </div>
+                              {selectedModel === m.id && <div className="w-1.5 h-1.5 rounded-full bg-current shadow-[0_0_8px_currentColor]"></div>}
+                            </button>
+                          ))}
+                        </div>
+                        <div className={`px-4 py-2 border-t text-[9px] flex items-center gap-1.5 ${theme === 'dark' ? 'border-white/5 text-white/30' : 'border-black/5 text-black/30'}`}>
+                          <Cpu size={10} />
+                          <span>All models are free to use</span>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="flex items-center gap-1.5">
