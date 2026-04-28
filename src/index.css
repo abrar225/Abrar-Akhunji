@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600&family=Fira+Code:wght@400;500&family=Archivo+Black&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Raleway:wght@400;700;800&display=swap');
 
 @theme {
     --color-background-dark: #030303;
@@ -51,3 +52,35 @@ html.lenis body {
 .lenis.lenis-scrolling iframe {
     pointer-events: none;
 }
+
+/* Global Styles & Fonts */
+
+@font-face {
+    font-family: 'MagnificChaos';
+    src: url('/font/MagnificChaosPersonalUseRegular-x3J88.ttf') format('truetype');
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background-color: var(--background);
+    color: var(--foreground);
+}
+
+.font-mono { font-family: 'Fira Code', monospace; }
+.font-display { font-family: 'Space Grotesk', sans-serif; }
+.font-museo { font-family: 'Raleway', sans-serif; }
+.font-custom { font-family: 'MagnificChaos', cursive; }
+.font-fashion { font-family: 'Space Grotesk', sans-serif; }
+.font-script { font-family: 'Archivo Black', sans-serif; }
+.font-serif { font-family: 'Cormorant Garamond', serif; font-style: italic; }
+
+html { scroll-behavior: auto !important; }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #555; }
+
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
