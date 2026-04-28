@@ -15,7 +15,7 @@ export default async function handler(req, res) {
   
   const now = Date.now();
   const windowMs = 24 * 60 * 60 * 1000; // 24 hours
-  const maxRequests = currentMode === 'builder' ? 5 : 10;
+  const maxRequests = currentMode === 'builder' ? 1 : 10;
   
   const userKey = `${ip}_${currentMode}`;
   const requestInfo = global.rateLimitStore.get(userKey) || { count: 0, resetTime: now + windowMs };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Bot, Send, Sparkles, X, Volume2, VolumeX, Wrench, Square, Zap } from 'lucide-react';
+import { Bot, Send, Sparkles, X, Volume2, VolumeX, Wrench, Square, Zap, Trash2, Paperclip, ChevronRight, Settings } from 'lucide-react';
 import BuilderMode from './BuilderMode';
 
 const PORTFOLIO_CONTEXT = `
@@ -39,7 +39,7 @@ const ChatBot = ({ theme }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [chatMode, setChatMode] = useState('normal'); // 'normal', 'builder'
   const [messages, setMessages] = useState([
-    { role: 'ai', text: "Hi! I'm FixO, Abrar's AI Assistant. Ask me anything about his projects, skills, or experience! ✨" }
+    { role: 'ai', text: "Welcome. I am FixO, an AI assistant built to help you navigate Abrar's universe. How can I assist you today?" }
   ]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -50,7 +50,6 @@ const ChatBot = ({ theme }) => {
   const abortControllerRef = useRef(null);
 
   useEffect(() => {
-    // Check daily credits for Chat
     const resetTime = localStorage.getItem('fixo_chat_reset');
     const storedCredits = localStorage.getItem('fixo_chat_credits');
     const now = Date.now();
@@ -89,13 +88,17 @@ const ChatBot = ({ theme }) => {
       abortControllerRef.current.abort();
       abortControllerRef.current = null;
       setIsLoading(false);
-      setMessages(prev => [...prev, { role: 'ai', text: "Generation stopped." }]);
+      setMessages(prev => [...prev, { role: 'ai', text: "Process halted." }]);
     }
+  };
+
+  const handleClearChat = () => {
+    setMessages([{ role: 'ai', text: "Memory cleared. How can I help?" }]);
   };
 
   const handleSendMessage = async (customText) => {
     if (chatCredits <= 0) {
-      setMessages(prev => [...prev, { role: 'ai', text: "You have reached your daily limit of 10 messages for chat mode. Please try again tomorrow!" }]);
+      setMessages(prev => [...prev, { role: 'ai', text: "Daily limit of 10 messages reached. See you tomorrow!" }]);
       return;
     }
 
@@ -112,7 +115,7 @@ const ChatBot = ({ theme }) => {
     // STATIC ROUTING
     const unethicalKeywords = ['bomb', 'kill', 'hack', 'steal', 'murder', 'weapon', 'drugs', 'illegal'];
     if (unethicalKeywords.some(keyword => lowerText.includes(keyword))) {
-      const responseText = "I'm a portfolio bot, not a Bond villain! Try asking about Abrar's projects instead. 🕵️‍♂️";
+      const responseText = "I'm designed to discuss Abrar's portfolio, not harmful activities. Let's redirect our focus.";
       setMessages(prev => [...prev, { role: 'ai', text: responseText }]);
       speakText(responseText);
       setIsLoading(false);
@@ -121,7 +124,7 @@ const ChatBot = ({ theme }) => {
 
     const adultKeywords = ['sex', 'porn', 'nude', 'nsfw', 'hookup'];
     if (adultKeywords.some(keyword => lowerText.includes(keyword))) {
-      const responseText = "Control majnu control! 🎬 Let's keep it professional.";
+      const responseText = "Let's keep the conversation professional.";
       setMessages(prev => [...prev, { role: 'ai', text: responseText }]);
       speakText(responseText);
       setIsLoading(false);
@@ -129,13 +132,13 @@ const ChatBot = ({ theme }) => {
     }
 
     const faqMap = {
-      'who are you': "I am FixO, Abrar's personal AI Assistant. I can tell you about his projects, skills, and experience!",
-      'what are you': "I am FixO, an AI Assistant built by Abrar. I'm here to help you navigate his portfolio and learn about his work.",
-      'who is abrar': "Abrar Akhunji is a passionate developer constantly trying to improve. He holds a Diploma in IT and is currently pursuing a B.E. in Information Technology. He loves building AI/ML solutions and web applications!",
-      'tell me about abrar': "Abrar Akhunji is a passionate developer constantly trying to improve. He holds a Diploma in IT and is currently pursuing a B.E. in Information Technology. He loves building AI/ML solutions and web applications!",
-      'projects': "Abrar has built several cool projects including Lyra Music AI, CivicEye (AI crime detection), TerraFlow, and NeuroVision. Would you like to know more about a specific one?",
-      'skills': "Abrar is skilled in Python, Java, JavaScript, AI/ML (Pandas, OpenCV), and web frameworks like Django and React. He's a versatile full-stack developer!",
-      'can you code': "I can definitely talk about code! For writing code, click the Wrench icon to unlock my Phase 2 Builder Mode."
+      'who are you': "I am FixO, Abrar's AI Assistant. I have comprehensive knowledge of his projects, skills, and background.",
+      'what are you': "I am an AI interface built by Abrar to assist visitors in exploring his work.",
+      'who is abrar': "Abrar Akhunji is a dedicated developer pursuing a B.E. in Information Technology. He builds AI/ML solutions and modern web applications.",
+      'tell me about abrar': "Abrar Akhunji is a dedicated developer pursuing a B.E. in Information Technology. He builds AI/ML solutions and modern web applications.",
+      'projects': "Abrar has engineered several systems including Lyra Music AI, CivicEye (AI crime detection), TerraFlow, and NeuroVision. Would you like specifics on any of these?",
+      'skills': "Abrar's tech stack includes Python, Java, JavaScript, AI/ML (Pandas, OpenCV), Django, and React.",
+      'can you code': "Absolutely. I have a dedicated IDE. Click the Wrench icon to unlock FixO Builder Mode."
     };
 
     for (const [key, answer] of Object.entries(faqMap)) {
@@ -186,13 +189,13 @@ const ChatBot = ({ theme }) => {
       }
 
       if (response.status === 429) {
-        const text = "Too Many Requests. Please slow down and try again later.";
+        const text = "Rate limit exceeded. Please try again later.";
         setMessages(prev => [...prev, { role: 'ai', text }]);
         speakText(text);
         return;
       }
 
-      const aiResponseText = data.choices?.[0]?.message?.content || "I'm having trouble connecting right now.";
+      const aiResponseText = data.choices?.[0]?.message?.content || "Connection failed. Please try again.";
       setMessages(prev => [...prev, { role: 'ai', text: aiResponseText }]);
       speakText(aiResponseText);
       
@@ -203,7 +206,7 @@ const ChatBot = ({ theme }) => {
       if (error.name === 'AbortError') {
         console.log("Fetch aborted");
       } else {
-        const errorText = "Sorry, error connecting to AI.";
+        const errorText = "Network error. Unable to reach AI.";
         setMessages(prev => [...prev, { role: 'ai', text: errorText }]);
         speakText(errorText);
       }
@@ -215,20 +218,33 @@ const ChatBot = ({ theme }) => {
 
   return (
     <>
+      {/* Floating Trigger - Premium Orb */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`fixed bottom-28 right-6 md:right-12 z-[70] p-4 ${theme === 'dark' ? 'bg-white text-black' : 'bg-black text-white'} rounded-full shadow-2xl hover:scale-110 transition-transform duration-300 flex items-center justify-center group`}
+        className={`fixed bottom-8 right-6 md:right-12 z-[70] transition-all duration-500 hover:scale-110 active:scale-95 flex items-center justify-center group`}
       >
-        {isOpen ? <X size={24} /> : <Sparkles size={24} className={chatMode === 'builder' ? 'text-pink-500' : 'text-purple-500'} />}
-        {!isOpen && (
-          <span className={`absolute right-full mr-4 ${theme === 'dark' ? 'bg-white/10' : 'bg-black/10'} backdrop-blur-md ${theme === 'dark' ? 'text-white' : 'text-black'} text-xs px-3 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-white/10`}>
-            {chatMode === 'builder' ? 'Open Builder' : 'Ask AI about me'}
-          </span>
-        )}
+        <div className={`relative flex items-center justify-center w-16 h-16 rounded-full shadow-[0_0_40px_rgba(139,92,246,0.3)] transition-all ${isOpen ? 'rotate-90 scale-90' : 'rotate-0 scale-100'} ${theme === 'dark' ? 'bg-[#0a0a0c] border border-white/10' : 'bg-white border border-black/5'}`}>
+          {/* Glowing layers */}
+          <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-violet-600 to-fuchsia-600 opacity-20 group-hover:opacity-40 blur-xl transition-opacity duration-500"></div>
+          <div className="absolute inset-1 rounded-full bg-gradient-to-tr from-violet-500 to-fuchsia-500 opacity-20 blur-md"></div>
+          
+          {isOpen ? (
+            <X size={24} className={`${theme === 'dark' ? 'text-white/80' : 'text-black/80'} z-10`} />
+          ) : (
+            <div className="relative z-10 flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tr from-violet-600 to-fuchsia-600">
+              <Sparkles size={20} className="text-white" />
+            </div>
+          )}
+        </div>
       </button>
 
+      {/* Main Chat Interface */}
       {isOpen && (
-        <div className={`fixed z-[70] transition-all duration-300 ${chatMode === 'builder' ? 'inset-0 w-full h-full rounded-none border-0' : `bottom-44 right-6 md:right-12 w-[90vw] md:w-[380px] h-[500px] rounded-2xl border ${theme === 'dark' ? 'border-white/10' : 'border-black/5'} shadow-2xl`} ${theme === 'dark' ? 'bg-black/90' : 'bg-white/95'} backdrop-blur-xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-10`}>
+        <div className={`fixed z-[70] transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${
+          chatMode === 'builder' 
+            ? 'inset-0 w-full h-full rounded-none border-0' 
+            : `bottom-28 right-6 md:right-12 w-[calc(100vw-3rem)] md:w-[420px] h-[600px] max-h-[80vh] rounded-3xl border shadow-2xl`
+        } ${theme === 'dark' ? 'bg-[#0a0a0c]/90 border-white/[0.08]' : 'bg-[#fcfcfc]/95 border-black/[0.05]'} backdrop-blur-3xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-8`}>
           
           {chatMode === 'builder' ? (
             <BuilderMode 
@@ -238,88 +254,135 @@ const ChatBot = ({ theme }) => {
             />
           ) : (
             <>
-              {/* NORMAL CHAT MODE */}
-              <div className={`p-4 border-b ${theme === 'dark' ? 'border-white/10 bg-white/5' : 'border-black/5 bg-black/5'} flex items-center justify-between`}>
+              {/* HEADER */}
+              <div className={`px-5 py-4 border-b flex items-center justify-between ${theme === 'dark' ? 'border-white/[0.05] bg-white/[0.01]' : 'border-black/[0.05] bg-black/[0.01]'}`}>
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-600 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
-                    <Bot size={18} className="text-white" />
+                  <div className="relative group">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-violet-600 to-fuchsia-600 flex items-center justify-center shadow-[0_0_20px_rgba(139,92,246,0.4)] transition-all duration-500 group-hover:shadow-[0_0_30px_rgba(139,92,246,0.6)]">
+                      <Bot size={20} className="text-white" />
+                    </div>
+                    <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-[#0a0a0c] rounded-full flex items-center justify-center">
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_5px_rgba(34,197,94,0.5)]"></div>
+                    </div>
                   </div>
                   <div>
-                    <h3 className={`text-sm font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400`}>FixO</h3>
-                    <p className="text-[10px] text-green-400 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>Powered by Firehox</p>
+                    <h3 className={`text-base font-bold tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-fuchsia-400`}>FixO</h3>
+                    <p className={`text-[10px] uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>AI Assistant</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className={`flex items-center gap-1 text-[10px] font-mono px-2 py-1 rounded border ${chatCredits > 0 ? 'border-green-500/30 text-green-400 bg-green-500/10' : 'border-red-500/30 text-red-400 bg-red-500/10'}`}>
-                    <Zap size={10} />
-                    <span>{chatCredits}/10</span>
+                <div className="flex items-center gap-1.5">
+                  <div className={`hidden md:flex items-center gap-1.5 px-2 py-1 rounded-full border ${chatCredits > 0 ? (theme === 'dark' ? 'border-white/10 text-white/60 bg-white/5' : 'border-black/10 text-black/60 bg-black/5') : 'border-red-500/30 text-red-400 bg-red-500/10'}`}>
+                    <Zap size={10} className={chatCredits > 0 ? "fill-current text-violet-400" : ""} />
+                    <span className="text-[10px] font-mono">{chatCredits}/10</span>
                   </div>
                   <button 
                     onClick={() => setChatMode('builder')} 
-                    className={`p-1.5 rounded-lg border transition-colors ${theme === 'dark' ? 'bg-white/10 border-pink-500/50 text-pink-400 hover:bg-pink-500/20' : 'bg-pink-50 border-pink-200 text-pink-600 hover:bg-pink-100'}`}
+                    className={`p-2 rounded-full transition-all hover:scale-105 active:scale-95 ${theme === 'dark' ? 'bg-violet-500/10 text-violet-400 hover:bg-violet-500/20' : 'bg-violet-50 text-violet-600 hover:bg-violet-100'}`}
                     title="Open Builder Mode"
                   >
-                    <Wrench size={14} />
+                    <Wrench size={16} />
+                  </button>
+                  <button 
+                    onClick={handleClearChat} 
+                    className={`p-2 rounded-full transition-all hover:scale-105 active:scale-95 ${theme === 'dark' ? 'text-white/40 hover:text-white hover:bg-white/10' : 'text-black/40 hover:text-black hover:bg-black/5'}`}
+                    title="Clear Chat"
+                  >
+                    <Trash2 size={16} />
                   </button>
                   <button 
                     onClick={() => setIsMuted(!isMuted)} 
-                    className={`p-1.5 rounded-lg border transition-colors ${theme === 'dark' ? 'bg-white/10 border-white/20 text-gray-300 hover:text-white' : 'bg-black/5 border-black/10 text-gray-700 hover:text-black'}`}
+                    className={`p-2 rounded-full transition-all hover:scale-105 active:scale-95 ${theme === 'dark' ? 'text-white/40 hover:text-white hover:bg-white/10' : 'text-black/40 hover:text-black hover:bg-black/5'}`}
                     title={isMuted ? "Unmute Voice" : "Mute Voice"}
                   >
-                    {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
+                    {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
                   </button>
-                  <select
-                    value={selectedModel}
-                    onChange={(e) => setSelectedModel(e.target.value)}
-                    className={`text-[10px] p-1.5 rounded-lg border focus:outline-none appearance-none cursor-pointer ${
-                      theme === 'dark' 
-                        ? 'bg-white/10 border-white/20 text-gray-300 hover:border-purple-500' 
-                        : 'bg-black/5 border-black/10 text-gray-700 hover:border-purple-500'
-                    }`}
-                  >
-                    {AVAILABLE_MODELS.map(model => (
-                      <option key={model.id} value={model.id} className="bg-black text-white">{model.name}</option>
-                    ))}
-                  </select>
                 </div>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
+              {/* CHAT AREA */}
+              <div className="flex-1 overflow-y-auto p-5 space-y-5 custom-scrollbar relative">
+                {/* Background Noise for texture */}
+                <div className="absolute inset-0 opacity-[0.015] pointer-events-none mix-blend-overlay" style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")'}}></div>
+                
                 {messages.map((msg, idx) => (
-                  <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed shadow-sm ${msg.role === 'user' ? 'bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-tr-sm' : `${theme === 'dark' ? 'bg-white/10 text-gray-200' : 'bg-black/5 text-gray-800'} rounded-tl-sm border ${theme === 'dark' ? 'border-white/5' : 'border-black/5'}`}`}>{msg.text}</div>
+                  <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-2 duration-300`}>
+                    <div className={`max-w-[85%] px-4 py-3 text-sm leading-relaxed ${
+                      msg.role === 'user' 
+                        ? 'bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white rounded-2xl rounded-tr-sm shadow-[0_4px_15px_rgba(139,92,246,0.2)]' 
+                        : `${theme === 'dark' ? 'bg-white/[0.04] text-gray-200 border-white/[0.08]' : 'bg-black/[0.03] text-gray-800 border-black/[0.05]'} rounded-2xl rounded-tl-sm border backdrop-blur-xl shadow-sm`
+                    }`}>
+                      {msg.text}
+                    </div>
                   </div>
                 ))}
-                {isLoading && <div className="text-xs text-purple-400 animate-pulse font-medium">FixO is thinking...</div>}
+                
+                {isLoading && (
+                  <div className="flex justify-start animate-in fade-in">
+                    <div className={`px-4 py-3 rounded-2xl rounded-tl-sm border backdrop-blur-xl flex items-center gap-2 ${theme === 'dark' ? 'bg-white/[0.04] border-white/[0.08]' : 'bg-black/[0.03] border-black/[0.05]'}`}>
+                      <div className="flex space-x-1">
+                        <div className="w-1.5 h-1.5 bg-violet-500 rounded-full animate-bounce" style={{animationDelay: '0ms'}}></div>
+                        <div className="w-1.5 h-1.5 bg-violet-500 rounded-full animate-bounce" style={{animationDelay: '150ms'}}></div>
+                        <div className="w-1.5 h-1.5 bg-violet-500 rounded-full animate-bounce" style={{animationDelay: '300ms'}}></div>
+                      </div>
+                    </div>
+                  </div>
+                )}
                 <div ref={messagesEndRef} />
               </div>
               
-              <div className={`p-4 border-t ${theme === 'dark' ? 'border-white/10 bg-black/50' : 'border-black/5 bg-white/50'}`}>
-                <div className="flex gap-2 overflow-x-auto custom-scrollbar pb-2 mb-2">
-                  {SUGGESTIONS.map((suggestion, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => handleSendMessage(suggestion)}
-                      disabled={isLoading}
-                      className={`whitespace-nowrap text-[10px] px-3 py-1.5 rounded-full border transition-colors ${
-                        theme === 'dark' 
-                          ? 'border-white/20 text-gray-300 hover:bg-white/10 hover:border-white/40' 
-                          : 'border-black/20 text-gray-700 hover:bg-black/5 hover:border-black/40'
-                      }`}
-                    >
-                      {suggestion}
-                    </button>
-                  ))}
-                </div>
-                <form onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} className="flex gap-2">
-                  <input type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Ask about skills..." disabled={isLoading} className={`flex-1 ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white focus:border-purple-500' : 'bg-black/5 border-black/10 text-black focus:border-purple-500'} rounded-xl px-4 py-2 text-sm transition-colors focus:outline-none disabled:opacity-50`} />
+              {/* INPUT AREA */}
+              <div className={`p-4 pt-2 border-t relative z-10 ${theme === 'dark' ? 'border-white/[0.05] bg-[#0a0a0c]/80' : 'border-black/[0.05] bg-white/80'} backdrop-blur-xl`}>
+                
+                {/* Suggestions */}
+                {messages.length === 1 && (
+                  <div className="flex gap-2 overflow-x-auto custom-scrollbar pb-3 mb-1 w-full">
+                    {SUGGESTIONS.map((suggestion, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => handleSendMessage(suggestion)}
+                        disabled={isLoading}
+                        className={`flex-shrink-0 text-[11px] px-3.5 py-1.5 rounded-full border transition-all duration-300 hover:scale-[1.02] active:scale-95 ${
+                          theme === 'dark' 
+                            ? 'border-white/[0.08] text-white/60 hover:text-white hover:bg-white/[0.05] hover:border-white/20' 
+                            : 'border-black/[0.08] text-black/60 hover:text-black hover:bg-black/[0.02] hover:border-black/20'
+                        }`}
+                      >
+                        {suggestion}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                <form onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} className={`relative flex items-center p-1.5 rounded-full border transition-all duration-300 ${
+                  theme === 'dark' 
+                    ? 'bg-white/[0.02] border-white/[0.1] focus-within:border-violet-500/50 focus-within:bg-white/[0.04]' 
+                    : 'bg-black/[0.02] border-black/[0.1] focus-within:border-violet-500/50 focus-within:bg-black/[0.04]'
+                }`}>
+                  <button type="button" className={`p-2 ml-1 rounded-full transition-colors ${theme === 'dark' ? 'text-white/40 hover:text-white hover:bg-white/10' : 'text-black/40 hover:text-black hover:bg-black/5'}`}>
+                    <Paperclip size={16} />
+                  </button>
+                  
+                  <input 
+                    type="text" 
+                    value={inputValue} 
+                    onChange={(e) => setInputValue(e.target.value)} 
+                    placeholder="Message FixO..." 
+                    disabled={isLoading || chatCredits <= 0} 
+                    className="flex-1 bg-transparent px-3 py-2 text-sm transition-colors focus:outline-none disabled:opacity-50" 
+                  />
                   
                   {isLoading ? (
-                    <button type="button" onClick={handleStop} className="p-2 bg-red-600/20 text-red-500 border border-red-500/50 rounded-xl hover:bg-red-600/40 transition-colors" title="Stop Generation">
-                      <Square size={18} className="fill-current" />
+                    <button type="button" onClick={handleStop} className="p-2 mr-1 rounded-full bg-rose-500/20 text-rose-500 hover:bg-rose-500/30 transition-all active:scale-95" title="Stop">
+                      <Square size={16} className="fill-current" />
                     </button>
                   ) : (
-                    <button type="submit" disabled={!inputValue.trim() || chatCredits <= 0} className="p-2 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-xl hover:from-purple-500 hover:to-pink-400 transition-colors disabled:opacity-50 shadow-lg shadow-purple-500/20"><Send size={18} /></button>
+                    <button 
+                      type="submit" 
+                      disabled={!inputValue.trim() || chatCredits <= 0} 
+                      className="p-2 mr-1 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white transition-all duration-300 disabled:opacity-30 disabled:scale-100 hover:scale-105 active:scale-95 shadow-[0_0_15px_rgba(139,92,246,0.3)] disabled:shadow-none"
+                    >
+                      <ChevronRight size={16} />
+                    </button>
                   )}
                 </form>
               </div>
