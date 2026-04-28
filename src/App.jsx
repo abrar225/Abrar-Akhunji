@@ -44,35 +44,10 @@ export default function App() {
   const [heroStyle, setHeroStyle] = useState('serif');
 
   const HERO_STYLES = {
-    cyber: {
-      top: "font-script opacity-40 tracking-widest text-3xl",
-      bottom: "font-script text-white/90 tracking-tight text-5xl",
-      pressure: "font-custom text-purple-500"
-    },
-    minimal: {
-      top: "font-display font-light tracking-[0.2em] text-xl opacity-60",
-      bottom: "font-display font-bold tracking-tighter text-6xl",
-      pressure: ""
-    },
-    chaos: {
-      top: "font-custom text-2xl opacity-50",
-      bottom: "font-custom text-6xl text-purple-400 rotate-1",
-      pressure: "font-custom"
-    },
-    glass: {
-      top: "font-display uppercase tracking-[0.5em] text-sm opacity-30",
-      bottom: "font-display font-black text-7xl text-transparent [-webkit-text-stroke:1px_rgba(255,255,255,0.2)]",
-      pressure: "opacity-80"
-    },
     serif: {
-      top: "font-serif italic text-3xl sm:text-4xl md:text-5xl opacity-80 tracking-tight",
-      bottom: "font-serif italic text-6xl sm:text-8xl md:text-9xl lg:text-[11rem] text-purple-300 leading-[0.8] mt-4",
+      top: "font-serif italic text-4xl sm:text-5xl md:text-7xl opacity-80 mb-2",
+      bottom: "font-serif italic text-6xl sm:text-8xl md:text-9xl text-purple-300 drop-shadow-[0_0_40px_rgba(168,85,247,0.2)]",
       pressure: "font-serif"
-    },
-    spatial: {
-      top: "font-display text-xl sm:text-2xl md:text-3xl font-light tracking-[0.4em] uppercase text-white/30",
-      bottom: "font-custom text-5xl sm:text-6xl md:text-8xl bg-clip-text text-transparent bg-gradient-to-r from-violet-400 via-fuchsia-400 to-purple-600 drop-shadow-[0_0_30px_rgba(139,92,246,0.3)]",
-      pressure: ""
     }
   };
 
