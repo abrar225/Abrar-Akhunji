@@ -8,7 +8,6 @@ import gsap from 'gsap';
 const TextPressure = ({ 
   text = "FIXO", 
   fontFamily = "'Fraunces', serif",
-  fontSize = "clamp(3rem, 12vw, 10rem)",
   minWidth = 50,
   maxWidth = 100,
   minWeight = 100,
@@ -85,10 +84,12 @@ const TextPressure = ({
         const distance = Math.sqrt(dx * dx + dy * dy);
         const influence = Math.max(0, 1 - distance / proximity);
         
+        // Advanced Mapping for Fraunces
         const wdth = minWidth + (maxWidth - minWidth) * influence;
         const wght = minWeight + (maxWeight - minWeight) * influence;
         const ital = minItalic + (maxItalic - minItalic) * influence;
         
+        // Interactive visual feedback
         const opacity = 0.4 + (0.6 * influence);
         const colorScale = influence * 100;
 
@@ -117,7 +118,7 @@ const TextPressure = ({
   return (
     <div className={`stage ${className}`} style={{ ...stageStyles, height }}>
       <div ref={containerRef} className="pressure" style={pressureStyles}>
-        <h1 ref={titleRef} className="pressure-title" style={{ ...titleStyles, fontSize }}>
+        <h1 ref={titleRef} className="pressure-title" style={titleStyles}>
           {chars.map((char, index) => (
             <span 
               key={index} 
