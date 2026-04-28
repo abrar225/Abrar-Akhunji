@@ -41,7 +41,7 @@ export default function App() {
   const heroTextRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
-  const [heroStyle, setHeroStyle] = useState('spatial');
+  const [heroStyle, setHeroStyle] = useState('serif');
 
   const HERO_STYLES = {
     cyber: {
@@ -65,8 +65,8 @@ export default function App() {
       pressure: "opacity-80"
     },
     serif: {
-      top: "font-serif italic text-2xl opacity-70",
-      bottom: "font-serif italic text-7xl text-purple-300",
+      top: "font-serif italic text-3xl sm:text-4xl md:text-5xl opacity-80 tracking-tight",
+      bottom: "font-serif italic text-6xl sm:text-8xl md:text-9xl lg:text-[11rem] text-purple-300 leading-[0.8] mt-4",
       pressure: "font-serif"
     },
     spatial: {
@@ -165,23 +165,6 @@ export default function App() {
               <span className={`font-bold tracking-tighter text-xl ${theme === 'dark' ? 'text-white' : 'text-black'}`}>ABRAR<span className="text-purple-500">.</span></span>
             </div>
             <div className="flex items-center gap-4 md:gap-6 pointer-events-auto">
-              {/* STYLE SWITCHER */}
-              <div className="relative group/switcher">
-                <button className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-[10px] font-mono tracking-wider uppercase transition-all ${theme === 'dark' ? 'border-white/10 bg-white/5 text-white/40 hover:text-white' : 'border-black/10 bg-black/5 text-black/40 hover:text-black'}`}>
-                  Style: {heroStyle}
-                </button>
-                <div className={`absolute top-full right-0 mt-2 w-48 rounded-2xl border p-2 opacity-0 translate-y-2 pointer-events-none group-hover/switcher:opacity-100 group-hover/switcher:translate-y-0 group-hover/switcher:pointer-events-auto transition-all duration-300 z-[100] backdrop-blur-3xl ${theme === 'dark' ? 'bg-black/80 border-white/10' : 'bg-white/80 border-black/10'}`}>
-                  {Object.keys(HERO_STYLES).map((style) => (
-                    <button
-                      key={style}
-                      onClick={() => setHeroStyle(style)}
-                      className={`w-full text-left px-4 py-2 rounded-xl text-[10px] font-mono uppercase tracking-widest transition-colors ${heroStyle === style ? 'bg-purple-500 text-white' : (theme === 'dark' ? 'text-white/40 hover:bg-white/5' : 'text-black/40 hover:bg-black/5')}`}
-                    >
-                      {style}
-                    </button>
-                  ))}
-                </div>
-              </div>
               <div className="hidden md:flex items-center gap-6">
                 <a href="https://github.com/abrar225" target="_blank" rel="noopener noreferrer" className={`text-xs font-mono ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'} hover:text-purple-500 transition-colors`}>GH</a>
                 <a href="https://www.linkedin.com/in/abrar-akhunji/" target="_blank" rel="noopener noreferrer" className={`text-xs font-mono ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'} hover:text-purple-500 transition-colors`}>LI</a>

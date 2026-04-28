@@ -174,10 +174,10 @@ const pressureStyles = {
 };
 
 const titleStyles = {
-  fontSize: 'clamp(3rem, 12vw, 10rem)',
+  fontSize: 'clamp(5rem, 20vw, 15rem)',
   margin: 0,
-  padding: '1rem 0',
-  lineHeight: 1,
+  padding: '0.5rem 0',
+  lineHeight: 0.85,
   cursor: 'default'
 };
 
