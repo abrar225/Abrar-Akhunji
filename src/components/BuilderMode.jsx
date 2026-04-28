@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Download, ChevronLeft, Code, Square, Cpu, Layout, FileCode2, Paintbrush, Zap, Monitor, Smartphone, Tablet, Copy, Check, Terminal, Play, Maximize, Columns, Settings, Lock, CheckCircle2, AlertCircle, X } from 'lucide-react';
+import { Send, Download, ChevronLeft, Code, Square, Cpu, Layout, FileCode2, Paintbrush, Zap, Monitor, Smartphone, Tablet, Copy, Check, Terminal, Play, Maximize, Columns, Settings, Lock, CheckCircle2, AlertCircle, X, MessageSquare, Plus, LogOut, Loader } from 'lucide-react';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
+import { auth, db, googleProvider, signInWithPopup, signOut, onAuthStateChanged, doc, setDoc, getDoc, collection, addDoc, updateDoc, query, where, getDocs, orderBy, serverTimestamp } from '../lib/firebase';
 
 const BUILDER_CONTEXT = `
 You are FixO The Builder, an expert UI/UX developer and creative designer.
@@ -30,6 +31,18 @@ const PRESETS = [
 ];
 
 const BuilderMode = ({ theme, initialModel, onExit }) => {
+  // Auth State
+  const [user, setUser] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
+
+  // Chat History
+  const [chats, setChats] = useState([]);
+  const [currentChatId, setCurrentChatId] = useState(null);
+  const [showChatHistory, setShowChatHistory] = useState(false);
+
+  // Trial / Credits State
+  const [trialCount, setTrialCount] = useState(0);
+
   const [messages, setMessages] = useState([
     { role: 'ai', text: "I am FixO The Builder. What are we creating today?" }
   ]);
@@ -39,15 +52,14 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
   const [previewCode, setPreviewCode] = useState({ html: '', css: '', js: '' });
   const [previewUrl, setPreviewUrl] = useState('');
   
-  const [builderCredits, setBuilderCredits] = useState(1);
   const [deviceView, setDeviceView] = useState('desktop'); 
   const [codeTab, setCodeTab] = useState('html'); 
   const [isCopied, setIsCopied] = useState(false);
   const [hasGenerated, setHasGenerated] = useState(false);
   
   // Responsive / Panel states
-  const [activeView, setActiveView] = useState('split'); // 'preview', 'code', 'split'
-  const [mobileTab, setMobileTab] = useState('prompt'); // 'prompt', 'preview', 'code'
+  const [activeView, setActiveView] = useState('split'); 
+  const [mobileTab, setMobileTab] = useState('prompt'); 
   
   // API Key & Provider Settings
   const [showSettings, setShowSettings] = useState(false);
@@ -70,6 +82,15 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
   const abortControllerRef = useRef(null);
   const inputRef = useRef(null);
 
+  // Scroll lock when Builder is active
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
+
+  // Window Resize
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 1024 && activeView === 'split') {
@@ -80,19 +101,139 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, [activeView]);
 
+  // Firebase Auth Listener
   useEffect(() => {
-    const resetTime = localStorage.getItem('fixo_builder_reset');
-    const storedCredits = localStorage.getItem('fixo_builder_credits');
-    const now = Date.now();
-    
-    if (!resetTime || now > parseInt(resetTime)) {
-      localStorage.setItem('fixo_builder_reset', (now + 24 * 60 * 60 * 1000).toString());
-      localStorage.setItem('fixo_builder_credits', '1');
-      setBuilderCredits(1);
-    } else if (storedCredits) {
-      setBuilderCredits(parseInt(storedCredits));
-    }
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        await initializeUser(currentUser.uid);
+        await loadChats(currentUser.uid);
+      } else {
+        setUser(null);
+      }
+      setAuthLoading(false);
+    });
+    return () => unsubscribe();
   }, []);
+
+  const initializeUser = async (uid) => {
+    const userRef = doc(db, 'users', uid);
+    const userSnap = await getDoc(userRef);
+    
+    const now = Date.now();
+    const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
+    
+    if (userSnap.exists()) {
+      const data = userSnap.data();
+      const lastResetDate = data.lastResetDate || 0;
+      
+      if (now - lastResetDate >= SEVEN_DAYS) {
+        await setDoc(userRef, { trialCount: 3, lastResetDate: now }, { merge: true });
+        setTrialCount(3);
+      } else {
+        setTrialCount(data.trialCount !== undefined ? data.trialCount : 3);
+      }
+    } else {
+      await setDoc(userRef, { trialCount: 3, lastResetDate: now });
+      setTrialCount(3);
+    }
+  };
+
+  const loadChats = async (uid) => {
+    try {
+      const q = query(collection(db, 'chats'), where('userId', '==', uid), orderBy('updatedAt', 'desc'));
+      const snapshot = await getDocs(q);
+      const loadedChats = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setChats(loadedChats);
+      
+      if (loadedChats.length > 0) {
+        setCurrentChatId(loadedChats[0].id);
+        setMessages(loadedChats[0].messages || []);
+        if(loadedChats[0].previewCode) {
+          setPreviewCode(loadedChats[0].previewCode);
+          setHasGenerated(true);
+        } else {
+          setHasGenerated(false);
+          setPreviewCode({ html: '', css: '', js: '' });
+        }
+      } else {
+        createNewChat(uid);
+      }
+    } catch (e) {
+      console.error("Failed to load chats", e);
+      // Fallback local chat
+      createNewChat(uid);
+    }
+  };
+
+  const createNewChat = async (uid = user?.uid) => {
+    if (!uid) return;
+    const newMessages = [{ role: 'ai', text: "I am FixO The Builder. What are we creating today?" }];
+    const newChat = {
+      userId: uid,
+      title: "New Generation",
+      messages: newMessages,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+      previewCode: null
+    };
+    try {
+      const docRef = await addDoc(collection(db, 'chats'), newChat);
+      setCurrentChatId(docRef.id);
+      setMessages(newMessages);
+      setPreviewCode({ html: '', css: '', js: '' });
+      setHasGenerated(false);
+      setChats([{ id: docRef.id, ...newChat, updatedAt: { toMillis: () => Date.now() } }, ...chats]);
+      setShowChatHistory(false);
+    } catch (e) {
+      console.error("Failed to create chat", e);
+    }
+  };
+
+  const switchChat = (chat) => {
+    setCurrentChatId(chat.id);
+    setMessages(chat.messages || []);
+    if (chat.previewCode) {
+      setPreviewCode(chat.previewCode);
+      setHasGenerated(true);
+    } else {
+      setPreviewCode({ html: '', css: '', js: '' });
+      setHasGenerated(false);
+    }
+    setShowChatHistory(false);
+  };
+
+  const updateCurrentChat = async (newMessages, newPreviewCode = null, title = null) => {
+    if (!currentChatId || !user) return;
+    const updateData = {
+      messages: newMessages,
+      updatedAt: serverTimestamp()
+    };
+    if (newPreviewCode) updateData.previewCode = newPreviewCode;
+    if (title && title !== "New Generation") updateData.title = title;
+    
+    try {
+      await updateDoc(doc(db, 'chats', currentChatId), updateData);
+      setChats(prev => prev.map(c => {
+        if(c.id === currentChatId) return { ...c, ...updateData, updatedAt: { toMillis: () => Date.now() } };
+        return c;
+      }).sort((a, b) => {
+        const timeA = a.updatedAt?.toMillis ? a.updatedAt.toMillis() : 0;
+        const timeB = b.updatedAt?.toMillis ? b.updatedAt.toMillis() : 0;
+        return timeB - timeA;
+      }));
+    } catch (e) {
+      console.error("Failed to update chat", e);
+    }
+  };
+
+  const handleLogin = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -145,15 +286,13 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
     const jsMatch = text.match(/```(?:javascript|js)\n([\s\S]*?)```/) || text.match(/```(?:javascript|js)([\s\S]*?)```/);
 
     if (htmlMatch || cssMatch || jsMatch) {
-      setPreviewCode({
+      return {
         html: htmlMatch ? htmlMatch[1].trim() : '',
         css: cssMatch ? cssMatch[1].trim() : '',
         js: jsMatch ? jsMatch[1].trim() : ''
-      });
-      if (window.innerWidth < 768) {
-        setMobileTab('preview');
-      }
+      };
     }
+    return null;
   };
 
   const handleStop = () => {
@@ -162,7 +301,9 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
       abortControllerRef.current = null;
       setIsLoading(false);
       setGenerationStep(0);
-      setMessages(prev => [...prev, { role: 'ai', text: "Process interrupted." }]);
+      const newMsgs = [...messages, { role: 'ai', text: "Process interrupted." }];
+      setMessages(newMsgs);
+      updateCurrentChat(newMsgs);
     }
   };
 
@@ -216,6 +357,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
       setVerificationStatus('success');
       setTimeout(() => setShowSettings(false), 1500);
     } catch (error) {
+      console.error(error);
       setVerificationStatus('error');
       setFetchedModels([]);
     }
@@ -232,11 +374,51 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
     setSelectedModel(DEFAULT_MODELS[0].id);
   };
 
+  const generateUnified = async (provider, key, model, msgs, signal) => {
+    const formatMessages = msgs.map(m => ({
+      role: m.role === 'ai' ? 'assistant' : m.role,
+      content: m.text || m.content
+    }));
+
+    if (provider === 'gemini') {
+      const geminiMessages = formatMessages.filter(m => m.role !== 'system').map(m => ({
+        role: m.role === 'assistant' ? 'model' : 'user',
+        parts: [{ text: m.content }]
+      }));
+      // prepend system conceptually
+      const systemMsg = formatMessages.find(m => m.role === 'system');
+      if (systemMsg && geminiMessages.length > 0) {
+        geminiMessages[0].parts[0].text = `SYSTEM: ${systemMsg.content}\n\n${geminiMessages[0].parts[0].text}`;
+      }
+
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: geminiMessages }),
+        signal
+      });
+      if (!res.ok) throw new Error("Gemini API Error: " + res.status);
+      const data = await res.json();
+      return data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+    }
+
+    let url = provider === 'openai' ? 'https://api.openai.com/v1/chat/completions' : 'https://openrouter.ai/api/v1/chat/completions';
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
+      body: JSON.stringify({ model, messages: formatMessages }),
+      signal
+    });
+    if (!res.ok) throw new Error(`${provider} API Error: ` + res.status);
+    const data = await res.json();
+    return data.choices?.[0]?.message?.content || "";
+  };
+
   const handleSendMessage = async (overrideText = null) => {
     const isUsingCustomKey = !!localStorage.getItem('fixo_custom_api_key');
     
-    if (!isUsingCustomKey && builderCredits <= 0) {
-      setMessages(prev => [...prev, { role: 'ai', text: "You have reached your daily limit of 1 free generation. Please add your own API Key in Settings to continue building!" }]);
+    if (!isUsingCustomKey && trialCount <= 0) {
+      setMessages(prev => [...prev, { role: 'ai', text: "You have exhausted your free generations. Please configure your own API Key in Settings to continue." }]);
       setShowSettings(true);
       return;
     }
@@ -244,7 +426,8 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
     const textToSend = overrideText || inputValue;
     if (!textToSend.trim()) return;
 
-    setMessages(prev => [...prev, { role: 'user', text: textToSend }]);
+    const newMsgs = [...messages, { role: 'user', text: textToSend }];
+    setMessages(newMsgs);
     setInputValue("");
     setIsLoading(true);
     setHasGenerated(false);
@@ -255,84 +438,58 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
     simulateProgress();
 
     try {
-      let response;
-      let data;
-      
-      const requestBody = {
-        model: selectedModel,
-        messages: [
-          { role: "system", content: BUILDER_CONTEXT },
-          ...messages.filter(m => m.role === 'user').slice(-3),
-          { role: "user", content: textToSend }
-        ]
-      };
-
+      let aiResponseText = "";
       const customKey = localStorage.getItem('fixo_custom_api_key');
       const customProvider = localStorage.getItem('fixo_custom_provider');
 
-      if (customKey && customProvider === 'openrouter') {
-         response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${customKey}` },
-          body: JSON.stringify(requestBody),
-          signal
-        });
-      } else if (customKey && customProvider === 'openai') {
-         response = await fetch("https://api.openai.com/v1/chat/completions", {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${customKey}` },
-          body: JSON.stringify(requestBody),
-          signal
-        });
-      } else if (import.meta.env.DEV) {
-        response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${import.meta.env.VITE_OPENROUTER_API_KEY}` },
-          body: JSON.stringify(requestBody),
-          signal
-        });
+      const apiMessages = [
+        { role: "system", content: BUILDER_CONTEXT },
+        ...newMsgs.slice(-5)
+      ];
+
+      if (customKey && customProvider) {
+        aiResponseText = await generateUnified(customProvider, customKey, selectedModel, apiMessages, signal);
       } else {
-        response = await fetch("/api/chat", {
+        const response = await fetch("/api/chat", {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({...requestBody, mode: "builder"}),
+          body: JSON.stringify({ model: selectedModel, messages: apiMessages, mode: "builder" }),
           signal
         });
+        if (!response.ok) throw new Error("Proxy API Error: " + response.status);
+        const data = await response.json();
+        aiResponseText = data.choices?.[0]?.message?.content || "";
       }
 
-      data = await response.json();
-
-      if (response.status === 429) {
-        setMessages(prev => [...prev, { role: 'ai', text: "Rate limit exceeded. Please wait a minute." }]);
-        setIsLoading(false);
-        setGenerationStep(0);
-        return;
-      }
-
-      if (response.status === 401 || response.status === 403) {
-        setMessages(prev => [...prev, { role: 'ai', text: "API Key Error. Your custom key might be invalid or out of credits." }]);
-        setIsLoading(false);
-        setGenerationStep(0);
-        setShowSettings(true);
-        return;
-      }
-
-      const aiResponseText = data.choices?.[0]?.message?.content || "";
       if (aiResponseText) {
-        setMessages(prev => [...prev, { role: 'ai', text: "Render complete." }]);
-        parseCodeBlocks(aiResponseText);
+        const finalMsgs = [...newMsgs, { role: 'ai', text: "Render complete." }];
+        setMessages(finalMsgs);
+        const newCode = parseCodeBlocks(aiResponseText);
         
+        if (newCode) {
+           setPreviewCode(newCode);
+           if (window.innerWidth < 768) setMobileTab('preview');
+        }
+
+        // Determine title for chat
+        const chatTitle = textToSend.length > 20 ? textToSend.substring(0, 20) + '...' : textToSend;
+
+        updateCurrentChat(finalMsgs, newCode || previewCode, messages.length <= 1 ? chatTitle : null);
+
         if (!isUsingCustomKey) {
-          const newCredits = builderCredits - 1;
-          setBuilderCredits(newCredits);
-          localStorage.setItem('fixo_builder_credits', newCredits.toString());
+          const newCount = trialCount - 1;
+          setTrialCount(newCount);
+          await setDoc(doc(db, 'users', user.uid), { trialCount: newCount }, { merge: true });
         }
       } else {
-        setMessages(prev => [...prev, { role: 'ai', text: "Generation failed." }]);
+        throw new Error("Empty response received.");
       }
     } catch (error) {
       if (error.name !== 'AbortError') {
-        setMessages(prev => [...prev, { role: 'ai', text: "Error connecting to the Builder API." }]);
+        console.error("Generation failed:", error);
+        const errMsgs = [...newMsgs, { role: 'ai', text: `Generation failed: ${error.message}. Please check your API key or model availability.` }];
+        setMessages(errMsgs);
+        updateCurrentChat(errMsgs);
       }
     } finally {
       setIsLoading(false);
@@ -344,8 +501,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
   const handleDownload = async () => {
     if (!previewCode.html && !previewCode.css && !previewCode.js) return;
     const zip = new JSZip();
-    const indexHtml = `
-<!DOCTYPE html>
+    const indexHtml = `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -376,13 +532,6 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
     setTimeout(() => setIsCopied(false), 2000);
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage();
-    }
-  };
-
   const steps = [
     { step: 1, text: "Analyzing context...", icon: <Cpu size={14} className="animate-pulse text-violet-400" /> },
     { step: 2, text: "Structuring layout...", icon: <Layout size={14} className="animate-pulse text-fuchsia-400" /> },
@@ -390,10 +539,42 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
     { step: 4, text: "Injecting logic...", icon: <FileCode2 size={14} className="animate-pulse text-rose-400" /> }
   ];
 
+  if (authLoading) {
+    return (
+      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#050505] text-white overflow-hidden">
+         <Loader className="animate-spin text-violet-500" size={32} />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#050505] text-white overflow-hidden">
+         <div className="absolute inset-0 bg-gradient-to-tr from-violet-600/20 to-fuchsia-600/20 blur-[120px]"></div>
+         <div className="relative z-10 p-8 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-3xl text-center max-w-sm w-full mx-4 shadow-2xl">
+            <button onClick={onExit} className="absolute top-4 left-4 p-2 text-white/50 hover:text-white transition-colors">
+              <ChevronLeft size={20} />
+            </button>
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-violet-600 to-fuchsia-600 mx-auto flex items-center justify-center shadow-[0_0_30px_rgba(139,92,246,0.3)] mb-6 mt-4">
+               <Code size={32} className="text-white" />
+            </div>
+            <h2 className="text-2xl font-bold mb-2">Fixo Builder</h2>
+            <p className="text-white/50 text-sm mb-8 leading-relaxed">Sign in to sync your generations, access powerful models, and save your chat history securely.</p>
+            <button 
+               onClick={handleLogin} 
+               className="w-full py-3.5 rounded-xl bg-white text-black font-semibold flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-95 transition-all shadow-xl"
+            >
+               Continue with Google
+            </button>
+         </div>
+      </div>
+    );
+  }
+
   const isUsingCustomKey = !!localStorage.getItem('fixo_custom_api_key');
 
   return (
-    <div className={`flex flex-col md:flex-row h-full w-full overflow-hidden ${theme === 'dark' ? 'bg-[#050505] text-white' : 'bg-[#fcfcfc] text-black'}`}>
+    <div className={`fixed inset-0 z-50 flex flex-col md:flex-row h-screen w-full overflow-hidden ${theme === 'dark' ? 'bg-[#050505] text-white' : 'bg-[#fcfcfc] text-black'}`}>
       
       {/* SETTINGS MODAL */}
       {showSettings && (
@@ -436,27 +617,20 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
 
               {verificationStatus === 'success' && (
                 <div className="flex items-center gap-2 text-green-500 text-sm font-medium bg-green-500/10 p-3 rounded-xl border border-green-500/20">
-                  <CheckCircle2 size={16} /> API Key Verified & Models Loaded
+                  <CheckCircle2 size={16} /> Verified & Models Loaded
                 </div>
               )}
               {verificationStatus === 'error' && (
                 <div className="flex items-center gap-2 text-rose-500 text-sm font-medium bg-rose-500/10 p-3 rounded-xl border border-rose-500/20">
-                  <AlertCircle size={16} /> Invalid API Key or Network Error
+                  <AlertCircle size={16} /> Invalid Key / Network Error
                 </div>
               )}
 
               <div className="flex gap-3 pt-2">
-                <button 
-                  onClick={handleClearKey} 
-                  className={`flex-1 p-3 rounded-xl border text-sm font-medium transition-all ${theme === 'dark' ? 'border-white/10 hover:bg-white/5' : 'border-black/10 hover:bg-black/5'}`}
-                >
+                <button onClick={handleClearKey} className={`flex-1 p-3 rounded-xl border text-sm font-medium transition-all ${theme === 'dark' ? 'border-white/10 hover:bg-white/5' : 'border-black/10 hover:bg-black/5'}`}>
                   Clear Key
                 </button>
-                <button 
-                  onClick={handleVerifyAndFetch} 
-                  disabled={isVerifying || !apiKey}
-                  className="flex-1 p-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-                >
+                <button onClick={handleVerifyAndFetch} disabled={isVerifying || !apiKey} className="flex-1 p-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium transition-all flex items-center justify-center gap-2 disabled:opacity-50">
                   {isVerifying ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div> : "Verify & Save"}
                 </button>
               </div>
@@ -465,25 +639,70 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
         </div>
       )}
 
+      {/* CHAT HISTORY DRAWER */}
+      {showChatHistory && (
+        <div className="fixed inset-0 z-[60] flex">
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowChatHistory(false)}></div>
+          <div className={`relative w-72 h-full flex flex-col shadow-2xl border-r ${theme === 'dark' ? 'bg-[#0a0a0c] border-white/10' : 'bg-[#fcfcfc] border-black/10'} animate-in slide-in-from-left duration-300`}>
+             <div className={`p-4 border-b flex items-center justify-between ${theme === 'dark' ? 'border-white/10' : 'border-black/10'}`}>
+                <h3 className="font-semibold flex items-center gap-2"><MessageSquare size={16}/> Chats</h3>
+                <button onClick={() => setShowChatHistory(false)} className="p-1 rounded opacity-50 hover:opacity-100"><X size={18}/></button>
+             </div>
+             <div className="p-3">
+                <button onClick={() => createNewChat()} className="w-full py-2.5 px-3 rounded-lg border border-dashed border-violet-500/50 text-violet-500 flex items-center justify-center gap-2 text-sm font-medium hover:bg-violet-500/10 transition-all">
+                  <Plus size={16} /> New Chat
+                </button>
+             </div>
+             <div className="flex-1 overflow-y-auto p-2 space-y-1 custom-scrollbar">
+                {chats.map(c => (
+                  <button 
+                    key={c.id} 
+                    onClick={() => switchChat(c)}
+                    className={`w-full text-left p-3 rounded-lg text-sm truncate transition-all ${currentChatId === c.id ? (theme === 'dark' ? 'bg-white/10 text-white' : 'bg-black/5 text-black') : (theme === 'dark' ? 'text-white/60 hover:bg-white/5 hover:text-white' : 'text-black/60 hover:bg-black/5 hover:text-black')}`}
+                  >
+                    {c.title}
+                  </button>
+                ))}
+             </div>
+             <div className={`p-4 border-t flex items-center justify-between ${theme === 'dark' ? 'border-white/10' : 'border-black/10'}`}>
+                <div className="flex items-center gap-2 truncate">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-violet-600 to-fuchsia-600 flex items-center justify-center text-white text-xs font-bold uppercase overflow-hidden">
+                    {user.photoURL ? <img src={user.photoURL} alt="User" /> : user.email?.charAt(0)}
+                  </div>
+                  <span className="text-xs font-medium truncate opacity-70">{user.email}</span>
+                </div>
+                <button onClick={() => signOut(auth)} className="p-1.5 rounded-lg text-rose-500 hover:bg-rose-500/10" title="Sign Out">
+                  <LogOut size={16} />
+                </button>
+             </div>
+          </div>
+        </div>
+      )}
+
       {/* 1. LEFT PANEL (Prompt & Controls) */}
       <div className={`${mobileTab === 'prompt' ? 'flex' : 'hidden'} md:flex w-full md:w-[300px] lg:w-[320px] flex-col flex-shrink-0 border-r transition-colors duration-300 ${theme === 'dark' ? 'border-white/[0.05] bg-white/[0.01]' : 'border-black/[0.05] bg-black/[0.01]'} backdrop-blur-3xl z-10 relative h-full md:h-auto`}>
+        
         {/* Header */}
         <div className={`p-4 border-b flex-shrink-0 flex items-center justify-between ${theme === 'dark' ? 'border-white/[0.05]' : 'border-black/[0.05]'}`}>
           <div className="flex items-center gap-3">
             <button onClick={onExit} className={`p-1.5 rounded-full hover:bg-black/10 ${theme === 'dark' ? 'hover:bg-white/10 text-white/50 hover:text-white' : 'text-black/50 hover:text-black'} transition-all hover:scale-105 active:scale-95`}>
               <ChevronLeft size={18} />
             </button>
-            <div className="relative">
+            <div className="relative cursor-pointer" onClick={() => setShowChatHistory(true)} title="View Chats">
               <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-violet-600 to-fuchsia-600 flex items-center justify-center shadow-[0_0_15px_rgba(139,92,246,0.3)]">
                 <Code size={14} className="text-white" />
               </div>
-              <div className="absolute top-0 right-0 w-2 h-2 bg-green-500 rounded-full border border-black animate-pulse"></div>
             </div>
             <span className={`text-sm font-bold tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-fuchsia-400`}>FixO IDE</span>
           </div>
-          <button onClick={() => setShowSettings(true)} className={`p-1.5 rounded-lg transition-all hover:scale-105 ${theme === 'dark' ? 'bg-white/5 hover:bg-white/10 text-white/70 hover:text-white' : 'bg-black/5 hover:bg-black/10 text-black/70 hover:text-black'} ${isUsingCustomKey ? 'ring-1 ring-violet-500/50 text-violet-400' : ''}`} title="API Settings">
-             <Settings size={16} className={isUsingCustomKey ? "text-violet-500" : ""} />
-          </button>
+          <div className="flex items-center gap-1">
+            <button onClick={() => setShowChatHistory(true)} className={`p-1.5 rounded-lg transition-all ${theme === 'dark' ? 'bg-white/5 hover:bg-white/10 text-white/70' : 'bg-black/5 hover:bg-black/10 text-black/70'}`} title="Chat History">
+               <MessageSquare size={16} />
+            </button>
+            <button onClick={() => setShowSettings(true)} className={`p-1.5 rounded-lg transition-all ${theme === 'dark' ? 'bg-white/5 hover:bg-white/10 text-white/70' : 'bg-black/5 hover:bg-black/10 text-black/70'} ${isUsingCustomKey ? 'ring-1 ring-violet-500/50 text-violet-400' : ''}`} title="API Settings">
+               <Settings size={16} className={isUsingCustomKey ? "text-violet-500" : ""} />
+            </button>
+          </div>
         </div>
 
         {/* Settings / Controls */}
@@ -508,11 +727,11 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
             </select>
           </div>
           
-          <div className={`p-3.5 rounded-xl border flex items-center justify-between ${isUsingCustomKey ? (theme === 'dark' ? 'bg-green-500/10 border-green-500/20 text-green-400' : 'bg-green-50 border-green-200 text-green-700') : builderCredits > 0 ? (theme === 'dark' ? 'bg-violet-500/10 border-violet-500/20 text-violet-300' : 'bg-violet-500/10 border-violet-500/20 text-violet-700') : 'bg-rose-500/10 border-rose-500/20 text-rose-400'}`}>
-            <span className="text-xs font-medium">{isUsingCustomKey ? "Unlimited Usage" : "Free Daily Limit"}</span>
+          <div className={`p-3.5 rounded-xl border flex items-center justify-between ${isUsingCustomKey ? (theme === 'dark' ? 'bg-green-500/10 border-green-500/20 text-green-400' : 'bg-green-50 border-green-200 text-green-700') : trialCount > 0 ? (theme === 'dark' ? 'bg-violet-500/10 border-violet-500/20 text-violet-300' : 'bg-violet-500/10 border-violet-500/20 text-violet-700') : 'bg-rose-500/10 border-rose-500/20 text-rose-400'}`}>
+            <span className="text-xs font-medium">{isUsingCustomKey ? "Unlimited Usage" : "Free Trial Credits"}</span>
             <div className="flex items-center gap-1.5 font-mono text-sm">
-              {isUsingCustomKey ? <CheckCircle2 size={14} /> : <Zap size={14} className={builderCredits > 0 ? "fill-current" : ""} />}
-              {isUsingCustomKey ? '∞' : `${builderCredits}/1`}
+              {isUsingCustomKey ? <CheckCircle2 size={14} /> : <Zap size={14} className={trialCount > 0 ? "fill-current" : ""} />}
+              {isUsingCustomKey ? '∞' : `${trialCount}/3`}
             </div>
           </div>
         </div>
@@ -562,7 +781,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
               onChange={(e) => setInputValue(e.target.value)} 
               onKeyDown={handleKeyDown}
               placeholder="Describe the UI..." 
-              disabled={isLoading || (!isUsingCustomKey && builderCredits <= 0)}
+              disabled={isLoading || (!isUsingCustomKey && trialCount <= 0)}
               rows={1}
               className="flex-1 bg-transparent text-[13px] p-3 resize-none focus:outline-none custom-scrollbar disabled:opacity-50 min-h-[44px] max-h-[120px]" 
             />
@@ -579,7 +798,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
         </div>
       </div>
 
-      {/* RIGHT WORKSPACE (Global Wrapper for Preview + Code) */}
+      {/* RIGHT WORKSPACE */}
       <div className={`${mobileTab !== 'prompt' ? 'flex' : 'hidden'} md:flex flex-1 flex-col relative z-0 h-full overflow-hidden`}>
         
         {/* GLOBAL WORKSPACE TOP BAR */}
@@ -611,7 +830,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
           </div>
         </div>
 
-        {/* PANELS CONTAINER (Preview + Code) */}
+        {/* PANELS CONTAINER */}
         <div className="flex-1 flex flex-row relative min-h-0 overflow-hidden">
           
           {/* PREVIEW PANEL */}
@@ -682,7 +901,6 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
               : activeView === 'split' ? 'w-[360px] lg:w-[450px] flex-none' 
               : 'flex-1 opacity-100'
           }`}>
-            {/* Code Tabs Header */}
             <div className={`flex items-center justify-between p-2 md:p-3 border-b flex-shrink-0 ${theme === 'dark' ? 'border-white/[0.05]' : 'border-black/[0.05]'}`}>
               <div className="flex gap-1.5">
                 {['html', 'css', 'js'].map(tab => (
@@ -708,8 +926,6 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
                 </button>
               </div>
             </div>
-
-            {/* Code View */}
             <div className={`flex-1 overflow-y-auto p-5 custom-scrollbar min-h-0 ${theme === 'dark' ? 'bg-[#050505]' : 'bg-[#f0f0f0]'}`}>
               {previewCode[codeTab] ? (
                 <pre className={`text-[12px] md:text-[13px] font-mono leading-relaxed whitespace-pre-wrap ${
