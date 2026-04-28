@@ -6,16 +6,19 @@ export default async function handler(req, res) {
   // Very basic in-memory rate limiting (works per Vercel lambda instance)
   // In a robust app, use Vercel KV or similar
   const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown';
+  const { model, messages, mode } = req.body;
+  const currentMode = mode === 'builder' ? 'builder' : 'chat';
   
   if (!global.rateLimitStore) {
     global.rateLimitStore = new Map();
   }
   
   const now = Date.now();
-  const windowMs = 60 * 1000; // 1 minute
-  const maxRequests = 10;
+  const windowMs = 24 * 60 * 60 * 1000; // 24 hours
+  const maxRequests = currentMode === 'builder' ? 5 : 10;
   
-  const requestInfo = global.rateLimitStore.get(ip) || { count: 0, resetTime: now + windowMs };
+  const userKey = `${ip}_${currentMode}`;
+  const requestInfo = global.rateLimitStore.get(userKey) || { count: 0, resetTime: now + windowMs };
   
   if (now > requestInfo.resetTime) {
     requestInfo.count = 1;
@@ -24,16 +27,15 @@ export default async function handler(req, res) {
     requestInfo.count++;
   }
   
-  global.rateLimitStore.set(ip, requestInfo);
+  global.rateLimitStore.set(userKey, requestInfo);
   
   if (requestInfo.count > maxRequests) {
     return res.status(429).json({ 
-      error: 'Too Many Requests. Please slow down and try again later.',
-      isStatic: true
+      error: `Limit reached. You have used your ${maxRequests} daily requests for ${currentMode} mode.`,
+      isStatic: true,
+      remaining: 0
     });
   }
-
-  const { model, messages } = req.body;
 
   if (!messages || !Array.isArray(messages) || messages.length === 0) {
     return res.status(400).json({ error: 'Invalid messages' });

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Download, RefreshCw, ChevronLeft, Code, Square, Cpu, Layout, FileCode2, Paintbrush, Loader2 } from 'lucide-react';
+import { Send, Download, RefreshCw, ChevronLeft, Code, Square, Cpu, Layout, FileCode2, Paintbrush, Loader2, Zap } from 'lucide-react';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 
@@ -34,8 +34,23 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
   const [previewUrl, setPreviewUrl] = useState('');
   const [activeTab, setActiveTab] = useState('preview'); // 'preview', 'code'
   const [selectedModel, setSelectedModel] = useState(initialModel || AVAILABLE_MODELS[0].id);
+  const [builderCredits, setBuilderCredits] = useState(5);
   const messagesEndRef = useRef(null);
   const abortControllerRef = useRef(null);
+
+  useEffect(() => {
+    const resetTime = localStorage.getItem('fixo_builder_reset');
+    const storedCredits = localStorage.getItem('fixo_builder_credits');
+    const now = Date.now();
+    
+    if (!resetTime || now > parseInt(resetTime)) {
+      localStorage.setItem('fixo_builder_reset', (now + 24 * 60 * 60 * 1000).toString());
+      localStorage.setItem('fixo_builder_credits', '5');
+      setBuilderCredits(5);
+    } else if (storedCredits) {
+      setBuilderCredits(parseInt(storedCredits));
+    }
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -106,6 +121,11 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
   };
 
   const handleSendMessage = async () => {
+    if (builderCredits <= 0) {
+      setMessages(prev => [...prev, { role: 'ai', text: "You have reached your daily limit of 5 builder actions. Please try again tomorrow!" }]);
+      return;
+    }
+
     if (!inputValue.trim()) return;
 
     const userMessage = { role: 'user', text: inputValue };
@@ -128,7 +148,8 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
           { role: "system", content: BUILDER_CONTEXT },
           ...messages.filter(m => m.role === 'user').slice(-3),
           { role: "user", content: userMessage.text }
-        ]
+        ],
+        mode: "builder"
       });
 
       if (import.meta.env.DEV) {
@@ -164,6 +185,9 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
       if (aiResponseText) {
         setMessages(prev => [...prev, { role: 'ai', text: "I've generated the code. Check the live preview!" }]);
         parseCodeBlocks(aiResponseText);
+        const newCredits = builderCredits - 1;
+        setBuilderCredits(newCredits);
+        localStorage.setItem('fixo_builder_credits', newCredits.toString());
       } else {
         setMessages(prev => [...prev, { role: 'ai', text: "Failed to generate code." }]);
       }
@@ -227,20 +251,25 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
             </div>
             <span className={`text-xs font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400`}>The Builder</span>
           </div>
-          
-          <select
-            value={selectedModel}
-            onChange={(e) => setSelectedModel(e.target.value)}
-            className={`text-[9px] max-w-[100px] truncate p-1 rounded-md border focus:outline-none appearance-none cursor-pointer ${
-              theme === 'dark' 
-                ? 'bg-black/50 border-white/20 text-gray-300 hover:border-purple-500' 
-                : 'bg-white/50 border-black/10 text-gray-700 hover:border-purple-500'
-            }`}
-          >
-            {AVAILABLE_MODELS.map(model => (
-              <option key={model.id} value={model.id} className="bg-black text-white">{model.name}</option>
-            ))}
-          </select>
+          <div className="flex items-center gap-3">
+            <div className={`flex items-center gap-1 text-[10px] font-mono px-2 py-1 rounded border ${builderCredits > 0 ? 'border-green-500/30 text-green-400 bg-green-500/10' : 'border-red-500/30 text-red-400 bg-red-500/10'}`}>
+              <Zap size={10} />
+              <span>{builderCredits}/5</span>
+            </div>
+            <select
+              value={selectedModel}
+              onChange={(e) => setSelectedModel(e.target.value)}
+              className={`text-[9px] max-w-[100px] truncate p-1 rounded-md border focus:outline-none appearance-none cursor-pointer ${
+                theme === 'dark' 
+                  ? 'bg-black/50 border-white/20 text-gray-300 hover:border-purple-500' 
+                  : 'bg-white/50 border-black/10 text-gray-700 hover:border-purple-500'
+              }`}
+            >
+              {AVAILABLE_MODELS.map(model => (
+                <option key={model.id} value={model.id} className="bg-black text-white">{model.name}</option>
+              ))}
+            </select>
+          </div>
         </div>
 
         <div className="flex-1 overflow-y-auto p-3 space-y-3 custom-scrollbar">
@@ -286,7 +315,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
                 <Square size={14} className="fill-current" />
               </button>
             ) : (
-              <button type="submit" disabled={!inputValue.trim()} className="p-1.5 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-lg hover:from-purple-500 hover:to-pink-400 transition-colors disabled:opacity-50">
+              <button type="submit" disabled={!inputValue.trim() || builderCredits <= 0} className="p-1.5 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-lg hover:from-purple-500 hover:to-pink-400 transition-colors disabled:opacity-50">
                 <Send size={14} />
               </button>
             )}

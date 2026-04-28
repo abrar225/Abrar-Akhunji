@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Bot, Send, Sparkles, X, Volume2, VolumeX, Wrench, Square } from 'lucide-react';
-import PuzzleGate from './PuzzleGate';
+import { Bot, Send, Sparkles, X, Volume2, VolumeX, Wrench, Square, Zap } from 'lucide-react';
 import BuilderMode from './BuilderMode';
 
 const PORTFOLIO_CONTEXT = `
@@ -38,7 +37,7 @@ const SUGGESTIONS = [
 
 const ChatBot = ({ theme }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [chatMode, setChatMode] = useState('normal'); // 'normal', 'puzzle', 'builder'
+  const [chatMode, setChatMode] = useState('normal'); // 'normal', 'builder'
   const [messages, setMessages] = useState([
     { role: 'ai', text: "Hi! I'm FixO, Abrar's AI Assistant. Ask me anything about his projects, skills, or experience! ✨" }
   ]);
@@ -46,8 +45,24 @@ const ChatBot = ({ theme }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedModel, setSelectedModel] = useState(AVAILABLE_MODELS[0].id);
   const [isMuted, setIsMuted] = useState(false);
+  const [chatCredits, setChatCredits] = useState(10);
   const messagesEndRef = useRef(null);
   const abortControllerRef = useRef(null);
+
+  useEffect(() => {
+    // Check daily credits for Chat
+    const resetTime = localStorage.getItem('fixo_chat_reset');
+    const storedCredits = localStorage.getItem('fixo_chat_credits');
+    const now = Date.now();
+    
+    if (!resetTime || now > parseInt(resetTime)) {
+      localStorage.setItem('fixo_chat_reset', (now + 24 * 60 * 60 * 1000).toString());
+      localStorage.setItem('fixo_chat_credits', '10');
+      setChatCredits(10);
+    } else if (storedCredits) {
+      setChatCredits(parseInt(storedCredits));
+    }
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -79,6 +94,11 @@ const ChatBot = ({ theme }) => {
   };
 
   const handleSendMessage = async (customText) => {
+    if (chatCredits <= 0) {
+      setMessages(prev => [...prev, { role: 'ai', text: "You have reached your daily limit of 10 messages for chat mode. Please try again tomorrow!" }]);
+      return;
+    }
+
     const textToSend = typeof customText === 'string' ? customText : inputValue;
     if (!textToSend.trim()) return;
 
@@ -139,7 +159,8 @@ const ChatBot = ({ theme }) => {
         messages: [
           { role: "system", content: PORTFOLIO_CONTEXT },
           { role: "user", content: textToSend }
-        ]
+        ],
+        mode: "chat"
       });
 
       if (import.meta.env.DEV) {
@@ -174,6 +195,10 @@ const ChatBot = ({ theme }) => {
       const aiResponseText = data.choices?.[0]?.message?.content || "I'm having trouble connecting right now.";
       setMessages(prev => [...prev, { role: 'ai', text: aiResponseText }]);
       speakText(aiResponseText);
+      
+      const newCredits = chatCredits - 1;
+      setChatCredits(newCredits);
+      localStorage.setItem('fixo_chat_credits', newCredits.toString());
     } catch (error) {
       if (error.name === 'AbortError') {
         console.log("Fetch aborted");
@@ -203,16 +228,8 @@ const ChatBot = ({ theme }) => {
       </button>
 
       {isOpen && (
-        <div className={`fixed bottom-44 right-6 md:right-12 z-[70] ${chatMode === 'builder' ? 'w-[90vw] md:w-[900px] h-[650px] max-h-[85vh]' : 'w-[90vw] md:w-[380px] h-[500px]'} ${theme === 'dark' ? 'bg-black/90' : 'bg-white/95'} backdrop-blur-xl border ${theme === 'dark' ? 'border-white/10' : 'border-black/5'} rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-10 duration-300 transition-all`}>
+        <div className={`fixed z-[70] transition-all duration-300 ${chatMode === 'builder' ? 'inset-0 w-full h-full rounded-none border-0' : `bottom-44 right-6 md:right-12 w-[90vw] md:w-[380px] h-[500px] rounded-2xl border ${theme === 'dark' ? 'border-white/10' : 'border-black/5'} shadow-2xl`} ${theme === 'dark' ? 'bg-black/90' : 'bg-white/95'} backdrop-blur-xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-10`}>
           
-          {chatMode === 'puzzle' && (
-            <PuzzleGate 
-              theme={theme} 
-              onSuccess={() => setChatMode('builder')} 
-              onCancel={() => setChatMode('normal')} 
-            />
-          )}
-
           {chatMode === 'builder' ? (
             <BuilderMode 
               theme={theme} 
@@ -233,10 +250,14 @@ const ChatBot = ({ theme }) => {
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
+                  <div className={`flex items-center gap-1 text-[10px] font-mono px-2 py-1 rounded border ${chatCredits > 0 ? 'border-green-500/30 text-green-400 bg-green-500/10' : 'border-red-500/30 text-red-400 bg-red-500/10'}`}>
+                    <Zap size={10} />
+                    <span>{chatCredits}/10</span>
+                  </div>
                   <button 
-                    onClick={() => setChatMode('puzzle')} 
+                    onClick={() => setChatMode('builder')} 
                     className={`p-1.5 rounded-lg border transition-colors ${theme === 'dark' ? 'bg-white/10 border-pink-500/50 text-pink-400 hover:bg-pink-500/20' : 'bg-pink-50 border-pink-200 text-pink-600 hover:bg-pink-100'}`}
-                    title="Unlock Builder Mode"
+                    title="Open Builder Mode"
                   >
                     <Wrench size={14} />
                   </button>
@@ -298,7 +319,7 @@ const ChatBot = ({ theme }) => {
                       <Square size={18} className="fill-current" />
                     </button>
                   ) : (
-                    <button type="submit" disabled={!inputValue.trim()} className="p-2 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-xl hover:from-purple-500 hover:to-pink-400 transition-colors disabled:opacity-50 shadow-lg shadow-purple-500/20"><Send size={18} /></button>
+                    <button type="submit" disabled={!inputValue.trim() || chatCredits <= 0} className="p-2 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-xl hover:from-purple-500 hover:to-pink-400 transition-colors disabled:opacity-50 shadow-lg shadow-purple-500/20"><Send size={18} /></button>
                   )}
                 </form>
               </div>
