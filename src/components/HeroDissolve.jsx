@@ -9,15 +9,15 @@ import Lenis from 'lenis';
 gsap.registerPlugin(ScrollTrigger);
 
 // --- SHADER CODE ---
-const vertexShader = \`
+const vertexShader = `
   varying vec2 vUv;
   void main() {
     vUv = uv;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
   }
-\`;
+`;
 
-const fragmentShader = \`
+const fragmentShader = `
   varying vec2 vUv;
   uniform float uProgress;
   uniform vec2 uResolution;
@@ -69,7 +69,7 @@ const fragmentShader = \`
     
     gl_FragColor = vec4(uColor, alpha);
   }
-\`;
+`;
 
 const DissolvePlane = ({ progress }) => {
   const meshRef = useRef();
@@ -161,7 +161,7 @@ const HeroDissolve = ({ theme }) => {
             const end = (i + 1) / words.length;
             const opacity = gsap.utils.clamp(0, 1, (p - start) / (end - start));
             word.style.opacity = opacity;
-            word.style.transform = \`translateY(\${10 * (1 - opacity)}px)\`;
+            word.style.transform = `translateY(${10 * (1 - opacity)}px)`;
           });
         }
       });
