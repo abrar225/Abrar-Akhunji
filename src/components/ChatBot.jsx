@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Bot, Send, Sparkles, X, Volume2, VolumeX, Wrench, Square, Zap, Trash2, Paperclip, ChevronRight, AlertCircle, RefreshCcw } from 'lucide-react';
+import { Bot, Send, Sparkles, X, Volume2, VolumeX, Wrench, Square, Zap, Trash2, Paperclip, ChevronRight, AlertCircle, RefreshCcw, Cpu } from 'lucide-react';
 import BuilderMode from './BuilderMode';
+import { buildRequestContext } from '../lib/memory';
 
 const PORTFOLIO_CONTEXT = `
 You are an AI Assistant for Abrar Akhunji's portfolio website.
@@ -41,6 +42,7 @@ const ChatBot = ({ theme }) => {
   const [selectedModel, setSelectedModel] = useState(AVAILABLE_MODELS[0].id);
   const [isMuted, setIsMuted] = useState(false);
   const [chatCredits, setChatCredits] = useState(10);
+  const [generationStatus, setGenerationStatus] = useState('');
   const messagesEndRef = useRef(null);
   const abortControllerRef = useRef(null);
   const inputRef = useRef(null);
@@ -91,6 +93,7 @@ const ChatBot = ({ theme }) => {
       abortControllerRef.current.abort();
       abortControllerRef.current = null;
       setIsLoading(false);
+      setGenerationStatus('');
       setMessages(prev => [...prev, { role: 'ai', text: "Process halted." }]);
     }
   };
@@ -100,9 +103,17 @@ const ChatBot = ({ theme }) => {
     setErrorState(null);
   };
 
+  const handleRetry = () => {
+    setErrorState(null);
+    const lastUserMsg = [...messages].reverse().find(m => m.role === 'user');
+    if (lastUserMsg) {
+      handleSendMessage(lastUserMsg.text);
+    }
+  };
+
   const handleSendMessage = async (customText) => {
     if (chatCredits <= 0) {
-      setErrorState({ type: 'limit', message: "Daily limit of 10 messages reached. See you tomorrow!" });
+      setErrorState({ type: 'limit', message: "Daily limit reached. See you tomorrow!" });
       return;
     }
 
@@ -114,110 +125,73 @@ const ChatBot = ({ theme }) => {
     setMessages(prev => [...prev, userMessage]);
     setInputValue("");
     setIsLoading(true);
-
-    const lowerText = textToSend.toLowerCase();
-
-    // STATIC ROUTING
-    const unethicalKeywords = ['bomb', 'kill', 'hack', 'steal', 'murder', 'weapon', 'drugs', 'illegal'];
-    if (unethicalKeywords.some(keyword => lowerText.includes(keyword))) {
-      const responseText = "I'm designed to discuss Abrar's portfolio, not harmful activities. Let's redirect our focus.";
-      setMessages(prev => [...prev, { role: 'ai', text: responseText }]);
-      speakText(responseText);
-      setIsLoading(false);
-      return;
-    }
-
-    const adultKeywords = ['sex', 'porn', 'nude', 'nsfw', 'hookup'];
-    if (adultKeywords.some(keyword => lowerText.includes(keyword))) {
-      const responseText = "Let's keep the conversation professional.";
-      setMessages(prev => [...prev, { role: 'ai', text: responseText }]);
-      speakText(responseText);
-      setIsLoading(false);
-      return;
-    }
-
-    const faqMap = {
-      'who are you': "I am FixO, Abrar's AI Assistant. I have comprehensive knowledge of his projects, skills, and background.",
-      'what are you': "I am an AI interface built by Abrar to assist visitors in exploring his work.",
-      'who is abrar': "Abrar Akhunji is a dedicated developer pursuing a B.E. in Information Technology. He builds AI/ML solutions and modern web applications.",
-      'tell me about abrar': "Abrar Akhunji is a dedicated developer pursuing a B.E. in Information Technology. He builds AI/ML solutions and modern web applications.",
-      'projects': "Abrar has engineered several systems including Lyra Music AI, CivicEye (AI crime detection), TerraFlow, and NeuroVision. Would you like specifics on any of these?",
-      'skills': "Abrar's tech stack includes Python, Java, JavaScript, AI/ML (Pandas, OpenCV), Django, and React.",
-      'can you code': "Absolutely. I have a dedicated IDE. Click the Wrench icon to unlock FixO Builder Mode."
-    };
-
-    for (const [key, answer] of Object.entries(faqMap)) {
-      if (lowerText.includes(key)) {
-        setMessages(prev => [...prev, { role: 'ai', text: answer }]);
-        speakText(answer);
-        setIsLoading(false);
-        return;
-      }
-    }
+    setGenerationStatus('Connecting to AI...');
 
     abortControllerRef.current = new AbortController();
     const signal = abortControllerRef.current.signal;
 
     try {
-      let response;
-      let data;
-      
-      const requestBody = JSON.stringify({
-        model: selectedModel,
-        messages: [
-          { role: "system", content: PORTFOLIO_CONTEXT },
-          { role: "user", content: textToSend }
-        ],
-        mode: "chat"
+      setGenerationStatus('Generating response...');
+
+      // Build context using memory system
+      const allMessages = [...messages, userMessage];
+      const apiMessages = buildRequestContext({
+        systemPrompt: PORTFOLIO_CONTEXT,
+        messages: allMessages,
+        windowSize: 10
       });
 
-      if (import.meta.env.DEV) {
-        const apiKey = import.meta.env.VITE_OPENROUTER_API_KEY;
-        response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKey}`,
-          },
-          body: requestBody,
-          signal
-        });
-        data = await response.json();
-      } else {
-        response = await fetch("/api/chat", {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: requestBody,
-          signal
-        });
-        data = await response.json();
-      }
+      // ALL requests go through the backend proxy — never call providers directly
+      const response = await fetch("/api/generate", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: selectedModel,
+          messages: apiMessages,
+          mode: "chat"
+        }),
+        signal
+      });
+
+      const data = await response.json();
 
       if (response.status === 429) {
-        setErrorState({ type: 'rate_limit', message: "Rate limit exceeded. Please try again in a few moments." });
+        setErrorState({ type: 'rate_limit', message: data.error || "Rate limit exceeded. Please try again later." });
         return;
       }
 
-      const aiResponseText = data.choices?.[0]?.message?.content;
+      if (!response.ok || !data.success) {
+        setErrorState({ type: 'error', message: data.error || "Something went wrong. Try another model or check your connection." });
+        return;
+      }
+
+      // Handle static responses (FAQ/filters) and AI responses
+      const aiResponseText = data.data;
       if (aiResponseText) {
         setMessages(prev => [...prev, { role: 'ai', text: aiResponseText }]);
         speakText(aiResponseText);
         
-        const newCredits = chatCredits - 1;
-        setChatCredits(newCredits);
-        localStorage.setItem('fixo_chat_credits', newCredits.toString());
+        // Only deduct credits for non-static responses
+        if (!data.isStatic) {
+          const newCredits = chatCredits - 1;
+          setChatCredits(newCredits);
+          localStorage.setItem('fixo_chat_credits', newCredits.toString());
+        }
       } else {
-        setErrorState({ type: 'error', message: "Connection failed. Please try again." });
+        setErrorState({ type: 'error', message: "AI returned an empty response. Try a different model." });
       }
     } catch (error) {
       if (error.name !== 'AbortError') {
-        setErrorState({ type: 'error', message: "Network error. Unable to reach AI." });
+        setErrorState({ type: 'error', message: "Network error. Unable to reach AI. Check your connection." });
       }
     } finally {
       setIsLoading(false);
+      setGenerationStatus('');
       abortControllerRef.current = null;
     }
   };
+
+  const activeModelName = AVAILABLE_MODELS.find(m => m.id === selectedModel)?.name || selectedModel;
 
   return (
     <>
@@ -269,7 +243,9 @@ const ChatBot = ({ theme }) => {
                   </div>
                   <div>
                     <h3 className={`text-base font-bold tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-fuchsia-400`}>FixO</h3>
-                    <p className={`text-[10px] uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>AI Assistant</p>
+                    <p className={`text-[10px] uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>
+                      {isLoading ? generationStatus : activeModelName}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-1.5">
@@ -322,10 +298,15 @@ const ChatBot = ({ theme }) => {
                 {isLoading && (
                   <div className="flex justify-start animate-in fade-in relative z-10">
                     <div className={`px-4 py-3.5 rounded-2xl rounded-tl-sm border backdrop-blur-xl flex flex-col gap-2 shadow-sm ${theme === 'dark' ? 'bg-white/[0.04] border-white/[0.08]' : 'bg-black/[0.03] border-black/[0.05]'}`}>
-                      <div className="flex items-center gap-1.5 h-5">
-                        <div className={`w-1.5 h-1.5 rounded-full animate-bounce ${theme === 'dark' ? 'bg-violet-400' : 'bg-violet-600'}`} style={{animationDelay: '0ms'}}></div>
-                        <div className={`w-1.5 h-1.5 rounded-full animate-bounce ${theme === 'dark' ? 'bg-fuchsia-400' : 'bg-fuchsia-600'}`} style={{animationDelay: '150ms'}}></div>
-                        <div className={`w-1.5 h-1.5 rounded-full animate-bounce ${theme === 'dark' ? 'bg-pink-400' : 'bg-pink-600'}`} style={{animationDelay: '300ms'}}></div>
+                      <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1.5 h-5">
+                          <div className={`w-1.5 h-1.5 rounded-full animate-bounce ${theme === 'dark' ? 'bg-violet-400' : 'bg-violet-600'}`} style={{animationDelay: '0ms'}}></div>
+                          <div className={`w-1.5 h-1.5 rounded-full animate-bounce ${theme === 'dark' ? 'bg-fuchsia-400' : 'bg-fuchsia-600'}`} style={{animationDelay: '150ms'}}></div>
+                          <div className={`w-1.5 h-1.5 rounded-full animate-bounce ${theme === 'dark' ? 'bg-pink-400' : 'bg-pink-600'}`} style={{animationDelay: '300ms'}}></div>
+                        </div>
+                        {generationStatus && (
+                          <span className={`text-[10px] ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>{generationStatus}</span>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -336,10 +317,17 @@ const ChatBot = ({ theme }) => {
                     <div className={`max-w-[90%] p-4 rounded-2xl border flex items-start gap-3 shadow-lg ${theme === 'dark' ? 'bg-rose-500/10 border-rose-500/20 text-rose-200' : 'bg-rose-50 border-rose-200 text-rose-800'}`}>
                       <AlertCircle size={18} className="text-rose-500 mt-0.5 flex-shrink-0" />
                       <div>
-                        <p className="text-sm font-medium mb-1">{errorState.message}</p>
-                        <button onClick={() => setErrorState(null)} className="text-xs flex items-center gap-1 text-rose-500 hover:underline">
-                          <RefreshCcw size={12} /> Dismiss
-                        </button>
+                        <p className="text-sm font-medium mb-2">{errorState.message}</p>
+                        <div className="flex gap-2">
+                          <button onClick={() => setErrorState(null)} className="text-xs flex items-center gap-1 text-rose-500 hover:underline">
+                            <X size={12} /> Dismiss
+                          </button>
+                          {errorState.type === 'error' && (
+                            <button onClick={handleRetry} className="text-xs flex items-center gap-1 text-violet-400 hover:underline">
+                              <RefreshCcw size={12} /> Retry
+                            </button>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>

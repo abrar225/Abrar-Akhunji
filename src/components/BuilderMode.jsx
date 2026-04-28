@@ -3,6 +3,8 @@ import { Send, Download, ChevronLeft, Code, Square, Cpu, Layout, FileCode2, Pain
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { auth, db, googleProvider, signInWithPopup, signOut, onAuthStateChanged, doc, setDoc, getDoc, collection, addDoc, updateDoc, query, where, getDocs, orderBy, serverTimestamp } from '../lib/firebase';
+import ErrorBoundary from './ErrorBoundary';
+import { saveApiKey, loadApiKey, saveProvider, loadProvider, saveModels, loadModels, clearApiConfig, buildRequestContext, loadUserMemory, saveUserMemory, extractMemoryFromPrompt, needsSummarization, buildSummarizationRequest, saveChatSummary, getMemoryStats, getDefaultMemory, clearUserMemory } from '../lib/memory';
 
 const BUILDER_CONTEXT = `
 You are FixO The Builder, an expert UI/UX developer and creative designer.
@@ -15,13 +17,23 @@ When the user asks you to build or design something, you must return EXACTLY THR
 DO NOT return any other text, explanations, or conversational filler. ONLY the code blocks.
 `;
 
+const PROVIDERS = [
+  { id: 'openrouter', name: 'OpenRouter' },
+  { id: 'openai', name: 'OpenAI' },
+  { id: 'gemini', name: 'Google Gemini' },
+  { id: 'anthropic', name: 'Anthropic' },
+  { id: 'groq', name: 'Groq' },
+  { id: 'mistral', name: 'Mistral' },
+  { id: 'cohere', name: 'Cohere' },
+  { id: 'together', name: 'Together AI' },
+  { id: 'nvidia', name: 'NVIDIA NIM' }
+];
+
 const DEFAULT_MODELS = [
   { id: "minimax/minimax-m2.5:free", name: "Minimax M2.5 (Fast)" },
   { id: "google/gemma-3-27b-it:free", name: "Google Gemma 3" },
   { id: "openai/gpt-oss-120b:free", name: "GPT OSS 120B" },
-  { id: "nvidia/nemotron-nano-9b-v2:free", name: "Nvidia Nemotron" },
-  { id: "liquid/lfm-2.5-1.2b-thinking:free", name: "Liquid LFM Thinking" },
-  { id: "inclusionai/ling-2.6-flash:free", name: "Ling Flash 2.6" }
+  { id: "nvidia/nemotron-nano-9b-v2:free", name: "Nvidia Nemotron" }
 ];
 
 const PRESETS = [
@@ -43,6 +55,10 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
   // Trial / Credits State
   const [trialCount, setTrialCount] = useState(0);
 
+  // Memory Engine State
+  const [userMemory, setUserMemory] = useState(null);
+  const [chatSummary, setChatSummary] = useState(null);
+
   const [messages, setMessages] = useState([
     { role: 'ai', text: "I am FixO The Builder. What are we creating today?" }
   ]);
@@ -62,18 +78,13 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
   const [mobileTab, setMobileTab] = useState('prompt'); 
   
   // API Key & Provider Settings
+  const [showProfile, setShowProfile] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const [provider, setProvider] = useState(localStorage.getItem('fixo_custom_provider') || 'openrouter');
-  const [apiKey, setApiKey] = useState(localStorage.getItem('fixo_custom_api_key') || '');
+  const [provider, setProvider] = useState(loadProvider());
+  const [apiKey, setApiKey] = useState(loadApiKey());
   const [isVerifying, setIsVerifying] = useState(false);
   const [verificationStatus, setVerificationStatus] = useState(null);
-  const [fetchedModels, setFetchedModels] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem('fixo_custom_models')) || [];
-    } catch {
-      return [];
-    }
-  });
+  const [fetchedModels, setFetchedModels] = useState(() => loadModels());
   
   const activeModels = fetchedModels.length > 0 ? fetchedModels : DEFAULT_MODELS;
   const [selectedModel, setSelectedModel] = useState(initialModel || activeModels[0].id);
@@ -104,14 +115,23 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
   // Firebase Auth Listener
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
-        await initializeUser(currentUser.uid);
-        await loadChats(currentUser.uid);
-      } else {
-        setUser(null);
+      try {
+        if (currentUser) {
+          setUser(currentUser);
+          await initializeUser(currentUser.uid);
+          await loadChats(currentUser.uid);
+          // Load persistent memory
+          const mem = await loadUserMemory(currentUser.uid);
+          setUserMemory(mem);
+        } else {
+          setUser(null);
+          setUserMemory(null);
+        }
+      } catch (e) {
+        console.error("Firebase auth error:", e);
+      } finally {
+        setAuthLoading(false);
       }
-      setAuthLoading(false);
     });
     return () => unsubscribe();
   }, []);
@@ -193,6 +213,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
   const switchChat = (chat) => {
     setCurrentChatId(chat.id);
     setMessages(chat.messages || []);
+    setChatSummary(chat.summary || null);
     if (chat.previewCode) {
       setPreviewCode(chat.previewCode);
       setHasGenerated(true);
@@ -319,40 +340,36 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
     setIsVerifying(true);
     setVerificationStatus(null);
     try {
-      let url = '';
-      let headers = { 'Authorization': `Bearer ${apiKey}` };
+      // In a production app with multiple providers, model fetching logic differs heavily per provider.
+      // For this implementation, we will skip complex fetching for non-standard providers to avoid CORS blocks,
+      // and allow the user to type or select from generic provider names if dynamic fetch isn't supported.
+      let modelsList = [];
       
-      if (provider === 'openrouter') {
-        url = 'https://openrouter.ai/api/v1/models';
-      } else if (provider === 'openai') {
-        url = 'https://api.openai.com/v1/models';
-      } else if (provider === 'gemini') {
-        url = `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`;
-        headers = {}; 
-      }
-
-      if (url) {
-        const res = await fetch(url, { headers });
+      if (provider === 'openrouter' || provider === 'openai') {
+        const url = provider === 'openai' ? 'https://api.openai.com/v1/models' : 'https://openrouter.ai/api/v1/models';
+        const res = await fetch(url, { headers: { 'Authorization': `Bearer ${apiKey}` } });
         if (!res.ok) throw new Error("Invalid Key");
         const data = await res.json();
-        
-        let modelsList = [];
-        if (provider === 'openrouter' || provider === 'openai') {
-          modelsList = data.data.map(m => ({ id: m.id, name: m.id })).filter(m => !m.id.includes('embedding') && !m.id.includes('dall-e') && !m.id.includes('tts') && !m.id.includes('whisper'));
-        } else if (provider === 'gemini') {
-          modelsList = data.models.map(m => ({ id: m.name, name: m.displayName || m.name })).filter(m => m.id.includes('gemini'));
-        }
-        
-        setFetchedModels(modelsList);
-        if (modelsList.length > 0) setSelectedModel(modelsList[0].id);
-        
-        localStorage.setItem('fixo_custom_provider', provider);
-        localStorage.setItem('fixo_custom_api_key', apiKey);
-        localStorage.setItem('fixo_custom_models', JSON.stringify(modelsList));
+        modelsList = data.data.map(m => ({ id: m.id, name: m.id })).filter(m => !m.id.includes('embedding') && !m.id.includes('dall-e') && !m.id.includes('tts') && !m.id.includes('whisper'));
+      } else if (provider === 'gemini') {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
+        if (!res.ok) throw new Error("Invalid Key");
+        const data = await res.json();
+        modelsList = data.models.map(m => ({ id: m.name.replace('models/', ''), name: m.displayName || m.name })).filter(m => m.id.includes('gemini'));
+      } else if (provider === 'anthropic') {
+        modelsList = [{ id: 'claude-3-5-sonnet-20240620', name: 'Claude 3.5 Sonnet' }, { id: 'claude-3-haiku-20240307', name: 'Claude 3 Haiku' }];
+      } else if (provider === 'groq') {
+        modelsList = [{ id: 'llama3-70b-8192', name: 'Llama 3 70B' }, { id: 'mixtral-8x7b-32768', name: 'Mixtral 8x7B' }];
       } else {
-        localStorage.setItem('fixo_custom_provider', provider);
-        localStorage.setItem('fixo_custom_api_key', apiKey);
+        modelsList = [{ id: 'default', name: `Default ${provider} Model` }];
       }
+
+      setFetchedModels(modelsList);
+      if (modelsList.length > 0) setSelectedModel(modelsList[0].id);
+      
+      saveProvider(provider);
+      saveApiKey(apiKey);
+      saveModels(modelsList);
       
       setVerificationStatus('success');
       setTimeout(() => setShowSettings(false), 1500);
@@ -368,54 +385,21 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
     setApiKey('');
     setFetchedModels([]);
     setVerificationStatus(null);
-    localStorage.removeItem('fixo_custom_provider');
-    localStorage.removeItem('fixo_custom_api_key');
-    localStorage.removeItem('fixo_custom_models');
+    clearApiConfig();
     setSelectedModel(DEFAULT_MODELS[0].id);
   };
 
-  const generateUnified = async (provider, key, model, msgs, signal) => {
-    const formatMessages = msgs.map(m => ({
-      role: m.role === 'ai' ? 'assistant' : m.role,
-      content: m.text || m.content
-    }));
+  // generateUnified is completely handled by our robust backend proxy now.
 
-    if (provider === 'gemini') {
-      const geminiMessages = formatMessages.filter(m => m.role !== 'system').map(m => ({
-        role: m.role === 'assistant' ? 'model' : 'user',
-        parts: [{ text: m.content }]
-      }));
-      // prepend system conceptually
-      const systemMsg = formatMessages.find(m => m.role === 'system');
-      if (systemMsg && geminiMessages.length > 0) {
-        geminiMessages[0].parts[0].text = `SYSTEM: ${systemMsg.content}\n\n${geminiMessages[0].parts[0].text}`;
-      }
-
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contents: geminiMessages }),
-        signal
-      });
-      if (!res.ok) throw new Error("Gemini API Error: " + res.status);
-      const data = await res.json();
-      return data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
     }
-
-    let url = provider === 'openai' ? 'https://api.openai.com/v1/chat/completions' : 'https://openrouter.ai/api/v1/chat/completions';
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
-      body: JSON.stringify({ model, messages: formatMessages }),
-      signal
-    });
-    if (!res.ok) throw new Error(`${provider} API Error: ` + res.status);
-    const data = await res.json();
-    return data.choices?.[0]?.message?.content || "";
   };
 
   const handleSendMessage = async (overrideText = null) => {
-    const isUsingCustomKey = !!localStorage.getItem('fixo_custom_api_key');
+    const isUsingCustomKey = !!loadApiKey();
     
     if (!isUsingCustomKey && trialCount <= 0) {
       setMessages(prev => [...prev, { role: 'ai', text: "You have exhausted your free generations. Please configure your own API Key in Settings to continue." }]);
@@ -439,27 +423,53 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
 
     try {
       let aiResponseText = "";
-      const customKey = localStorage.getItem('fixo_custom_api_key');
-      const customProvider = localStorage.getItem('fixo_custom_provider');
+      const customKey = loadApiKey();
+      const customProvider = loadProvider();
 
-      const apiMessages = [
-        { role: "system", content: BUILDER_CONTEXT },
-        ...newMsgs.slice(-5)
-      ];
+      // ── Memory Extraction: learn from user's prompt ──
+      if (user?.uid) {
+        const memUpdates = extractMemoryFromPrompt(textToSend, userMemory);
+        if (memUpdates) {
+          const updatedMem = { ...(userMemory || getDefaultMemory()), ...memUpdates };
+          setUserMemory(updatedMem);
+          saveUserMemory(user.uid, updatedMem); // async, non-blocking
+        }
+      }
+
+      // ── Build context with all 3 memory layers ──
+      const apiMessages = buildRequestContext({
+        systemPrompt: BUILDER_CONTEXT,
+        messages: newMsgs,
+        chatSummary: chatSummary,
+        userMemory: userMemory,
+        windowSize: 5
+      });
+
+      const requestBody = {
+        model: selectedModel,
+        messages: apiMessages,
+        mode: "builder"
+      };
 
       if (customKey && customProvider) {
-        aiResponseText = await generateUnified(customProvider, customKey, selectedModel, apiMessages, signal);
-      } else {
-        const response = await fetch("/api/chat", {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ model: selectedModel, messages: apiMessages, mode: "builder" }),
-          signal
-        });
-        if (!response.ok) throw new Error("Proxy API Error: " + response.status);
-        const data = await response.json();
-        aiResponseText = data.choices?.[0]?.message?.content || "";
+        requestBody.customKey = customKey;
+        requestBody.provider = customProvider;
       }
+
+      const response = await fetch("/api/generate", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody),
+        signal
+      });
+      
+      if (!response.ok) {
+        const errObj = await response.json().catch(() => ({}));
+        throw new Error(errObj.error || "Something went wrong. Try another model or check your API key.");
+      }
+      
+      const data = await response.json();
+      aiResponseText = data.data || "";
 
       if (aiResponseText) {
         const finalMsgs = [...newMsgs, { role: 'ai', text: "Render complete." }];
@@ -471,10 +481,26 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
            if (window.innerWidth < 768) setMobileTab('preview');
         }
 
-        // Determine title for chat
         const chatTitle = textToSend.length > 20 ? textToSend.substring(0, 20) + '...' : textToSend;
-
         updateCurrentChat(finalMsgs, newCode || previewCode, messages.length <= 1 ? chatTitle : null);
+
+        // ── Auto-summarize long conversations ──
+        if (currentChatId && needsSummarization(finalMsgs, chatSummary)) {
+          const sumReq = buildSummarizationRequest(finalMsgs, chatSummary);
+          if (sumReq) {
+            // Fire summarization in background (non-blocking)
+            fetch("/api/generate", {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ model: selectedModel, messages: sumReq, mode: 'chat', ...(customKey ? { customKey, provider: customProvider } : {}) })
+            }).then(r => r.json()).then(d => {
+              if (d.success && d.data) {
+                setChatSummary(d.data);
+                saveChatSummary(currentChatId, d.data);
+              }
+            }).catch(() => { /* summarization is best-effort */ });
+          }
+        }
 
         if (!isUsingCustomKey) {
           const newCount = trialCount - 1;
@@ -487,7 +513,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
     } catch (error) {
       if (error.name !== 'AbortError') {
         console.error("Generation failed:", error);
-        const errMsgs = [...newMsgs, { role: 'ai', text: `Generation failed: ${error.message}. Please check your API key or model availability.` }];
+        const errMsgs = [...newMsgs, { role: 'ai', text: `Generation Error: ${error.message}. Try switching to another model or check your provider settings.`, isError: true }];
         setMessages(errMsgs);
         updateCurrentChat(errMsgs);
       }
@@ -571,7 +597,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
     );
   }
 
-  const isUsingCustomKey = !!localStorage.getItem('fixo_custom_api_key');
+  const isUsingCustomKey = !!loadApiKey();
 
   return (
     <div className={`fixed inset-0 z-50 flex flex-col md:flex-row h-screen w-full overflow-hidden ${theme === 'dark' ? 'bg-[#050505] text-white' : 'bg-[#fcfcfc] text-black'}`}>
@@ -586,32 +612,36 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
                 <Settings className="text-violet-500" size={20} />
                 <h3 className="font-bold text-lg">Provider Settings</h3>
               </div>
-              <button onClick={() => setShowSettings(false)} className={`p-1 rounded-md transition-all ${theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-black/5'}`}>
-                <X size={20} />
-              </button>
+              <button onClick={() => setShowSettings(false)} className="p-2 rounded-lg hover:bg-white/5 transition-colors"><X size={18} /></button>
             </div>
+            
+            <div className="space-y-6">
+              <div className="space-y-4">
+                <div>
+                  <label className={`text-xs font-medium uppercase mb-2 block ${theme === 'dark' ? 'text-white/60' : 'text-black/60'}`}>API Provider</label>
+                  <select 
+                    value={provider}
+                    onChange={(e) => setProvider(e.target.value)}
+                    className={`w-full p-3 rounded-xl border focus:outline-none focus:border-violet-500 transition-all ${theme === 'dark' ? 'bg-white/[0.03] border-white/10' : 'bg-black/[0.02] border-black/10'}`}
+                  >
+                    {PROVIDERS.map(p => (
+                      <option key={p.id} value={p.id} className="bg-black text-white">{p.name} {p.id === 'openrouter' ? '(Recommended)' : ''}</option>
+                    ))}
+                  </select>
+                </div>
 
-            <div className="space-y-4">
-              <div>
-                <label className={`text-xs font-semibold uppercase tracking-wider mb-2 block ${theme === 'dark' ? 'text-white/60' : 'text-black/60'}`}>Provider</label>
-                <select value={provider} onChange={(e) => setProvider(e.target.value)} className={`w-full p-3 rounded-xl border focus:outline-none transition-all ${theme === 'dark' ? 'bg-white/[0.03] border-white/10 focus:border-violet-500/50' : 'bg-black/[0.02] border-black/10 focus:border-violet-500/50'}`}>
-                  <option value="openrouter" className="bg-black text-white">OpenRouter</option>
-                  <option value="openai" className="bg-black text-white">OpenAI</option>
-                  <option value="gemini" className="bg-black text-white">Google Gemini</option>
-                </select>
-              </div>
-
-              <div>
-                <label className={`text-xs font-semibold uppercase tracking-wider mb-2 block ${theme === 'dark' ? 'text-white/60' : 'text-black/60'}`}>API Key</label>
-                <div className={`relative flex items-center p-1 rounded-xl border focus-within:border-violet-500/50 transition-all ${theme === 'dark' ? 'bg-white/[0.03] border-white/10' : 'bg-black/[0.02] border-black/10'}`}>
-                  <div className="pl-3 text-violet-500"><Lock size={16} /></div>
-                  <input 
-                    type="password" 
-                    value={apiKey} 
-                    onChange={(e) => setApiKey(e.target.value)} 
-                    placeholder="sk-..." 
-                    className="flex-1 bg-transparent p-2 text-sm focus:outline-none min-w-0"
-                  />
+                <div>
+                  <label className={`text-xs font-semibold uppercase tracking-wider mb-2 block ${theme === 'dark' ? 'text-white/60' : 'text-black/60'}`}>API Key</label>
+                  <div className={`relative flex items-center p-1 rounded-xl border focus-within:border-violet-500/50 transition-all ${theme === 'dark' ? 'bg-white/[0.03] border-white/10' : 'bg-black/[0.02] border-black/10'}`}>
+                    <div className="pl-3 text-violet-500"><Lock size={16} /></div>
+                    <input 
+                      type="password" 
+                      value={apiKey} 
+                      onChange={(e) => setApiKey(e.target.value)} 
+                      placeholder="sk-..." 
+                      className="flex-1 bg-transparent p-2 text-sm focus:outline-none min-w-0"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -634,6 +664,110 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
                   {isVerifying ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div> : "Verify & Save"}
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* PROFILE MODAL */}
+      {showProfile && (
+        <div className="fixed inset-0 z-[100] flex items-start justify-end p-6">
+          <div className="absolute inset-0 bg-transparent" onClick={() => setShowProfile(false)}></div>
+          <div className={`relative w-80 p-5 rounded-2xl shadow-2xl border ${theme === 'dark' ? 'bg-[#0a0a0c] border-white/10' : 'bg-white border-black/10'} animate-in fade-in slide-in-from-top-4 duration-200 mt-12`}>
+            <div className="flex items-center gap-3 mb-6 pb-4 border-b border-white/10">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-violet-600 to-fuchsia-600 flex items-center justify-center text-white text-xl font-bold uppercase overflow-hidden shadow-[0_0_20px_rgba(139,92,246,0.3)]">
+                {user.photoURL ? <img src={user.photoURL} alt="User" /> : user.email?.charAt(0)}
+              </div>
+              <div className="flex-1 truncate">
+                <h4 className="font-bold text-sm truncate">{user.displayName || "Fixo Developer"}</h4>
+                <p className="text-xs opacity-60 truncate">{user.email}</p>
+              </div>
+            </div>
+
+            <div className="space-y-4 mb-6">
+              <div>
+                <label className="text-[10px] uppercase font-bold tracking-wider opacity-50 mb-1 block">Current Setup</label>
+                <div className={`p-3 rounded-lg border flex flex-col gap-1.5 ${theme === 'dark' ? 'bg-white/[0.02] border-white/5' : 'bg-black/[0.02] border-black/5'}`}>
+                  <div className="flex justify-between text-xs">
+                    <span className="opacity-70">Provider:</span>
+                    <span className="font-bold text-violet-400">{PROVIDERS.find(p => p.id === provider)?.name || provider}</span>
+                  </div>
+                  <div className="flex justify-between text-xs">
+                    <span className="opacity-70">Model:</span>
+                    <span className="font-medium truncate max-w-[120px]" title={selectedModel}>{selectedModel}</span>
+                  </div>
+                  <div className="flex justify-between text-xs">
+                    <span className="opacity-70">Status:</span>
+                    <span className={`font-medium ${isUsingCustomKey ? 'text-green-500' : 'text-orange-400'}`}>
+                      {isUsingCustomKey ? 'Custom Key Active' : 'Free Trial Mode'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label className="text-[10px] uppercase font-bold tracking-wider opacity-50 mb-1 block">Credits</label>
+                <div className={`p-3 rounded-lg border flex items-center justify-between ${theme === 'dark' ? 'bg-white/[0.02] border-white/5' : 'bg-black/[0.02] border-black/5'}`}>
+                  <span className="text-xs opacity-70">Remaining Gens:</span>
+                  <span className="font-bold text-lg">{isUsingCustomKey ? '∞' : trialCount}</span>
+                </div>
+              </div>
+
+              <div>
+                <label className="text-[10px] uppercase font-bold tracking-wider opacity-50 mb-1 block">Memory Engine</label>
+                <div className={`p-3 rounded-lg border flex flex-col gap-1.5 ${theme === 'dark' ? 'bg-white/[0.02] border-white/5' : 'bg-black/[0.02] border-black/5'}`}>
+                  {(() => {
+                    const stats = getMemoryStats(messages, chatSummary, userMemory);
+                    return (
+                      <>
+                        <div className="flex justify-between text-xs">
+                          <span className="opacity-70">Context Window:</span>
+                          <span className="font-medium">{stats.contextWindow}/{stats.messageCount} msgs</span>
+                        </div>
+                        <div className="flex justify-between text-xs">
+                          <span className="opacity-70">Summary:</span>
+                          <span className={`font-medium ${stats.hasSummary ? 'text-green-400' : 'text-white/40'}`}>
+                            {stats.hasSummary ? 'Active' : 'None'}
+                          </span>
+                        </div>
+                        <div className="flex justify-between text-xs">
+                          <span className="opacity-70">Learned Prefs:</span>
+                          <span className="font-medium text-violet-400">{stats.memoryItems} items</span>
+                        </div>
+                        {userMemory?.techStack?.length > 0 && (
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {userMemory.techStack.slice(0, 6).map(t => (
+                              <span key={t} className="text-[9px] px-1.5 py-0.5 rounded bg-violet-500/10 text-violet-400 border border-violet-500/20">{t}</span>
+                            ))}
+                          </div>
+                        )}
+                      </>
+                    );
+                  })()}
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <button onClick={() => { setShowSettings(true); setShowProfile(false); }} className={`w-full py-2.5 px-3 rounded-lg border flex items-center gap-2 text-sm font-medium transition-all ${theme === 'dark' ? 'border-white/10 hover:bg-white/5 text-white/80' : 'border-black/10 hover:bg-black/5 text-black/80'}`}>
+                <Settings size={16} /> Edit Provider Settings
+              </button>
+              {userMemory && (userMemory.techStack?.length > 0 || userMemory.designStyle || userMemory.name) && (
+                <button 
+                  onClick={async () => { 
+                    if (user?.uid) { 
+                      await clearUserMemory(user.uid); 
+                      setUserMemory(getDefaultMemory()); 
+                    } 
+                  }} 
+                  className={`w-full py-2.5 px-3 rounded-lg border flex items-center gap-2 text-sm font-medium transition-all ${theme === 'dark' ? 'border-white/10 hover:bg-white/5 text-white/80' : 'border-black/10 hover:bg-black/5 text-black/80'}`}
+                >
+                  <X size={16} /> Clear Memory
+                </button>
+              )}
+              <button onClick={() => signOut(auth)} className="w-full py-2.5 px-3 rounded-lg border border-rose-500/30 text-rose-500 bg-rose-500/10 flex items-center gap-2 text-sm font-medium hover:bg-rose-500/20 transition-all">
+                <LogOut size={16} /> Sign Out
+              </button>
             </div>
           </div>
         </div>
@@ -744,9 +878,23 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
               <div className={`max-w-[90%] p-3.5 rounded-2xl text-[13px] leading-relaxed shadow-lg ${
                 msg.role === 'user' 
                   ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-br-sm' 
-                  : `${theme === 'dark' ? 'bg-white/[0.03] border-white/[0.05] text-white/90' : 'bg-black/[0.03] border-black/[0.05] text-black/90'} rounded-bl-sm border backdrop-blur-md`
+                  : `${theme === 'dark' ? 'bg-white/[0.03] border-white/[0.05] text-white/90' : 'bg-black/[0.03] border-black/[0.05] text-black/90'} rounded-bl-sm border backdrop-blur-md ${msg.isError ? 'border-rose-500/50 bg-rose-500/10' : ''}`
               }`}>
                 {msg.text}
+                {msg.isError && (
+                  <div className="mt-3 flex gap-2">
+                    <button 
+                      onClick={() => {
+                        const lastUserMsg = messages[idx - 1]?.text || "";
+                        setInputValue(lastUserMsg);
+                        setMessages(messages.slice(0, idx - 1));
+                      }} 
+                      className="py-1.5 px-3 bg-rose-600 hover:bg-rose-500 rounded-lg text-white text-[11px] font-bold flex items-center gap-1.5 transition-colors"
+                    >
+                      <Play size={12} className="fill-current" /> Retry Request
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           ))}
@@ -975,4 +1123,10 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
   );
 };
 
-export default BuilderMode;
+export default function BuilderModeWrapper(props) {
+  return (
+    <ErrorBoundary>
+      <BuilderMode {...props} />
+    </ErrorBoundary>
+  );
+}
