@@ -64,14 +64,14 @@ Key Information:
 `;
 
 // --- Theme Toggle Component ---
-const ThemeToggle = ({ theme, toggleTheme }) => (
+const ThemeToggle = ({ theme, toggleTheme, className = "" }) => (
   <motion.button
     onClick={toggleTheme}
-    className="fixed top-24 right-6 md:right-12 z-[70] p-3 bg-white/10 backdrop-blur-md border border-white/10 rounded-full shadow-2xl hover:scale-110 transition-transform duration-300"
-    whileHover={{ scale: 1.1 }}
-    whileTap={{ scale: 0.9 }}
+    className={`p-2.5 bg-white/5 backdrop-blur-lg border border-white/10 rounded-full shadow-lg hover:scale-110 transition-all duration-300 ${className}`}
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
   >
-    {theme === 'dark' ? <Sun size={20} className="text-yellow-400" /> : <Moon size={20} className="text-purple-600" />}
+    {theme === 'dark' ? <Sun size={18} className="text-yellow-400" /> : <Moon size={18} className="text-purple-600" />}
   </motion.button>
 );
 
@@ -610,7 +610,6 @@ export default function App() {
       {!isLoading && (
         <>
           <ThreeBackground theme={theme} />
-          <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
 
           {/* Header */}
           <header className="fixed top-0 left-0 w-full px-6 md:px-12 py-6 flex justify-between items-center z-50 pointer-events-none">
@@ -618,12 +617,15 @@ export default function App() {
             <div className="pointer-events-auto">
               <span className={`font-bold tracking-tighter text-xl ${theme === 'dark' ? 'text-white' : 'text-black'}`}>ABRAR<span className="text-purple-500">.</span></span>
             </div>
-            <div className="hidden md:flex items-center gap-6 pointer-events-auto">
-              <a href="https://github.com/abrar225" target="_blank" rel="noopener noreferrer" className={`text-xs font-mono ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'} hover:text-purple-500 transition-colors`}>GH</a>
-              <a href="https://www.linkedin.com/in/abrar-akhunji/" target="_blank" rel="noopener noreferrer" className={`text-xs font-mono ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'} hover:text-purple-500 transition-colors`}>LI</a>
-              <a href="https://www.instagram.com/strick.9_/" target="_blank" rel="noopener noreferrer" className={`text-xs font-mono ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'} hover:text-purple-500 transition-colors`}>IG</a>
-              <span className="text-xs font-mono text-gray-700">/</span>
-              <span className={`text-xs font-mono ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>INDIA, GJ</span>
+            <div className="flex items-center gap-4 md:gap-6 pointer-events-auto">
+              <div className="hidden md:flex items-center gap-6">
+                <a href="https://github.com/abrar225" target="_blank" rel="noopener noreferrer" className={`text-xs font-mono ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'} hover:text-purple-500 transition-colors`}>GH</a>
+                <a href="https://www.linkedin.com/in/abrar-akhunji/" target="_blank" rel="noopener noreferrer" className={`text-xs font-mono ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'} hover:text-purple-500 transition-colors`}>LI</a>
+                <a href="https://www.instagram.com/strick.9_/" target="_blank" rel="noopener noreferrer" className={`text-xs font-mono ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'} hover:text-purple-500 transition-colors`}>IG</a>
+                <span className="text-xs font-mono text-gray-700">/</span>
+                <span className={`text-xs font-mono ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>INDIA, GJ</span>
+              </div>
+              <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
             </div>
           </header>
 
