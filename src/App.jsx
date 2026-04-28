@@ -153,15 +153,15 @@ export default function App() {
                   <span className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse"></span>
                   <span className={`text-[10px] font-mono ${theme === 'dark' ? 'text-purple-300' : 'text-purple-700'} tracking-widest uppercase`}>Open to work</span>
                 </div>
-                <h1 ref={heroTextRef} className={`text-5xl sm:text-6xl md:text-8xl font-bold tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'} leading-[1.1] md:leading-[0.9] flex flex-col items-center overflow-visible uppercase`}>
-                  <span className="font-script inline-block text-3xl sm:text-4xl md:text-5xl opacity-40 tracking-widest">Engineer of</span>
+                <h1 ref={heroTextRef} className={`text-5xl sm:text-6xl md:text-8xl font-bold tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'} leading-[1.1] md:leading-[0.9] flex flex-col items-center overflow-visible`}>
+                  <span className={`font-display inline-block text-xl sm:text-2xl md:text-3xl font-light tracking-[0.4em] uppercase ${theme === 'dark' ? 'text-white/30' : 'text-black/30'}`}>Engineer of</span>
                   <TextPressure 
                     text="Intelligent" 
                     height="auto"
                     proximity={250}
                     className="py-2" 
                   />
-                  <span className="font-script inline-block text-4xl sm:text-5xl md:text-6xl tracking-tight text-white/90">Systems.</span>
+                  <span className="font-custom inline-block text-5xl sm:text-6xl md:text-8xl bg-clip-text text-transparent bg-gradient-to-r from-violet-400 via-fuchsia-400 to-purple-600 drop-shadow-[0_0_30px_rgba(139,92,246,0.3)]">Systems.</span>
                 </h1>
                 <p className={`max-w-lg text-base md:text-lg ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'} leading-relaxed pt-4`}>
                   I bridge the gap between <span className={theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}>complex AI models</span> and <span className={theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}>scalable web architectures</span>. Building the next generation of digital products.
