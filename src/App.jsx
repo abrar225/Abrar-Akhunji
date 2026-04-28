@@ -28,6 +28,7 @@ import FloatingDock from './components/FloatingDock';
 import SectionHeader from './components/SectionHeader';
 import SectionWrapper from './components/SectionWrapper';
 import ProjectCard from './components/ProjectCard';
+import TextPressure from './components/TextPressure';
 
 // Constants
 import { PROJECTS, EXPERIENCE, SKILLS, EDUCATION, CERTIFICATIONS } from './constants/portfolio';
@@ -152,9 +153,14 @@ export default function App() {
                   <span className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse"></span>
                   <span className={`text-[10px] font-mono ${theme === 'dark' ? 'text-purple-300' : 'text-purple-700'} tracking-widest uppercase`}>Open to work</span>
                 </div>
-                <h1 ref={heroTextRef} className={`text-5xl sm:text-6xl md:text-8xl font-bold tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'} leading-[1.1] md:leading-[0.9]`}>
-                  <span className="font-museo inline-block">Engineer of</span> <br />
-                  <span className="font-custom text-purple-500 text-6xl sm:text-7xl md:text-9xl block mt-2 mb-2">Intelligent</span>
+                <h1 ref={heroTextRef} className={`text-5xl sm:text-6xl md:text-8xl font-bold tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'} leading-[1.1] md:leading-[0.9] flex flex-col items-center`}>
+                  <span className="font-museo inline-block">Engineer of</span>
+                  <TextPressure 
+                    text="Intelligent" 
+                    height="auto"
+                    proximity={250}
+                    className="font-custom text-purple-500 py-4" 
+                  />
                   <span className="font-museo inline-block">Systems.</span>
                 </h1>
                 <p className={`max-w-lg text-base md:text-lg ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'} leading-relaxed pt-4`}>
