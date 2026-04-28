@@ -21,7 +21,7 @@ Key Information:
 const ChatBot = ({ theme }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { role: 'ai', text: "Hi! I'm Abrar's AI Assistant. Ask me anything about his projects, skills, or experience! ✨" }
+    { role: 'ai', text: "Hi! I'm FixO, Abrar's AI Assistant. Ask me anything about his projects, skills, or experience! ✨" }
   ]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -84,10 +84,11 @@ const ChatBot = ({ theme }) => {
               <Bot size={18} className="text-white" />
             </div>
             <div>
-              <h3 className={`text-sm font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>Abrar's Assistant</h3>
-              <p className="text-[10px] text-green-400 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>Powered by Gemini</p>
+              <h3 className={`text-sm font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>FixO</h3>
+              <p className="text-[10px] text-green-400 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>Powered by Firehox</p>
             </div>
           </div>
+
           <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
             {messages.map((msg, idx) => (
               <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
