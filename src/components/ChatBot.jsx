@@ -44,17 +44,27 @@ const ChatBot = ({ theme }) => {
     setIsLoading(true);
 
     try {
-      const prompt = `System Context: ${PORTFOLIO_CONTEXT}\nUser Question: ${userMessage.text}\nAnswer:`;
-      const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+      const apiKey = import.meta.env.VITE_OPENROUTER_API_KEY;
 
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`,
+          'HTTP-Referer': window.location.origin, // Optional, for OpenRouter analytics
+          'X-Title': 'Abrar Akhunji Portfolio', // Optional
+        },
+        body: JSON.stringify({
+          model: "minimax/minimax-m2.5:free",
+          messages: [
+            { role: "system", content: PORTFOLIO_CONTEXT },
+            { role: "user", content: userMessage.text }
+          ]
+        })
       });
 
       const data = await response.json();
-      const aiResponseText = data.candidates?.[0]?.content?.parts?.[0]?.text || "I'm having trouble connecting right now.";
+      const aiResponseText = data.choices?.[0]?.message?.content || "I'm having trouble connecting right now.";
       setMessages(prev => [...prev, { role: 'ai', text: aiResponseText }]);
     } catch (error) {
       setMessages(prev => [...prev, { role: 'ai', text: "Sorry, error connecting to AI." }]);
