@@ -154,14 +154,14 @@ export default function App() {
                   <span className={`text-[10px] font-mono ${theme === 'dark' ? 'text-purple-300' : 'text-purple-700'} tracking-widest uppercase`}>Open to work</span>
                 </div>
                 <h1 ref={heroTextRef} className={`text-5xl sm:text-6xl md:text-8xl font-bold tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'} leading-[1.1] md:leading-[0.9] flex flex-col items-center overflow-visible`}>
-                  <span className="font-museo inline-block">Engineer of</span>
+                  <span className={`text-sm md:text-xl font-light italic opacity-60 tracking-[0.2em] uppercase mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>Engineer of</span>
                   <TextPressure 
                     text="Intelligent" 
                     height="auto"
                     proximity={250}
                     className="py-2" 
                   />
-                  <span className="font-museo inline-block">Systems.</span>
+                  <span className={`text-5xl sm:text-6xl md:text-8xl font-black tracking-[-0.04em] uppercase mt-4 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>Systems<span className="text-purple-500">.</span></span>
                 </h1>
                 <p className={`max-w-lg text-base md:text-lg ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'} leading-relaxed pt-4`}>
                   I bridge the gap between <span className={theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}>complex AI models</span> and <span className={theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}>scalable web architectures</span>. Building the next generation of digital products.
