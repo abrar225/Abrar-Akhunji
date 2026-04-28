@@ -1,86 +1,83 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 
-/**
- * LoadingScreen - Elite Frontend Creative Preloader
- * Orchestrates a complex sequence: Odometer -> Dual Progress -> Climax -> Scale Out -> Content Reveal
- */
-const LoadingScreen = ({ onComplete }) => {
+const LoadingScreen = ({ onComplete, theme }) => {
+  const counter1Ref = useRef(null);
+  const counter2Ref = useRef(null);
   const counter3Ref = useRef(null);
   const loader1Ref = useRef(null);
   const loader2Ref = useRef(null);
-  const loadingScreenRef = useRef(null);
   const loaderContainerRef = useRef(null);
+  const loadingScreenRef = useRef(null);
   const websiteContentRef = useRef(null);
-  const timelineRef = useRef(null);
+  const h1Ref = useRef(null);
 
   useEffect(() => {
-    // 1. Dynamic Odometer Number Generation
-    const c3 = counter3Ref.current;
-    if (c3 && c3.children.length === 0) {
+    // 1. Dynamic DOM Injection for Counter 3
+    if (counter3Ref.current) {
+      // Clear existing children to avoid duplicates in strict mode
+      counter3Ref.current.innerHTML = '';
       for (let i = 0; i < 2; i++) {
         for (let j = 0; j < 10; j++) {
-          const div = document.createElement('div');
-          div.className = 'num';
+          const div = document.createElement("div");
+          div.className = "num";
           div.textContent = j;
-          c3.appendChild(div);
+          counter3Ref.current.appendChild(div);
         }
       }
-      const finalDiv = document.createElement('div');
-      finalDiv.className = 'num';
-      finalDiv.textContent = '0';
-      c3.appendChild(finalDiv);
+      const finalDiv = document.createElement("div");
+      finalDiv.className = "num";
+      finalDiv.textContent = "0";
+      counter3Ref.current.appendChild(finalDiv);
     }
 
+    // 2. GSAP Timeline Logic
     const tl = gsap.timeline({
       onComplete: () => {
-        // Final handoff to parent App
-        gsap.to(loadingScreenRef.current, {
-          opacity: 0,
-          duration: 0.5,
-          onComplete: onComplete
-        });
+        if (onComplete) onComplete();
       }
     });
-    timelineRef.current = tl;
 
-    // 2. Odometer Motion Logic
-    tl.to('.counter-3', {
-      y: '-95.23%', 
+    // Odometer Animation
+    // Column 3 (0-9 twice + 0 = 21 digits)
+    tl.to(counter3Ref.current, {
+      y: "-95.23%", // (20/21) * 100
       duration: 5,
       ease: "power2.inOut",
     }, 0);
 
-    tl.to('.counter-2', {
-      y: '-90.9%',
+    // Column 2 (0-9)
+    tl.to(counter2Ref.current, {
+      y: "-90%",
       duration: 6,
       ease: "power2.inOut",
     }, 0);
 
-    tl.to('.counter-1', {
-      y: '-50%',
+    // Column 1 (0-1)
+    tl.to(counter1Ref.current, {
+      y: "-50%",
       duration: 2,
       delay: 4,
       ease: "power2.inOut",
     }, 0);
 
-    // 3. Progress Bar Logic
+    // Progress Bars
     tl.to(loader1Ref.current, {
-      width: '100%',
+      width: "100%",
       duration: 6,
       ease: "power2.inOut",
     }, 0);
 
     tl.to(loader2Ref.current, {
-      width: '100%',
+      width: "100%",
       duration: 2,
       delay: 1.9,
       ease: "power2.inOut",
     }, 0);
 
-    // 4. THE CLIMAX (6s)
+    // The Climax (at 6s)
     tl.to(loaderContainerRef.current, {
-      background: 'transparent',
+      background: "none",
       duration: 0.1
     }, 6);
 
@@ -88,164 +85,180 @@ const LoadingScreen = ({ onComplete }) => {
       rotate: 90,
       y: -50,
       duration: 0.5,
-      ease: "power2.inOut"
+      ease: "power2.out"
     }, 6);
 
     tl.to(loader2Ref.current, {
       x: -50,
       y: 50,
       duration: 0.5,
-      ease: "power2.inOut"
+      ease: "power2.out"
     }, 6);
 
-    // 5. THE SCALE THROW (7s)
+    // Transition (at 7s)
     tl.to(loaderContainerRef.current, {
-      scale: 60,
+      scale: 40,
       rotate: 45,
-      x: 2500,
-      y: 800,
-      duration: 1.2,
-      ease: "power4.inOut"
+      x: 2000,
+      y: 500,
+      duration: 1,
+      ease: "power2.inOut"
     }, 7);
 
-    // 6. FADE OUT & REVEAL (7.5s)
     tl.to(loadingScreenRef.current, {
-      backgroundColor: 'transparent',
-      duration: 0.5
+      opacity: 0,
+      duration: 0.5,
+      ease: "power2.inOut"
     }, 7.5);
 
-    tl.from('.header h1', {
-      y: 300,
-      stagger: 0.2,
+    // Content Reveal
+    tl.to(h1Ref.current, {
+      y: 0,
+      stagger: 0.1,
       duration: 1.5,
-      ease: "power4.inOut",
-      skewY: 10
-    }, 7.2);
+      ease: "power4.inOut"
+    }, 7.5);
 
-    return () => tl.kill();
+    return () => {
+      tl.kill();
+    };
   }, [onComplete]);
 
   return (
     <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
+      <style>
+        {`
+          @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
 
-        .preloader-root {
-          position: fixed;
-          inset: 0;
-          z-index: 10000;
-          font-family: 'Montserrat', sans-serif;
-          background: #000;
-          overflow: hidden;
-        }
+          .loading-wrapper {
+            font-family: 'Montserrat', sans-serif;
+            background: #030303;
+            color: #fff;
+          }
 
-        .loading-screen {
-          position: absolute;
-          inset: 0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 2;
-        }
+          .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
 
-        .loader {
-          position: absolute;
-          width: 300px;
-          height: 40px;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          padding: 8px;
-          background: rgba(255, 255, 255, 0.05);
-          backdrop-blur: 5px;
-        }
+          .loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 5px;
+          }
 
-        .loader-1, .loader-2 {
-          width: 0;
-          height: 3px;
-          background: #fff;
-          box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
-        }
+          .loader-1, .loader-2 {
+            height: 48%;
+            background: #fff;
+            width: 0%;
+          }
 
-        .counter {
-          position: absolute;
-          bottom: 40px;
-          left: 40px;
-          height: 120px;
-          display: flex;
-          font-size: 120px;
-          font-weight: 900;
-          line-height: 120px;
-          color: #fff;
-          clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-          letter-spacing: -5px;
-        }
+          .counter {
+            position: absolute;
+            bottom: 50px;
+            left: 50px;
+            display: flex;
+            height: 100px;
+            font-size: 100px;
+            line-height: 100px;
+            font-weight: 900;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            overflow: hidden;
+          }
 
-        .counter-1, .counter-2, .counter-3 {
-          position: relative;
-          display: flex;
-          flex-direction: column;
-        }
+          .counter-col {
+            display: flex;
+            flex-direction: column;
+            transition: transform 0s;
+          }
 
-        .num {
-          height: 120px;
-          text-align: center;
-          min-width: 80px;
-        }
+          .num {
+            height: 100px;
+            text-align: center;
+          }
 
-        .website-content {
-          position: absolute;
-          inset: 0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 1;
-        }
+          .website-content {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+            background: #030303;
+          }
 
-        .header {
-          position: relative;
-          overflow: hidden;
-          text-align: center;
-        }
+          .header {
+            position: relative;
+            overflow: hidden;
+          }
 
-        .header h1 {
-          font-size: 10vw;
-          font-weight: 900;
-          color: #fff;
-          margin: -2vw 0;
-          text-transform: uppercase;
-          line-height: 1;
-          letter-spacing: -0.05em;
-        }
-      `}</style>
+          .header h1 {
+            font-size: 10vw;
+            text-transform: uppercase;
+            font-weight: 900;
+            margin: 0;
+            transform: translateY(100%);
+          }
 
-      <div className="preloader-root" ref={loadingScreenRef}>
-        <div className="loading-screen">
-          <div className="loader" ref={loaderContainerRef}>
-            <div className="loader-1" ref={loader1Ref}></div>
-            <div className="loader-2" ref={loader2Ref}></div>
+          .header-revealer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 2;
+            display: none; /* Handled by GSAP if needed */
+          }
+        `}
+      </style>
+
+      <div className="loading-wrapper">
+        <div ref={loadingScreenRef} className="loading-screen">
+          <div ref={loaderContainerRef} className="loader">
+            <div ref={loader1Ref} className="loader-1"></div>
+            <div ref={loader2Ref} className="loader-2"></div>
           </div>
 
           <div className="counter">
-            <div className="counter-1">
+            <div ref={counter1Ref} className="counter-col">
               <div className="num">0</div>
               <div className="num">1</div>
             </div>
-            <div className="counter-2">
-              {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((n, i) => (
-                <div key={i} className="num">{n}</div>
+            <div ref={counter2Ref} className="counter-col">
+              {Array.from({ length: 10 }).map((_, i) => (
+                <div key={i} className="num">{i}</div>
               ))}
             </div>
-            <div className="counter-3" ref={counter3Ref}>
-              {/* Injected */}
+            <div ref={counter3Ref} className="counter-col">
+              {/* Dynamically injected */}
             </div>
           </div>
         </div>
 
-        <div className="website-content" ref={websiteContentRef}>
+        <div ref={websiteContentRef} className="website-content">
           <div className="header">
-            <h1>FIXO</h1>
-            <h1>STUDIO</h1>
+            <h1 ref={h1Ref}>Abrar</h1>
+            <div className="header-revealer"></div>
           </div>
         </div>
       </div>
@@ -254,4 +267,3 @@ const LoadingScreen = ({ onComplete }) => {
 };
 
 export default LoadingScreen;
-
