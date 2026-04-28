@@ -46,13 +46,19 @@ const ChatBot = ({ theme }) => {
     try {
       const apiKey = import.meta.env.VITE_OPENROUTER_API_KEY;
 
+      if (!apiKey) {
+        setMessages(prev => [...prev, { role: 'ai', text: "API Key is missing. Please add VITE_OPENROUTER_API_KEY to your environment variables." }]);
+        setIsLoading(false);
+        return;
+      }
+
       const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${apiKey}`,
-          'HTTP-Referer': window.location.origin, // Optional, for OpenRouter analytics
-          'X-Title': 'Abrar Akhunji Portfolio', // Optional
+          'HTTP-Referer': window.location.origin,
+          'X-Title': 'Abrar Akhunji Portfolio',
         },
         body: JSON.stringify({
           model: "minimax/minimax-m2.5:free",
@@ -64,11 +70,19 @@ const ChatBot = ({ theme }) => {
       });
 
       const data = await response.json();
-      const aiResponseText = data.choices?.[0]?.message?.content || "I'm having trouble connecting right now.";
-      setMessages(prev => [...prev, { role: 'ai', text: aiResponseText }]);
+      
+      if (data.error) {
+        console.error("OpenRouter Error:", data.error);
+        setMessages(prev => [...prev, { role: 'ai', text: `Error from AI: ${data.error.message || "Unknown error"}` }]);
+      } else {
+        const aiResponseText = data.choices?.[0]?.message?.content || "I'm having trouble thinking of a response.";
+        setMessages(prev => [...prev, { role: 'ai', text: aiResponseText }]);
+      }
     } catch (error) {
-      setMessages(prev => [...prev, { role: 'ai', text: "Sorry, error connecting to AI." }]);
+      console.error("Fetch Error:", error);
+      setMessages(prev => [...prev, { role: 'ai', text: "Network error. Please check your connection or Vercel environment variables." }]);
     } finally {
+
       setIsLoading(false);
     }
   };

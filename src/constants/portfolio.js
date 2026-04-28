@@ -1,3 +1,17 @@
+import { 
+  Cpu, 
+  Code2, 
+  Layers, 
+  Terminal, 
+  Database, 
+  Monitor, 
+  ShieldCheck, 
+  Trophy, 
+  Award,
+  GraduationCap,
+  School
+} from 'lucide-react';
+
 export const PROJECTS = [
   { 
     title: "Library Management System", 
@@ -62,11 +76,49 @@ export const EXPERIENCE = [
   { role: "Web Developer & Designer Intern", date: "JUN 2024 — AUG 2024", desc: "Designed responsive interfaces & frontend logic." }
 ];
 
+export const EDUCATION = [
+  { 
+    degree: "Bachelor of Engineering (IT)", 
+    school: "Kalol Institute of Technology & Research Center", 
+    date: "AUG 2023 — PRESENT",
+    icon: GraduationCap,
+    color: "bg-blue-500"
+  },
+  { 
+    degree: "Diploma in Information Technology", 
+    school: "Government Polytechnic, Himmatnagar", 
+    date: "2020 — 2023",
+    icon: School,
+    color: "bg-blue-400"
+  }
+];
+
 export const SKILLS = [
-  { t: "AI & Data Science", d: "Numpy, Pandas, OpenCV, Models" },
-  { t: "Languages", d: "Python, Java, PHP, JS" },
-  { t: "Web Frameworks", d: "Django, Flask, React" },
-  { t: "Tools", d: "Git, GitHub, Linux" },
-  { t: "Databases", d: "MySQL, SQLite" },
-  { t: "Others", d: "VSCode, Android Studio" }
+  { t: "AI & Data Science", d: "Numpy, Pandas, OpenCV, Models", icon: Cpu },
+  { t: "Languages", d: "Python, Java, PHP, JS", icon: Code2 },
+  { t: "Web Frameworks", d: "Django, Flask, React", icon: Layers },
+  { t: "Tools", d: "Git, GitHub, Linux", icon: Terminal },
+  { t: "Databases", d: "MySQL, SQLite", icon: Database },
+  { t: "Others", d: "VSCode, Android Studio", icon: Monitor }
+];
+
+export const CERTIFICATIONS = [
+  { 
+    title: "Google Cybersecurity", 
+    desc: "Google / Coursera • Sep 2025", 
+    icon: ShieldCheck,
+    color: "text-yellow-500"
+  },
+  { 
+    title: "Smart India Hackathon", 
+    desc: "Participation", 
+    icon: Trophy,
+    color: "text-purple-500"
+  },
+  { 
+    title: "AI/ML Basics Workshop", 
+    desc: "Coursera / College", 
+    icon: Cpu,
+    color: "text-blue-500"
+  }
 ];

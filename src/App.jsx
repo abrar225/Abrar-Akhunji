@@ -29,7 +29,7 @@ import SectionWrapper from './components/SectionWrapper';
 import ProjectCard from './components/ProjectCard';
 
 // Constants
-import { PROJECTS, EXPERIENCE, SKILLS } from './constants/portfolio';
+import { PROJECTS, EXPERIENCE, SKILLS, EDUCATION, CERTIFICATIONS } from './constants/portfolio';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -242,46 +242,89 @@ export default function App() {
               </div>
             </section>
 
-            {/* Experience & Skills */}
-            <section id="experience" className={`py-24 md:py-32 max-w-5xl mx-auto px-6 relative z-40 ${theme === 'dark' ? 'bg-[#030303]' : 'bg-[#f8f9fa]'}`}>
+            {/* Experience, Education & Skills */}
+            <section id="experience" className={`py-24 md:py-32 max-w-6xl mx-auto px-6 relative z-40 ${theme === 'dark' ? 'bg-[#030303]' : 'bg-[#f8f9fa]'}`}>
               <SectionWrapper>
-                <SectionHeader title="Experience & Skills" number="2" theme={theme} />
+                <SectionHeader title="Experience, Education & Skills" number="2" theme={theme} />
               </SectionWrapper>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-                <div className="space-y-16">
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
+                {/* Left Column: Career & Education */}
+                <div className="space-y-20">
+                  {/* Career History */}
                   <div>
-                    <h3 className={`text-sm font-mono ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'} uppercase tracking-wider mb-8 flex items-center gap-2`}><Briefcase size={16} /> Career History</h3>
-                    <div className={`relative border-l ${theme === 'dark' ? 'border-white/10' : 'border-black/10'} pl-8 space-y-12`}>
+                    <h3 className={`text-xs font-mono ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'} uppercase tracking-widest mb-10 flex items-center gap-3`}>
+                      <Briefcase size={14} className="text-purple-500" /> Career History
+                    </h3>
+                    <div className={`relative border-l ${theme === 'dark' ? 'border-white/10' : 'border-black/10'} ml-2 pl-8 space-y-12`}>
                       {EXPERIENCE.map((job, i) => (
-                        <div key={i} className="relative">
-                          <span className="absolute -left-[37px] top-1 w-2.5 h-2.5 rounded-full bg-purple-500"></span>
-                          <span className="text-xs font-mono text-purple-500 mb-1 block">{job.date}</span>
-                          <h4 className={`text-lg ${theme === 'dark' ? 'text-white' : 'text-black'} font-medium`}>{job.role}</h4>
-                          <p className={`text-sm ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'} mt-2`}>{job.desc}</p>
+                        <div key={i} className="relative group">
+                          <span className="absolute -left-[37px] top-1.5 w-2.5 h-2.5 rounded-full bg-purple-500 ring-4 ring-purple-500/20 group-hover:scale-125 transition-transform"></span>
+                          <span className="text-[10px] font-mono text-purple-400 mb-2 block tracking-wider">{job.date}</span>
+                          <h4 className={`text-xl ${theme === 'dark' ? 'text-white' : 'text-black'} font-medium tracking-tight`}>{job.role}</h4>
+                          <p className={`text-sm ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'} mt-3 leading-relaxed max-w-md`}>{job.desc}</p>
                         </div>
                       ))}
                     </div>
                   </div>
+
+                  {/* Education */}
                   <div>
-                    <h3 className={`text-sm font-mono ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'} uppercase tracking-wider mb-8 flex items-center gap-2`}><GraduationCap size={16} /> Education</h3>
-                    <div className={`relative border-l ${theme === 'dark' ? 'border-white/10' : 'border-black/10'} pl-8 space-y-12`}>
-                      <div className="relative">
-                        <span className="absolute -left-[37px] top-1 w-2.5 h-2.5 rounded-full bg-blue-500"></span>
-                        <span className="text-xs font-mono text-blue-500 mb-1 block">AUG 2023 — PRESENT</span>
-                        <h4 className={`text-lg ${theme === 'dark' ? 'text-white' : 'text-black'} font-medium`}>Bachelor of Engineering (IT)</h4>
-                        <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} mt-1`}>Kalol Institute of Technology & Research Center</p>
-                      </div>
+                    <h3 className={`text-xs font-mono ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'} uppercase tracking-widest mb-10 flex items-center gap-3`}>
+                      <GraduationCap size={16} className="text-blue-500" /> Education
+                    </h3>
+                    <div className={`relative border-l ${theme === 'dark' ? 'border-white/10' : 'border-black/10'} ml-2 pl-8 space-y-12`}>
+                      {EDUCATION.map((edu, i) => (
+                        <div key={i} className="relative group">
+                          <span className={`absolute -left-[37px] top-1.5 w-2.5 h-2.5 rounded-full ${edu.color || 'bg-blue-500'} ring-4 ring-blue-500/20 group-hover:scale-125 transition-transform`}></span>
+                          <span className="text-[10px] font-mono text-blue-400 mb-2 block tracking-wider">{edu.date}</span>
+                          <h4 className={`text-xl ${theme === 'dark' ? 'text-white' : 'text-black'} font-medium tracking-tight`}>{edu.degree}</h4>
+                          <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'} mt-1`}>{edu.school}</p>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
-                <div className="space-y-16">
+
+                {/* Right Column: Skills & Certifications */}
+                <div className="space-y-20">
+                  {/* Technical Arsenal */}
                   <div>
-                    <h3 className={`text-sm font-mono ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'} uppercase tracking-wider mb-8 flex items-center gap-2`}><Trophy size={16} /> Technical Arsenal</h3>
-                    <div className="grid grid-cols-2 gap-4">
-                      {SKILLS.map((s, i) => (
-                        <div key={i} className={`p-4 border ${theme === 'dark' ? 'border-white/10 bg-white/[0.02]' : 'border-black/5 bg-black/[0.02]'} rounded-lg backdrop-blur-sm hover:border-purple-500/30 transition-colors`}>
-                          <h4 className={`${theme === 'dark' ? 'text-white' : 'text-black'} text-sm font-medium mb-1`}>{s.t}</h4>
-                          <p className={`text-[10px] ${theme === 'dark' ? 'text-gray-600' : 'text-gray-500'}`}>{s.d}</p>
+                    <h3 className={`text-xs font-mono ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'} uppercase tracking-widest mb-10 flex items-center gap-3`}>
+                      <Cpu size={16} className="text-purple-500" /> Technical Arsenal
+                    </h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {SKILLS.map((skill, i) => (
+                        <div key={i} className={`p-5 border ${theme === 'dark' ? 'border-white/10 bg-white/[0.02]' : 'border-black/5 bg-black/[0.02]'} rounded-xl backdrop-blur-sm hover:border-purple-500/40 hover:bg-purple-500/5 transition-all duration-300 group`}>
+                          <div className="flex items-start gap-4">
+                            <div className={`p-2 rounded-lg ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} text-purple-500 group-hover:scale-110 transition-transform`}>
+                              {skill.icon && <skill.icon size={20} />}
+                            </div>
+                            <div>
+                              <h4 className={`${theme === 'dark' ? 'text-white' : 'text-black'} text-base font-medium mb-1 tracking-tight`}>{skill.t}</h4>
+                              <p className={`text-[10px] ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'} leading-relaxed`}>{skill.d}</p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Certifications */}
+                  <div>
+                    <h3 className={`text-xs font-mono ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'} uppercase tracking-widest mb-10 flex items-center gap-3`}>
+                      <Trophy size={16} className="text-yellow-500" /> Certifications
+                    </h3>
+                    <div className="space-y-4">
+                      {CERTIFICATIONS.map((cert, i) => (
+                        <div key={i} className={`p-5 border ${theme === 'dark' ? 'border-white/10 bg-white/[0.02]' : 'border-black/5 bg-black/[0.02]'} rounded-xl backdrop-blur-sm hover:border-yellow-500/30 transition-all duration-300 flex items-center gap-6`}>
+                          <div className={`w-12 h-12 rounded-full ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} flex items-center justify-center ${cert.color}`}>
+                            {cert.icon && <cert.icon size={24} />}
+                          </div>
+                          <div>
+                            <h4 className={`${theme === 'dark' ? 'text-white' : 'text-black'} text-lg font-medium tracking-tight`}>{cert.title}</h4>
+                            <p className={`text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'} mt-1`}>{cert.desc}</p>
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -289,6 +332,7 @@ export default function App() {
                 </div>
               </div>
             </section>
+
 
             {/* Footer */}
             <footer id="contact" className={`py-12 md:py-24 border-t ${theme === 'dark' ? 'border-white/5 bg-[#030303]' : 'border-black/5 bg-[#f8f9fa]'} max-w-5xl mx-auto px-6 relative z-50`}>
