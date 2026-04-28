@@ -59,15 +59,15 @@ export default async function handler(req, res) {
   } else {
     // Check for provider-specific keys in environment variables
     const envKeyMap = {
-      'openai': process.env.OPENAI_API_KEY,
-      'gemini': process.env.GEMINI_API_KEY || process.env.GOOGLE_AI_API_KEY,
-      'anthropic': process.env.ANTHROPIC_API_KEY,
-      'groq': process.env.GROQ_API_KEY,
-      'mistral': process.env.MISTRAL_API_KEY,
-      'together': process.env.TOGETHER_API_KEY,
-      'nvidia': process.env.NVIDIA_API_KEY,
-      'cohere': process.env.COHERE_API_KEY,
-      'openrouter': process.env.OPENROUTER_API_KEY
+      'openai': process.env.OPENAI_API_KEY || process.env.VITE_OPENAI_API_KEY,
+      'gemini': process.env.GEMINI_API_KEY || process.env.GOOGLE_AI_API_KEY || process.env.VITE_GEMINI_API_KEY,
+      'anthropic': process.env.ANTHROPIC_API_KEY || process.env.VITE_ANTHROPIC_API_KEY,
+      'groq': process.env.GROQ_API_KEY || process.env.VITE_GROQ_API_KEY,
+      'mistral': process.env.MISTRAL_API_KEY || process.env.VITE_MISTRAL_API_KEY,
+      'together': process.env.TOGETHER_API_KEY || process.env.VITE_TOGETHER_API_KEY,
+      'nvidia': process.env.NVIDIA_API_KEY || process.env.VITE_NVIDIA_API_KEY,
+      'cohere': process.env.COHERE_API_KEY || process.env.VITE_COHERE_API_KEY,
+      'openrouter': process.env.OPENROUTER_API_KEY || process.env.VITE_OPENROUTER_API_KEY
     };
 
     apiKey = envKeyMap[resolvedProvider];

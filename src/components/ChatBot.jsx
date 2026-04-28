@@ -234,7 +234,7 @@ const ChatBot = ({ theme }) => {
           ) : (
             <>
               {/* HEADER */}
-              <div className={`px-4 md:px-5 py-4 border-b flex-shrink-0 flex items-center justify-between z-10 ${theme === 'dark' ? 'border-white/[0.05] bg-white/[0.01]' : 'border-black/[0.05] bg-black/[0.01]'}`}>
+              <div className={`px-4 md:px-5 py-4 border-b flex-shrink-0 flex items-center justify-between z-[50] relative ${theme === 'dark' ? 'border-white/[0.05] bg-white/[0.01]' : 'border-black/[0.05] bg-black/[0.01]'}`}>
                 <div className="flex items-center gap-3">
                   <div className="relative group">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-violet-600 to-fuchsia-600 flex items-center justify-center shadow-[0_0_20px_rgba(139,92,246,0.4)] transition-all duration-500 group-hover:shadow-[0_0_30px_rgba(139,92,246,0.6)]">
