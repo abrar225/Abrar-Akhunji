@@ -40,31 +40,31 @@ const LoadingScreen = ({ onComplete, theme }) => {
         });
       };
 
-      // Odometer Animations
-      if (counter3Ref.current) animateCounter(counter3Ref.current, 5);
-      if (counter2Ref.current) animateCounter(counter2Ref.current, 6);
-      if (counter1Ref.current) animateCounter(counter1Ref.current, 2, 4);
+      // Odometer Animations (Faster & Smoother)
+      if (counter3Ref.current) animateCounter(counter3Ref.current, 3);
+      if (counter2Ref.current) animateCounter(counter2Ref.current, 3.5);
+      if (counter1Ref.current) animateCounter(counter1Ref.current, 1.2, 2.3);
 
-      // Progress Bars
+      // Progress Bars (Faster)
       gsap.to(loader1Ref.current, {
         width: "100%",
-        duration: 6,
-        ease: "power2.inOut",
+        duration: 3.5,
+        ease: "expo.inOut",
       });
 
       gsap.to(loader2Ref.current, {
         width: "100%",
-        duration: 2,
-        delay: 1.9,
-        ease: "power2.inOut",
+        duration: 1.5,
+        delay: 1.2,
+        ease: "expo.inOut",
       });
 
-      // The Climax & Layout Transition
+      // The Climax & Layout Transition (Snappier)
       const tl = gsap.timeline({
         onComplete: onComplete
       });
 
-      tl.to({}, { duration: 6 }) // Absolute 6s mark
+      tl.to({}, { duration: 3.5 }) // Absolute 3.5s mark (End of main progress)
         .to(loaderContainerRef.current, {
           background: "none",
           duration: 0.1
@@ -72,29 +72,29 @@ const LoadingScreen = ({ onComplete, theme }) => {
         .to(loader1Ref.current, {
           rotate: 90,
           y: -50,
-          duration: 0.5,
-          ease: "power2.out"
-        }, "+=0.1")
+          duration: 0.4,
+          ease: "back.out(2)"
+        }, "+=0.05")
         .to(loader2Ref.current, {
           x: -50,
           y: 50,
-          duration: 0.5,
-          ease: "power2.out"
+          duration: 0.4,
+          ease: "back.out(2)"
         }, "<")
         .to(loaderContainerRef.current, {
-          scale: 40,
+          scale: 45,
           rotate: 45,
-          x: 2000,
-          y: 500,
-          duration: 1.5,
-          ease: "power4.inOut"
-        }, 7) // Precise 7s mark
+          x: 2500,
+          y: 700,
+          duration: 1.2,
+          ease: "expo.in"
+        }, 4) // Precise 4s mark
         .to(loadingScreenRef.current, {
           opacity: 0,
           pointerEvents: "none",
-          duration: 0.8,
+          duration: 0.6,
           ease: "power2.inOut"
-        }, 7.5); // Precise 7.5s mark
+        }, 4.2); // Precise 4.2s mark
     });
 
     return () => ctx.revert();
