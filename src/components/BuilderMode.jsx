@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Download, ChevronLeft, Code, Square, Cpu, Layout, FileCode2, Paintbrush, Loader2, Zap, Monitor, Smartphone, Tablet, Copy, Check, Terminal } from 'lucide-react';
+import { Send, Download, ChevronLeft, Code, Square, Cpu, Layout, FileCode2, Paintbrush, Loader2, Zap, Monitor, Smartphone, Tablet, Copy, Check, Terminal, Menu, X } from 'lucide-react';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 
@@ -36,13 +36,29 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
   const [previewUrl, setPreviewUrl] = useState('');
   const [selectedModel, setSelectedModel] = useState(initialModel || AVAILABLE_MODELS[0].id);
   const [builderCredits, setBuilderCredits] = useState(1);
-  const [deviceView, setDeviceView] = useState('desktop'); // desktop, tablet, mobile
-  const [codeTab, setCodeTab] = useState('html'); // html, css, js
+  const [deviceView, setDeviceView] = useState('desktop'); 
+  const [codeTab, setCodeTab] = useState('html'); 
   const [isCopied, setIsCopied] = useState(false);
-  const [showRightPanel, setShowRightPanel] = useState(true);
   
+  // Responsive states
+  const [showRightPanel, setShowRightPanel] = useState(false);
+  const [mobileTab, setMobileTab] = useState('prompt'); // prompt, preview, code
+
   const messagesEndRef = useRef(null);
   const abortControllerRef = useRef(null);
+
+  // Desktop check
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
+  useEffect(() => {
+    const handleResize = () => {
+      const desktop = window.innerWidth >= 1024;
+      setIsDesktop(desktop);
+      if (desktop) setShowRightPanel(true);
+    };
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const resetTime = localStorage.getItem('fixo_builder_reset');
@@ -106,6 +122,9 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
         css: cssMatch ? cssMatch[1].trim() : '',
         js: jsMatch ? jsMatch[1].trim() : ''
       });
+      if (window.innerWidth < 768) {
+        setMobileTab('preview');
+      }
     }
   };
 
@@ -244,44 +263,44 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
   };
 
   const steps = [
-    { step: 1, text: "Analyzing context...", icon: <Cpu size={12} className="animate-pulse text-violet-400" /> },
-    { step: 2, text: "Structuring layout...", icon: <Layout size={12} className="animate-pulse text-fuchsia-400" /> },
-    { step: 3, text: "Applying styles...", icon: <Paintbrush size={12} className="animate-pulse text-pink-400" /> },
-    { step: 4, text: "Injecting logic...", icon: <FileCode2 size={12} className="animate-pulse text-rose-400" /> }
+    { step: 1, text: "Analyzing context...", icon: <Cpu size={14} className="animate-pulse text-violet-400" /> },
+    { step: 2, text: "Structuring layout...", icon: <Layout size={14} className="animate-pulse text-fuchsia-400" /> },
+    { step: 3, text: "Applying styles...", icon: <Paintbrush size={14} className="animate-pulse text-pink-400" /> },
+    { step: 4, text: "Injecting logic...", icon: <FileCode2 size={14} className="animate-pulse text-rose-400" /> }
   ];
 
   return (
-    <div className={`flex h-full w-full overflow-hidden ${theme === 'dark' ? 'bg-[#050505]' : 'bg-[#fcfcfc]'}`}>
+    <div className={`flex flex-col md:flex-row h-full w-full overflow-hidden ${theme === 'dark' ? 'bg-[#050505] text-white' : 'bg-[#fcfcfc] text-black'}`}>
       
       {/* 1. LEFT PANEL (Prompt & Controls) */}
-      <div className={`w-[320px] flex flex-col flex-shrink-0 border-r ${theme === 'dark' ? 'border-white/[0.05] bg-white/[0.01]' : 'border-black/[0.05] bg-black/[0.01]'} backdrop-blur-3xl z-10 relative shadow-[10px_0_30px_-15px_rgba(0,0,0,0.5)]`}>
+      <div className={`${mobileTab === 'prompt' ? 'flex' : 'hidden'} md:flex w-full md:w-[320px] flex-col flex-shrink-0 border-r ${theme === 'dark' ? 'border-white/[0.05] bg-white/[0.01]' : 'border-black/[0.05] bg-black/[0.01]'} backdrop-blur-3xl z-10 relative h-full md:h-auto`}>
         {/* Header */}
-        <div className={`p-4 border-b flex items-center justify-between ${theme === 'dark' ? 'border-white/[0.05]' : 'border-black/[0.05]'}`}>
+        <div className={`p-4 border-b flex-shrink-0 flex items-center justify-between ${theme === 'dark' ? 'border-white/[0.05]' : 'border-black/[0.05]'}`}>
           <div className="flex items-center gap-3">
             <button onClick={onExit} className={`p-1.5 rounded-full hover:bg-black/10 ${theme === 'dark' ? 'hover:bg-white/10 text-white/50 hover:text-white' : 'text-black/50 hover:text-black'} transition-all hover:scale-105 active:scale-95`}>
               <ChevronLeft size={18} />
             </button>
             <div className="relative">
-              <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-violet-600 to-fuchsia-600 flex items-center justify-center shadow-[0_0_15px_rgba(139,92,246,0.3)]">
-                <Code size={12} className="text-white" />
+              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-violet-600 to-fuchsia-600 flex items-center justify-center shadow-[0_0_15px_rgba(139,92,246,0.3)]">
+                <Code size={14} className="text-white" />
               </div>
               <div className="absolute top-0 right-0 w-2 h-2 bg-green-500 rounded-full border border-black animate-pulse"></div>
             </div>
-            <span className={`text-sm font-semibold tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-fuchsia-400`}>FixO IDE</span>
+            <span className={`text-sm font-bold tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-fuchsia-400`}>FixO IDE</span>
           </div>
         </div>
 
         {/* Settings / Controls */}
-        <div className="p-4 space-y-4">
+        <div className="p-4 space-y-5 flex-shrink-0">
           <div>
-            <label className={`text-[10px] font-medium uppercase tracking-wider mb-2 block ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Model</label>
+            <label className={`text-[11px] font-medium uppercase tracking-wider mb-2 block ${theme === 'dark' ? 'text-white/50' : 'text-black/50'}`}>AI Model</label>
             <select
               value={selectedModel}
               onChange={(e) => setSelectedModel(e.target.value)}
-              className={`w-full text-[11px] p-2.5 rounded-xl border focus:outline-none appearance-none cursor-pointer transition-all ${
+              className={`w-full text-[13px] p-3 rounded-xl border focus:outline-none appearance-none cursor-pointer transition-all ${
                 theme === 'dark' 
-                  ? 'bg-white/[0.03] border-white/[0.05] text-white/80 hover:border-violet-500/50 hover:bg-white/[0.05]' 
-                  : 'bg-black/[0.02] border-black/[0.05] text-black/80 hover:border-violet-500/50 hover:bg-black/[0.05]'
+                  ? 'bg-white/[0.03] border-white/[0.05] text-white/90 hover:border-violet-500/50 hover:bg-white/[0.05]' 
+                  : 'bg-black/[0.02] border-black/[0.05] text-black/90 hover:border-violet-500/50 hover:bg-black/[0.05]'
               }`}
             >
               {AVAILABLE_MODELS.map(model => (
@@ -291,34 +310,34 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
           </div>
 
           <div>
-            <label className={`text-[10px] font-medium uppercase tracking-wider mb-2 block ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Presets</label>
+            <label className={`text-[11px] font-medium uppercase tracking-wider mb-2 block ${theme === 'dark' ? 'text-white/50' : 'text-black/50'}`}>Quick Presets</label>
             <div className="flex flex-wrap gap-2">
               {PRESETS.map(preset => (
-                <button key={preset} onClick={() => setInputValue(`Build a ${preset.toLowerCase()} hero section`)} className={`text-[10px] px-3 py-1.5 rounded-full border transition-all hover:scale-105 active:scale-95 ${theme === 'dark' ? 'bg-white/[0.03] border-white/[0.05] text-white/60 hover:text-white hover:border-white/20' : 'bg-black/[0.03] border-black/[0.05] text-black/60 hover:text-black hover:border-black/20'}`}>
+                <button key={preset} onClick={() => setInputValue(`Build a ${preset.toLowerCase()} hero section`)} className={`text-xs px-4 py-2 rounded-full border transition-all hover:scale-105 active:scale-95 ${theme === 'dark' ? 'bg-white/[0.03] border-white/[0.08] text-white/70 hover:text-white hover:border-white/30' : 'bg-black/[0.03] border-black/[0.08] text-black/70 hover:text-black hover:border-black/30'}`}>
                   {preset}
                 </button>
               ))}
             </div>
           </div>
           
-          <div className={`p-3 rounded-xl border flex items-center justify-between ${builderCredits > 0 ? (theme === 'dark' ? 'bg-violet-500/10 border-violet-500/20 text-violet-300' : 'bg-violet-500/10 border-violet-500/20 text-violet-700') : 'bg-red-500/10 border-red-500/20 text-red-400'}`}>
+          <div className={`p-3.5 rounded-xl border flex items-center justify-between ${builderCredits > 0 ? (theme === 'dark' ? 'bg-violet-500/10 border-violet-500/20 text-violet-300' : 'bg-violet-500/10 border-violet-500/20 text-violet-700') : 'bg-rose-500/10 border-rose-500/20 text-rose-400'}`}>
             <span className="text-xs font-medium">Daily Limit</span>
-            <div className="flex items-center gap-1.5 font-mono text-xs">
-              <Zap size={12} className={builderCredits > 0 ? "fill-current" : ""} />
+            <div className="flex items-center gap-1.5 font-mono text-sm">
+              <Zap size={14} className={builderCredits > 0 ? "fill-current" : ""} />
               {builderCredits}/1
             </div>
           </div>
         </div>
 
         {/* Chat Area */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar relative">
+        <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar relative min-h-0">
           <div className="absolute inset-x-0 top-0 h-4 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none z-10 opacity-50"></div>
           {messages.map((msg, idx) => (
             <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-[90%] p-3 rounded-2xl text-xs leading-relaxed shadow-lg ${
+              <div className={`max-w-[90%] p-3.5 rounded-2xl text-[13px] leading-relaxed shadow-lg ${
                 msg.role === 'user' 
                   ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-br-sm' 
-                  : `${theme === 'dark' ? 'bg-white/[0.03] border-white/[0.05] text-white/80' : 'bg-black/[0.03] border-black/[0.05] text-black/80'} rounded-bl-sm border backdrop-blur-md`
+                  : `${theme === 'dark' ? 'bg-white/[0.03] border-white/[0.05] text-white/90' : 'bg-black/[0.03] border-black/[0.05] text-black/90'} rounded-bl-sm border backdrop-blur-md`
               }`}>
                 {msg.text}
               </div>
@@ -327,14 +346,14 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
           
           {isLoading && generationStep > 0 && (
             <div className={`flex justify-start`}>
-              <div className={`w-full p-4 rounded-2xl rounded-bl-sm border backdrop-blur-md ${theme === 'dark' ? 'bg-white/[0.02] border-white/[0.05] text-white/70' : 'bg-black/[0.02] border-black/[0.05] text-black/70'}`}>
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="w-4 h-4 rounded-full border-2 border-violet-500 border-t-transparent animate-spin"></div>
-                  <span className="font-semibold text-[10px] text-violet-400 uppercase tracking-widest">Generating</span>
+              <div className={`w-full p-5 rounded-2xl rounded-bl-sm border backdrop-blur-md ${theme === 'dark' ? 'bg-white/[0.02] border-white/[0.05] text-white/80' : 'bg-black/[0.02] border-black/[0.05] text-black/80'}`}>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-5 h-5 rounded-full border-2 border-violet-500 border-t-transparent animate-spin"></div>
+                  <span className="font-semibold text-xs text-violet-400 uppercase tracking-widest">Generating</span>
                 </div>
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {steps.map(s => (
-                    <div key={s.step} className={`flex items-center gap-3 text-xs transition-opacity duration-500 ${generationStep >= s.step ? 'opacity-100' : 'opacity-20'}`}>
+                    <div key={s.step} className={`flex items-center gap-3 text-sm transition-opacity duration-500 ${generationStep >= s.step ? 'opacity-100' : 'opacity-30'}`}>
                       {s.icon}
                       <span className={generationStep === s.step ? 'text-white font-medium' : ''}>{s.text}</span>
                     </div>
@@ -343,27 +362,27 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
               </div>
             </div>
           )}
-          <div ref={messagesEndRef} />
+          <div ref={messagesEndRef} className="h-2" />
         </div>
 
         {/* Input Area */}
-        <div className={`p-4 border-t ${theme === 'dark' ? 'border-white/[0.05] bg-black/20' : 'border-black/[0.05] bg-white/20'} backdrop-blur-xl`}>
-          <div className={`relative flex items-end gap-2 p-1.5 rounded-2xl border transition-all ${theme === 'dark' ? 'bg-white/[0.03] border-white/[0.1] focus-within:border-violet-500/50 focus-within:bg-white/[0.05]' : 'bg-black/[0.03] border-black/[0.1] focus-within:border-violet-500/50 focus-within:bg-black/[0.05]'}`}>
+        <div className={`p-4 border-t flex-shrink-0 ${theme === 'dark' ? 'border-white/[0.05] bg-black/20' : 'border-black/[0.05] bg-white/20'} backdrop-blur-xl`}>
+          <div className={`relative flex items-end gap-2 p-1.5 rounded-2xl border transition-all ${theme === 'dark' ? 'bg-white/[0.03] border-white/[0.1] focus-within:border-violet-500/50 focus-within:bg-white/[0.05]' : 'bg-white border-black/[0.1] focus-within:border-violet-500/50 focus-within:bg-white'}`}>
             <textarea 
               value={inputValue} 
               onChange={(e) => setInputValue(e.target.value)} 
               placeholder="Describe the UI..." 
               disabled={isLoading || builderCredits <= 0}
               rows={2}
-              className="flex-1 bg-transparent text-xs p-2.5 resize-none focus:outline-none custom-scrollbar disabled:opacity-50" 
+              className="flex-1 bg-transparent text-[13px] p-3 resize-none focus:outline-none custom-scrollbar disabled:opacity-50 min-h-[60px]" 
             />
             {isLoading ? (
-              <button onClick={handleStop} className="p-2 mb-1 mr-1 bg-rose-500/20 text-rose-500 rounded-xl hover:bg-rose-500/30 transition-all active:scale-95" title="Stop">
-                <Square size={16} className="fill-current" />
+              <button onClick={handleStop} className="p-2.5 mb-1 mr-1 bg-rose-500/10 text-rose-500 rounded-xl hover:bg-rose-500/20 border border-rose-500/20 transition-all active:scale-95 flex-shrink-0" title="Stop">
+                <Square size={18} className="fill-current" />
               </button>
             ) : (
-              <button onClick={() => handleSendMessage()} disabled={!inputValue.trim() || builderCredits <= 0} className="p-2 mb-1 mr-1 bg-white text-black rounded-xl hover:bg-gray-200 transition-all disabled:opacity-50 disabled:bg-white/10 disabled:text-white/30 active:scale-95 shadow-[0_0_15px_rgba(255,255,255,0.1)]">
-                <Send size={16} />
+              <button onClick={() => handleSendMessage()} disabled={!inputValue.trim() || builderCredits <= 0} className="p-2.5 mb-1 mr-1 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-xl hover:from-violet-500 hover:to-fuchsia-500 transition-all disabled:opacity-30 disabled:scale-100 active:scale-95 shadow-[0_0_15px_rgba(139,92,246,0.3)] disabled:shadow-none flex-shrink-0">
+                <Send size={18} />
               </button>
             )}
           </div>
@@ -371,57 +390,61 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
       </div>
 
       {/* 2. CENTER PANEL (Live Preview) */}
-      <div className="flex-1 flex flex-col relative z-0">
-        <div className={`flex items-center justify-between px-4 py-3 border-b ${theme === 'dark' ? 'border-white/[0.05] bg-[#0a0a0c]' : 'border-black/[0.05] bg-white'}`}>
+      <div className={`${mobileTab === 'preview' ? 'flex' : 'hidden'} md:flex flex-1 flex-col relative z-0 h-full`}>
+        <div className={`flex items-center justify-between px-3 md:px-4 py-3 border-b flex-shrink-0 ${theme === 'dark' ? 'border-white/[0.05] bg-[#0a0a0c]' : 'border-black/[0.05] bg-white'}`}>
           <div className="flex items-center gap-2">
-            <button onClick={() => setShowRightPanel(!showRightPanel)} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-medium transition-all ${showRightPanel ? 'bg-violet-500/20 text-violet-400' : (theme === 'dark' ? 'hover:bg-white/5 text-white/50 hover:text-white' : 'hover:bg-black/5 text-black/50 hover:text-black')}`}>
-              <Terminal size={14} /> Code
+            <button onClick={() => { setShowRightPanel(!showRightPanel); if(window.innerWidth < 1024) setMobileTab('code'); }} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-medium transition-all ${showRightPanel || mobileTab === 'code' ? 'bg-violet-500/20 text-violet-400' : (theme === 'dark' ? 'hover:bg-white/5 text-white/50 hover:text-white' : 'hover:bg-black/5 text-black/50 hover:text-black')}`}>
+              <Terminal size={16} /> <span className="hidden sm:inline">Code</span>
             </button>
           </div>
           
           {/* Fake Browser URL Bar */}
-          <div className={`flex-1 max-w-md mx-4 flex items-center justify-center px-4 py-1.5 rounded-full border text-[10px] font-mono tracking-wide ${theme === 'dark' ? 'bg-white/[0.02] border-white/[0.05] text-white/30' : 'bg-black/[0.02] border-black/[0.05] text-black/40'}`}>
+          <div className={`flex-1 max-w-sm mx-3 flex items-center justify-center px-4 py-2 rounded-full border text-[11px] font-mono tracking-wide truncate ${theme === 'dark' ? 'bg-white/[0.02] border-white/[0.05] text-white/40' : 'bg-black/[0.02] border-black/[0.05] text-black/50'}`}>
             <span className="opacity-50">https://</span>fixo.build/preview
           </div>
 
-          <div className="flex items-center gap-1 bg-black/20 p-1 rounded-lg border border-white/5">
-            <button onClick={() => setDeviceView('desktop')} className={`p-1.5 rounded-md transition-all ${deviceView === 'desktop' ? 'bg-white/10 text-white shadow-sm' : 'text-white/40 hover:text-white/80'}`}><Monitor size={14} /></button>
-            <button onClick={() => setDeviceView('tablet')} className={`p-1.5 rounded-md transition-all ${deviceView === 'tablet' ? 'bg-white/10 text-white shadow-sm' : 'text-white/40 hover:text-white/80'}`}><Tablet size={14} /></button>
-            <button onClick={() => setDeviceView('mobile')} className={`p-1.5 rounded-md transition-all ${deviceView === 'mobile' ? 'bg-white/10 text-white shadow-sm' : 'text-white/40 hover:text-white/80'}`}><Smartphone size={14} /></button>
+          <div className="flex items-center gap-1 bg-black/10 dark:bg-black/20 p-1 rounded-lg border border-black/5 dark:border-white/5 hidden md:flex">
+            <button onClick={() => setDeviceView('desktop')} className={`p-1.5 rounded-md transition-all ${deviceView === 'desktop' ? (theme === 'dark' ? 'bg-white/10 text-white shadow-sm' : 'bg-white text-black shadow-sm') : 'text-gray-400 hover:text-gray-600 dark:hover:text-white/80'}`}><Monitor size={16} /></button>
+            <button onClick={() => setDeviceView('tablet')} className={`p-1.5 rounded-md transition-all ${deviceView === 'tablet' ? (theme === 'dark' ? 'bg-white/10 text-white shadow-sm' : 'bg-white text-black shadow-sm') : 'text-gray-400 hover:text-gray-600 dark:hover:text-white/80'}`}><Tablet size={16} /></button>
+            <button onClick={() => setDeviceView('mobile')} className={`p-1.5 rounded-md transition-all ${deviceView === 'mobile' ? (theme === 'dark' ? 'bg-white/10 text-white shadow-sm' : 'bg-white text-black shadow-sm') : 'text-gray-400 hover:text-gray-600 dark:hover:text-white/80'}`}><Smartphone size={16} /></button>
           </div>
         </div>
 
         {/* Browser Canvas */}
-        <div className={`flex-1 p-4 md:p-8 overflow-hidden flex items-center justify-center relative ${theme === 'dark' ? 'bg-[#050505]' : 'bg-[#f0f0f0]'}`}>
+        <div className={`flex-1 p-0 md:p-6 lg:p-8 overflow-hidden flex items-center justify-center relative ${theme === 'dark' ? 'bg-[#050505]' : 'bg-[#f5f5f5]'}`}>
           {/* Noise overlay */}
           <div className="absolute inset-0 opacity-[0.015] pointer-events-none mix-blend-overlay" style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")'}}></div>
           
-          <div className={`relative transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] flex flex-col overflow-hidden shadow-2xl rounded-xl border ${theme === 'dark' ? 'border-white/[0.1] bg-[#0a0a0c]' : 'border-black/[0.1] bg-white'} ${
+          <div className={`relative transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] flex flex-col overflow-hidden shadow-2xl md:rounded-xl border ${theme === 'dark' ? 'border-white/[0.1] bg-[#0a0a0c]' : 'border-black/[0.1] bg-white'} ${
+            window.innerWidth < 768 ? 'w-full h-full' :
             deviceView === 'desktop' ? 'w-full h-full' :
             deviceView === 'tablet' ? 'w-[768px] h-full shadow-[0_0_50px_rgba(0,0,0,0.5)]' :
-            'w-[375px] h-[812px] shadow-[0_0_50px_rgba(0,0,0,0.5)]'
+            'w-[375px] h-[812px] max-h-full shadow-[0_0_50px_rgba(0,0,0,0.5)]'
           }`}>
             
-            {/* Fake macOS Window Controls */}
-            <div className={`h-8 w-full border-b flex items-center px-4 gap-2 ${theme === 'dark' ? 'bg-[#1a1a1c] border-white/5' : 'bg-[#f5f5f5] border-black/5'}`}>
-              <div className="w-2.5 h-2.5 rounded-full bg-rose-500/80"></div>
-              <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80"></div>
-              <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></div>
+            {/* Fake macOS Window Controls (hidden on mobile) */}
+            <div className={`hidden md:flex h-10 w-full flex-shrink-0 border-b items-center px-4 gap-2.5 ${theme === 'dark' ? 'bg-[#1a1a1c] border-white/5' : 'bg-[#fcfcfc] border-black/5'}`}>
+              <div className="w-3 h-3 rounded-full bg-rose-500/90 shadow-sm"></div>
+              <div className="w-3 h-3 rounded-full bg-amber-500/90 shadow-sm"></div>
+              <div className="w-3 h-3 rounded-full bg-emerald-500/90 shadow-sm"></div>
             </div>
 
             {previewUrl ? (
               <iframe 
                 src={previewUrl} 
-                className={`w-full h-full border-none transition-opacity duration-700 ${isLoading ? 'opacity-30' : 'opacity-100'} bg-white`}
+                className={`w-full h-full flex-1 border-none transition-opacity duration-700 ${isLoading ? 'opacity-30' : 'opacity-100'} bg-white`}
                 title="Live Preview"
                 sandbox="allow-scripts allow-same-origin"
               />
             ) : (
-              <div className="flex-1 flex items-center justify-center flex-col gap-4">
-                <div className="w-16 h-16 rounded-3xl bg-white/[0.02] border border-white/[0.05] flex items-center justify-center">
-                  <Layout size={24} className="text-white/20" />
+              <div className="flex-1 flex items-center justify-center flex-col gap-5">
+                <div className={`w-20 h-20 rounded-3xl ${theme === 'dark' ? 'bg-white/[0.02] border-white/[0.05]' : 'bg-black/[0.02] border-black/[0.05]'} border flex items-center justify-center shadow-inner`}>
+                  <Layout size={32} className={theme === 'dark' ? 'text-white/20' : 'text-black/20'} />
                 </div>
-                <p className="text-xs font-mono text-white/30 tracking-widest uppercase">Canvas Empty</p>
+                <div className="text-center">
+                  <p className={`text-sm font-medium ${theme === 'dark' ? 'text-white/60' : 'text-black/60'} mb-1`}>Canvas Empty</p>
+                  <p className={`text-xs ${theme === 'dark' ? 'text-white/30' : 'text-black/30'}`}>Describe a UI component in the prompt panel to get started.</p>
+                </div>
               </div>
             )}
           </div>
@@ -429,18 +452,18 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
       </div>
 
       {/* 3. RIGHT PANEL (Code Output) */}
-      <div className={`w-[360px] flex-shrink-0 flex flex-col border-l transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${showRightPanel ? 'translate-x-0' : 'translate-x-full absolute right-0 h-full shadow-2xl z-20'} ${theme === 'dark' ? 'border-white/[0.05] bg-[#0a0a0c]' : 'border-black/[0.05] bg-white'}`}>
+      <div className={`${mobileTab === 'code' ? 'flex w-full h-full' : 'hidden'} md:flex md:absolute lg:relative right-0 h-full w-full md:w-[360px] flex-shrink-0 flex-col border-l transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${showRightPanel || mobileTab === 'code' ? 'translate-x-0' : 'translate-x-full md:shadow-[0_0_50px_rgba(0,0,0,0.3)] lg:shadow-none'} ${theme === 'dark' ? 'border-white/[0.05] bg-[#0a0a0c]' : 'border-black/[0.05] bg-[#fcfcfc]'} z-20`}>
         
         {/* Code Tabs Header */}
-        <div className={`flex items-center justify-between p-2 border-b ${theme === 'dark' ? 'border-white/[0.05]' : 'border-black/[0.05]'}`}>
-          <div className="flex gap-1">
+        <div className={`flex items-center justify-between p-2 md:p-3 border-b flex-shrink-0 ${theme === 'dark' ? 'border-white/[0.05]' : 'border-black/[0.05]'}`}>
+          <div className="flex gap-1.5">
             {['html', 'css', 'js'].map(tab => (
-              <button 
+               <button 
                 key={tab} 
                 onClick={() => setCodeTab(tab)} 
-                className={`px-4 py-1.5 rounded-lg text-[10px] font-mono tracking-wider uppercase transition-all ${
+                className={`px-4 py-2 rounded-lg text-xs font-mono tracking-wider uppercase transition-all ${
                   codeTab === tab 
-                    ? (theme === 'dark' ? 'bg-white/10 text-white' : 'bg-black/10 text-black') 
+                    ? (theme === 'dark' ? 'bg-white/10 text-white shadow-sm' : 'bg-black/5 text-black shadow-sm border border-black/5') 
                     : (theme === 'dark' ? 'text-white/40 hover:bg-white/5 hover:text-white/70' : 'text-black/40 hover:bg-black/5 hover:text-black/70')
                 }`}
               >
@@ -448,32 +471,62 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
               </button>
             ))}
           </div>
-          <div className="flex items-center gap-1 pr-2">
-            <button onClick={copyToClipboard} className={`p-1.5 rounded-lg transition-all ${theme === 'dark' ? 'text-white/40 hover:bg-white/10 hover:text-white' : 'text-black/40 hover:bg-black/10 hover:text-black'}`} title="Copy Code">
-              {isCopied ? <Check size={14} className="text-green-500" /> : <Copy size={14} />}
+          <div className="flex items-center gap-1.5 pr-1">
+            <button onClick={copyToClipboard} className={`p-2 rounded-lg transition-all ${theme === 'dark' ? 'text-white/50 hover:bg-white/10 hover:text-white' : 'text-black/50 hover:bg-black/5 hover:text-black'}`} title="Copy Code">
+              {isCopied ? <Check size={16} className="text-green-500" /> : <Copy size={16} />}
             </button>
-            <button onClick={handleDownload} disabled={!previewUrl} className={`p-1.5 rounded-lg transition-all disabled:opacity-30 ${theme === 'dark' ? 'text-white/40 hover:bg-white/10 hover:text-white' : 'text-black/40 hover:bg-black/10 hover:text-black'}`} title="Download ZIP">
-              <Download size={14} />
+            <button onClick={handleDownload} disabled={!previewUrl} className={`p-2 rounded-lg transition-all disabled:opacity-30 ${theme === 'dark' ? 'text-white/50 hover:bg-white/10 hover:text-white' : 'text-black/50 hover:bg-black/5 hover:text-black'}`} title="Download ZIP">
+              <Download size={16} />
+            </button>
+            {/* Close button for tablet drawer view */}
+            <button onClick={() => { setShowRightPanel(false); if(window.innerWidth < 1024) setMobileTab('preview'); }} className={`md:flex lg:hidden p-2 rounded-lg transition-all ${theme === 'dark' ? 'text-white/50 hover:bg-white/10 hover:text-white' : 'text-black/50 hover:bg-black/5 hover:text-black'}`} title="Close Code Panel">
+              <X size={16} />
             </button>
           </div>
         </div>
 
         {/* Code View */}
-        <div className={`flex-1 overflow-y-auto p-4 custom-scrollbar ${theme === 'dark' ? 'bg-[#050505]' : 'bg-gray-50'}`}>
+        <div className={`flex-1 overflow-y-auto p-5 custom-scrollbar min-h-0 ${theme === 'dark' ? 'bg-[#050505]' : 'bg-[#f0f0f0]'}`}>
           {previewCode[codeTab] ? (
-            <pre className={`text-[11px] font-mono leading-relaxed whitespace-pre-wrap ${
-              codeTab === 'html' ? 'text-blue-400' :
-              codeTab === 'css' ? 'text-pink-400' :
-              'text-yellow-400'
+            <pre className={`text-[12px] font-mono leading-relaxed whitespace-pre-wrap ${
+              codeTab === 'html' ? (theme === 'dark' ? 'text-blue-400' : 'text-blue-700') :
+              codeTab === 'css' ? (theme === 'dark' ? 'text-pink-400' : 'text-pink-700') :
+              (theme === 'dark' ? 'text-yellow-400' : 'text-yellow-700')
             }`}>
               {previewCode[codeTab]}
             </pre>
           ) : (
-            <div className="h-full flex items-center justify-center">
-              <p className="text-xs font-mono text-white/20 uppercase tracking-widest">No code yet</p>
+            <div className="h-full flex flex-col items-center justify-center gap-3">
+              <Code size={24} className={theme === 'dark' ? 'text-white/10' : 'text-black/10'} />
+              <p className={`text-xs font-mono uppercase tracking-widest ${theme === 'dark' ? 'text-white/20' : 'text-black/30'}`}>No code yet</p>
             </div>
           )}
         </div>
+      </div>
+
+      {/* MOBILE BOTTOM NAVIGATION */}
+      <div className={`md:hidden flex-shrink-0 border-t flex justify-around p-2 ${theme === 'dark' ? 'bg-[#0a0a0c] border-white/10' : 'bg-white border-black/10'} z-50 relative`}>
+        <button 
+          onClick={() => setMobileTab('prompt')}
+          className={`flex flex-col items-center gap-1 p-2 w-20 rounded-xl transition-all ${mobileTab === 'prompt' ? (theme === 'dark' ? 'text-violet-400 bg-violet-500/10' : 'text-violet-600 bg-violet-50') : (theme === 'dark' ? 'text-white/40' : 'text-black/40')}`}
+        >
+          <Cpu size={20} />
+          <span className="text-[10px] font-medium">Prompt</span>
+        </button>
+        <button 
+          onClick={() => setMobileTab('preview')}
+          className={`flex flex-col items-center gap-1 p-2 w-20 rounded-xl transition-all ${mobileTab === 'preview' ? (theme === 'dark' ? 'text-violet-400 bg-violet-500/10' : 'text-violet-600 bg-violet-50') : (theme === 'dark' ? 'text-white/40' : 'text-black/40')}`}
+        >
+          <Layout size={20} />
+          <span className="text-[10px] font-medium">Preview</span>
+        </button>
+        <button 
+          onClick={() => setMobileTab('code')}
+          className={`flex flex-col items-center gap-1 p-2 w-20 rounded-xl transition-all ${mobileTab === 'code' ? (theme === 'dark' ? 'text-violet-400 bg-violet-500/10' : 'text-violet-600 bg-violet-50') : (theme === 'dark' ? 'text-white/40' : 'text-black/40')}`}
+        >
+          <Terminal size={20} />
+          <span className="text-[10px] font-medium">Code</span>
+        </button>
       </div>
 
     </div>
