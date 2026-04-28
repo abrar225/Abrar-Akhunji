@@ -30,10 +30,28 @@ const PROVIDERS = [
 ];
 
 const DEFAULT_MODELS = [
-  { id: "minimax/minimax-m2.5:free", name: "Minimax M2.5 (Fast)" },
-  { id: "google/gemma-3-27b-it:free", name: "Google Gemma 3" },
-  { id: "openai/gpt-oss-120b:free", name: "GPT OSS 120B" },
-  { id: "nvidia/nemotron-nano-9b-v2:free", name: "Nvidia Nemotron" }
+  // --- FREE MODELS ---
+  { id: "minimax/minimax-m2.5:free", name: "Minimax M2.5 (Free)" },
+  { id: "google/gemma-3-27b-it:free", name: "Gemma 3 27B (Free)" },
+  { id: "meta-llama/llama-3.1-8b-instruct:free", name: "Llama 3.1 8B (Free)" },
+  { id: "mistralai/pixtral-12b:free", name: "Pixtral 12B (Free)" },
+  { id: "openai/gpt-oss-120b:free", name: "GPT OSS 120B (Free)" },
+  { id: "nvidia/nemotron-nano-9b-v2:free", name: "Nemotron Nano (Free)" },
+  { id: "liquid/lfm-2.5-1.2b-thinking:free", name: "Liquid LFM Thinking (Free)" },
+  
+  // --- PREMIUM MODELS ---
+  { id: "openai/gpt-4o", name: "GPT-4o (Most Capable)" },
+  { id: "openai/gpt-4o-mini", name: "GPT-4o Mini" },
+  { id: "anthropic/claude-3.5-sonnet", name: "Claude 3.5 Sonnet" },
+  { id: "anthropic/claude-3-opus", name: "Claude 3 Opus" },
+  { id: "google/gemini-pro-1.5", name: "Gemini 1.5 Pro" },
+  { id: "google/gemini-flash-1.5", name: "Gemini 1.5 Flash" },
+  { id: "meta-llama/llama-3.1-405b-instruct", name: "Llama 3.1 405B" },
+  { id: "meta-llama/llama-3.1-70b-instruct", name: "Llama 3.1 70B" },
+  { id: "mistralai/mistral-large-2407", name: "Mistral Large 2" },
+  { id: "deepseek/deepseek-chat", name: "DeepSeek Chat" },
+  { id: "perplexity/llama-3.1-sonar-large-128k-online", name: "Sonar Llama 3.1" },
+  { id: "cohere/command-r-plus", name: "Command R+" }
 ];
 
 const PRESETS = [
