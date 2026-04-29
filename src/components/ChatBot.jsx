@@ -50,12 +50,97 @@ const ChatBot = ({ theme }) => {
   const abortControllerRef = useRef(null);
   const inputRef = useRef(null);
 
+  // ── Draggable Widget State ──
+  const SAFE_TOP = 80;
+  const SAFE_BOTTOM = 100;
+  const SAFE_X = 12;
+  const STORAGE_KEY = 'fixo_widget_pos';
+
+  const [widgetPos, setWidgetPos] = useState(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return { x: typeof window !== 'undefined' ? window.innerWidth - 80 : 300, y: typeof window !== 'undefined' ? window.innerHeight - 160 : 500 };
+  });
+  const dragRef = useRef({ isDragging: false, wasDragged: false, startX: 0, startY: 0, startPosX: 0, startPosY: 0 });
+  const widgetRef = useRef(null);
+
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.style.height = 'auto';
       inputRef.current.style.height = Math.min(inputRef.current.scrollHeight, 120) + 'px';
     }
   }, [inputValue]);
+
+  // Clamp widget on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setWidgetPos(prev => clampPos(prev.x, prev.y));
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const clampPos = (x, y) => {
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    return {
+      x: Math.max(SAFE_X, Math.min(x, w - 64 - SAFE_X)),
+      y: Math.max(SAFE_TOP, Math.min(y, h - 64 - SAFE_BOTTOM))
+    };
+  };
+
+  const snapToEdge = (x, y) => {
+    const w = window.innerWidth;
+    const snappedX = x < w / 2 ? SAFE_X : w - 64 - SAFE_X;
+    const clamped = clampPos(snappedX, y);
+    return clamped;
+  };
+
+  const onDragStart = (clientX, clientY) => {
+    if (isOpen) return;
+    dragRef.current = { isDragging: true, wasDragged: false, startX: clientX, startY: clientY, startPosX: widgetPos.x, startPosY: widgetPos.y };
+  };
+
+  const onDragMove = (clientX, clientY) => {
+    const d = dragRef.current;
+    if (!d.isDragging) return;
+    const dx = clientX - d.startX;
+    const dy = clientY - d.startY;
+    if (Math.abs(dx) > 3 || Math.abs(dy) > 3) d.wasDragged = true;
+    if (!d.wasDragged) return;
+    const pos = clampPos(d.startPosX + dx, d.startPosY + dy);
+    setWidgetPos(pos);
+  };
+
+  const onDragEnd = () => {
+    const d = dragRef.current;
+    if (!d.isDragging) return;
+    d.isDragging = false;
+    if (d.wasDragged) {
+      const final = snapToEdge(widgetPos.x, widgetPos.y);
+      setWidgetPos(final);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(final));
+    }
+  };
+
+  // Global move/end listeners
+  useEffect(() => {
+    const onMouseMove = (e) => onDragMove(e.clientX, e.clientY);
+    const onTouchMove = (e) => { if (dragRef.current.isDragging && dragRef.current.wasDragged) e.preventDefault(); onDragMove(e.touches[0].clientX, e.touches[0].clientY); };
+    const onEnd = () => onDragEnd();
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onEnd);
+    window.addEventListener('touchmove', onTouchMove, { passive: false });
+    window.addEventListener('touchend', onEnd);
+    return () => {
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onEnd);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchend', onEnd);
+    };
+  });
 
   useEffect(() => {
     const resetTime = localStorage.getItem('fixo_chat_reset');
@@ -198,12 +283,22 @@ const ChatBot = ({ theme }) => {
 
   return (
     <>
-      {/* Floating Trigger - Premium Orb */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className={`fixed bottom-8 right-6 md:right-12 z-[70] transition-all duration-500 hover:scale-110 active:scale-95 flex items-center justify-center group ${isOpen && chatMode === 'normal' ? 'md:opacity-0 md:pointer-events-none' : ''}`}
+      {/* Floating Trigger - Draggable Premium Orb */}
+      <div
+        ref={widgetRef}
+        onMouseDown={(e) => { e.preventDefault(); onDragStart(e.clientX, e.clientY); }}
+        onTouchStart={(e) => onDragStart(e.touches[0].clientX, e.touches[0].clientY)}
+        onClick={() => { if (!dragRef.current.wasDragged) setIsOpen(!isOpen); }}
+        className={`fixed z-[70] select-none touch-none ${isOpen && chatMode === 'normal' ? 'md:opacity-0 md:pointer-events-none' : ''}`}
+        style={{
+          left: 0, top: 0,
+          transform: `translate3d(${widgetPos.x}px, ${widgetPos.y}px, 0)`,
+          transition: dragRef.current.isDragging ? 'none' : 'transform 0.35s cubic-bezier(0.23, 1, 0.32, 1)',
+          cursor: isOpen ? 'pointer' : 'grab',
+          willChange: 'transform'
+        }}
       >
-        <div className={`relative flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full shadow-[0_0_40px_rgba(139,92,246,0.3)] transition-all ${isOpen ? 'rotate-90 scale-90' : 'rotate-0 scale-100'} ${theme === 'dark' ? 'bg-[#0a0a0c] border border-white/10' : 'bg-white border border-black/5'}`}>
+        <div className={`relative flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full shadow-[0_0_40px_rgba(139,92,246,0.3)] transition-all duration-500 hover:scale-110 active:scale-95 group ${isOpen ? 'rotate-90 scale-90' : 'rotate-0 scale-100'} ${theme === 'dark' ? 'bg-[#0a0a0c] border border-white/10' : 'bg-white border border-black/5'}`}>
           <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-violet-600 to-fuchsia-600 opacity-20 group-hover:opacity-40 blur-xl transition-opacity duration-500"></div>
           <div className="absolute inset-1 rounded-full bg-gradient-to-tr from-violet-500 to-fuchsia-500 opacity-20 blur-md"></div>
           
@@ -215,7 +310,7 @@ const ChatBot = ({ theme }) => {
             </div>
           )}
         </div>
-      </button>
+      </div>
 
       {/* Main Chat Interface */}
       {isOpen && (
