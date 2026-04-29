@@ -26,7 +26,8 @@ const PROVIDERS = [
   { id: 'mistral', name: 'Mistral' },
   { id: 'cohere', name: 'Cohere' },
   { id: 'together', name: 'Together AI' },
-  { id: 'nvidia', name: 'NVIDIA NIM' }
+  { id: 'nvidia', name: 'NVIDIA NIM' },
+  { id: 'xai', name: 'xAI (Grok)' }
 ];
 
 const PROVIDER_KEY_LINKS = {
@@ -38,7 +39,8 @@ const PROVIDER_KEY_LINKS = {
   mistral: 'https://console.mistral.ai/api-keys',
   cohere: 'https://dashboard.cohere.com/api-keys',
   together: 'https://api.together.xyz/settings/api-keys',
-  nvidia: 'https://build.nvidia.com/'
+  nvidia: 'https://build.nvidia.com/',
+  xai: 'https://console.x.ai/'
 };
 
 const DEFAULT_MODELS = [
@@ -515,6 +517,18 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
           { id: 'mistralai/mixtral-8x22b-instruct-v0.1', name: 'Mixtral 8x22B' },
           { id: 'google/gemma-2-27b-it', name: 'Gemma 2 27B' }
         ];
+      } else if (provider === 'xai') {
+        const res = await fetch('https://api.x.ai/v1/models', { headers: { 'Authorization': `Bearer ${apiKey}` } });
+        if (!res.ok) throw new Error('Invalid API Key');
+        const data = await res.json();
+        modelsList = (data.data || []).map(m => ({ id: m.id, name: m.id }));
+        if (modelsList.length === 0) {
+          modelsList = [
+            { id: 'grok-2', name: 'Grok 2' },
+            { id: 'grok-2-mini', name: 'Grok 2 Mini' },
+            { id: 'grok-beta', name: 'Grok Beta' }
+          ];
+        }
       } else {
         modelsList = [{ id: 'default', name: `Default ${provider} Model` }];
       }
@@ -1101,11 +1115,12 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
         </div>
       </div>
 
-      {/* RIGHT WORKSPACE / PREVIEW + CODE PANEL */}
+      {/* RIGHT WORKSPACE — PREVIEW + CODE AREA */}
       <div className={`${mobileTab !== 'prompt' ? 'flex' : 'hidden'} md:flex flex-col relative w-full h-full overflow-hidden z-0`}>
         
-        {/* GLOBAL WORKSPACE TOP BAR — ALWAYS VISIBLE, NEVER CONDITIONALLY REMOVED */}
-        <div className={`flex items-center justify-between px-3 md:px-4 py-3 border-b flex-shrink-0 ${theme === 'dark' ? 'border-white/[0.05] bg-[#0a0a0c]' : 'border-black/[0.05] bg-white'}`}>
+        {/* ═══ STICKY TOP BAR — ALWAYS VISIBLE, NEVER INSIDE SCROLLABLE AREA ═══ */}
+        <div className={`sticky top-0 z-40 flex items-center justify-between px-3 md:px-4 py-3 border-b flex-shrink-0 ${theme === 'dark' ? 'border-white/[0.05] bg-[#0a0a0c]' : 'border-black/[0.05] bg-white'}`}>
+          {/* View Mode Controls — ALWAYS rendered on md+ */}
           <div className="flex items-center gap-1.5 hidden md:flex">
             <button onClick={() => setActiveView('preview')} className={`p-1.5 rounded-lg transition-all ${activeView === 'preview' ? 'bg-violet-500/20 text-violet-400' : (theme === 'dark' ? 'hover:bg-white/5 text-white/50 hover:text-white' : 'hover:bg-black/5 text-black/50 hover:text-black')}`} title="Preview Only">
               <Maximize size={16} />
@@ -1117,6 +1132,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
               <Terminal size={16} />
             </button>
           </div>
+          {/* Mobile: show context label */}
           <div className="md:hidden flex font-semibold text-xs items-center gap-2">
             <Layout size={16} className="text-violet-500"/> {mobileTab === 'code' ? 'Code Editor' : 'Live Preview'}
           </div>
@@ -1130,22 +1146,21 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
             <button onClick={() => setDeviceView('desktop')} className={`p-1.5 rounded-md transition-all ${deviceView === 'desktop' ? (theme === 'dark' ? 'bg-white/10 text-white shadow-sm' : 'bg-white text-black shadow-sm') : 'text-gray-400 hover:text-gray-600 dark:hover:text-white/80'}`}><Monitor size={16} /></button>
             <button onClick={() => setDeviceView('tablet')} className={`p-1.5 rounded-md transition-all ${deviceView === 'tablet' ? (theme === 'dark' ? 'bg-white/10 text-white shadow-sm' : 'bg-white text-black shadow-sm') : 'text-gray-400 hover:text-gray-600 dark:hover:text-white/80'}`}><Tablet size={16} /></button>
             <button onClick={() => setDeviceView('mobile')} className={`p-1.5 rounded-md transition-all ${deviceView === 'mobile' ? (theme === 'dark' ? 'bg-white/10 text-white shadow-sm' : 'bg-white text-black shadow-sm') : 'text-gray-400 hover:text-gray-600 dark:hover:text-white/80'}`}><Smartphone size={16} /></button>
-            {/* Unified Profile Button */}
+            {/* Profile */}
             <button onClick={() => setShowProfile(true)} className={`ml-4 p-1.5 rounded-full overflow-hidden border-2 transition-all ${theme === 'dark' ? 'border-white/10 hover:border-violet-500' : 'border-black/10 hover:border-violet-500'}`} title="Profile & Settings">
               {user?.photoURL ? <img src={user.photoURL} alt="Profile" className="w-6 h-6 rounded-full" /> : <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-violet-600 to-fuchsia-600 text-white flex items-center justify-center text-[10px] font-bold">{user?.email?.charAt(0) || 'U'}</div>}
             </button>
-            
             {/* Tablet Code Drawer Toggle */}
-            <button onClick={() => setShowCodeDrawer(!showCodeDrawer)} className={`ml-2 p-1.5 rounded-md transition-all lg:hidden ${showCodeDrawer ? 'bg-violet-500/20 text-violet-400' : (theme === 'dark' ? 'text-white/50 hover:bg-white/5' : 'text-black/50 hover:bg-black/5')}`} title="Toggle Code Drawer">
+            <button onClick={() => setShowCodeDrawer(!showCodeDrawer)} className={`ml-2 p-1.5 rounded-md transition-all lg:hidden ${showCodeDrawer ? 'bg-violet-500/20 text-violet-400' : (theme === 'dark' ? 'text-white/50 hover:bg-white/5' : 'text-black/50 hover:bg-black/5')}`} title="Toggle Code">
               <Code size={16} />
             </button>
           </div>
         </div>
 
-        {/* CONTENT AREA — switches content based on activeView, NEVER removes the top bar */}
+        {/* ═══ CONTENT AREA — only this scrolls, top bar stays fixed above ═══ */}
         <div className="flex-1 flex flex-col relative min-h-0 overflow-hidden">
           
-          {/* PREVIEW CONTENT — visible in preview and split modes */}
+          {/* PREVIEW — visible in preview and split modes */}
           <div className={`flex flex-col relative w-full h-full transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${activeView === 'code' ? 'hidden' : ''}`}>
             <div className={`flex-1 p-0 md:p-6 lg:p-8 overflow-hidden flex items-center justify-center relative ${theme === 'dark' ? 'bg-[#050505]' : 'bg-[#f5f5f5]'}`}>
               <div className="absolute inset-0 opacity-[0.015] pointer-events-none mix-blend-overlay" style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")'}}></div>
@@ -1205,8 +1220,17 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
 
       {/* CODE PANEL — visible in code and split modes on desktop, drawer on tablet, tab on mobile */}
       <div className={`${mobileTab === 'code' ? 'flex' : 'hidden'} ${showCodeDrawer ? 'md:flex' : 'md:hidden'} ${activeView === 'preview' ? 'lg:hidden' : 'lg:flex'} flex-col h-full w-full transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${theme === 'dark' ? 'border-white/[0.05] bg-[#0a0a0c]' : 'border-black/[0.05] bg-[#fcfcfc]'} z-[60] md:fixed md:top-0 md:right-0 md:w-[400px] lg:relative lg:w-full lg:border-l md:shadow-2xl lg:shadow-none ${showCodeDrawer ? 'md:translate-x-0' : 'md:translate-x-full lg:translate-x-0'}`}>
-            <div className={`flex items-center justify-between p-2 md:p-3 border-b flex-shrink-0 ${theme === 'dark' ? 'border-white/[0.05]' : 'border-black/[0.05]'}`}>
-              <div className="flex gap-1.5">
+            <div className={`flex items-center justify-between p-2 md:p-3 border-b flex-shrink-0 sticky top-0 z-10 ${theme === 'dark' ? 'border-white/[0.05] bg-[#0a0a0c]' : 'border-black/[0.05] bg-[#fcfcfc]'}`}>
+              <div className="flex items-center gap-1.5">
+                {/* Back to Preview button — always visible escape hatch */}
+                <button 
+                  onClick={() => { setActiveView('preview'); if (window.innerWidth < 768) setMobileTab('preview'); }}
+                  className={`p-1.5 rounded-lg transition-all ${theme === 'dark' ? 'text-white/50 hover:bg-white/10 hover:text-white' : 'text-black/50 hover:bg-black/5 hover:text-black'}`}
+                  title="Back to Preview"
+                >
+                  <ChevronLeft size={16} />
+                </button>
+                <div className="w-px h-5 bg-white/10 mx-1 hidden md:block"></div>
                 {['html', 'css', 'js'].map(tab => (
                    <button 
                     key={tab} 

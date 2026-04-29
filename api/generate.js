@@ -2,7 +2,7 @@
  * /api/generate — Unified AI Generation Proxy
  * 
  * All AI API calls go through this route. Never call providers from frontend.
- * Supports: OpenRouter, OpenAI, Gemini, Anthropic, Groq, Mistral, Cohere, Together, NVIDIA
+ * Supports: OpenRouter, OpenAI, Gemini, Anthropic, Groq, Mistral, Cohere, Together, NVIDIA, xAI (Grok)
  */
 
 const MAX_MESSAGES = 25;
@@ -67,7 +67,8 @@ export default async function handler(req, res) {
       'together': process.env.TOGETHER_API_KEY || process.env.VITE_TOGETHER_API_KEY,
       'nvidia': process.env.NVIDIA_API_KEY || process.env.VITE_NVIDIA_API_KEY,
       'cohere': process.env.COHERE_API_KEY || process.env.VITE_COHERE_API_KEY,
-      'openrouter': process.env.OPENROUTER_API_KEY || process.env.VITE_OPENROUTER_API_KEY
+      'openrouter': process.env.OPENROUTER_API_KEY || process.env.VITE_OPENROUTER_API_KEY,
+      'xai': process.env.XAI_API_KEY || process.env.VITE_XAI_API_KEY
     };
 
     apiKey = envKeyMap[resolvedProvider];
@@ -92,9 +93,30 @@ export default async function handler(req, res) {
     return res.status(200).json({ success: true, data: result });
   } catch (error) {
     console.error(`API Error (${resolvedProvider}):`, error.message);
-    return res.status(500).json({ 
+    
+    // Parse specific error types for better UX
+    const errMsg = error.message || '';
+    let statusCode = 500;
+    let userError = 'Failed to generate response from AI provider.';
+    
+    if (errMsg.includes('401') || errMsg.includes('Unauthorized') || errMsg.includes('Invalid')) {
+      statusCode = 401;
+      userError = 'Invalid API key. Please check your key in Settings and try again.';
+    } else if (errMsg.includes('429') || errMsg.includes('rate') || errMsg.includes('quota')) {
+      statusCode = 429;
+      userError = 'Rate limit exceeded. Please wait a moment or switch to a different model/provider.';
+    } else if (errMsg.includes('404') || errMsg.includes('not found') || errMsg.includes('does not exist')) {
+      statusCode = 404;
+      userError = 'Model not found. This model may have been deprecated. Please select a different model.';
+    } else if (errMsg.includes('context') || errMsg.includes('token')) {
+      statusCode = 400;
+      userError = 'Message too long for this model. Try a shorter prompt or a model with more context.';
+    }
+    
+    return res.status(statusCode).json({ 
       success: false, 
-      error: error.message || 'Failed to generate response from AI provider.' 
+      error: userError,
+      detail: process.env.NODE_ENV === 'development' ? errMsg : undefined
     });
   }
 }
@@ -180,6 +202,34 @@ async function callProvider(provider, model, messages, apiKey) {
       headers['Authorization'] = `Bearer ${apiKey}`;
       body = { model: model || 'llama3-70b-8192', messages: openAiFormat(messages) };
       break;
+    case 'mistral':
+      url = 'https://api.mistral.ai/v1/chat/completions';
+      headers['Authorization'] = `Bearer ${apiKey}`;
+      body = { model: model || 'mistral-large-latest', messages: openAiFormat(messages) };
+      break;
+    case 'together':
+      url = 'https://api.together.xyz/v1/chat/completions';
+      headers['Authorization'] = `Bearer ${apiKey}`;
+      body = { model: model || 'meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo', messages: openAiFormat(messages) };
+      break;
+    case 'nvidia':
+      url = 'https://integrate.api.nvidia.com/v1/chat/completions';
+      headers['Authorization'] = `Bearer ${apiKey}`;
+      body = { model: model || 'meta/llama-3.1-405b-instruct', messages: openAiFormat(messages) };
+      break;
+    case 'cohere':
+      url = 'https://api.cohere.ai/v2/chat';
+      headers['Authorization'] = `Bearer ${apiKey}`;
+      body = { 
+        model: model || 'command-r-plus', 
+        messages: openAiFormat(messages)
+      };
+      break;
+    case 'xai':
+      url = 'https://api.x.ai/v1/chat/completions';
+      headers['Authorization'] = `Bearer ${apiKey}`;
+      body = { model: model || 'grok-2', messages: openAiFormat(messages) };
+      break;
     default:
       // Generic OpenAI-compatible fallback
       url = getGenericUrl(provider);
@@ -206,13 +256,14 @@ function getGenericUrl(p) {
   if (p === 'mistral') return 'https://api.mistral.ai/v1/chat/completions';
   if (p === 'together') return 'https://api.together.xyz/v1/chat/completions';
   if (p === 'nvidia') return 'https://integrate.api.nvidia.com/v1/chat/completions';
-  if (p === 'cohere') return 'https://api.cohere.ai/v1/chat';
+  if (p === 'cohere') return 'https://api.cohere.ai/v2/chat';
+  if (p === 'xai') return 'https://api.x.ai/v1/chat/completions';
   return 'https://openrouter.ai/api/v1/chat/completions';
 }
 
 function extractText(provider, data) {
   if (provider === 'gemini') return data.candidates?.[0]?.content?.parts?.[0]?.text || "";
   if (provider === 'anthropic') return data.content?.[0]?.text || "";
-  if (provider === 'cohere') return data.text || "";
+  if (provider === 'cohere') return data.message?.content?.[0]?.text || data.text || "";
   return data.choices?.[0]?.message?.content || "";
 }
