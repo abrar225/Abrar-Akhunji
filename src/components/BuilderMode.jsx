@@ -102,6 +102,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [generationStep, setGenerationStep] = useState(0); 
   const [previewCode, setPreviewCode] = useState({ html: '', css: '', js: '' });
+  const [previousCode, setPreviousCode] = useState(null); // Version safety: backup before generation
   const [previewUrl, setPreviewUrl] = useState('');
   
   const [deviceView, setDeviceView] = useState('desktop'); 
@@ -128,6 +129,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
 
   const messagesEndRef = useRef(null);
   const abortControllerRef = useRef(null);
+  const saveTimerRef = useRef(null); // Debounce Firestore writes
   const inputRef = useRef(null);
 
   // Scroll lock when Builder is active
@@ -307,44 +309,51 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
     }
   };
 
-  const updateCurrentProject = async (newMessages, newPreviewCode = null, title = null) => {
+  const updateCurrentProject = async (newMessages, newPreviewCode = null, title = null, lastPrompt = null) => {
     if (!currentProjectId || !currentChatId || !user) return;
     
-    // 1. Update Chat messages
-    try {
-      await updateDoc(doc(db, 'chats', currentChatId), {
-        messages: newMessages,
-        updatedAt: serverTimestamp()
-      });
-    } catch (e) {
-      console.error("Failed to update chat messages", e);
-    }
+    // Debounce: cancel any pending save and schedule new one
+    if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+    
+    saveTimerRef.current = setTimeout(async () => {
+      // 1. Update Chat messages
+      try {
+        await updateDoc(doc(db, 'chats', currentChatId), {
+          messages: newMessages,
+          updatedAt: serverTimestamp()
+        });
+      } catch (e) {
+        console.error("Failed to update chat messages", e);
+      }
 
-    // 2. Update Project metadata & code (save both structured + individual fields)
-    const projUpdate = { updatedAt: serverTimestamp() };
-    if (newPreviewCode) {
-      projUpdate.currentCode = newPreviewCode;
-      projUpdate.currentHTML = newPreviewCode.html || '';
-      projUpdate.currentCSS = newPreviewCode.css || '';
-      projUpdate.currentJS = newPreviewCode.js || '';
-      // Also persist to localStorage for instant recovery on refresh
-      localStorage.setItem('fixo_last_code', JSON.stringify(newPreviewCode));
-    }
-    if (title && title !== "New Generation" && title !== "New Project") projUpdate.title = title;
+      // 2. Update Project metadata & code (save both structured + individual fields)
+      const projUpdate = { updatedAt: serverTimestamp() };
+      if (newPreviewCode) {
+        projUpdate.currentCode = newPreviewCode;
+        projUpdate.currentHTML = newPreviewCode.html || '';
+        projUpdate.currentCSS = newPreviewCode.css || '';
+        projUpdate.currentJS = newPreviewCode.js || '';
+        // Also persist to localStorage for instant recovery on refresh
+        localStorage.setItem('fixo_last_code', JSON.stringify(newPreviewCode));
+      }
+      if (title && title !== "New Generation" && title !== "New Project") projUpdate.title = title;
+      if (lastPrompt) projUpdate.lastPrompt = lastPrompt;
 
-    try {
-      await updateDoc(doc(db, 'projects', currentProjectId), projUpdate);
-      setProjects(prev => prev.map(p => {
-        if(p.id === currentProjectId) return { ...p, ...projUpdate, updatedAt: { toMillis: () => Date.now() } };
-        return p;
-      }).sort((a, b) => {
-        const timeA = a.updatedAt?.toMillis ? a.updatedAt.toMillis() : 0;
-        const timeB = b.updatedAt?.toMillis ? b.updatedAt.toMillis() : 0;
-        return timeB - timeA;
-      }));
-    } catch (e) {
-      console.error("Failed to update project", e);
-    }
+      try {
+        await updateDoc(doc(db, 'projects', currentProjectId), projUpdate);
+        // Optimistic UI update — don't wait for Firestore round-trip
+        setProjects(prev => prev.map(p => {
+          if(p.id === currentProjectId) return { ...p, ...projUpdate, updatedAt: { toMillis: () => Date.now() } };
+          return p;
+        }).sort((a, b) => {
+          const timeA = a.updatedAt?.toMillis ? a.updatedAt.toMillis() : 0;
+          const timeB = b.updatedAt?.toMillis ? b.updatedAt.toMillis() : 0;
+          return timeB - timeA;
+        }));
+      } catch (e) {
+        console.error("Failed to update project", e);
+      }
+    }, 500); // 500ms debounce to prevent duplicate saves
   };
 
   const handleLogin = async () => {
@@ -588,6 +597,11 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
     setIsLoading(true);
     setHasGenerated(false);
     
+    // Version safety: backup current working code before generation
+    if (previewCode.html || previewCode.css || previewCode.js) {
+      setPreviousCode({ ...previewCode });
+    }
+    
     abortControllerRef.current = new AbortController();
     const signal = abortControllerRef.current.signal;
 
@@ -654,7 +668,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
         }
 
         const chatTitle = textToSend.length > 20 ? textToSend.substring(0, 20) + '...' : textToSend;
-        updateCurrentProject(finalMsgs, newCode || previewCode, messages.length <= 1 ? chatTitle : null);
+        updateCurrentProject(finalMsgs, newCode || previewCode, messages.length <= 1 ? chatTitle : null, textToSend);
 
         // ── Auto-summarize long conversations ──
         if (currentChatId && needsSummarization(finalMsgs, chatSummary)) {
@@ -685,6 +699,11 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
     } catch (error) {
       if (error.name !== 'AbortError') {
         console.error("Generation failed:", error);
+        // Version safety: restore previous working code if generation failed
+        if (previousCode) {
+          setPreviewCode(previousCode);
+          setHasGenerated(true);
+        }
         const errMsgs = [...newMsgs, { role: 'ai', text: `Generation Error: ${error.message}. Try switching to another model or check your provider settings.`, isError: true }];
         setMessages(errMsgs);
         updateCurrentProject(errMsgs);
