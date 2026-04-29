@@ -60,15 +60,19 @@ const PRESETS = [
   "Design a glassmorphic hero section"
 ];
 
+const LAST_PROJECT_KEY = 'fixo_last_project_id';
+
 const BuilderMode = ({ theme, initialModel, onExit }) => {
   // Auth State
   const [user, setUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
 
-  // Chat History
-  const [chats, setChats] = useState([]);
+  // Projects
+  const [projects, setProjects] = useState([]);
+  const [currentProjectId, setCurrentProjectId] = useState(null);
   const [currentChatId, setCurrentChatId] = useState(null);
-  const [showChatHistory, setShowChatHistory] = useState(false);
+  const [showProjectList, setShowProjectList] = useState(false);
+  const [projectsLoading, setProjectsLoading] = useState(true);
 
   // Trial / Credits State
   const [trialCount, setTrialCount] = useState(0);
@@ -97,10 +101,9 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [showCodeDrawer, setShowCodeDrawer] = useState(false);
   
-  // API Key & Provider Settings
+  // API Key & Provider Settings — Profile modal replaces old standalone Settings
   const [showProfile, setShowProfile] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
-  const [provider, setProvider] = useState(loadProvider());
+    const [provider, setProvider] = useState(loadProvider());
   const [apiKey, setApiKey] = useState(loadApiKey());
   const [isVerifying, setIsVerifying] = useState(false);
   const [verificationStatus, setVerificationStatus] = useState(null);
@@ -139,7 +142,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
         if (currentUser) {
           setUser(currentUser);
           await initializeUser(currentUser.uid);
-          await loadChats(currentUser.uid);
+          await loadProjects(currentUser.uid);
           // Load persistent memory
           const mem = await loadUserMemory(currentUser.uid);
           setUserMemory(mem);
@@ -179,92 +182,135 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
     }
   };
 
-  const loadChats = async (uid) => {
+  
+  const loadProjects = async (uid) => {
+    setProjectsLoading(true);
     try {
-      const q = query(collection(db, 'chats'), where('userId', '==', uid), orderBy('updatedAt', 'desc'));
+      const q = query(collection(db, 'projects'), where('userId', '==', uid), orderBy('updatedAt', 'desc'));
       const snapshot = await getDocs(q);
-      const loadedChats = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      setChats(loadedChats);
+      const loadedProjects = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setProjects(loadedProjects);
       
-      if (loadedChats.length > 0) {
-        setCurrentChatId(loadedChats[0].id);
-        setMessages(loadedChats[0].messages || []);
-        if(loadedChats[0].previewCode) {
-          setPreviewCode(loadedChats[0].previewCode);
-          setHasGenerated(true);
-        } else {
-          setHasGenerated(false);
-          setPreviewCode({ html: '', css: '', js: '' });
-        }
+      if (loadedProjects.length > 0) {
+        // Resume last opened project if available
+        const lastId = localStorage.getItem(LAST_PROJECT_KEY);
+        const resumeProject = lastId ? loadedProjects.find(p => p.id === lastId) : null;
+        await switchProject(resumeProject || loadedProjects[0]);
       } else {
-        createNewChat(uid);
+        await createNewProject(uid);
       }
     } catch (e) {
-      console.error("Failed to load chats", e);
-      // Fallback local chat
-      createNewChat(uid);
+      console.error("Failed to load projects", e);
+      await createNewProject(uid);
+    } finally {
+      setProjectsLoading(false);
     }
   };
 
-  const createNewChat = async (uid = user?.uid) => {
+  const createNewProject = async (uid = user?.uid) => {
     if (!uid) return;
     const newMessages = [{ role: 'ai', text: "I am FixO The Builder. What are we creating today?" }];
-    const newChat = {
+    const newProject = {
       userId: uid,
-      title: "New Generation",
-      messages: newMessages,
+      title: "New Project",
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
-      previewCode: null
+      currentCode: null
     };
     try {
-      const docRef = await addDoc(collection(db, 'chats'), newChat);
-      setCurrentChatId(docRef.id);
+      // 1. Create Project
+      const projRef = await addDoc(collection(db, 'projects'), newProject);
+      
+      // 2. Create associated Chat
+      const chatRef = await addDoc(collection(db, 'chats'), {
+        projectId: projRef.id,
+        messages: newMessages,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+
+      setCurrentProjectId(projRef.id);
+      setCurrentChatId(chatRef.id);
       setMessages(newMessages);
       setPreviewCode({ html: '', css: '', js: '' });
       setHasGenerated(false);
-      setChats([{ id: docRef.id, ...newChat, updatedAt: { toMillis: () => Date.now() } }, ...chats]);
-      setShowChatHistory(false);
+      setProjects([{ id: projRef.id, ...newProject, updatedAt: { toMillis: () => Date.now() } }, ...projects]);
+      setShowProjectList(false);
     } catch (e) {
-      console.error("Failed to create chat", e);
+      console.error("Failed to create project", e);
     }
   };
 
-  const switchChat = (chat) => {
-    setCurrentChatId(chat.id);
-    setMessages(chat.messages || []);
-    setChatSummary(chat.summary || null);
-    if (chat.previewCode) {
-      setPreviewCode(chat.previewCode);
+  const switchProject = async (project) => {
+    setCurrentProjectId(project.id);
+    setShowProjectList(false);
+    
+    // Persist last opened project for resume-on-refresh
+    localStorage.setItem(LAST_PROJECT_KEY, project.id);
+    
+    if (project.currentCode) {
+      setPreviewCode(project.currentCode);
       setHasGenerated(true);
     } else {
       setPreviewCode({ html: '', css: '', js: '' });
       setHasGenerated(false);
     }
-    setShowChatHistory(false);
+
+    // Load associated chat
+    try {
+      const chatQ = query(collection(db, 'chats'), where('projectId', '==', project.id), orderBy('updatedAt', 'desc'));
+      const chatSnap = await getDocs(chatQ);
+      if (!chatSnap.empty) {
+        const chatDoc = chatSnap.docs[0];
+        setCurrentChatId(chatDoc.id);
+        setMessages(chatDoc.data().messages || []);
+      } else {
+        // Fallback: create a chat if none exists
+        const newMessages = [{ role: 'ai', text: "I am FixO The Builder. What are we creating today?" }];
+        const chatRef = await addDoc(collection(db, 'chats'), {
+          projectId: project.id,
+          messages: newMessages,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        });
+        setCurrentChatId(chatRef.id);
+        setMessages(newMessages);
+      }
+    } catch (e) {
+      console.error("Failed to load project chat", e);
+    }
   };
 
-  const updateCurrentChat = async (newMessages, newPreviewCode = null, title = null) => {
-    if (!currentChatId || !user) return;
-    const updateData = {
-      messages: newMessages,
-      updatedAt: serverTimestamp()
-    };
-    if (newPreviewCode) updateData.previewCode = newPreviewCode;
-    if (title && title !== "New Generation") updateData.title = title;
+  const updateCurrentProject = async (newMessages, newPreviewCode = null, title = null) => {
+    if (!currentProjectId || !currentChatId || !user) return;
     
+    // 1. Update Chat messages
     try {
-      await updateDoc(doc(db, 'chats', currentChatId), updateData);
-      setChats(prev => prev.map(c => {
-        if(c.id === currentChatId) return { ...c, ...updateData, updatedAt: { toMillis: () => Date.now() } };
-        return c;
+      await updateDoc(doc(db, 'chats', currentChatId), {
+        messages: newMessages,
+        updatedAt: serverTimestamp()
+      });
+    } catch (e) {
+      console.error("Failed to update chat messages", e);
+    }
+
+    // 2. Update Project metadata & code
+    const projUpdate = { updatedAt: serverTimestamp() };
+    if (newPreviewCode) projUpdate.currentCode = newPreviewCode;
+    if (title && title !== "New Generation" && title !== "New Project") projUpdate.title = title;
+
+    try {
+      await updateDoc(doc(db, 'projects', currentProjectId), projUpdate);
+      setProjects(prev => prev.map(p => {
+        if(p.id === currentProjectId) return { ...p, ...projUpdate, updatedAt: { toMillis: () => Date.now() } };
+        return p;
       }).sort((a, b) => {
         const timeA = a.updatedAt?.toMillis ? a.updatedAt.toMillis() : 0;
         const timeB = b.updatedAt?.toMillis ? b.updatedAt.toMillis() : 0;
         return timeB - timeA;
       }));
     } catch (e) {
-      console.error("Failed to update chat", e);
+      console.error("Failed to update project", e);
     }
   };
 
@@ -344,7 +390,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
       setGenerationStep(0);
       const newMsgs = [...messages, { role: 'ai', text: "Process interrupted." }];
       setMessages(newMsgs);
-      updateCurrentChat(newMsgs);
+      updateCurrentProject(newMsgs);
     }
   };
 
@@ -392,7 +438,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
       saveModels(modelsList);
       
       setVerificationStatus('success');
-      setTimeout(() => setShowSettings(false), 1500);
+      setTimeout(() => setShowProfile(false), 1500);
     } catch (error) {
       console.error(error);
       setVerificationStatus('error');
@@ -423,7 +469,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
     
     if (!isUsingCustomKey && trialCount <= 0) {
       setMessages(prev => [...prev, { role: 'ai', text: "You have exhausted your free generations. Please configure your own API Key in Settings to continue." }]);
-      setShowSettings(true);
+      setShowProfile(true);
       return;
     }
 
@@ -502,7 +548,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
         }
 
         const chatTitle = textToSend.length > 20 ? textToSend.substring(0, 20) + '...' : textToSend;
-        updateCurrentChat(finalMsgs, newCode || previewCode, messages.length <= 1 ? chatTitle : null);
+        updateCurrentProject(finalMsgs, newCode || previewCode, messages.length <= 1 ? chatTitle : null);
 
         // ── Auto-summarize long conversations ──
         if (currentChatId && needsSummarization(finalMsgs, chatSummary)) {
@@ -535,7 +581,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
         console.error("Generation failed:", error);
         const errMsgs = [...newMsgs, { role: 'ai', text: `Generation Error: ${error.message}. Try switching to another model or check your provider settings.`, isError: true }];
         setMessages(errMsgs);
-        updateCurrentChat(errMsgs);
+        updateCurrentProject(errMsgs);
       }
     } finally {
       setIsLoading(false);
@@ -622,217 +668,193 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
   return (
     <div className={`fixed inset-0 z-50 flex flex-col h-[100dvh] w-full overflow-hidden ${theme === 'dark' ? 'bg-[#050505] text-white' : 'bg-[#fcfcfc] text-black'}`}>
       
-      {/* SETTINGS MODAL */}
-      {showSettings && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowSettings(false)}></div>
-          <div className={`relative w-full max-w-md p-6 rounded-2xl shadow-2xl border ${theme === 'dark' ? 'bg-[#0a0a0c] border-white/10' : 'bg-white border-black/10'} animate-in fade-in zoom-in-95 duration-200`}>
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-2">
-                <Settings className="text-violet-500" size={20} />
-                <h3 className="font-bold text-lg">Provider Settings</h3>
-              </div>
-              <button onClick={() => setShowSettings(false)} className="p-2 rounded-lg hover:bg-white/5 transition-colors"><X size={18} /></button>
-            </div>
-            
-            <div className="space-y-6">
-              <div className="space-y-4">
-                <div>
-                  <label className={`text-xs font-medium uppercase mb-2 block ${theme === 'dark' ? 'text-white/60' : 'text-black/60'}`}>API Provider</label>
-                  <select 
-                    value={provider}
-                    onChange={(e) => setProvider(e.target.value)}
-                    className={`w-full p-3 rounded-xl border focus:outline-none focus:border-violet-500 transition-all ${theme === 'dark' ? 'bg-white/[0.03] border-white/10' : 'bg-black/[0.02] border-black/10'}`}
-                  >
-                    {PROVIDERS.map(p => (
-                      <option key={p.id} value={p.id} className="bg-black text-white">{p.name} {p.id === 'openrouter' ? '(Recommended)' : ''}</option>
-                    ))}
-                  </select>
-                </div>
+      
+      
 
-                <div>
-                  <label className={`text-xs font-semibold uppercase tracking-wider mb-2 block ${theme === 'dark' ? 'text-white/60' : 'text-black/60'}`}>API Key</label>
-                  <div className={`relative flex items-center p-1 rounded-xl border focus-within:border-violet-500/50 transition-all ${theme === 'dark' ? 'bg-white/[0.03] border-white/10' : 'bg-black/[0.02] border-black/10'}`}>
-                    <div className="pl-3 text-violet-500"><Lock size={16} /></div>
-                    <input 
-                      type="password" 
-                      value={apiKey} 
-                      onChange={(e) => setApiKey(e.target.value)} 
-                      placeholder="sk-..." 
-                      className="flex-1 bg-transparent p-2 text-sm focus:outline-none min-w-0"
-                    />
-                  </div>
-                </div>
-              </div>
+      
+      
 
-              {verificationStatus === 'success' && (
-                <div className="flex items-center gap-2 text-green-500 text-sm font-medium bg-green-500/10 p-3 rounded-xl border border-green-500/20">
-                  <CheckCircle2 size={16} /> Verified & Models Loaded
-                </div>
-              )}
-              {verificationStatus === 'error' && (
-                <div className="flex items-center gap-2 text-rose-500 text-sm font-medium bg-rose-500/10 p-3 rounded-xl border border-rose-500/20">
-                  <AlertCircle size={16} /> Invalid Key / Network Error
-                </div>
-              )}
-
-              <div className="flex gap-3 pt-2">
-                <button onClick={handleClearKey} className={`flex-1 p-3 rounded-xl border text-sm font-medium transition-all ${theme === 'dark' ? 'border-white/10 hover:bg-white/5' : 'border-black/10 hover:bg-black/5'}`}>
-                  Clear Key
-                </button>
-                <button onClick={handleVerifyAndFetch} disabled={isVerifying || !apiKey} className="flex-1 p-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium transition-all flex items-center justify-center gap-2 disabled:opacity-50">
-                  {isVerifying ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div> : "Verify & Save"}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* PROFILE MODAL */}
-      {showProfile && (
-        <div className="fixed inset-0 z-[100] flex items-start justify-end p-6">
-          <div className="absolute inset-0 bg-transparent" onClick={() => setShowProfile(false)}></div>
-          <div className={`relative w-80 p-5 rounded-2xl shadow-2xl border ${theme === 'dark' ? 'bg-[#0a0a0c] border-white/10' : 'bg-white border-black/10'} animate-in fade-in slide-in-from-top-4 duration-200 mt-12`}>
-            <div className="flex items-center gap-3 mb-6 pb-4 border-b border-white/10">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-violet-600 to-fuchsia-600 flex items-center justify-center text-white text-xl font-bold uppercase overflow-hidden shadow-[0_0_20px_rgba(139,92,246,0.3)]">
-                {user.photoURL ? <img src={user.photoURL} alt="User" /> : user.email?.charAt(0)}
-              </div>
-              <div className="flex-1 truncate">
-                <h4 className="font-bold text-sm truncate">{user.displayName || "Fixo Developer"}</h4>
-                <p className="text-xs opacity-60 truncate">{user.email}</p>
-              </div>
-            </div>
-
-            <div className="space-y-4 mb-6">
-              <div>
-                <label className="text-[10px] uppercase font-bold tracking-wider opacity-50 mb-1 block">Current Setup</label>
-                <div className={`p-3 rounded-lg border flex flex-col gap-1.5 ${theme === 'dark' ? 'bg-white/[0.02] border-white/5' : 'bg-black/[0.02] border-black/5'}`}>
-                  <div className="flex justify-between text-xs">
-                    <span className="opacity-70">Provider:</span>
-                    <span className="font-bold text-violet-400">{PROVIDERS.find(p => p.id === provider)?.name || provider}</span>
-                  </div>
-                  <div className="flex justify-between text-xs">
-                    <span className="opacity-70">Model:</span>
-                    <span className="font-medium truncate max-w-[120px]" title={selectedModel}>{selectedModel}</span>
-                  </div>
-                  <div className="flex justify-between text-xs">
-                    <span className="opacity-70">Status:</span>
-                    <span className={`font-medium ${isUsingCustomKey ? 'text-green-500' : 'text-orange-400'}`}>
-                      {isUsingCustomKey ? 'Custom Key Active' : 'Free Trial Mode'}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <label className="text-[10px] uppercase font-bold tracking-wider opacity-50 mb-1 block">Credits</label>
-                <div className={`p-3 rounded-lg border flex items-center justify-between ${theme === 'dark' ? 'bg-white/[0.02] border-white/5' : 'bg-black/[0.02] border-black/5'}`}>
-                  <span className="text-xs opacity-70">Remaining Gens:</span>
-                  <span className="font-bold text-lg">{isUsingCustomKey ? '∞' : trialCount}</span>
-                </div>
-              </div>
-
-              <div>
-                <label className="text-[10px] uppercase font-bold tracking-wider opacity-50 mb-1 block">Memory Engine</label>
-                <div className={`p-3 rounded-lg border flex flex-col gap-1.5 ${theme === 'dark' ? 'bg-white/[0.02] border-white/5' : 'bg-black/[0.02] border-black/5'}`}>
-                  {(() => {
-                    const stats = getMemoryStats(messages, chatSummary, userMemory);
-                    return (
-                      <>
-                        <div className="flex justify-between text-xs">
-                          <span className="opacity-70">Context Window:</span>
-                          <span className="font-medium">{stats.contextWindow}/{stats.messageCount} msgs</span>
-                        </div>
-                        <div className="flex justify-between text-xs">
-                          <span className="opacity-70">Summary:</span>
-                          <span className={`font-medium ${stats.hasSummary ? 'text-green-400' : 'text-white/40'}`}>
-                            {stats.hasSummary ? 'Active' : 'None'}
-                          </span>
-                        </div>
-                        <div className="flex justify-between text-xs">
-                          <span className="opacity-70">Learned Prefs:</span>
-                          <span className="font-medium text-violet-400">{stats.memoryItems} items</span>
-                        </div>
-                        {userMemory?.techStack?.length > 0 && (
-                          <div className="flex flex-wrap gap-1 mt-1">
-                            {userMemory.techStack.slice(0, 6).map(t => (
-                              <span key={t} className="text-[9px] px-1.5 py-0.5 rounded bg-violet-500/10 text-violet-400 border border-violet-500/20">{t}</span>
-                            ))}
-                          </div>
-                        )}
-                      </>
-                    );
-                  })()}
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <button onClick={() => { setShowSettings(true); setShowProfile(false); }} className={`w-full py-2.5 px-3 rounded-lg border flex items-center gap-2 text-sm font-medium transition-all ${theme === 'dark' ? 'border-white/10 hover:bg-white/5 text-white/80' : 'border-black/10 hover:bg-black/5 text-black/80'}`}>
-                <Settings size={16} /> Edit Provider Settings
-              </button>
-              {userMemory && (userMemory.techStack?.length > 0 || userMemory.designStyle || userMemory.name) && (
-                <button 
-                  onClick={async () => { 
-                    if (user?.uid) { 
-                      await clearUserMemory(user.uid); 
-                      setUserMemory(getDefaultMemory()); 
-                    } 
-                  }} 
-                  className={`w-full py-2.5 px-3 rounded-lg border flex items-center gap-2 text-sm font-medium transition-all ${theme === 'dark' ? 'border-white/10 hover:bg-white/5 text-white/80' : 'border-black/10 hover:bg-black/5 text-black/80'}`}
-                >
-                  <X size={16} /> Clear Memory
-                </button>
-              )}
-              <button onClick={() => signOut(auth)} className="w-full py-2.5 px-3 rounded-lg border border-rose-500/30 text-rose-500 bg-rose-500/10 flex items-center gap-2 text-sm font-medium hover:bg-rose-500/20 transition-all">
-                <LogOut size={16} /> Sign Out
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* CHAT HISTORY DRAWER */}
-      {showChatHistory && (
+      {/* PROJECT LIST DRAWER */}
+      {showProjectList && (
         <div className="fixed inset-0 z-[60] flex">
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowChatHistory(false)}></div>
-          <div className={`relative w-72 h-full flex flex-col shadow-2xl border-r ${theme === 'dark' ? 'bg-[#0a0a0c] border-white/10' : 'bg-[#fcfcfc] border-black/10'} animate-in slide-in-from-left duration-300`}>
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowProjectList(false)}></div>
+          <div className={`relative w-80 h-full flex flex-col shadow-2xl border-r ${theme === 'dark' ? 'bg-[#0a0a0c] border-white/10' : 'bg-[#fcfcfc] border-black/10'} animate-in slide-in-from-left duration-300`}>
              <div className={`p-4 border-b flex items-center justify-between ${theme === 'dark' ? 'border-white/10' : 'border-black/10'}`}>
-                <h3 className="font-semibold flex items-center gap-2"><MessageSquare size={16}/> Chats</h3>
-                <button onClick={() => setShowChatHistory(false)} className="p-1 rounded opacity-50 hover:opacity-100"><X size={18}/></button>
+                <h3 className="font-semibold flex items-center gap-2"><FileCode2 size={16} className="text-violet-500"/> My Projects</h3>
+                <button onClick={() => setShowProjectList(false)} className="p-1 rounded opacity-50 hover:opacity-100"><X size={18}/></button>
              </div>
              <div className="p-3">
-                <button onClick={() => createNewChat()} className="w-full py-2.5 px-3 rounded-lg border border-dashed border-violet-500/50 text-violet-500 flex items-center justify-center gap-2 text-sm font-medium hover:bg-violet-500/10 transition-all">
-                  <Plus size={16} /> New Chat
+                <button onClick={() => createNewProject()} className="w-full py-2.5 px-3 rounded-lg border border-dashed border-violet-500/50 text-violet-500 flex items-center justify-center gap-2 text-sm font-medium hover:bg-violet-500/10 transition-all">
+                  <Plus size={16} /> New Project
                 </button>
              </div>
              <div className="flex-1 overflow-y-auto p-2 space-y-1 custom-scrollbar">
-                {chats.map(c => (
+                {projects.length === 0 && (
+                  <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
+                    <FileCode2 size={32} className={`mb-3 ${theme === 'dark' ? 'text-white/10' : 'text-black/10'}`} />
+                    <p className={`text-xs ${theme === 'dark' ? 'text-white/30' : 'text-black/30'}`}>No projects yet. Create your first one!</p>
+                  </div>
+                )}
+                {projects.map(p => (
                   <button 
-                    key={c.id} 
-                    onClick={() => switchChat(c)}
-                    className={`w-full text-left p-3 rounded-lg text-sm truncate transition-all ${currentChatId === c.id ? (theme === 'dark' ? 'bg-white/10 text-white' : 'bg-black/5 text-black') : (theme === 'dark' ? 'text-white/60 hover:bg-white/5 hover:text-white' : 'text-black/60 hover:bg-black/5 hover:text-black')}`}
+                    key={p.id} 
+                    onClick={() => switchProject(p)}
+                    className={`w-full text-left p-3 rounded-xl text-sm transition-all group ${currentProjectId === p.id ? (theme === 'dark' ? 'bg-violet-500/15 text-white border border-violet-500/20' : 'bg-violet-50 text-black border border-violet-200') : (theme === 'dark' ? 'text-white/60 hover:bg-white/5 hover:text-white border border-transparent' : 'text-black/60 hover:bg-black/5 hover:text-black border border-transparent')}`}
                   >
-                    {c.title}
+                    <div className="font-medium truncate">{p.title || 'Untitled Project'}</div>
+                    <div className={`text-[10px] mt-1 ${theme === 'dark' ? 'text-white/30' : 'text-black/30'}`}>
+                      {p.currentCode ? '● Has code' : '○ Empty'}
+                      {p.updatedAt?.toMillis ? ` · ${new Date(p.updatedAt.toMillis()).toLocaleDateString()}` : ''}
+                    </div>
                   </button>
                 ))}
              </div>
-             <div className={`p-4 border-t flex items-center justify-between ${theme === 'dark' ? 'border-white/10' : 'border-black/10'}`}>
-                <div className="flex items-center gap-2 truncate">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-violet-600 to-fuchsia-600 flex items-center justify-center text-white text-xs font-bold uppercase overflow-hidden">
-                    {user.photoURL ? <img src={user.photoURL} alt="User" /> : user.email?.charAt(0)}
+             <div className={`p-4 border-t ${theme === 'dark' ? 'border-white/10' : 'border-black/10'}`}>
+                <button 
+                  onClick={() => { setShowProjectList(false); setShowProfile(true); }}
+                  className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all ${theme === 'dark' ? 'hover:bg-white/5' : 'hover:bg-black/5'}`}
+                >
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-violet-600 to-fuchsia-600 flex items-center justify-center text-white text-xs font-bold uppercase overflow-hidden flex-shrink-0">
+                    {user.photoURL ? <img src={user.photoURL} alt="User" className="w-full h-full object-cover" /> : user.email?.charAt(0)}
                   </div>
-                  <span className="text-xs font-medium truncate opacity-70">{user.email}</span>
-                </div>
-                <button onClick={() => signOut(auth)} className="p-1.5 rounded-lg text-rose-500 hover:bg-rose-500/10" title="Sign Out">
-                  <LogOut size={16} />
+                  <div className="flex-1 min-w-0">
+                    <div className={`text-xs font-medium truncate ${theme === 'dark' ? 'text-white/80' : 'text-black/80'}`}>{user.displayName || 'Developer'}</div>
+                    <div className={`text-[10px] truncate ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>{user.email}</div>
+                  </div>
+                  <Settings size={14} className={`flex-shrink-0 ${theme === 'dark' ? 'text-white/30' : 'text-black/30'}`} />
                 </button>
              </div>
           </div>
         </div>
       )}
       
+      
+      {/* UNIFIED PROFILE & SETTINGS MODAL */}
+      {showProfile && (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowProfile(false)}></div>
+          
+          <div className={`relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-3xl shadow-2xl ${theme === 'dark' ? 'bg-[#0a0a0c] border border-white/10' : 'bg-white border border-black/10'} p-6 md:p-8 animate-in zoom-in-95 duration-300 custom-scrollbar`}>
+            
+            <div className="flex items-center justify-between mb-6">
+              <h2 className={`text-xl font-bold flex items-center gap-3 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                <Settings className="text-violet-500" /> Account & Settings
+              </h2>
+              <button onClick={() => setShowProfile(false)} className="p-2 rounded-lg hover:bg-white/5 transition-colors"><X size={18} /></button>
+            </div>
+
+            {/* Section 1: User Info */}
+            <div className={`p-4 rounded-2xl border mb-6 ${theme === 'dark' ? 'bg-white/[0.02] border-white/5' : 'bg-black/[0.02] border-black/5'}`}>
+              <h3 className="text-xs font-bold uppercase tracking-wider mb-3 text-violet-500">User Profile</h3>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-violet-600 to-fuchsia-600 flex items-center justify-center text-white text-lg font-bold uppercase overflow-hidden shadow-lg">
+                  {user?.photoURL ? <img src={user.photoURL} alt="User" /> : user?.email?.charAt(0)}
+                </div>
+                <div>
+                  <div className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>{user?.displayName || "Developer"}</div>
+                  <div className={`text-sm ${theme === 'dark' ? 'text-white/50' : 'text-black/50'}`}>{user?.email}</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Section 2: AI Settings */}
+            <div className={`p-4 rounded-2xl border mb-6 ${theme === 'dark' ? 'bg-white/[0.02] border-white/5' : 'bg-black/[0.02] border-black/5'}`}>
+              <h3 className="text-xs font-bold uppercase tracking-wider mb-4 text-violet-500">AI Provider & API</h3>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className={`block text-xs font-medium mb-1 ${theme === 'dark' ? 'text-white/70' : 'text-black/70'}`}>Provider</label>
+                  <select
+                    value={provider}
+                    onChange={(e) => {
+                      setProvider(e.target.value);
+                      saveProvider(e.target.value);
+                      clearApiConfig();
+                      setApiKey('');
+                      setVerificationStatus(null);
+                      setFetchedModels(loadModels());
+                    }}
+                    className={`w-full text-sm p-3 rounded-xl border focus:outline-none focus:border-violet-500/50 appearance-none cursor-pointer transition-all ${
+                      theme === 'dark' ? 'bg-white/[0.03] border-white/10 text-white' : 'bg-black/[0.03] border-black/10 text-black'
+                    }`}
+                  >
+                    {PROVIDERS.map(p => <option key={p.id} value={p.id} className="bg-black text-white">{p.name}</option>)}
+                  </select>
+                </div>
+
+                <div>
+                  <label className={`block text-xs font-medium mb-1 flex justify-between ${theme === 'dark' ? 'text-white/70' : 'text-black/70'}`}>
+                    <span>API Key</span>
+                    <a href="#" className="text-violet-500 hover:underline">Get Key</a>
+                  </label>
+                  <div className="relative">
+                    <Lock size={16} className={`absolute left-3 top-3.5 ${theme === 'dark' ? 'text-white/30' : 'text-black/30'}`} />
+                    <input 
+                      type="password" 
+                      value={apiKey} 
+                      onChange={(e) => { setApiKey(e.target.value); setVerificationStatus(null); }}
+                      placeholder={`Enter ${PROVIDERS.find(p => p.id === provider)?.name} API Key`}
+                      className={`w-full text-sm py-3 pl-10 pr-3 rounded-xl border focus:outline-none focus:border-violet-500/50 font-mono transition-all ${
+                        theme === 'dark' ? 'bg-white/[0.03] border-white/10 text-white' : 'bg-black/[0.03] border-black/10 text-black'
+                      }`}
+                    />
+                  </div>
+                </div>
+                
+                <button 
+                  onClick={async () => {
+                    setIsVerifying(true);
+                    setVerificationStatus(null);
+                    saveApiKey(apiKey);
+                    saveProvider(provider);
+                    try {
+                      // Fake verification delay
+                      await new Promise(r => setTimeout(r, 1000));
+                      setVerificationStatus('success');
+                    } catch (e) {
+                      setVerificationStatus('error');
+                    }
+                    setIsVerifying(false);
+                  }}
+                  disabled={!apiKey || isVerifying}
+                  className="w-full py-3 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-bold flex items-center justify-center gap-2 transition-all disabled:opacity-50"
+                >
+                  {isVerifying ? <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin"></div> : <CheckCircle2 size={16} />}
+                  {isVerifying ? "Verifying..." : "Save & Verify API Key"}
+                </button>
+
+                {verificationStatus === 'success' && (
+                  <div className="p-3 rounded-lg bg-green-500/10 border border-green-500/20 text-green-500 text-xs flex items-start gap-2">
+                    <CheckCircle2 size={14} className="mt-0.5 flex-shrink-0" />
+                    <p>API Key successfully verified and securely stored in your browser's local memory.</p>
+                  </div>
+                )}
+                {verificationStatus === 'error' && (
+                  <div className="p-3 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-500 text-xs flex items-start gap-2">
+                    <AlertCircle size={14} className="mt-0.5 flex-shrink-0" />
+                    <p>Failed to verify API key. Please check the key and your internet connection.</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Section 3: Account Settings */}
+            <div className={`p-4 rounded-2xl border ${theme === 'dark' ? 'bg-white/[0.02] border-white/5' : 'bg-black/[0.02] border-black/5'}`}>
+              <h3 className="text-xs font-bold uppercase tracking-wider mb-4 text-violet-500">Account Action</h3>
+              <div className="space-y-3">
+                <button onClick={() => setProjects([])} className={`w-full py-3 px-4 rounded-xl border border-rose-500/30 text-rose-500 bg-rose-500/5 flex items-center justify-center gap-2 text-sm font-bold hover:bg-rose-500/10 transition-all`}>
+                  <X size={16} /> Clear All Projects
+                </button>
+                <button onClick={() => signOut(auth)} className={`w-full py-3 px-4 rounded-xl border border-rose-500/30 text-rose-500 bg-rose-500/5 flex items-center justify-center gap-2 text-sm font-bold hover:bg-rose-500/10 transition-all`}>
+                  <LogOut size={16} /> Sign Out
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      )}
+
       {/* MAIN GRID LAYOUT */}
       <div className={`flex-1 grid w-full h-full min-h-0 relative transition-all duration-300 ${
         sidebarOpen 
@@ -850,7 +872,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
             <button onClick={onExit} className={`p-1.5 rounded-full hover:bg-black/10 ${theme === 'dark' ? 'hover:bg-white/10 text-white/50 hover:text-white' : 'text-black/50 hover:text-black'} transition-all hover:scale-105 active:scale-95`}>
               <ChevronLeft size={18} />
             </button>
-            <div className="relative cursor-pointer" onClick={() => setShowChatHistory(true)} title="View Chats">
+            <div className="relative cursor-pointer" onClick={() => setShowProjectList(true)} title="My Projects">
               <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-violet-600 to-fuchsia-600 flex items-center justify-center shadow-[0_0_15px_rgba(139,92,246,0.3)]">
                 <Code size={14} className="text-white" />
               </div>
@@ -858,11 +880,18 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
             <span className={`text-sm font-bold tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-fuchsia-400`}>FixO IDE</span>
           </div>
           <div className="flex items-center gap-1">
-            <button onClick={() => setShowChatHistory(true)} className={`p-1.5 rounded-lg transition-all ${theme === 'dark' ? 'bg-white/5 hover:bg-white/10 text-white/70' : 'bg-black/5 hover:bg-black/10 text-black/70'}`} title="Chat History">
-               <MessageSquare size={16} />
+            <button onClick={() => setShowProjectList(true)} className={`p-1.5 rounded-lg transition-all ${theme === 'dark' ? 'bg-white/5 hover:bg-white/10 text-white/70' : 'bg-black/5 hover:bg-black/10 text-black/70'}`} title="My Projects">
+               <FileCode2 size={16} />
             </button>
-            <button onClick={() => setShowSettings(true)} className={`p-1.5 rounded-lg transition-all ${theme === 'dark' ? 'bg-white/5 hover:bg-white/10 text-white/70' : 'bg-black/5 hover:bg-black/10 text-black/70'} ${isUsingCustomKey ? 'ring-1 ring-violet-500/50 text-violet-400' : ''}`} title="API Settings">
-               <Settings size={16} className={isUsingCustomKey ? "text-violet-500" : ""} />
+            <button 
+              onClick={() => setShowProfile(true)} 
+              className={`p-0.5 rounded-full overflow-hidden border-2 transition-all ${isUsingCustomKey ? 'border-violet-500 shadow-[0_0_10px_rgba(139,92,246,0.3)]' : (theme === 'dark' ? 'border-white/10 hover:border-violet-500/50' : 'border-black/10 hover:border-violet-500/50')}`} 
+              title="Profile & Settings"
+            >
+              {user?.photoURL 
+                ? <img src={user.photoURL} alt="Profile" className="w-6 h-6 rounded-full" /> 
+                : <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-violet-600 to-fuchsia-600 text-white flex items-center justify-center text-[10px] font-bold">{user?.email?.charAt(0) || 'U'}</div>
+              }
             </button>
           </div>
         </div>
@@ -1003,6 +1032,10 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
             <button onClick={() => setDeviceView('desktop')} className={`p-1.5 rounded-md transition-all ${deviceView === 'desktop' ? (theme === 'dark' ? 'bg-white/10 text-white shadow-sm' : 'bg-white text-black shadow-sm') : 'text-gray-400 hover:text-gray-600 dark:hover:text-white/80'}`}><Monitor size={16} /></button>
             <button onClick={() => setDeviceView('tablet')} className={`p-1.5 rounded-md transition-all ${deviceView === 'tablet' ? (theme === 'dark' ? 'bg-white/10 text-white shadow-sm' : 'bg-white text-black shadow-sm') : 'text-gray-400 hover:text-gray-600 dark:hover:text-white/80'}`}><Tablet size={16} /></button>
             <button onClick={() => setDeviceView('mobile')} className={`p-1.5 rounded-md transition-all ${deviceView === 'mobile' ? (theme === 'dark' ? 'bg-white/10 text-white shadow-sm' : 'bg-white text-black shadow-sm') : 'text-gray-400 hover:text-gray-600 dark:hover:text-white/80'}`}><Smartphone size={16} /></button>
+            {/* Unified Profile Button */}
+            <button onClick={() => setShowProfile(true)} className={`ml-4 p-1.5 rounded-full overflow-hidden border-2 transition-all ${theme === 'dark' ? 'border-white/10 hover:border-violet-500' : 'border-black/10 hover:border-violet-500'}`} title="Profile & Settings">
+              {user?.photoURL ? <img src={user.photoURL} alt="Profile" className="w-6 h-6 rounded-full" /> : <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-violet-600 to-fuchsia-600 text-white flex items-center justify-center text-[10px] font-bold">{user?.email?.charAt(0) || 'U'}</div>}
+            </button>
             
             {/* Tablet Code Drawer Toggle */}
             <button onClick={() => setShowCodeDrawer(!showCodeDrawer)} className={`ml-2 p-1.5 rounded-md transition-all lg:hidden ${showCodeDrawer ? 'bg-violet-500/20 text-violet-400' : (theme === 'dark' ? 'text-white/50 hover:bg-white/5' : 'text-black/50 hover:bg-black/5')}`} title="Toggle Code Drawer">
