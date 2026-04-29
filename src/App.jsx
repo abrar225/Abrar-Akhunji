@@ -40,6 +40,7 @@ export default function App() {
   const heroTextRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+  const [selectedCertificate, setSelectedCertificate] = useState(null);
 
   useEffect(() => {
     document.documentElement.className = theme;
@@ -318,13 +319,20 @@ export default function App() {
                     </h3>
                     <div className="space-y-4">
                       {CERTIFICATIONS.map((cert, i) => (
-                        <div key={i} className={`p-5 border ${theme === 'dark' ? 'border-white/10 bg-white/[0.02]' : 'border-black/5 bg-black/[0.02]'} rounded-xl backdrop-blur-sm hover:border-yellow-500/30 transition-all duration-300 flex items-center gap-6`}>
-                          <div className={`w-12 h-12 rounded-full ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} flex items-center justify-center ${cert.color}`}>
+                        <div 
+                          key={i} 
+                          onClick={() => cert.file && setSelectedCertificate(cert)}
+                          className={`p-5 border ${theme === 'dark' ? 'border-white/10 bg-white/[0.02]' : 'border-black/5 bg-black/[0.02]'} rounded-xl backdrop-blur-sm transition-all duration-300 flex items-center gap-6 ${cert.file ? 'cursor-pointer hover:border-yellow-500/50 hover:bg-yellow-500/5 hover:scale-[1.02]' : ''}`}
+                        >
+                          <div className={`w-12 h-12 flex-shrink-0 rounded-full ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} flex items-center justify-center ${cert.color}`}>
                             {cert.icon && <cert.icon size={24} />}
                           </div>
-                          <div>
+                          <div className="flex-1">
                             <h4 className={`${theme === 'dark' ? 'text-white' : 'text-black'} text-lg font-medium tracking-tight`}>{cert.title}</h4>
                             <p className={`text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'} mt-1`}>{cert.desc}</p>
+                            {cert.file && (
+                              <span className="text-[10px] text-yellow-500 font-mono mt-2 inline-block opacity-60 group-hover:opacity-100">Click to view →</span>
+                            )}
                           </div>
                         </div>
                       ))}
@@ -354,6 +362,51 @@ export default function App() {
           </main>
         </>
       )}
+      {/* Certificate Modal */}
+      <AnimatePresence>
+        {selectedCertificate && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-10">
+            <div 
+              className="absolute inset-0 bg-black/90 backdrop-blur-md" 
+              onClick={() => setSelectedCertificate(null)}
+            ></div>
+            <div className={`relative w-full max-w-5xl h-[80vh] md:h-[85vh] rounded-2xl overflow-hidden shadow-2xl border ${theme === 'dark' ? 'bg-[#0a0a0c] border-white/10' : 'bg-white border-black/10'} animate-in fade-in zoom-in-95 duration-300`}>
+              <div className={`flex items-center justify-between p-4 border-b ${theme === 'dark' ? 'border-white/5 bg-white/[0.02]' : 'border-black/5 bg-black/[0.02]'}`}>
+                <div className="flex items-center gap-3">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} ${selectedCertificate.color}`}>
+                    <selectedCertificate.icon size={16} />
+                  </div>
+                  <div>
+                    <h4 className={`text-sm font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>{selectedCertificate.title}</h4>
+                    <p className={`text-[10px] ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>{selectedCertificate.desc}</p>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => setSelectedCertificate(null)}
+                  className={`p-2 rounded-full transition-colors ${theme === 'dark' ? 'hover:bg-white/10 text-white/50 hover:text-white' : 'hover:bg-black/10 text-black/50 hover:text-black'}`}
+                >
+                  <Download size={20} className="rotate-45" /> {/* Using Download as an X for style */}
+                </button>
+              </div>
+              <div className="w-full h-full p-4 md:p-8 flex items-center justify-center overflow-hidden">
+                {selectedCertificate.file.toLowerCase().endsWith('.pdf') ? (
+                  <iframe 
+                    src={`${selectedCertificate.file}#toolbar=0`} 
+                    className="w-full h-full rounded-lg"
+                    title="Certificate Viewer"
+                  ></iframe>
+                ) : (
+                  <img 
+                    src={selectedCertificate.file} 
+                    alt={selectedCertificate.title} 
+                    className="max-w-full max-h-full object-contain rounded-lg shadow-lg"
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

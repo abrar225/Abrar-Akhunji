@@ -107,19 +107,29 @@ export const CERTIFICATIONS = [
     title: "GUNIpreneur Bootcamp", 
     desc: "2nd Runner-up: Most Innovative Idea • Ganpat University SSIP", 
     icon: Award,
-    color: "text-orange-500"
+    color: "text-orange-500",
+    file: "certificates/Ganpat University certificate SSIP/ Ganpat University SSIP.png"
   },
   { 
     title: "Full-Stack Python Internship", 
     desc: "Completion Certificate • BrainyBeam IT Solutions", 
     icon: ShieldCheck,
-    color: "text-green-500"
+    color: "text-green-500",
+    file: "certificates/Python full stack certificate/Completion Certificate BRNB-25-9004 Abrar Saeed Ahmad Akhunji .pdf"
+  },
+  { 
+    title: "Web Developer & Designer Intern", 
+    desc: "3-Month Internship Completion • Oct-Dec 2024", 
+    icon: Code2,
+    color: "text-cyan-500",
+    file: "certificates/Web Developer & Designer Intern Abrar Akhunji.pdf"
   },
   { 
     title: "Google Cybersecurity", 
     desc: "Google / Coursera • Sep 2025", 
     icon: ShieldCheck,
-    color: "text-yellow-500"
+    color: "text-yellow-500",
+    file: "certificates/Certificate cyber security/Certificate of Coursera Cource 1.pdf"
   },
   { 
     title: "Smart India Hackathon", 
