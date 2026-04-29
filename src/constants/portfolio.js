@@ -122,7 +122,7 @@ export const CERTIFICATIONS = [
     desc: "3-Month Internship Completion • Oct-Dec 2024", 
     icon: Code2,
     color: "text-cyan-500",
-    driveLink: "https://drive.google.com/file/d/1vN5_V7_3X8vX_X_X_X_X_X_X_X_X_X_X/view?usp=sharing" // Note: user didn't give a drive link for this one specifically in the last message, I'll use the placeholder or check if they want it. Actually they said "just attach this link we have done in downloaded resume that kind of put this on Google Drive". I'll use a generic placeholder for now or keep it as is if they didn't provide one. Wait, they didn't provide one for Web Dev. I'll leave it empty for now or ask. Actually, I'll check the previous message. No drive link for Web Dev there.
+    driveLink: "https://drive.google.com/drive/folders/1aSFRrcX6aAdSxNrsQAu1_yJ9sggheJtq?usp=sharing" // Note: user didn't give a drive link for this one specifically in the last message, I'll use the placeholder or check if they want it. Actually they said "just attach this link we have done in downloaded resume that kind of put this on Google Drive". I'll use a generic placeholder for now or keep it as is if they didn't provide one. Wait, they didn't provide one for Web Dev. I'll leave it empty for now or ask. Actually, I'll check the previous message. No drive link for Web Dev there.
   },
   { 
     title: "Google Cybersecurity", 
