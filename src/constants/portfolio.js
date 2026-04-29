@@ -128,9 +128,9 @@ export const CERTIFICATIONS = [
     color: "text-purple-500"
   },
   { 
-    title: "AI/ML Basics Workshop", 
-    desc: "Coursera / College", 
-    icon: Cpu,
+    title: "Python Django Certificate", 
+    desc: "15 Days Intensive Internship • BrainyBeam", 
+    icon: Layers,
     color: "text-blue-500"
   }
 ];
