@@ -28,7 +28,6 @@ import FloatingDock from './components/FloatingDock';
 import SectionHeader from './components/SectionHeader';
 import SectionWrapper from './components/SectionWrapper';
 import ProjectCard from './components/ProjectCard';
-import TextPressure from './components/TextPressure';
 
 // Constants
 import { PROJECTS, EXPERIENCE, SKILLS, EDUCATION, CERTIFICATIONS } from './constants/portfolio';
@@ -41,15 +40,6 @@ export default function App() {
   const heroTextRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
-  const [heroStyle, setHeroStyle] = useState('serif');
-
-  const HERO_STYLES = {
-    serif: {
-      top: "font-serif italic text-4xl sm:text-5xl md:text-7xl opacity-80 mb-2",
-      bottom: "font-serif italic text-6xl sm:text-8xl md:text-9xl text-purple-300 drop-shadow-[0_0_40px_rgba(168,85,247,0.2)]",
-      pressure: "font-serif"
-    }
-  };
 
   useEffect(() => {
     document.documentElement.className = theme;
@@ -162,15 +152,10 @@ export default function App() {
                   <span className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse"></span>
                   <span className={`text-[10px] font-mono ${theme === 'dark' ? 'text-purple-300' : 'text-purple-700'} tracking-widest uppercase`}>Open to work</span>
                 </div>
-                <h1 ref={heroTextRef} className={`text-5xl sm:text-6xl md:text-8xl font-bold tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'} leading-[1.1] md:leading-[0.9] flex flex-col items-center overflow-visible`}>
-                  <span className={`inline-block ${HERO_STYLES[heroStyle].top}`}>Engineer of</span>
-                  <TextPressure 
-                    text="Intelligent" 
-                    height="auto"
-                    proximity={250}
-                    className={`py-2 ${HERO_STYLES[heroStyle].pressure}`}
-                  />
-                  <span className={`inline-block ${HERO_STYLES[heroStyle].bottom}`}>Systems.</span>
+                <h1 ref={heroTextRef} className={`text-5xl sm:text-6xl md:text-8xl font-bold tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'} leading-[1.1] md:leading-[0.9]`}>
+                  <span className="font-museo inline-block">Engineer of</span> <br />
+                  <span className="font-custom text-purple-500 text-6xl sm:text-7xl md:text-9xl block mt-2 mb-2">Intelligent</span>
+                  <span className="font-museo inline-block">Systems.</span>
                 </h1>
                 <p className={`max-w-lg text-base md:text-lg ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'} leading-relaxed pt-4`}>
                   I bridge the gap between <span className={theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}>complex AI models</span> and <span className={theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}>scalable web architectures</span>. Building the next generation of digital products.
@@ -358,7 +343,7 @@ export default function App() {
                     <a href="mailto:moabrarakhunji@gmail.com" className={`inline-flex items-center gap-2 ${theme === 'dark' ? 'text-white' : 'text-black'} border-b border-purple-500 pb-1 hover:text-purple-400 transition-colors text-lg`}>moabrarakhunji@gmail.com <ArrowUpRight size={16} /></a>
                   </div>
                   <div className="flex flex-col gap-4 justify-end">
-                    <a href="https://github.com/abrar225" target="_blank" rel="noopener noreferrer" className={`flex items-center gap-3 px-6 py-3 border ${theme === 'dark' ? 'border-white/10 text-gray-400 hover:bg-white/5 hover:text-white' : 'border-black/10 text-gray-600 hover:bg-black/5 hover:text-black'} rounded-lg text-sm transition-colors`}><Download size={16} /> View Github</a>
+                    <a href="https://drive.google.com/file/d/1dV5ukxF-i-9JcWCaxsbQljNwL7Dni8Jc/view?usp=sharing" target="_blank" rel="noopener noreferrer" className={`flex items-center gap-3 px-6 py-3 border ${theme === 'dark' ? 'border-white/10 text-gray-400 hover:bg-white/5 hover:text-white' : 'border-black/10 text-gray-600 hover:bg-black/5 hover:text-black'} rounded-lg text-sm transition-colors`}><Download size={16} /> Download Resume</a>
                   </div>
                 </div>
                 <div className={`mt-12 md:mt-24 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left text-[10px] ${theme === 'dark' ? 'text-gray-700' : 'text-gray-400'} font-mono uppercase border-t ${theme === 'dark' ? 'border-white/5' : 'border-black/5'} pt-8`}>

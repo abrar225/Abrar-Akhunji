@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, User, Layers, Briefcase, Mail } from 'lucide-react';
+import { Home, User, Layers, Briefcase, Mail, FileText } from 'lucide-react';
 
 const FloatingDock = ({ theme }) => {
   const links = [
@@ -7,6 +7,7 @@ const FloatingDock = ({ theme }) => {
     { icon: User, label: 'About', href: '#about-me' },
     { icon: Layers, label: 'Work', href: '#work' },
     { icon: Briefcase, label: 'Exp', href: '#experience' },
+    { icon: FileText, label: 'Resume', href: 'https://drive.google.com/file/d/1dV5ukxF-i-9JcWCaxsbQljNwL7Dni8Jc/view?usp=sharing', target: '_blank' },
     { icon: Mail, label: 'Contact', href: '#contact' },
   ];
 
@@ -14,7 +15,13 @@ const FloatingDock = ({ theme }) => {
     <div className="fixed bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 z-[60] w-[95vw] max-w-max">
       <nav className={`flex items-center justify-center gap-1 md:gap-2 px-2 py-2 ${theme === 'dark' ? 'bg-white/10 border-white/10' : 'bg-black/5 border-black/10'} backdrop-blur-xl border rounded-full shadow-2xl ring-1 ring-white/5`}>
         {links.map((link, idx) => (
-          <a key={idx} href={link.href} className={`group relative p-2 md:p-3 rounded-full ${theme === 'dark' ? 'hover:bg-white/20' : 'hover:bg-black/10'} transition-all duration-300`}>
+          <a 
+            key={idx} 
+            href={link.href} 
+            target={link.target || '_self'}
+            rel={link.target === '_blank' ? 'noopener noreferrer' : ''}
+            className={`group relative p-2 md:p-3 rounded-full ${theme === 'dark' ? 'hover:bg-white/20' : 'hover:bg-black/10'} transition-all duration-300`}
+          >
             <link.icon size={18} className={`${theme === 'dark' ? 'text-gray-300 group-hover:text-white' : 'text-gray-600 group-hover:text-black'} transition-colors`} />
             <span className={`absolute -top-12 left-1/2 -translate-x-1/2 px-2 py-1 ${theme === 'dark' ? 'bg-black text-white' : 'bg-white text-black'} border border-white/10 rounded text-[10px] opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-xl`}>
               {link.label}
