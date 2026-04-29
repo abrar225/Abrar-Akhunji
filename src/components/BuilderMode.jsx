@@ -987,15 +987,15 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
       )}
 
       {/* MAIN GRID LAYOUT */}
-      <div className={`flex-1 grid w-full h-full min-h-0 relative transition-all duration-300 ${
+      <div className={`flex-1 grid w-full h-full min-h-0 overflow-hidden relative transition-all duration-300 ${
         sidebarOpen 
           ? (activeView === 'preview' ? 'grid-cols-1 md:grid-cols-[35%_65%] lg:grid-cols-[20%_80%_0%]' : 
              activeView === 'code' ? 'grid-cols-1 md:grid-cols-[35%_65%] lg:grid-cols-[20%_0%_80%]' :
              'grid-cols-1 md:grid-cols-[35%_65%] lg:grid-cols-[20%_55%_25%]')
           : 'grid-cols-1 md:grid-cols-1 lg:grid-cols-[0%_75%_25%]'
       }`}>
-        {/* 1. LEFT PANEL (Prompt & Controls) */}
-        <div className={`${mobileTab === 'prompt' ? 'flex' : 'hidden'} ${sidebarOpen ? 'md:flex' : 'md:hidden'} w-full h-full flex-col flex-shrink-0 border-r transition-colors duration-300 ${theme === 'dark' ? 'border-white/[0.05] bg-[#050505]' : 'border-black/[0.05] bg-[#fcfcfc]'} backdrop-blur-3xl z-10 relative overflow-hidden`}>
+        {/* 1. LEFT PANEL (Prompt & Controls) — HARD CONTAINER: nothing escapes */}
+        <div className={`${mobileTab === 'prompt' ? 'flex' : 'hidden'} ${sidebarOpen ? 'md:flex' : 'md:hidden'} w-full h-full max-h-full flex-col flex-shrink-0 border-r transition-colors duration-300 ${theme === 'dark' ? 'border-white/[0.05] bg-[#050505]' : 'border-black/[0.05] bg-[#fcfcfc]'} backdrop-blur-3xl z-10 relative overflow-hidden`}>
         
         {/* Header */}
         <div className={`p-4 border-b flex-shrink-0 flex items-center justify-between ${theme === 'dark' ? 'border-white/[0.05]' : 'border-black/[0.05]'}`}>
@@ -1058,7 +1058,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
           </div>
         </div>
 
-        {/* Chat Area */}
+        {/* Chat Area — flex-1 with min-h-0 prevents this from pushing input off screen */}
         <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar relative min-h-0">
           <div className="absolute inset-x-0 top-0 h-4 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none z-10 opacity-50"></div>
           {messages.map((msg, idx) => (
@@ -1108,8 +1108,8 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
           <div ref={messagesEndRef} className="h-2" />
         </div>
 
-        {/* Input Area */}
-        <div className={`p-4 border-t flex-shrink-0 ${theme === 'dark' ? 'border-white/[0.05] bg-[#0a0a0c]/80' : 'border-black/[0.05] bg-white/80'} backdrop-blur-xl`}>
+        {/* Input Area — ALWAYS visible at bottom, never pushed off by content above */}
+        <div className={`p-4 border-t flex-shrink-0 z-20 ${theme === 'dark' ? 'border-white/[0.05] bg-[#0a0a0c]/80' : 'border-black/[0.05] bg-white/80'} backdrop-blur-xl`}>
           <div className={`relative flex items-end gap-2 p-1.5 rounded-2xl border transition-all duration-300 shadow-sm ${theme === 'dark' ? 'bg-white/[0.02] border-white/[0.1] focus-within:border-violet-500/50 focus-within:bg-white/[0.04] focus-within:shadow-[0_0_20px_rgba(139,92,246,0.1)]' : 'bg-white border-black/[0.1] focus-within:border-violet-500/40 focus-within:shadow-[0_0_20px_rgba(139,92,246,0.1)]'}`}>
             <textarea 
               ref={inputRef}
@@ -1237,8 +1237,8 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
         </div>
       </div>
 
-      {/* CODE PANEL — visible in code and split modes on desktop, drawer on tablet, tab on mobile */}
-      <div className={`${mobileTab === 'code' ? 'flex' : 'hidden'} ${showCodeDrawer ? 'md:flex' : 'md:hidden'} ${activeView === 'preview' ? 'lg:hidden' : 'lg:flex'} flex-col h-full w-full transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${theme === 'dark' ? 'border-white/[0.05] bg-[#0a0a0c]' : 'border-black/[0.05] bg-[#fcfcfc]'} z-[60] md:fixed md:top-0 md:right-0 md:w-[400px] lg:relative lg:w-full lg:border-l md:shadow-2xl lg:shadow-none ${showCodeDrawer ? 'md:translate-x-0' : 'md:translate-x-full lg:translate-x-0'}`}>
+      {/* CODE PANEL — HARD CONTAINER: overflow isolated, never breaks layout */}
+      <div className={`${mobileTab === 'code' ? 'flex' : 'hidden'} ${showCodeDrawer ? 'md:flex' : 'md:hidden'} ${activeView === 'preview' ? 'lg:hidden' : 'lg:flex'} flex-col h-full max-h-full w-full overflow-hidden transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${theme === 'dark' ? 'border-white/[0.05] bg-[#0a0a0c]' : 'border-black/[0.05] bg-[#fcfcfc]'} z-[60] md:fixed md:top-0 md:right-0 md:w-[400px] lg:relative lg:w-full lg:border-l md:shadow-2xl lg:shadow-none ${showCodeDrawer ? 'md:translate-x-0' : 'md:translate-x-full lg:translate-x-0'}`}>
             <div className={`flex items-center justify-between p-2 md:p-3 border-b flex-shrink-0 sticky top-0 z-10 ${theme === 'dark' ? 'border-white/[0.05] bg-[#0a0a0c]' : 'border-black/[0.05] bg-[#fcfcfc]'}`}>
               <div className="flex items-center gap-1.5">
                 {/* Back to Preview button — always visible escape hatch */}
@@ -1273,7 +1273,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
                 </button>
               </div>
             </div>
-            <div className={`flex-1 overflow-y-auto p-5 custom-scrollbar min-h-0 ${theme === 'dark' ? 'bg-[#050505]' : 'bg-[#f0f0f0]'}`}>
+            <div className={`flex-1 overflow-y-auto p-5 custom-scrollbar min-h-0 max-h-full ${theme === 'dark' ? 'bg-[#050505]' : 'bg-[#f0f0f0]'}`}>
               {previewCode[codeTab] ? (
                 <pre className={`text-[12px] md:text-[13px] font-mono leading-relaxed whitespace-pre-wrap ${
                   codeTab === 'html' ? (theme === 'dark' ? 'text-blue-400' : 'text-blue-700') :
