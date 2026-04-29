@@ -108,28 +108,44 @@ export const CERTIFICATIONS = [
     desc: "2nd Runner-up: Most Innovative Idea • Ganpat University SSIP", 
     icon: Award,
     color: "text-orange-500",
-    file: "certificates/Ganpat University certificate SSIP/ Ganpat University SSIP.png"
+    files: [
+      "certificates/Ganpat University certificate SSIP/ Ganpat University SSIP.png",
+      "certificates/Ganpat University certificate SSIP/Medal Ganpati University SSIP.png",
+      "certificates/Ganpat University certificate SSIP/ Frame award Ganpati university ssip.png"
+    ]
   },
   { 
     title: "Full-Stack Python Internship", 
-    desc: "Completion Certificate • BrainyBeam IT Solutions", 
+    desc: "BrainyBeam IT Solutions • Jan-Mar 2026", 
     icon: ShieldCheck,
     color: "text-green-500",
-    file: "certificates/Python full stack certificate/Completion Certificate BRNB-25-9004 Abrar Saeed Ahmad Akhunji .pdf"
+    files: [
+      "certificates/Python full stack certificate/Joining Letter BRNB-25-9004.pdf",
+      "certificates/Python full stack certificate/Completion Certificate BRNB-25-9004 Abrar Saeed Ahmad Akhunji .pdf"
+    ]
   },
   { 
     title: "Web Developer & Designer Intern", 
     desc: "3-Month Internship Completion • Oct-Dec 2024", 
     icon: Code2,
     color: "text-cyan-500",
-    file: "certificates/Web Developer & Designer Intern Abrar Akhunji.pdf"
+    files: ["certificates/Web Developer & Designer Intern Abrar Akhunji.pdf"]
   },
   { 
     title: "Google Cybersecurity", 
-    desc: "Google / Coursera • Sep 2025", 
+    desc: "Professional Certificate (8 Courses) • Coursera", 
     icon: ShieldCheck,
     color: "text-yellow-500",
-    file: "certificates/Certificate cyber security/Certificate of Coursera Cource 1.pdf"
+    files: [
+      "certificates/Certificate cyber security/Certificate of Coursera Cource 1.pdf",
+      "certificates/Certificate cyber security/Certificate of Coursera Cource 2.pdf",
+      "certificates/Certificate cyber security/Certificate of Coursera Cource 3.pdf",
+      "certificates/Certificate cyber security/Certificate of Coursera Cource 4.pdf",
+      "certificates/Certificate cyber security/Certificate of Coursera Cource 5.pdf",
+      "certificates/Certificate cyber security/Certificate of Coursera Cource 6.pdf",
+      "certificates/Certificate cyber security/Certificate of Coursera Cource 7.pdf",
+      "certificates/Certificate cyber security/Certificate of Coursera Cource 8.pdf"
+    ]
   },
   { 
     title: "Smart India Hackathon", 
