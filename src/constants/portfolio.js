@@ -141,6 +141,7 @@ export const CERTIFICATIONS = [
     title: "Python Django Certificate", 
     desc: "15 Days Intensive Internship • BrainyBeam", 
     icon: Layers,
-    color: "text-blue-500"
+    color: "text-blue-500",
+    driveLink: "https://drive.google.com/drive/folders/1kGeWbI7MsmM63eIPEE551-hzHtFHTmrN?usp=sharing"
   }
 ];

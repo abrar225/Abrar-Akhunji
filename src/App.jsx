@@ -364,7 +364,7 @@ export default function App() {
                   </div>
                 </div>
                 <div className={`mt-12 md:mt-24 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left text-[10px] ${theme === 'dark' ? 'text-gray-700' : 'text-gray-400'} font-mono uppercase border-t ${theme === 'dark' ? 'border-white/5' : 'border-black/5'} pt-8`}>
-                  <span>© 2025 Abrar Akhunji</span>
+                  <span>© 2026 Abrar Akhunji</span>
                 </div>
               </SectionWrapper>
             </footer>
