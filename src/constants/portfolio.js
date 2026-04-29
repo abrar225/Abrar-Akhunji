@@ -9,9 +9,7 @@ import {
   Trophy, 
   Award,
   GraduationCap,
-  School,
-  CheckCircle2,
-  Medal
+  School
 } from 'lucide-react';
 
 export const PROJECTS = [
@@ -73,7 +71,7 @@ export const PROJECTS = [
 ];
 
 export const EXPERIENCE = [
-  { role: "Full-Stack Python Intern", date: "JAN 2026 — MAR 2026", desc: "Completed a 3-month intensive internship at BrainyBeam focusing on Advanced Django & Python Full-Stack development." },
+  { role: "Full-Stack Python Intern", date: "JAN 2026 — MAR 2026", desc: "Completed 3-month intensive Full-Stack development program at BrainyBeam focusing on Advanced Django & Python ecosystem." },
   { role: "Python Django Intern", date: "JULY 2025", desc: "Focusing on backend architecture & REST APIs." },
   { role: "Web Developer & Designer Intern", date: "JUN 2024 — AUG 2024", desc: "Designed responsive interfaces & frontend logic." }
 ];
@@ -104,28 +102,35 @@ export const SKILLS = [
   { t: "Others", d: "VSCode, Android Studio", icon: Monitor }
 ];
 
+export const CERTIFICATIONS = [
   { 
     title: "GUNIpreneur Bootcamp", 
-    desc: "2nd Runner-up • Most Innovative Idea • Ganpat University SSIP", 
-    icon: Medal,
-    color: "text-fuchsia-500"
+    desc: "2nd Runner-up: Most Innovative Idea • Ganpat University SSIP", 
+    icon: Award,
+    color: "text-orange-500"
   },
   { 
-    title: "Full-Stack Python Completion", 
-    desc: "BrainyBeam Technologies • 3 Months Internship", 
-    icon: CheckCircle2,
+    title: "Full-Stack Python Internship", 
+    desc: "Completion Certificate • BrainyBeam IT Solutions", 
+    icon: ShieldCheck,
     color: "text-green-500"
   },
   { 
     title: "Google Cybersecurity", 
-    desc: "Google / Coursera • Professional Certificate", 
+    desc: "Google / Coursera • Sep 2025", 
     icon: ShieldCheck,
     color: "text-yellow-500"
   },
   { 
     title: "Smart India Hackathon", 
-    desc: "National Level Participation", 
+    desc: "Participation", 
     icon: Trophy,
     color: "text-purple-500"
+  },
+  { 
+    title: "AI/ML Basics Workshop", 
+    desc: "Coursera / College", 
+    icon: Cpu,
+    color: "text-blue-500"
   }
 ];
