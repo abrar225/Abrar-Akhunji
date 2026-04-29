@@ -40,8 +40,6 @@ export default function App() {
   const heroTextRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
-  const [selectedCertificate, setSelectedCertificate] = useState(null);
-  const [activeCertIndex, setActiveCertIndex] = useState(0);
 
   useEffect(() => {
     document.documentElement.className = theme;
@@ -319,32 +317,34 @@ export default function App() {
                       <Trophy size={16} className="text-yellow-500" /> Certifications
                     </h3>
                     <div className="space-y-4">
-                      {CERTIFICATIONS.map((cert, i) => (
-                        <div 
-                          key={i} 
-                          onClick={() => {
-                            if (cert.files) {
-                              setSelectedCertificate(cert);
-                              setActiveCertIndex(0);
-                            }
-                          }}
-                          className={`p-5 border ${theme === 'dark' ? 'border-white/10 bg-white/[0.02]' : 'border-black/5 bg-black/[0.02]'} rounded-xl backdrop-blur-sm transition-all duration-300 flex items-center gap-6 ${cert.files ? 'cursor-pointer hover:border-yellow-500/50 hover:bg-yellow-500/5 hover:scale-[1.02]' : ''}`}
-                        >
-                          <div className={`w-12 h-12 flex-shrink-0 rounded-full ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} flex items-center justify-center ${cert.color}`}>
-                            {cert.icon && <cert.icon size={24} />}
+                      {CERTIFICATIONS.map((cert, i) => {
+                        const Content = () => (
+                          <div className={`p-5 border ${theme === 'dark' ? 'border-white/10 bg-white/[0.02]' : 'border-black/5 bg-black/[0.02]'} rounded-xl backdrop-blur-sm transition-all duration-300 flex items-center gap-6 ${cert.driveLink ? 'hover:border-purple-500/50 hover:bg-purple-500/5 hover:scale-[1.02]' : ''}`}>
+                            <div className={`w-12 h-12 flex-shrink-0 rounded-full ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} flex items-center justify-center ${cert.color}`}>
+                              {cert.icon && <cert.icon size={24} />}
+                            </div>
+                            <div className="flex-1">
+                              <h4 className={`${theme === 'dark' ? 'text-white' : 'text-black'} text-lg font-medium tracking-tight`}>{cert.title}</h4>
+                              <p className={`text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'} mt-1`}>{cert.desc}</p>
+                              {cert.driveLink && (
+                                <div className="flex items-center gap-2 mt-3">
+                                  <span className="text-[10px] text-purple-500 font-mono opacity-80">View on Drive ↗</span>
+                                </div>
+                              )}
+                            </div>
                           </div>
-                          <div className="flex-1">
-                            <h4 className={`${theme === 'dark' ? 'text-white' : 'text-black'} text-lg font-medium tracking-tight`}>{cert.title}</h4>
-                            <p className={`text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'} mt-1`}>{cert.desc}</p>
-                            {cert.files && (
-                              <div className="flex items-center gap-2 mt-3">
-                                <span className="text-[10px] text-yellow-500 font-mono opacity-80 bg-yellow-500/10 px-1.5 py-0.5 rounded">{cert.files.length} Documents</span>
-                                <span className="text-[10px] text-gray-500 font-mono">View Details →</span>
-                              </div>
-                            )}
+                        );
+
+                        return cert.driveLink ? (
+                          <a key={i} href={cert.driveLink} target="_blank" rel="noopener noreferrer" className="block">
+                            <Content />
+                          </a>
+                        ) : (
+                          <div key={i}>
+                            <Content />
                           </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
@@ -371,93 +371,6 @@ export default function App() {
           </main>
         </>
       )}
-      {/* Certificate Modal - Enhanced Gallery */}
-      <AnimatePresence>
-        {selectedCertificate && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-10">
-            <div 
-              className="absolute inset-0 bg-black/95 backdrop-blur-xl" 
-              onClick={() => setSelectedCertificate(null)}
-            ></div>
-            
-            {/* Navigation Controls */}
-            {selectedCertificate.files.length > 1 && (
-              <>
-                <button 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setActiveCertIndex(prev => (prev > 0 ? prev - 1 : selectedCertificate.files.length - 1));
-                  }}
-                  className="fixed left-4 md:left-10 z-[110] p-3 md:p-4 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/20 transition-all active:scale-90"
-                >
-                  <ChevronRight size={24} className="rotate-180" />
-                </button>
-                <button 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setActiveCertIndex(prev => (prev < selectedCertificate.files.length - 1 ? prev + 1 : 0));
-                  }}
-                  className="fixed right-4 md:right-10 z-[110] p-3 md:p-4 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/20 transition-all active:scale-90"
-                >
-                  <ChevronRight size={24} />
-                </button>
-              </>
-            )}
-
-            <div className={`relative w-full max-w-6xl h-[85vh] md:h-[90vh] rounded-3xl overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] border ${theme === 'dark' ? 'bg-[#050505] border-white/10' : 'bg-white border-black/10'} animate-in fade-in zoom-in-95 duration-300`}>
-              {/* Modal Header */}
-              <div className={`flex items-center justify-between p-4 md:p-6 border-b ${theme === 'dark' ? 'border-white/5 bg-white/[0.02]' : 'border-black/5 bg-black/[0.02]'}`}>
-                <div className="flex items-center gap-4">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} ${selectedCertificate.color} shadow-inner`}>
-                    <selectedCertificate.icon size={20} />
-                  </div>
-                  <div>
-                    <h4 className={`text-base md:text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-black'} flex items-center gap-3`}>
-                      {selectedCertificate.title}
-                      {selectedCertificate.files.length > 1 && (
-                        <span className="text-[10px] md:text-xs font-mono px-2 py-0.5 rounded-full bg-violet-500/20 text-violet-400 border border-violet-500/30">
-                          {activeCertIndex + 1} / {selectedCertificate.files.length}
-                        </span>
-                      )}
-                    </h4>
-                    <p className={`text-[10px] md:text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>{selectedCertificate.desc}</p>
-                  </div>
-                </div>
-                <button 
-                  onClick={() => setSelectedCertificate(null)}
-                  className={`p-3 rounded-full transition-all active:scale-90 ${theme === 'dark' ? 'hover:bg-white/10 text-white/40 hover:text-white' : 'hover:bg-black/10 text-black/40 hover:text-black'}`}
-                >
-                  <X size={24} />
-                </button>
-              </div>
-
-              {/* Modal Content - Viewer */}
-              <div className="w-full h-full p-4 md:p-10 flex items-center justify-center overflow-hidden bg-black/40">
-                <AnimatePresence mode="wait">
-                  <div 
-                    key={activeCertIndex}
-                    className="w-full h-full animate-in fade-in slide-in-from-right-8 duration-500"
-                  >
-                    {selectedCertificate.files[activeCertIndex].toLowerCase().endsWith('.pdf') ? (
-                      <iframe 
-                        src={`${selectedCertificate.files[activeCertIndex]}#toolbar=0&navpanes=0&scrollbar=0`} 
-                        className="w-full h-full rounded-2xl border border-white/5 shadow-2xl bg-white/5"
-                        title="Certificate Viewer"
-                      ></iframe>
-                    ) : (
-                      <img 
-                        src={selectedCertificate.files[activeCertIndex]} 
-                        alt={`${selectedCertificate.title} - ${activeCertIndex + 1}`} 
-                        className="w-full h-full object-contain rounded-2xl shadow-2xl transition-transform hover:scale-[1.01] duration-700"
-                      />
-                    )}
-                  </div>
-                </AnimatePresence>
-              </div>
-            </div>
-          </div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }
