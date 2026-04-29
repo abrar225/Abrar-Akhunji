@@ -94,6 +94,8 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
   // Responsive / Panel states
   const [activeView, setActiveView] = useState('split'); 
   const [mobileTab, setMobileTab] = useState('prompt'); 
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [showCodeDrawer, setShowCodeDrawer] = useState(false);
   
   // API Key & Provider Settings
   const [showProfile, setShowProfile] = useState(false);
@@ -618,7 +620,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
   const isUsingCustomKey = !!loadApiKey();
 
   return (
-    <div className={`fixed inset-0 z-50 flex flex-col md:flex-row h-screen w-full overflow-hidden ${theme === 'dark' ? 'bg-[#050505] text-white' : 'bg-[#fcfcfc] text-black'}`}>
+    <div className={`fixed inset-0 z-50 flex flex-col h-[100dvh] w-full overflow-hidden ${theme === 'dark' ? 'bg-[#050505] text-white' : 'bg-[#fcfcfc] text-black'}`}>
       
       {/* SETTINGS MODAL */}
       {showSettings && (
@@ -830,9 +832,17 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
           </div>
         </div>
       )}
-
-      {/* 1. LEFT PANEL (Prompt & Controls) */}
-      <div className={`${mobileTab === 'prompt' ? 'flex' : 'hidden'} md:flex w-full md:w-[300px] lg:w-[320px] flex-col flex-shrink-0 border-r transition-colors duration-300 ${theme === 'dark' ? 'border-white/[0.05] bg-white/[0.01]' : 'border-black/[0.05] bg-black/[0.01]'} backdrop-blur-3xl z-10 relative h-full md:h-auto`}>
+      
+      {/* MAIN GRID LAYOUT */}
+      <div className={`flex-1 grid w-full h-full min-h-0 relative transition-all duration-300 ${
+        sidebarOpen 
+          ? (activeView === 'preview' ? 'grid-cols-1 md:grid-cols-[35%_65%] lg:grid-cols-[20%_80%_0%]' : 
+             activeView === 'code' ? 'grid-cols-1 md:grid-cols-[35%_65%] lg:grid-cols-[20%_0%_80%]' :
+             'grid-cols-1 md:grid-cols-[35%_65%] lg:grid-cols-[20%_55%_25%]')
+          : 'grid-cols-1 md:grid-cols-1 lg:grid-cols-[0%_75%_25%]'
+      }`}>
+        {/* 1. LEFT PANEL (Prompt & Controls) */}
+        <div className={`${mobileTab === 'prompt' ? 'flex' : 'hidden'} ${sidebarOpen ? 'md:flex' : 'md:hidden'} w-full h-full flex-col flex-shrink-0 border-r transition-colors duration-300 ${theme === 'dark' ? 'border-white/[0.05] bg-[#050505]' : 'border-black/[0.05] bg-[#fcfcfc]'} backdrop-blur-3xl z-10 relative overflow-hidden`}>
         
         {/* Header */}
         <div className={`p-4 border-b flex-shrink-0 flex items-center justify-between ${theme === 'dark' ? 'border-white/[0.05]' : 'border-black/[0.05]'}`}>
@@ -964,8 +974,8 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
         </div>
       </div>
 
-      {/* RIGHT WORKSPACE */}
-      <div className={`${mobileTab !== 'prompt' ? 'flex' : 'hidden'} md:flex flex-1 flex-col relative z-0 h-full overflow-hidden`}>
+      {/* RIGHT WORKSPACE / PREVIEW PANEL */}
+      <div className={`${mobileTab === 'preview' ? 'flex' : 'hidden'} md:flex flex-col relative w-full h-full overflow-hidden z-0`}>
         
         {/* GLOBAL WORKSPACE TOP BAR */}
         <div className={`flex items-center justify-between px-3 md:px-4 py-3 border-b flex-shrink-0 ${theme === 'dark' ? 'border-white/[0.05] bg-[#0a0a0c]' : 'border-black/[0.05] bg-white'}`}>
@@ -993,18 +1003,19 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
             <button onClick={() => setDeviceView('desktop')} className={`p-1.5 rounded-md transition-all ${deviceView === 'desktop' ? (theme === 'dark' ? 'bg-white/10 text-white shadow-sm' : 'bg-white text-black shadow-sm') : 'text-gray-400 hover:text-gray-600 dark:hover:text-white/80'}`}><Monitor size={16} /></button>
             <button onClick={() => setDeviceView('tablet')} className={`p-1.5 rounded-md transition-all ${deviceView === 'tablet' ? (theme === 'dark' ? 'bg-white/10 text-white shadow-sm' : 'bg-white text-black shadow-sm') : 'text-gray-400 hover:text-gray-600 dark:hover:text-white/80'}`}><Tablet size={16} /></button>
             <button onClick={() => setDeviceView('mobile')} className={`p-1.5 rounded-md transition-all ${deviceView === 'mobile' ? (theme === 'dark' ? 'bg-white/10 text-white shadow-sm' : 'bg-white text-black shadow-sm') : 'text-gray-400 hover:text-gray-600 dark:hover:text-white/80'}`}><Smartphone size={16} /></button>
+            
+            {/* Tablet Code Drawer Toggle */}
+            <button onClick={() => setShowCodeDrawer(!showCodeDrawer)} className={`ml-2 p-1.5 rounded-md transition-all lg:hidden ${showCodeDrawer ? 'bg-violet-500/20 text-violet-400' : (theme === 'dark' ? 'text-white/50 hover:bg-white/5' : 'text-black/50 hover:bg-black/5')}`} title="Toggle Code Drawer">
+              <Code size={16} />
+            </button>
           </div>
         </div>
 
-        {/* PANELS CONTAINER */}
-        <div className="flex-1 flex flex-row relative min-h-0 overflow-hidden">
+        {/* PREVIEW CONTAINER */}
+        <div className="flex-1 flex flex-col relative min-h-0 overflow-hidden">
           
-          {/* PREVIEW PANEL */}
-          <div className={`flex flex-col relative h-full transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${
-            window.innerWidth < 768 
-              ? (mobileTab === 'preview' ? 'w-full opacity-100' : 'w-0 opacity-0 hidden')
-              : activeView === 'code' ? 'w-0 opacity-0 overflow-hidden flex-none border-0' : 'flex-1 opacity-100'
-          }`}>
+          {/* PREVIEW CONTENT */}
+          <div className={`flex flex-col relative w-full h-full transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${activeView === 'code' ? 'hidden lg:hidden' : ''}`}>
             <div className={`flex-1 p-0 md:p-6 lg:p-8 overflow-hidden flex items-center justify-center relative ${theme === 'dark' ? 'bg-[#050505]' : 'bg-[#f5f5f5]'}`}>
               <div className="absolute inset-0 opacity-[0.015] pointer-events-none mix-blend-overlay" style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")'}}></div>
               
@@ -1058,15 +1069,11 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
               )}
             </div>
           </div>
+        </div>
+      </div>
 
-          {/* CODE PANEL */}
-          <div className={`flex flex-col h-full border-l transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${theme === 'dark' ? 'border-white/[0.05] bg-[#0a0a0c]' : 'border-black/[0.05] bg-[#fcfcfc]'} z-20 ${
-             window.innerWidth < 768 
-              ? (mobileTab === 'code' ? 'w-full opacity-100' : 'w-0 opacity-0 hidden')
-              : activeView === 'preview' ? 'w-0 opacity-0 overflow-hidden flex-none border-0' 
-              : activeView === 'split' ? 'w-[360px] lg:w-[450px] flex-none' 
-              : 'flex-1 opacity-100'
-          }`}>
+      {/* CODE PANEL (Desktop grid item, Tablet drawer) */}
+      <div className={`${mobileTab === 'code' ? 'flex' : 'hidden'} ${showCodeDrawer ? 'md:flex' : 'md:hidden'} ${activeView === 'preview' ? 'lg:hidden' : 'lg:flex'} flex-col h-full w-full transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${theme === 'dark' ? 'border-white/[0.05] bg-[#0a0a0c]' : 'border-black/[0.05] bg-[#fcfcfc]'} z-[60] md:fixed md:top-0 md:right-0 md:w-[400px] lg:relative lg:w-full lg:border-l md:shadow-2xl lg:shadow-none ${showCodeDrawer ? 'md:translate-x-0' : 'md:translate-x-full lg:translate-x-0'}`}>
             <div className={`flex items-center justify-between p-2 md:p-3 border-b flex-shrink-0 ${theme === 'dark' ? 'border-white/[0.05]' : 'border-black/[0.05]'}`}>
               <div className="flex gap-1.5">
                 {['html', 'css', 'js'].map(tab => (
@@ -1109,9 +1116,8 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
               )}
             </div>
           </div>
-        </div>
       </div>
-
+      
       {/* MOBILE BOTTOM NAVIGATION */}
       <div className={`md:hidden flex-shrink-0 border-t flex justify-around p-2 ${theme === 'dark' ? 'bg-[#0a0a0c] border-white/10' : 'bg-white border-black/10'} z-50 relative`}>
         <button 

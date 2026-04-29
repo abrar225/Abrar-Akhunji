@@ -221,8 +221,8 @@ const ChatBot = ({ theme }) => {
       {isOpen && (
         <div className={`fixed z-[80] md:z-[70] transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-8 ${
           chatMode === 'builder' 
-            ? 'inset-0 w-full h-full rounded-none border-0' 
-            : `inset-0 w-full h-full rounded-none border-0 md:bottom-8 md:right-12 md:w-[420px] md:h-[650px] md:max-h-[85vh] md:rounded-3xl md:border md:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] md:inset-auto`
+            ? 'inset-0 w-full h-[100dvh] rounded-none border-0' 
+            : `inset-0 w-full h-[100dvh] rounded-none border-0 md:bottom-8 md:right-12 md:w-[420px] md:h-[650px] md:max-h-[85vh] md:rounded-3xl md:border md:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] md:inset-auto`
         } ${theme === 'dark' ? 'bg-[#0a0a0c]/95 border-white/[0.08]' : 'bg-[#fcfcfc]/95 border-black/[0.05]'} backdrop-blur-3xl`}>
           
           {chatMode === 'builder' ? (
