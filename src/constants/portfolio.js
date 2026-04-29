@@ -9,7 +9,9 @@ import {
   Trophy, 
   Award,
   GraduationCap,
-  School
+  School,
+  CheckCircle2,
+  Medal
 } from 'lucide-react';
 
 export const PROJECTS = [
@@ -71,7 +73,7 @@ export const PROJECTS = [
 ];
 
 export const EXPERIENCE = [
-  { role: "Full-Stack Python Intern", date: "JAN 2026 — PRESENT", desc: "Focusing on Advanced Django & Python Full-Stack development at BrainyBeam." },
+  { role: "Full-Stack Python Intern", date: "JAN 2026 — MAR 2026", desc: "Completed a 3-month intensive internship at BrainyBeam focusing on Advanced Django & Python Full-Stack development." },
   { role: "Python Django Intern", date: "JULY 2025", desc: "Focusing on backend architecture & REST APIs." },
   { role: "Web Developer & Designer Intern", date: "JUN 2024 — AUG 2024", desc: "Designed responsive interfaces & frontend logic." }
 ];
@@ -102,23 +104,28 @@ export const SKILLS = [
   { t: "Others", d: "VSCode, Android Studio", icon: Monitor }
 ];
 
-export const CERTIFICATIONS = [
+  { 
+    title: "GUNIpreneur Bootcamp", 
+    desc: "2nd Runner-up • Most Innovative Idea • Ganpat University SSIP", 
+    icon: Medal,
+    color: "text-fuchsia-500"
+  },
+  { 
+    title: "Full-Stack Python Completion", 
+    desc: "BrainyBeam Technologies • 3 Months Internship", 
+    icon: CheckCircle2,
+    color: "text-green-500"
+  },
   { 
     title: "Google Cybersecurity", 
-    desc: "Google / Coursera • Sep 2025", 
+    desc: "Google / Coursera • Professional Certificate", 
     icon: ShieldCheck,
     color: "text-yellow-500"
   },
   { 
     title: "Smart India Hackathon", 
-    desc: "Participation", 
+    desc: "National Level Participation", 
     icon: Trophy,
     color: "text-purple-500"
-  },
-  { 
-    title: "AI/ML Basics Workshop", 
-    desc: "Coursera / College", 
-    icon: Cpu,
-    color: "text-blue-500"
   }
 ];
