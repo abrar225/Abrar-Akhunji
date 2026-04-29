@@ -29,6 +29,18 @@ const PROVIDERS = [
   { id: 'nvidia', name: 'NVIDIA NIM' }
 ];
 
+const PROVIDER_KEY_LINKS = {
+  openrouter: 'https://openrouter.ai/keys',
+  openai: 'https://platform.openai.com/api-keys',
+  gemini: 'https://aistudio.google.com/app/apikey',
+  anthropic: 'https://console.anthropic.com/settings/keys',
+  groq: 'https://console.groq.com/keys',
+  mistral: 'https://console.mistral.ai/api-keys',
+  cohere: 'https://dashboard.cohere.com/api-keys',
+  together: 'https://api.together.xyz/settings/api-keys',
+  nvidia: 'https://build.nvidia.com/'
+};
+
 const DEFAULT_MODELS = [
   // --- FREE MODELS ---
   { id: "minimax/minimax-m2.5:free", name: "Minimax M2.5 (Free)" },
@@ -215,7 +227,10 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
       title: "New Project",
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
-      currentCode: null
+      currentCode: null,
+      currentHTML: '',
+      currentCSS: '',
+      currentJS: ''
     };
     try {
       // 1. Create Project
@@ -248,9 +263,18 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
     // Persist last opened project for resume-on-refresh
     localStorage.setItem(LAST_PROJECT_KEY, project.id);
     
-    if (project.currentCode) {
-      setPreviewCode(project.currentCode);
+    // Restore code from individual fields first, fallback to currentCode object
+    const restoredCode = {
+      html: project.currentHTML || project.currentCode?.html || '',
+      css: project.currentCSS || project.currentCode?.css || '',
+      js: project.currentJS || project.currentCode?.js || ''
+    };
+    
+    if (restoredCode.html || restoredCode.css || restoredCode.js) {
+      setPreviewCode(restoredCode);
       setHasGenerated(true);
+      // Fast-restore to localStorage for instant recovery
+      localStorage.setItem('fixo_last_code', JSON.stringify(restoredCode));
     } else {
       setPreviewCode({ html: '', css: '', js: '' });
       setHasGenerated(false);
@@ -294,9 +318,16 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
       console.error("Failed to update chat messages", e);
     }
 
-    // 2. Update Project metadata & code
+    // 2. Update Project metadata & code (save both structured + individual fields)
     const projUpdate = { updatedAt: serverTimestamp() };
-    if (newPreviewCode) projUpdate.currentCode = newPreviewCode;
+    if (newPreviewCode) {
+      projUpdate.currentCode = newPreviewCode;
+      projUpdate.currentHTML = newPreviewCode.html || '';
+      projUpdate.currentCSS = newPreviewCode.css || '';
+      projUpdate.currentJS = newPreviewCode.js || '';
+      // Also persist to localStorage for instant recovery on refresh
+      localStorage.setItem('fixo_last_code', JSON.stringify(newPreviewCode));
+    }
     if (title && title !== "New Generation" && title !== "New Project") projUpdate.title = title;
 
     try {
@@ -785,7 +816,13 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
                 <div>
                   <label className={`block text-xs font-medium mb-1 flex justify-between ${theme === 'dark' ? 'text-white/70' : 'text-black/70'}`}>
                     <span>API Key</span>
-                    <a href="#" className="text-violet-500 hover:underline">Get Key</a>
+                    <a 
+                      href={PROVIDER_KEY_LINKS[provider] || '#'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-violet-500 hover:underline"
+                      onClick={(e) => { e.preventDefault(); window.open(PROVIDER_KEY_LINKS[provider] || 'https://openrouter.ai/keys', '_blank'); }}
+                    >Get Key →</a>
                   </label>
                   <div className="relative">
                     <Lock size={16} className={`absolute left-3 top-3.5 ${theme === 'dark' ? 'text-white/30' : 'text-black/30'}`} />
@@ -1003,10 +1040,10 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
         </div>
       </div>
 
-      {/* RIGHT WORKSPACE / PREVIEW PANEL */}
-      <div className={`${mobileTab === 'preview' ? 'flex' : 'hidden'} md:flex flex-col relative w-full h-full overflow-hidden z-0`}>
+      {/* RIGHT WORKSPACE / PREVIEW + CODE PANEL */}
+      <div className={`${mobileTab !== 'prompt' ? 'flex' : 'hidden'} md:flex flex-col relative w-full h-full overflow-hidden z-0`}>
         
-        {/* GLOBAL WORKSPACE TOP BAR */}
+        {/* GLOBAL WORKSPACE TOP BAR — ALWAYS VISIBLE, NEVER CONDITIONALLY REMOVED */}
         <div className={`flex items-center justify-between px-3 md:px-4 py-3 border-b flex-shrink-0 ${theme === 'dark' ? 'border-white/[0.05] bg-[#0a0a0c]' : 'border-black/[0.05] bg-white'}`}>
           <div className="flex items-center gap-1.5 hidden md:flex">
             <button onClick={() => setActiveView('preview')} className={`p-1.5 rounded-lg transition-all ${activeView === 'preview' ? 'bg-violet-500/20 text-violet-400' : (theme === 'dark' ? 'hover:bg-white/5 text-white/50 hover:text-white' : 'hover:bg-black/5 text-black/50 hover:text-black')}`} title="Preview Only">
@@ -1020,7 +1057,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
             </button>
           </div>
           <div className="md:hidden flex font-semibold text-xs items-center gap-2">
-            <Layout size={16} className="text-violet-500"/> Live Preview
+            <Layout size={16} className="text-violet-500"/> {mobileTab === 'code' ? 'Code Editor' : 'Live Preview'}
           </div>
           
           {/* Fake Browser URL Bar */}
@@ -1044,11 +1081,11 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
           </div>
         </div>
 
-        {/* PREVIEW CONTAINER */}
+        {/* CONTENT AREA — switches content based on activeView, NEVER removes the top bar */}
         <div className="flex-1 flex flex-col relative min-h-0 overflow-hidden">
           
-          {/* PREVIEW CONTENT */}
-          <div className={`flex flex-col relative w-full h-full transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${activeView === 'code' ? 'hidden lg:hidden' : ''}`}>
+          {/* PREVIEW CONTENT — visible in preview and split modes */}
+          <div className={`flex flex-col relative w-full h-full transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${activeView === 'code' ? 'hidden' : ''}`}>
             <div className={`flex-1 p-0 md:p-6 lg:p-8 overflow-hidden flex items-center justify-center relative ${theme === 'dark' ? 'bg-[#050505]' : 'bg-[#f5f5f5]'}`}>
               <div className="absolute inset-0 opacity-[0.015] pointer-events-none mix-blend-overlay" style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")'}}></div>
               
@@ -1105,7 +1142,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
         </div>
       </div>
 
-      {/* CODE PANEL (Desktop grid item, Tablet drawer) */}
+      {/* CODE PANEL — visible in code and split modes on desktop, drawer on tablet, tab on mobile */}
       <div className={`${mobileTab === 'code' ? 'flex' : 'hidden'} ${showCodeDrawer ? 'md:flex' : 'md:hidden'} ${activeView === 'preview' ? 'lg:hidden' : 'lg:flex'} flex-col h-full w-full transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${theme === 'dark' ? 'border-white/[0.05] bg-[#0a0a0c]' : 'border-black/[0.05] bg-[#fcfcfc]'} z-[60] md:fixed md:top-0 md:right-0 md:w-[400px] lg:relative lg:w-full lg:border-l md:shadow-2xl lg:shadow-none ${showCodeDrawer ? 'md:translate-x-0' : 'md:translate-x-full lg:translate-x-0'}`}>
             <div className={`flex items-center justify-between p-2 md:p-3 border-b flex-shrink-0 ${theme === 'dark' ? 'border-white/[0.05]' : 'border-black/[0.05]'}`}>
               <div className="flex gap-1.5">
