@@ -437,41 +437,102 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
     setIsVerifying(true);
     setVerificationStatus(null);
     try {
-      // In a production app with multiple providers, model fetching logic differs heavily per provider.
-      // For this implementation, we will skip complex fetching for non-standard providers to avoid CORS blocks,
-      // and allow the user to type or select from generic provider names if dynamic fetch isn't supported.
       let modelsList = [];
       
-      if (provider === 'openrouter' || provider === 'openai') {
-        const url = provider === 'openai' ? 'https://api.openai.com/v1/models' : 'https://openrouter.ai/api/v1/models';
-        const res = await fetch(url, { headers: { 'Authorization': `Bearer ${apiKey}` } });
-        if (!res.ok) throw new Error("Invalid Key");
+      if (provider === 'openrouter') {
+        const res = await fetch('https://openrouter.ai/api/v1/models', { headers: { 'Authorization': `Bearer ${apiKey}` } });
+        if (!res.ok) throw new Error('Invalid API Key');
         const data = await res.json();
-        modelsList = data.data.map(m => ({ id: m.id, name: m.id })).filter(m => !m.id.includes('embedding') && !m.id.includes('dall-e') && !m.id.includes('tts') && !m.id.includes('whisper'));
+        modelsList = (data.data || [])
+          .filter(m => !m.id.includes('embedding') && !m.id.includes('dall-e') && !m.id.includes('tts') && !m.id.includes('whisper') && !m.id.includes('moderation'))
+          .sort((a, b) => (a.id || '').localeCompare(b.id || ''))
+          .map(m => ({ id: m.id, name: m.name || m.id }));
+      } else if (provider === 'openai') {
+        const res = await fetch('https://api.openai.com/v1/models', { headers: { 'Authorization': `Bearer ${apiKey}` } });
+        if (!res.ok) throw new Error('Invalid API Key');
+        const data = await res.json();
+        modelsList = (data.data || [])
+          .filter(m => (m.id.includes('gpt') || m.id.includes('o1') || m.id.includes('o3') || m.id.includes('o4')) && !m.id.includes('instruct') && !m.id.includes('realtime'))
+          .sort((a, b) => b.created - a.created)
+          .map(m => ({ id: m.id, name: m.id }));
       } else if (provider === 'gemini') {
         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
-        if (!res.ok) throw new Error("Invalid Key");
+        if (!res.ok) throw new Error('Invalid API Key');
         const data = await res.json();
-        modelsList = data.models.map(m => ({ id: m.name.replace('models/', ''), name: m.displayName || m.name })).filter(m => m.id.includes('gemini'));
-      } else if (provider === 'anthropic') {
-        modelsList = [{ id: 'claude-3-5-sonnet-20240620', name: 'Claude 3.5 Sonnet' }, { id: 'claude-3-haiku-20240307', name: 'Claude 3 Haiku' }];
+        modelsList = (data.models || [])
+          .filter(m => m.name.includes('gemini'))
+          .map(m => ({ id: m.name.replace('models/', ''), name: m.displayName || m.name.replace('models/', '') }));
       } else if (provider === 'groq') {
-        modelsList = [{ id: 'llama3-70b-8192', name: 'Llama 3 70B' }, { id: 'mixtral-8x7b-32768', name: 'Mixtral 8x7B' }];
+        const res = await fetch('https://api.groq.com/openai/v1/models', { headers: { 'Authorization': `Bearer ${apiKey}` } });
+        if (!res.ok) throw new Error('Invalid API Key');
+        const data = await res.json();
+        modelsList = (data.data || [])
+          .filter(m => m.active !== false)
+          .map(m => ({ id: m.id, name: m.id }));
+      } else if (provider === 'anthropic') {
+        // Anthropic doesn't have a public model listing endpoint; validate key with a minimal request
+        const res = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: { 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'Content-Type': 'application/json' },
+          body: JSON.stringify({ model: 'claude-3-haiku-20240307', max_tokens: 1, messages: [{ role: 'user', content: 'hi' }] })
+        });
+        // 200 or 400 (bad request but key is valid) both indicate valid key; 401 means invalid
+        if (res.status === 401) throw new Error('Invalid API Key');
+        modelsList = [
+          { id: 'claude-sonnet-4-20250514', name: 'Claude Sonnet 4' },
+          { id: 'claude-3-7-sonnet-20250219', name: 'Claude 3.7 Sonnet' },
+          { id: 'claude-3-5-sonnet-20241022', name: 'Claude 3.5 Sonnet v2' },
+          { id: 'claude-3-5-sonnet-20240620', name: 'Claude 3.5 Sonnet' },
+          { id: 'claude-3-5-haiku-20241022', name: 'Claude 3.5 Haiku' },
+          { id: 'claude-3-opus-20240229', name: 'Claude 3 Opus' },
+          { id: 'claude-3-haiku-20240307', name: 'Claude 3 Haiku' },
+        ];
+      } else if (provider === 'mistral') {
+        const res = await fetch('https://api.mistral.ai/v1/models', { headers: { 'Authorization': `Bearer ${apiKey}` } });
+        if (!res.ok) throw new Error('Invalid API Key');
+        const data = await res.json();
+        modelsList = (data.data || [])
+          .map(m => ({ id: m.id, name: m.id }));
+      } else if (provider === 'together') {
+        const res = await fetch('https://api.together.xyz/v1/models', { headers: { 'Authorization': `Bearer ${apiKey}` } });
+        if (!res.ok) throw new Error('Invalid API Key');
+        const data = await res.json();
+        modelsList = (data || [])
+          .filter(m => m.type === 'chat' || m.type === 'language')
+          .map(m => ({ id: m.id, name: m.display_name || m.id }));
+      } else if (provider === 'cohere') {
+        modelsList = [
+          { id: 'command-r-plus', name: 'Command R+' },
+          { id: 'command-r', name: 'Command R' },
+          { id: 'command', name: 'Command' },
+          { id: 'command-light', name: 'Command Light' }
+        ];
+      } else if (provider === 'nvidia') {
+        modelsList = [
+          { id: 'meta/llama-3.1-405b-instruct', name: 'Llama 3.1 405B' },
+          { id: 'meta/llama-3.1-70b-instruct', name: 'Llama 3.1 70B' },
+          { id: 'nvidia/nemotron-4-340b-instruct', name: 'Nemotron 340B' },
+          { id: 'mistralai/mixtral-8x22b-instruct-v0.1', name: 'Mixtral 8x22B' },
+          { id: 'google/gemma-2-27b-it', name: 'Gemma 2 27B' }
+        ];
       } else {
         modelsList = [{ id: 'default', name: `Default ${provider} Model` }];
       }
 
+      if (modelsList.length === 0) {
+        throw new Error('No models found for this API key. Please check your key permissions.');
+      }
+
       setFetchedModels(modelsList);
-      if (modelsList.length > 0) setSelectedModel(modelsList[0].id);
+      setSelectedModel(modelsList[0].id);
       
       saveProvider(provider);
       saveApiKey(apiKey);
       saveModels(modelsList);
       
       setVerificationStatus('success');
-      setTimeout(() => setShowProfile(false), 1500);
     } catch (error) {
-      console.error(error);
+      console.error('API key verification failed:', error);
       setVerificationStatus('error');
       setFetchedModels([]);
     }
@@ -839,38 +900,38 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
                 </div>
                 
                 <button 
-                  onClick={async () => {
-                    setIsVerifying(true);
-                    setVerificationStatus(null);
-                    saveApiKey(apiKey);
-                    saveProvider(provider);
-                    try {
-                      // Fake verification delay
-                      await new Promise(r => setTimeout(r, 1000));
-                      setVerificationStatus('success');
-                    } catch (e) {
-                      setVerificationStatus('error');
-                    }
-                    setIsVerifying(false);
-                  }}
+                  onClick={handleVerifyAndFetch}
                   disabled={!apiKey || isVerifying}
                   className="w-full py-3 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-bold flex items-center justify-center gap-2 transition-all disabled:opacity-50"
                 >
                   {isVerifying ? <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin"></div> : <CheckCircle2 size={16} />}
-                  {isVerifying ? "Verifying..." : "Save & Verify API Key"}
+                  {isVerifying ? "Verifying & Fetching Models..." : "Verify Key & Load Models"}
                 </button>
 
                 {verificationStatus === 'success' && (
                   <div className="p-3 rounded-lg bg-green-500/10 border border-green-500/20 text-green-500 text-xs flex items-start gap-2">
                     <CheckCircle2 size={14} className="mt-0.5 flex-shrink-0" />
-                    <p>API Key successfully verified and securely stored in your browser's local memory.</p>
+                    <div>
+                      <p className="font-medium">API Key verified successfully!</p>
+                      <p className="mt-1 opacity-70">{fetchedModels.length} models loaded. Select your preferred model from the dropdown in the left panel.</p>
+                    </div>
                   </div>
                 )}
                 {verificationStatus === 'error' && (
                   <div className="p-3 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-500 text-xs flex items-start gap-2">
                     <AlertCircle size={14} className="mt-0.5 flex-shrink-0" />
-                    <p>Failed to verify API key. Please check the key and your internet connection.</p>
+                    <p>Failed to verify API key. Please check the key is correct, has proper permissions, and your internet is connected.</p>
                   </div>
+                )}
+
+                {/* Clear Key */}
+                {loadApiKey() && (
+                  <button 
+                    onClick={handleClearKey}
+                    className={`w-full py-2.5 rounded-xl border text-xs font-medium flex items-center justify-center gap-2 transition-all ${theme === 'dark' ? 'border-white/10 text-white/50 hover:bg-white/5 hover:text-white' : 'border-black/10 text-black/50 hover:bg-black/5 hover:text-black'}`}
+                  >
+                    <X size={14} /> Clear API Key & Use Free Models
+                  </button>
                 )}
               </div>
             </div>
