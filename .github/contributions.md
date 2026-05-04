@@ -78,3 +78,4 @@
 - [2026-04-25T17:53:35] chore: update configuration and build scripts
 - [2026-04-26T20:47:48] feat: add utility methods for state management
 - [2026-05-04T10:43:36] feat: add utility methods for state management
+- [2026-05-04T11:50:02] chore: update dependencies and environment config
