@@ -17,3 +17,4 @@
 <!-- [2026-01-30T09:58:37] docs: update system architecture details -->
 <!-- [2026-02-03T09:18:36] docs: update system architecture details -->
 <!-- [2026-03-06T18:56:16] docs: update system architecture details -->
+<!-- [2026-05-08T10:02:04] docs: update system architecture details -->
