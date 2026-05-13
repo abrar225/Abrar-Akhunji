@@ -83,3 +83,4 @@
 - [2026-05-04T20:23:55] refactor: optimize internal helper functions
 - [2026-05-08T18:58:55] docs: clarify API usage examples in documentation
 - [2026-05-12T11:33:43] style: improve code formatting and comments
+- [2026-05-13T11:40:38] docs: update activity log and documentation
