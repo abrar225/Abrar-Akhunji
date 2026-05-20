@@ -14,6 +14,22 @@ import {
 
 export const PROJECTS = [
   { 
+    title: "GourmetGo", 
+    category: "FULL STACK", 
+    year: "2026", 
+    description: "A complete, online multi-portal food ordering and delivery ecosystem (similar to Zomato/Swiggy) with four dedicated modules: Customer, Vendor (Restaurant Owner), Rider (Delivery Partner), and Admin.", 
+    features: [
+      "Real-time order tracking and notifications via WebSockets (Django Channels)",
+      "Secure payment processing with Razorpay integration (UPI and COD support)",
+      "Auto-location detection (browser Geolocation) and 15km radius restaurant discovery",
+      "Dynamic admin panel for restaurant approvals, payouts, and system health checks"
+    ], 
+    tech: ["Next.js 14", "React", "Django 5.0", "Django Channels", "Redis", "Razorpay", "Tailwind CSS", "Cloudinary"], 
+    image: "images/gourmetgo.png", 
+    github: "https://github.com/abrar225/GourmetGo", 
+    demo: "https://gourmet-go.vercel.app/" 
+  },
+  { 
     title: "Library Management System", 
     category: "FULL STACK", 
     year: "2025", 
