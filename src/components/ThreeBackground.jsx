@@ -40,8 +40,9 @@ const ThreeBackground = ({ theme }) => {
     const particles = new THREE.Points(particlesGeo, particlesMat);
     scene.add(particles);
 
+    let animationFrameId;
     const animate = () => {
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
       core.rotation.y += 0.002;
       core.rotation.x += 0.001;
       particles.rotation.y -= 0.0005;
@@ -56,9 +57,16 @@ const ThreeBackground = ({ theme }) => {
       renderer.setSize(window.innerWidth, window.innerHeight);
     };
     window.addEventListener('resize', handleResize);
+    
     return () => {
+      cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', handleResize);
       if (mountRef.current) mountRef.current.innerHTML = '';
+      geo.dispose();
+      mat.dispose();
+      particlesGeo.dispose();
+      particlesMat.dispose();
+      renderer.dispose();
     };
   }, [theme]);
 

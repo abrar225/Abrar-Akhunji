@@ -40,6 +40,15 @@ service cloud.firestore {
         && resource.data.userId == request.auth.uid;
     }
     
+    // Projects collection - only the owning user can access their projects
+    match /projects/{projectId} {
+      allow read, write: if request.auth != null 
+        && (resource == null || resource.data.userId == request.auth.uid);
+      
+      allow create: if request.auth != null 
+        && request.resource.data.userId == request.auth.uid;
+    }
+    
     // Deny all other access by default
     match /{document=**} {
       allow read, write: if false;
@@ -51,6 +60,7 @@ service cloud.firestore {
 export const FIREBASE_RULES_INFO = `
 Firebase Security Rules are configured to:
 - Only authenticated users can read/write their own data
+- Project data is scoped to the owning user (userId field must match auth.uid)
 - Chat data is scoped to the owning user (userId field must match auth.uid)
 - No unauthorized access to any collection
 - Default deny for all unmatched paths

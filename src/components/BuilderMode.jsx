@@ -202,9 +202,17 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
   const loadProjects = async (uid) => {
     setProjectsLoading(true);
     try {
-      const q = query(collection(db, 'projects'), where('userId', '==', uid), orderBy('updatedAt', 'desc'));
+      const q = query(collection(db, 'projects'), where('userId', '==', uid));
       const snapshot = await getDocs(q);
       const loadedProjects = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      
+      // Sort client-side safely without requiring Firestore composite index
+      loadedProjects.sort((a, b) => {
+        const timeA = a.updatedAt?.toMillis ? a.updatedAt.toMillis() : (a.updatedAt?.seconds ? a.updatedAt.seconds * 1000 : 0);
+        const timeB = b.updatedAt?.toMillis ? b.updatedAt.toMillis() : (b.updatedAt?.seconds ? b.updatedAt.seconds * 1000 : 0);
+        return timeB - timeA;
+      });
+      
       setProjects(loadedProjects);
       
       if (loadedProjects.length > 0) {
@@ -217,7 +225,7 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
       }
     } catch (e) {
       console.error("Failed to load projects", e);
-      await createNewProject(uid);
+      setProjects([]);
     } finally {
       setProjectsLoading(false);
     }
@@ -240,8 +248,9 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
       // 1. Create Project
       const projRef = await addDoc(collection(db, 'projects'), newProject);
       
-      // 2. Create associated Chat
+      // 2. Create associated Chat with userId for security rules
       const chatRef = await addDoc(collection(db, 'chats'), {
+        userId: uid,
         projectId: projRef.id,
         messages: newMessages,
         createdAt: serverTimestamp(),
@@ -293,9 +302,10 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
         setCurrentChatId(chatDoc.id);
         setMessages(chatDoc.data().messages || []);
       } else {
-        // Fallback: create a chat if none exists
+        // Fallback: create a chat if none exists, with userId for security rules
         const newMessages = [{ role: 'ai', text: "I am FixO The Builder. What are we creating today?" }];
         const chatRef = await addDoc(collection(db, 'chats'), {
+          userId: user?.uid || project.userId,
           projectId: project.id,
           messages: newMessages,
           createdAt: serverTimestamp(),
@@ -346,8 +356,8 @@ const BuilderMode = ({ theme, initialModel, onExit }) => {
           if(p.id === currentProjectId) return { ...p, ...projUpdate, updatedAt: { toMillis: () => Date.now() } };
           return p;
         }).sort((a, b) => {
-          const timeA = a.updatedAt?.toMillis ? a.updatedAt.toMillis() : 0;
-          const timeB = b.updatedAt?.toMillis ? b.updatedAt.toMillis() : 0;
+          const timeA = a.updatedAt?.toMillis ? a.updatedAt.toMillis() : (a.updatedAt?.seconds ? a.updatedAt.seconds * 1000 : Date.now());
+          const timeB = b.updatedAt?.toMillis ? b.updatedAt.toMillis() : (b.updatedAt?.seconds ? b.updatedAt.seconds * 1000 : Date.now());
           return timeB - timeA;
         }));
       } catch (e) {

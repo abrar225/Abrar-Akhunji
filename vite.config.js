@@ -13,11 +13,10 @@ const vercelApiMock = (mode) => {
     name: 'vercel-api-mock',
     configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
-        // Match /api/generate and /api/chat routes
+        // Match /api/generate route
         const isGenerate = req.url === '/api/generate' && req.method === 'POST';
-        const isChat = req.url === '/api/chat' && req.method === 'POST';
 
-        if (isGenerate || isChat) {
+        if (isGenerate) {
           let body = '';
           req.on('data', chunk => {
             body += chunk.toString();
@@ -45,8 +44,7 @@ const vercelApiMock = (mode) => {
               }
 
               // Route to the correct handler
-              const handlerFile = isGenerate ? 'generate.js' : 'chat.js';
-              const handlerPath = path.join(__dirname, 'api', handlerFile) + '?update=' + Date.now();
+              const handlerPath = path.join(__dirname, 'api', 'generate.js') + '?update=' + Date.now();
               const apiHandler = await import(handlerPath);
               await apiHandler.default(req, res);
             } catch (err) {
@@ -73,5 +71,25 @@ export default defineConfig(({ mode }) => {
       tailwindcss(),
       vercelApiMock(mode)
     ],
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              if (id.includes('three')) {
+                return 'vendor-three';
+              }
+              if (id.includes('gsap') || id.includes('lenis') || id.includes('framer-motion')) {
+                return 'vendor-animation';
+              }
+              if (id.includes('firebase')) {
+                return 'vendor-firebase';
+              }
+              return 'vendor-core';
+            }
+          }
+        }
+      }
+    }
   };
 })

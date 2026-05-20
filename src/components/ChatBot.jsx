@@ -66,6 +66,11 @@ const ChatBot = ({ theme }) => {
   const dragRef = useRef({ isDragging: false, wasDragged: false, startX: 0, startY: 0, startPosX: 0, startPosY: 0 });
   const widgetRef = useRef(null);
 
+  const widgetPosRef = useRef(widgetPos);
+  useEffect(() => {
+    widgetPosRef.current = widgetPos;
+  }, [widgetPos]);
+
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.style.height = 'auto';
@@ -100,7 +105,7 @@ const ChatBot = ({ theme }) => {
 
   const onDragStart = (clientX, clientY) => {
     if (isOpen) return;
-    dragRef.current = { isDragging: true, wasDragged: false, startX: clientX, startY: clientY, startPosX: widgetPos.x, startPosY: widgetPos.y };
+    dragRef.current = { isDragging: true, wasDragged: false, startX: clientX, startY: clientY, startPosX: widgetPosRef.current.x, startPosY: widgetPosRef.current.y };
   };
 
   const onDragMove = (clientX, clientY) => {
@@ -119,7 +124,7 @@ const ChatBot = ({ theme }) => {
     if (!d.isDragging) return;
     d.isDragging = false;
     if (d.wasDragged) {
-      const final = snapToEdge(widgetPos.x, widgetPos.y);
+      const final = snapToEdge(widgetPosRef.current.x, widgetPosRef.current.y);
       setWidgetPos(final);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(final));
     }
@@ -140,7 +145,7 @@ const ChatBot = ({ theme }) => {
       window.removeEventListener('touchmove', onTouchMove);
       window.removeEventListener('touchend', onEnd);
     };
-  });
+  }, []);
 
   useEffect(() => {
     const resetTime = localStorage.getItem('fixo_chat_reset');
@@ -153,6 +158,20 @@ const ChatBot = ({ theme }) => {
       setChatCredits(10);
     } else if (storedCredits) {
       setChatCredits(parseInt(storedCredits));
+    }
+  }, []);
+
+  // Pre-load speech synthesis voices on mount (handles async voice loading)
+  useEffect(() => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.getVoices();
+      const handleVoicesChanged = () => {
+        window.speechSynthesis.getVoices();
+      };
+      window.speechSynthesis.addEventListener('voiceschanged', handleVoicesChanged);
+      return () => {
+        window.speechSynthesis.removeEventListener('voiceschanged', handleVoicesChanged);
+      };
     }
   }, []);
 
@@ -169,7 +188,7 @@ const ChatBot = ({ theme }) => {
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     const voices = window.speechSynthesis.getVoices();
-    const englishVoice = voices.find(v => v.lang.includes('en-GB') || v.lang.includes('en-US'));
+    const englishVoice = voices.find(v => v.lang.startsWith('en-GB') || v.lang.startsWith('en-US') || v.lang.includes('en-'));
     if (englishVoice) utterance.voice = englishVoice;
     utterance.rate = 1.0;
     utterance.pitch = 1.0;

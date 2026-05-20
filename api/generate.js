@@ -87,9 +87,29 @@ export default async function handler(req, res) {
     });
   }
 
+  // Map model name to OpenRouter format if we fell back or are using OpenRouter natively
+  let resolvedModel = model;
+  if (resolvedProvider === 'openrouter' && model && !model.includes('/')) {
+    const mapping = {
+      'gpt-4o': 'openai/gpt-4o',
+      'gpt-4o-mini': 'openai/gpt-4o-mini',
+      'claude-3-5-sonnet': 'anthropic/claude-3.5-sonnet',
+      'claude-3-5-sonnet-20240620': 'anthropic/claude-3.5-sonnet',
+      'claude-3-opus': 'anthropic/claude-3-opus',
+      'gemini-1.5-pro': 'google/gemini-pro-1.5',
+      'gemini-1.5-flash': 'google/gemini-flash-1.5',
+      'gemini-2.0-flash': 'google/gemini-2.0-flash',
+      'llama3-70b-8192': 'meta-llama/llama-3-70b-instruct',
+      'mistral-large-latest': 'mistralai/mistral-large',
+      'command-r-plus': 'cohere/command-r-plus',
+      'grok-2': 'xai/grok-2'
+    };
+    resolvedModel = mapping[model] || `openai/${model}`;
+  }
+
   // ── Call AI Provider ──────────────────────────────────────────────────
   try {
-    const result = await callProvider(resolvedProvider, model, messages, apiKey);
+    const result = await callProvider(resolvedProvider, resolvedModel, messages, apiKey);
     return res.status(200).json({ success: true, data: result });
   } catch (error) {
     console.error(`API Error (${resolvedProvider}):`, error.message);
