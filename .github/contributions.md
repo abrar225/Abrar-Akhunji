@@ -85,3 +85,4 @@
 - [2026-05-12T11:33:43] style: improve code formatting and comments
 - [2026-05-13T11:40:38] docs: update activity log and documentation
 - [2026-05-15T16:24:55] fix: correct minor typo in logging output
+- [2026-05-25T14:20:29] docs: clarify API usage examples in documentation
