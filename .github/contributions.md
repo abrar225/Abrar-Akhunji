@@ -86,3 +86,4 @@
 - [2026-05-13T11:40:38] docs: update activity log and documentation
 - [2026-05-15T16:24:55] fix: correct minor typo in logging output
 - [2026-05-25T14:20:29] docs: clarify API usage examples in documentation
+- [2026-05-25T17:06:26] refactor: clean up unused variables and imports
