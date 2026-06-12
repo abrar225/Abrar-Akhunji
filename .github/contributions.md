@@ -94,3 +94,4 @@
 - [2026-05-31T20:53:19] perf: improve execution speed in hot paths
 - [2026-06-05T10:54:35] perf: improve execution speed in hot paths
 - [2026-06-12T17:19:24] fix: correct minor typo in logging output
+- [2026-06-12T21:37:13] chore: update dependencies and environment config
