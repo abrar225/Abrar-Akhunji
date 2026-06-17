@@ -126,3 +126,4 @@ Do not reuse projects or designs without permission.
 <!-- [2026-06-08T21:11:56] style: improve formatting and badge alignment -->
 <!-- [2026-06-11T22:44:39] style: improve formatting and badge alignment -->
 <!-- [2026-06-14T22:36:54] docs(readme): update project documentation and overview -->
+<!-- [2026-06-17T12:36:53] style: improve formatting and badge alignment -->
