@@ -96,3 +96,4 @@
 - [2026-06-12T17:19:24] fix: correct minor typo in logging output
 - [2026-06-12T21:37:13] chore: update dependencies and environment config
 - [2026-06-16T17:10:39] refactor: clean up unused variables and imports
+- [2026-06-19T11:14:18] feat: add utility methods for state management
