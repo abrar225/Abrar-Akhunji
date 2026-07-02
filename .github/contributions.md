@@ -100,3 +100,4 @@
 - [2026-06-27T18:44:41] chore: update dependencies and environment config
 - [2026-06-27T19:41:06] fix: correct minor typo in logging output
 - [2026-06-29T20:43:29] perf: improve execution speed in hot paths
+- [2026-07-02T13:05:07] chore: update configuration and build scripts
