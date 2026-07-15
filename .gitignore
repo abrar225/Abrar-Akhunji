@@ -87,6 +87,10 @@ out
 dist
 dist-ssr
 
+# never commit the generated server secret or the rate-limit store
+**/api/config.php
+**/api/.rl/
+
 # Gatsby files
 .cache/
 # Comment in the public line in if your build choice is to replace app.js with a public/app.js
@@ -128,3 +132,17 @@ dist-ssr
 *.sln
 *.sw?
 *.local
+
+# Analysis tooling artifacts (not part of the source)
+.fixo/
+graphify-out/
+ABRAR_RESUME_DATA.md
+
+# Build error logs
+build_err*.log
+
+# Local design-reference clones (not part of the app)
+_reference-repos/
+
+# Claude workspace configuration
+.claude/

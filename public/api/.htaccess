@@ -1,0 +1,12 @@
+# Protect server-side secrets & rate-limit storage from direct HTTP access.
+# twin.php stays reachable; config.php and the .rl/ store do not.
+
+<Files "config.php">
+    Require all denied
+</Files>
+
+# Deny the rate-limit data directory (and any .json/.txt in /api)
+RedirectMatch 404 ^/api/\.rl/
+<FilesMatch "\.(json|txt)$">
+    Require all denied
+</FilesMatch>

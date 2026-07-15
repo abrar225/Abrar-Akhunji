@@ -2,14 +2,15 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Sun, Moon } from 'lucide-react';
 
-const ThemeToggle = ({ theme, toggleTheme, className = "" }) => (
+const ThemeToggle = ({ theme, toggleTheme, className = '' }) => (
   <motion.button
     onClick={toggleTheme}
-    className={`p-2.5 bg-white/5 backdrop-blur-lg border border-white/10 rounded-full shadow-lg hover:scale-110 transition-all duration-300 ${className}`}
-    whileHover={{ scale: 1.05 }}
-    whileTap={{ scale: 0.95 }}
+    aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+    className={`p-2.5 bg-surface border border-line rounded-full text-fg hover:text-accent hover:border-accent transition-colors duration-300 ${className}`}
+    whileHover={{ scale: 1.06 }}
+    whileTap={{ scale: 0.92 }}
   >
-    {theme === 'dark' ? <Sun size={18} className="text-yellow-400" /> : <Moon size={18} className="text-purple-600" />}
+    {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
   </motion.button>
 );
 

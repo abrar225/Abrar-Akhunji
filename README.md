@@ -1,109 +1,105 @@
 # Abrar Akhunji — Portfolio
 
-Hi, I’m **Abrar Akhunji**, a **Full-Stack Web & App Developer** with hands-on experience in **Python, Django, JavaScript, React, and UI/UX design**.  
-I focus on building **practical, production-ready applications** rather than toy projects.
+Hi, I'm **Abrar Akhunji**, an **AI/ML Engineer & Full-Stack Developer** building production-ready applications spanning food delivery ecosystems, computer vision systems, and healthcare AI.
 
-This repository represents my **developer portfolio**, showcasing real projects, technical skills, and the way I approach problem-solving.
+This portfolio is built with **React 19**, **Vite 6**, and **Tailwind CSS 4** — and it embeds **[FixO](#-fixo--ai-assistant--builder-ide)**, a draggable AI chat assistant and in-browser UI builder IDE.
 
 ---
 
 ## 👨‍💻 About Me
 
-- 🎓 B.Tech IT student  
-- 🧑‍💻 Full-Stack Web & App Developer  
-- 🐍 Strong background in **Python & Django**
-- 🌐 Experience with **React, JavaScript, HTML, CSS**
-- 🎨 UI/UX Designer with a focus on clean, usable interfaces
-- 🏢 Founder of **IT Project Solutions**
-- 🚀 Building my personal brand: **FireHawks**
-
-I prefer **clarity over complexity**, **functionality over hype**, and **execution over ideas**.
+- 🎓 B.E. in Information Technology (Kalol Institute of Technology)
+- 🧑‍💻 AI/ML Engineer + Python Developer + Full-Stack Learner
+- 🐍 Strong background in **Python, Django, OpenCV, Vision Transformers**
+- 🌐 Experience with **React, Next.js, JavaScript, GSAP, Three.js**
+- 🏢 Founder of **FireHawks** (tech brand)
+- 🚀 Building **FixO** — AI-powered UI generation IDE
 
 ---
 
 ## 🛠 Tech Stack
 
 **Frontend**
-- HTML5, CSS3, JavaScript
-- React.js
-- Responsive UI & UX Design
+- React 19, Next.js 14, JavaScript (ES6+)
+- Tailwind CSS 4, GSAP, Framer Motion, Three.js, Lenis
 
 **Backend**
-- Python
-- Django
-- REST APIs
+- Python, Django 5.0, Django Channels, Flask
+- REST APIs, WebSockets, Redis
 
-**Databases**
-- SQLite
-- MySQL (basic usage)
+**AI / ML**
+- OpenCV, NumPy, Pandas
+- TensorFlow / PyTorch, Vision Transformers
+- Computer Vision, Deep Learning
 
-**Other Skills**
-- Git & GitHub
-- Project structuring
-- Prompt-driven development (AI-assisted workflows)
-- Basic Machine Learning & Computer Vision concepts
+**Databases & Infra**
+- MySQL, SQLite, Redis, Firebase (Auth + Firestore)
+- Vite, GitHub Pages, Vercel
 
 ---
 
 ## 📌 Featured Projects
 
-### 🔹 Tech Toolbox
-A Python-based utility software containing multiple tools:
-- Password Encryption & Decryption
-- Face Detection & Recognition
-- File transfer via QR codes
-- Gesture-based brightness control
-- Webcam via phone camera  
-*(Modular, versioned releases starting from v0.1)*
+### 🔹 GourmetGo — Full-Stack Food Delivery Ecosystem
+A complete multi-portal food ordering system (Customer, Vendor, Rider, Admin) with real-time tracking via WebSockets, Razorpay payments, and geolocation-based discovery.
+**Tech:** Next.js 14, Django 5.0, Django Channels, Redis, Razorpay, Tailwind CSS
+**Live:** [gourmet-go.vercel.app](https://gourmet-go.vercel.app/) · [GitHub](https://github.com/abrar225/GourmetGo)
 
-### 🔹 Interview Management System (DRDO – RAC)
-A web-based system designed to:
-- Automate interview workflows
-- Match questions with relevance
-- Evaluate and score responses
-- Generate structured reports
+### 🔹 Cattle Breed Identification — AI/ML
+Classifies 41 Indian cattle breeds using Vision Transformer embeddings and image preprocessing.
+**Tech:** Python, OpenCV, Vision Transformer (ViT)
+**Live:** [BreedAI on HuggingFace](https://huggingface.co/spaces/abrar225/BreedAI) · [GitHub](https://github.com/abrar225/AI_cattle_vison)
 
-### 🔹 Portfolio & Business Websites
-- Designed and developed multiple responsive websites
-- Focused on performance, SEO, and usability
-- Custom UI/UX instead of template-based designs
+### 🔹 Brain Tumor Detection (MRI) — Healthcare AI
+Computer vision model trained on MRI scans for automated tumor detection using classical image processing and ML.
+**Tech:** Python, OpenCV, NumPy, Pandas
+**GitHub:** [Brain-Tumer-Detection-System](https://github.com/abrar225/Brain-Tumer-Detection-System)
 
-> More projects and case studies are continuously added.
+### 🔹 Real vs AI Image Detector — Computer Vision
+Deep-learning system that distinguishes AI-generated images from real ones using transformer-based feature extraction.
+**Tech:** Python, OpenCV, TensorFlow/PyTorch
+
+### 🔹 Library Management System — Full Stack
+Full-featured library platform with inventory management, payments, and reader community.
+**Tech:** Python, Django, MySQL, HTML, CSS, JavaScript
+**GitHub:** [Library-Management-System](https://github.com/abrar225/Library-Management-System)
+
+### 🔹 Kid's Space — Android App
+Interactive educational Android app for children with clean, kid-friendly UI.
+**Tech:** Android Studio, XML, Java
+
+---
+
+## 🤖 FixO — AI Assistant & Builder IDE
+
+Embedded directly in this portfolio:
+
+- **AI Chat Assistant** — 8+ free AI models via OpenRouter, draggable floating widget, text-to-speech, daily credit system
+- **Builder Mode IDE** — Describe a UI in natural language and get production HTML/CSS/JS. Supports 10 AI providers, project persistence via Firebase, ZIP export, and live preview
 
 ---
 
 ## 🌐 Live Portfolio
 
-🔗 **Website:** https://firehox.co.in  
-🔗 **GitHub:** https://github.com/abrar225
+🔗 **Website:** [abrar225.github.io/Abrar-Akhunji](https://abrar225.github.io/Abrar-Akhunji/)
+🔗 **GitHub:** [github.com/abrar225](https://github.com/abrar225)
+🔗 **LinkedIn:** [linkedin.com/in/abrar-akhunji](https://www.linkedin.com/in/abrar-akhunji/)
 
 ---
 
-## 📈 What I’m Currently Working On
+## 🚀 Getting Started
 
-- Improving full-stack architecture skills
-- Building scalable React + Django applications
-- Automation & workflow-based systems
-- Refining AI-assisted development workflows
-- Growing **FireHawks** as a serious tech brand
-
----
-
-## 🤝 Let’s Connect
-
-If you’re looking for:
-- A developer who actually understands what he builds  
-- Someone who can design **and** implement  
-- Clean, maintainable, real-world code  
-
-You can reach me here:
-
-- **GitHub:** https://github.com/abrar225  
-- **Website:** https://firehox.co.in  
+```bash
+npm install
+npm run dev      # Start dev server (includes Vercel API mock)
+npm run build    # Production build
+npm run preview  # Preview production build
+npm run deploy   # Deploy to GitHub Pages
+```
 
 ---
 
 ## 📄 License
 
-This portfolio is for **personal and professional showcasing**.  
+This portfolio is for **personal and professional showcasing**.
 Do not reuse projects or designs without permission.

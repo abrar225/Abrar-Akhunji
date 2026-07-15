@@ -1,71 +1,90 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
+/**
+ * ThreeBackground — a slow, warm particle field with a faint wireframe core.
+ * Recoloured for Ink & Ember: ember points on espresso (dark) or ink points on
+ * bone (light). Deliberately low-opacity so it reads as texture, not focus.
+ */
 const ThreeBackground = ({ theme }) => {
   const mountRef = useRef(null);
 
   useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const isDark = theme === 'dark';
+
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.z = 6;
+
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     if (mountRef.current) mountRef.current.appendChild(renderer.domElement);
 
-    // Core Sphere
-    const geo = new THREE.IcosahedronGeometry(1.8, 2);
+    // faint wireframe core
+    const geo = new THREE.IcosahedronGeometry(2.1, 1);
     const mat = new THREE.MeshBasicMaterial({
-      color: isDark ? 0x8b5cf6 : 0x7c3aed,
+      color: 0xff5a1f,
       wireframe: true,
       transparent: true,
-      opacity: isDark ? 0.03 : 0.08
+      opacity: isDark ? 0.05 : 0.07,
     });
     const core = new THREE.Mesh(geo, mat);
     scene.add(core);
 
-    // Particles
-    const particlesGeo = new THREE.BufferGeometry();
-    const count = 2000;
+    // drifting particles
+    const count = 1400;
+    const pGeo = new THREE.BufferGeometry();
     const pos = new Float32Array(count * 3);
-    for (let i = 0; i < count * 3; i++) pos[i] = (Math.random() - 0.5) * 18;
-    particlesGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    const particlesMat = new THREE.PointsMaterial({
-      size: 0.02,
-      color: isDark ? 0xffffff : 0x000000,
+    for (let i = 0; i < count * 3; i++) pos[i] = (Math.random() - 0.5) * 20;
+    pGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    const pMat = new THREE.PointsMaterial({
+      size: 0.022,
+      color: isDark ? 0xf4f1ea : 0x141414,
       transparent: true,
-      opacity: isDark ? 0.3 : 0.15
+      opacity: isDark ? 0.28 : 0.16,
     });
-    const particles = new THREE.Points(particlesGeo, particlesMat);
+    const particles = new THREE.Points(pGeo, pMat);
     scene.add(particles);
 
-    let animationFrameId;
+    let mouseX = 0;
+    let mouseY = 0;
+    const onMouse = (e) => {
+      mouseX = (e.clientX / window.innerWidth - 0.5);
+      mouseY = (e.clientY / window.innerHeight - 0.5);
+    };
+    window.addEventListener('mousemove', onMouse);
+
+    let raf;
     const animate = () => {
-      animationFrameId = requestAnimationFrame(animate);
-      core.rotation.y += 0.002;
-      core.rotation.x += 0.001;
-      particles.rotation.y -= 0.0005;
-      camera.position.y = window.scrollY * -0.002; // Parallax
+      raf = requestAnimationFrame(animate);
+      core.rotation.y += 0.0016;
+      core.rotation.x += 0.0009;
+      particles.rotation.y -= 0.0004;
+      camera.position.x += (mouseX * 0.6 - camera.position.x) * 0.03;
+      camera.position.y += (-mouseY * 0.6 - window.scrollY * 0.0018 - camera.position.y) * 0.05;
+      camera.lookAt(scene.position);
       renderer.render(scene, camera);
     };
     animate();
 
-    const handleResize = () => {
+    const onResize = () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
     };
-    window.addEventListener('resize', handleResize);
-    
+    window.addEventListener('resize', onResize);
+
     return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener('resize', handleResize);
+      cancelAnimationFrame(raf);
+      window.removeEventListener('resize', onResize);
+      window.removeEventListener('mousemove', onMouse);
       if (mountRef.current) mountRef.current.innerHTML = '';
       geo.dispose();
       mat.dispose();
-      particlesGeo.dispose();
-      particlesMat.dispose();
+      pGeo.dispose();
+      pMat.dispose();
       renderer.dispose();
     };
   }, [theme]);

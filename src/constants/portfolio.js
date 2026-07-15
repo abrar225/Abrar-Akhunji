@@ -13,8 +13,25 @@ import {
 } from 'lucide-react';
 
 export const PROJECTS = [
-  { 
-    title: "GourmetGo", 
+  {
+    title: "FixO CLI",
+    category: "AI DEVTOOL",
+    year: "2026",
+    description: "An autonomous, open-source AI coding platform that lives in your terminal. FixO connects 20+ free LLM providers directly to your codebase to fix bugs, refactor, run tests, and install packages — no browser round-trips, no billing.",
+    features: [
+      "Multi-AI router across 20+ free providers with automatic failover (FreeLLMAPI)",
+      "Self-correcting autonomous loop with a built-in test runner that iterates until tests pass",
+      "Atomic shadow staging, LSP pre-save syntax checks, and a credential vault that scrubs secrets before the LLM",
+      "Tree-Sitter AST workspace indexing for JS, TS, Python & Go"
+    ],
+    tech: ["Node.js", "SQLite", "Tree-Sitter", "LSP", "MCP", "Ollama"],
+    image: "/images/fixo.svg",
+    github: null,
+    demo: "https://fixo.firehox.com/",
+    embeddable: true
+  },
+  {
+    title: "GourmetGo",
     category: "FULL STACK", 
     year: "2026", 
     description: "A complete, online multi-portal food ordering and delivery ecosystem (similar to Zomato/Swiggy) with four dedicated modules: Customer, Vendor (Restaurant Owner), Rider (Delivery Partner), and Admin.", 
@@ -25,9 +42,10 @@ export const PROJECTS = [
       "Dynamic admin panel for restaurant approvals, payouts, and system health checks"
     ], 
     tech: ["Next.js 14", "React", "Django 5.0", "Django Channels", "Redis", "Razorpay", "Tailwind CSS", "Cloudinary"], 
-    image: "images/gourmetgo.png", 
-    github: "https://github.com/abrar225/GourmetGo", 
-    demo: "https://gourmet-go.vercel.app/" 
+    image: "/images/gourmetgo.webp",
+    github: "https://github.com/abrar225/GourmetGo",
+    demo: "https://gourmet-go.vercel.app/",
+    embeddable: false
   },
   { 
     title: "Library Management System", 
@@ -36,7 +54,7 @@ export const PROJECTS = [
     description: "A high-performance ecosystem designed to bridge the gap between physical pages and digital convenience. Manage inventory, process secure payments, and build a community of readers.", 
     features: ["Inventory management system", "Secure payment processing", "Reader community platform", "Digital catalog integration"], 
     tech: ["Python", "Django", "MySQL", "HTML", "CSS", "JavaScript"], 
-    image: "images/library_management.png", 
+    image: "/images/library_management.webp",
     github: "https://github.com/abrar225/Library-Management-System", 
     demo: null 
   },
@@ -47,7 +65,7 @@ export const PROJECTS = [
     description: "A deep-learning powered system that identifies whether an image is AI-generated or real using advanced image forensics and transformer-based feature extraction.", 
     features: ["AI-vs-Real image classification", "Vision Transformer–based feature embedding", "Noise & artifact pattern detection"], 
     tech: ["Python", "OpenCV", "NumPy", "Pandas", "TensorFlow/PyTorch"], 
-    image: "images/Real vs AI.png", 
+    image: "/images/Real vs AI.webp",
     github: null, 
     demo: null 
   },
@@ -58,9 +76,10 @@ export const PROJECTS = [
     description: "An ensemble-based AI tool capable of classifying 41 Indian cattle breeds using Vision Transformers and image preprocessing techniques.", 
     features: ["Recognition of 41 unique cattle breeds", "Vision Transformer (ViT) embeddings", "Clean dataset preprocessing pipeline"], 
     tech: ["Python", "OpenCV", "Vision Transformer"], 
-    image: "images/Cattel Breed.png", 
-    github: "https://github.com/abrar225/AI_cattle_vison", 
-    demo: "https://huggingface.co/spaces/abrar225/BreedAI" 
+    image: "/images/Cattel Breed.webp",
+    github: "https://github.com/abrar225/AI_cattle_vison",
+    demo: "https://huggingface.co/spaces/abrar225/BreedAI",
+    embeddable: true
   },
   { 
     title: "Brain Tumor Detection (MRI)", 
@@ -69,7 +88,7 @@ export const PROJECTS = [
     description: "A Computer Vision model trained on MRI scan data to detect tumor presence with high accuracy using classical image processing and ML techniques.", 
     features: ["Automated MRI-based tumor detection", "Binary classification (tumor / no tumor)", "Mask processing + thresholding + contour analysis"], 
     tech: ["Python", "OpenCV", "NumPy", "Pandas"], 
-    image: "images/Brain Tumor Detection.png", 
+    image: "/images/Brain Tumor Detection.webp",
     github: "https://github.com/abrar225/Brain-Tumer-Detection-System", 
     demo: null 
   },
@@ -80,7 +99,7 @@ export const PROJECTS = [
     description: "An interactive educational Android app designed for kids, focused on simple UI/UX and modular Java development.", 
     features: ["Clean, kid-friendly UI", "Built using XML layouts", "Focused on kid's study"], 
     tech: ["Android Studio", "XML", "Java"], 
-    image: "images/Kid’s Space.png", 
+    image: "/images/kids_space.webp",
     github: null, 
     demo: null 
   }
@@ -88,8 +107,8 @@ export const PROJECTS = [
 
 export const EXPERIENCE = [
   { role: "Full-Stack Python Intern", date: "JAN 2026 — MAR 2026", desc: "Completed 3-month intensive Full-Stack development program at BrainyBeam focusing on Advanced Django & Python ecosystem." },
-  { role: "Python Django Intern", date: "JULY 2025", desc: "Focusing on backend architecture & REST APIs." },
-  { role: "Web Developer & Designer Intern", date: "JUN 2024 — AUG 2024", desc: "Designed responsive interfaces & frontend logic." }
+  { role: "Python Django Intern", date: "JUL 2025", desc: "Focused on backend architecture & REST API development at BrainyBeam IT Solutions." },
+  { role: "Web Developer & Designer Intern", date: "JUN 2024 — AUG 2024", desc: "Designed responsive interfaces & implemented frontend logic." }
 ];
 
 export const EDUCATION = [
@@ -138,7 +157,7 @@ export const CERTIFICATIONS = [
     desc: "3-Month Internship Completion • Oct-Dec 2024", 
     icon: Code2,
     color: "text-cyan-500",
-    driveLink: "https://drive.google.com/drive/folders/1aSFRrcX6aAdSxNrsQAu1_yJ9sggheJtq?usp=sharing" // Note: user didn't give a drive link for this one specifically in the last message, I'll use the placeholder or check if they want it. Actually they said "just attach this link we have done in downloaded resume that kind of put this on Google Drive". I'll use a generic placeholder for now or keep it as is if they didn't provide one. Wait, they didn't provide one for Web Dev. I'll leave it empty for now or ask. Actually, I'll check the previous message. No drive link for Web Dev there.
+    driveLink: "https://drive.google.com/drive/folders/1aSFRrcX6aAdSxNrsQAu1_yJ9sggheJtq?usp=sharing"
   },
   { 
     title: "Google Cybersecurity", 

@@ -1,376 +1,470 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useState, useEffect, useLayoutEffect, lazy, Suspense } from 'react';
 import {
-  Github,
-  Linkedin,
-  Mail,
-  ArrowUpRight,
-  Briefcase,
-  GraduationCap,
-  Trophy,
-  Download,
-  Instagram,
-  FileCode,
-  Music,
-  Cpu
+  Github, Linkedin, ArrowUpRight, Briefcase, GraduationCap,
+  Trophy, Download, Instagram, Music, Cpu,
+  ScanEye, BrainCircuit, Network, Blocks, Rocket, Send,
 } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 
-// Components
-import CustomCursor from './components/CustomCursor';
+// eager (lightweight / above-the-fold)
+import CursorBubble from './components/CursorBubble';
+import ErrorBoundary from './components/ErrorBoundary';
 import LoadingScreen from './components/LoadingScreen';
-import ThreeBackground from './components/ThreeBackground';
 import ThemeToggle from './components/ThemeToggle';
-import ChatBot from './components/ChatBot';
 import FloatingDock from './components/FloatingDock';
 import SectionHeader from './components/SectionHeader';
 import SectionWrapper from './components/SectionWrapper';
-import ProjectCard from './components/ProjectCard';
+import DigitalTwin from './components/DigitalTwin';
+import ProjectShowcase from './components/ProjectShowcase';
+import SplitText from './components/SplitText';
+import Magnetic from './components/Magnetic';
+import Marquee from './components/Marquee';
+import HorizontalWords from './components/HorizontalWords';
+import VerticalMarquee from './components/VerticalMarquee';
+import RepelText from './components/RepelText';
 
-// Constants
+// lazy (heavy deps)
+const ThreeBackground = lazy(() => import('./components/ThreeBackground'));
+
 import { PROJECTS, EXPERIENCE, SKILLS, EDUCATION, CERTIFICATIONS } from './constants/portfolio';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const TECH_CRAWLER = [
+  'Python', 'PyTorch', 'TensorFlow', 'Computer Vision', 'React', 'Django',
+  'Next.js', 'OpenCV', 'Vision Transformers', 'REST APIs', 'Three.js', 'Firebase',
+];
+
+// `sticker` is a Lucide icon component — rendered + animated by HorizontalWords
+const HWORDS = [
+  { text: 'SENSE', sticker: ScanEye },
+  { text: 'LEARN', sticker: BrainCircuit },
+  { text: 'REASON', sticker: Network },
+  { text: 'BUILD', sticker: Blocks },
+  { text: 'DEPLOY', sticker: Rocket },
+  { text: 'SHIP', sticker: Send },
+];
+
 export default function App() {
-  const scrollRef = useRef(null);
-  const sectionRef = useRef(null);
-  const heroTextRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+  const [theme, setTheme] = useState(() => {
+    try { return localStorage.getItem('theme') || 'dark'; } catch { return 'dark'; }
+  });
 
   useEffect(() => {
     document.documentElement.className = theme;
-    localStorage.setItem('theme', theme);
+    try { localStorage.setItem('theme', theme); } catch { /* storage unavailable */ }
   }, [theme]);
 
-  const toggleTheme = () => setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  const toggleTheme = () => setTheme((p) => (p === 'dark' ? 'light' : 'dark'));
 
   useLayoutEffect(() => {
     if (isLoading) return;
-
     let lenis;
     let updateLenis;
 
-    let ctx = gsap.context(() => {
-      // 1. Lenis Smooth Scroll
+    const ctx = gsap.context(() => {
       lenis = new Lenis({
         duration: 1.2,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        orientation: 'vertical',
         smoothWheel: true,
+        touchMultiplier: 1.5,
       });
-
       lenis.on('scroll', ScrollTrigger.update);
-
-      updateLenis = (time) => {
-        lenis.raf(time * 1000);
-      };
+      updateLenis = (time) => lenis.raf(time * 1000);
       gsap.ticker.add(updateLenis);
-
-      // 2. Hero Animations
-      const heroElements = heroTextRef.current?.children;
-      if (heroElements) {
-        const tl = gsap.timeline();
-        tl.fromTo(heroElements[0], { x: -50, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, 0.2)
-          .fromTo(heroElements[2], { x: 50, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, 0.4)
-          .fromTo(heroElements[3], { x: -50, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, 0.6);
-      }
-
-      // 3. Responsive Scroll
-      let mm = gsap.matchMedia();
-      mm.add("(min-width: 768px)", () => {
-        if (sectionRef.current && scrollRef.current) {
-          const amountToScroll = scrollRef.current.scrollWidth - window.innerWidth;
-          gsap.to(scrollRef.current, {
-            x: -amountToScroll,
-            ease: "none",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top top",
-              end: () => `+=${amountToScroll}`,
-              pin: true,
-              scrub: 1,
-              invalidateOnRefresh: true,
-            }
-          });
-        }
-      });
+      gsap.ticker.lagSmoothing(0);
+      window.__lenis = lenis;
     });
 
-    const refreshTimer = setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 1200);
+    // truus detail: playful tab title on blur
+    const originalTitle = document.title;
+    const onVis = () => { document.title = document.hidden ? 'Come back! 👋 — Abrar' : originalTitle; };
+    document.addEventListener('visibilitychange', onVis);
 
+    const t = setTimeout(() => ScrollTrigger.refresh(), 1200);
     return () => {
       if (lenis) lenis.destroy();
       if (updateLenis) gsap.ticker.remove(updateLenis);
-      clearTimeout(refreshTimer);
+      document.removeEventListener('visibilitychange', onVis);
+      delete window.__lenis;
+      clearTimeout(t);
       ctx.revert();
     };
   }, [isLoading]);
 
+  const socials = [
+    { label: 'GH', href: 'https://github.com/abrar225' },
+    { label: 'LI', href: 'https://www.linkedin.com/in/abrar-akhunji/' },
+    { label: 'IG', href: 'https://www.instagram.com/strick.9_/' },
+  ];
+
   return (
-    <div className={`min-h-screen ${theme === 'dark' ? 'bg-[#030303] text-gray-300' : 'bg-[#f8f9fa] text-gray-800'} font-sans selection:bg-purple-500/30 selection:text-purple-200 transition-colors duration-300`}>
-      <CustomCursor />
-      <AnimatePresence mode="wait">
-        {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} theme={theme} />}
-      </AnimatePresence>
+    <ErrorBoundary>
+      <div className="min-h-screen bg-canvas text-fg font-body antialiased">
+        <a href="#main-content" className="skip-link">Skip to content</a>
+        <div className="grain" aria-hidden="true" />
+        <CursorBubble />
 
-      {!isLoading && (
-        <>
-          <ThreeBackground theme={theme} />
+        <AnimatePresence mode="wait">
+          {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
+        </AnimatePresence>
 
-          {/* Header */}
-          <header className="fixed top-0 left-0 w-full px-6 md:px-12 py-6 flex justify-between items-center z-50 pointer-events-none">
-            <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-gradient-to-b from-black/50 to-transparent' : 'bg-gradient-to-b from-white/50 to-transparent'} pointer-events-none h-32`}></div>
-            <div className="pointer-events-auto">
-              <span className={`font-bold tracking-tighter text-xl ${theme === 'dark' ? 'text-white' : 'text-black'}`}>ABRAR<span className="text-purple-500">.</span></span>
-            </div>
-            <div className="flex items-center gap-4 md:gap-6 pointer-events-auto">
-              <div className="hidden md:flex items-center gap-6">
-                <a href="https://github.com/abrar225" target="_blank" rel="noopener noreferrer" className={`text-xs font-mono ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'} hover:text-purple-500 transition-colors`}>GH</a>
-                <a href="https://www.linkedin.com/in/abrar-akhunji/" target="_blank" rel="noopener noreferrer" className={`text-xs font-mono ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'} hover:text-purple-500 transition-colors`}>LI</a>
-                <a href="https://www.instagram.com/strick.9_/" target="_blank" rel="noopener noreferrer" className={`text-xs font-mono ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'} hover:text-purple-500 transition-colors`}>IG</a>
-                <span className="text-xs font-mono text-gray-700">/</span>
-                <span className={`text-xs font-mono ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>INDIA, GJ</span>
-              </div>
-              <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
-            </div>
-          </header>
+        {!isLoading && (
+          <>
+            <Suspense fallback={null}>
+              <ThreeBackground theme={theme} />
+            </Suspense>
 
-          <FloatingDock theme={theme} />
-          <ChatBot theme={theme} />
-
-          <main className="relative z-10">
-            {/* Hero Section */}
-            <section id="home" className="min-h-[90vh] flex flex-col justify-center items-center text-center max-w-5xl mx-auto px-6 pt-32 pb-20 relative z-10">
-              <SectionWrapper className="space-y-6 flex flex-col items-center">
-                <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border ${theme === 'dark' ? 'border-purple-500/20 bg-purple-500/10' : 'border-purple-500/30 bg-purple-100/50'} backdrop-blur-md`}>
-                  <span className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse"></span>
-                  <span className={`text-[10px] font-mono ${theme === 'dark' ? 'text-purple-300' : 'text-purple-700'} tracking-widest uppercase`}>Open to work</span>
+            {/* ── Header ── */}
+            <header className="fixed top-0 left-0 w-full px-6 md:px-12 py-5 flex justify-between items-center z-50 mix-blend-difference pointer-events-none">
+              <Magnetic as="div" strength={0.3} className="pointer-events-auto">
+                <a href="#home" className="font-display font-bold tracking-tight text-lg text-white">
+                  ABRAR<span className="text-accent">.</span>
+                </a>
+              </Magnetic>
+              <div className="flex items-center gap-5 md:gap-7 pointer-events-auto">
+                <div className="hidden md:flex items-center gap-6">
+                  {socials.map((s) => (
+                    <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
+                      className="text-xs font-mono text-white/70 hover:text-accent transition-colors">
+                      {s.label}
+                    </a>
+                  ))}
+                  <span className="text-xs font-mono text-white/40">IND · GJ</span>
                 </div>
-                <h1 ref={heroTextRef} className={`text-5xl sm:text-6xl md:text-8xl font-bold tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'} leading-[1.1] md:leading-[0.9]`}>
-                  <span className="font-museo inline-block">Engineer of</span> <br />
-                  <span className="font-custom text-purple-500 text-6xl sm:text-7xl md:text-9xl block mt-2 mb-2">Intelligent</span>
-                  <span className="font-museo inline-block">Systems.</span>
+                <div className="mix-blend-normal"><ThemeToggle theme={theme} toggleTheme={toggleTheme} /></div>
+              </div>
+            </header>
+
+            <FloatingDock />
+
+            {/* AI Digital Twin — neural orb assistant (agentic: can drive the site) */}
+            <DigitalTwin
+              setTheme={setTheme}
+              highlightProject={() => document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' })}
+            />
+
+            <main id="main-content" className="relative z-10">
+              {/* ── Hero ── */}
+              <section id="home" className="min-h-screen flex flex-col justify-center max-w-[1400px] mx-auto px-6 md:px-12 pt-28 pb-16 relative">
+                <div className="flex items-center justify-between font-mono text-[10px] md:text-xs uppercase tracking-[0.25em] text-muted mb-10 md:mb-16">
+                  <span>( Portfolio — 2026 )</span>
+                  <span className="hidden md:inline">Full-Stack · AI / ML</span>
+                </div>
+
+                <div className="inline-flex items-center gap-2 self-start px-3 py-1 rounded-full border border-line bg-surface mb-8">
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+                  <span className="text-[10px] font-mono text-accent tracking-widest uppercase">Open to work</span>
+                </div>
+
+                <h1 className="text-hero font-display font-medium text-fg">
+                  <SplitText text="Engineer of" type="word" trigger="mount" delay={0.15} as="span" className="block" />
+                  <SplitText text="Intelligent" type="char" trigger="mount" delay={0.35} stagger={0.045}
+                    as="span" className="block font-serif text-accent" />
+                  <SplitText text="Systems." type="word" trigger="mount" delay={0.55} as="span" className="block" />
                 </h1>
-                <p className={`max-w-lg text-base md:text-lg ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'} leading-relaxed pt-4`}>
-                  I bridge the gap between <span className={theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}>complex AI models</span> and <span className={theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}>scalable web architectures</span>. Building the next generation of digital products.
-                </p>
-              </SectionWrapper>
-              <SectionWrapper delay={0.2} className="mt-16 md:mt-24 w-full grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-8 border-t border-white/10 sm:border-t pt-8">
-                {['Experience', 'Focus', 'Stack'].map((label, i) => (
-                  <div key={i} className="text-center sm:text-left">
-                    <p className={`text-[10px] md:text-xs font-mono ${theme === 'dark' ? 'text-gray-600' : 'text-gray-500'} uppercase mb-1`}>{label}</p>
-                    <p className={`text-xs md:text-sm ${theme === 'dark' ? 'text-white' : 'text-black'} font-medium`}>{['Early Career — AI & Web Development', 'AI/ML & Full Stack', 'Python • React • Java'][i]}</p>
-                  </div>
-                ))}
-              </SectionWrapper>
-            </section>
 
-            {/* About Me */}
-            <section id="about-me" className="py-24 md:py-40 max-w-6xl mx-auto px-6 relative z-20">
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16 items-start">
-                <div className="md:col-span-7 space-y-8">
-                  <SectionWrapper>
-                    <div className="flex items-center gap-3 mb-8">
-                      <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
-                      <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
-                      <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
-                      <div className={`h-px w-24 ${theme === 'dark' ? 'bg-white/10' : 'bg-black/10'} ml-4`}></div>
-                      <span className={`text-xs font-mono ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>bio.txt</span>
-                    </div>
-                    <h2 className={`text-4xl md:text-6xl font-light ${theme === 'dark' ? 'text-white' : 'text-black'} leading-tight`}>
-                      I speak <span className="font-serif italic text-purple-400">Code</span> & <br />
-                      <span className="font-serif italic text-purple-400">Algorithms.</span>
-                    </h2>
-                  </SectionWrapper>
-                  <SectionWrapper delay={0.2} className={`space-y-6 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'} text-sm leading-relaxed font-mono border-l ${theme === 'dark' ? 'border-white/10 bg-white/5' : 'border-black/5 bg-black/5'} pl-6 p-4 rounded-r-xl`}>
-                    <p>
-                      <span className="text-purple-400">const</span> <span className={theme === 'dark' ? 'text-yellow-200' : 'text-yellow-600'}>Abrar</span> = <span className="text-blue-400">{`{`}</span><br />
-                      &nbsp;&nbsp;role: <span className="text-green-500">"AI/ML Engineer + Python Developer + Full-Stack Learner"</span>,<br />
-                      &nbsp;&nbsp;location: <span className="text-green-500">"India,Gujrat,383001"</span>,<br />
-                      &nbsp;&nbsp;passion: <span className="text-green-500">"Teaching Machines to See & Think"</span><br />
-                      <span className="text-blue-400">{`}`};</span>
-                    </p>
-                    <p>I'm an AI/ML and Python developer specializing in backend systems and modern web development. I enjoy turning ideas into real applications—whether it's detecting tumors or identifying cattle breeds.</p>
-                  </SectionWrapper>
-                  <SectionWrapper delay={0.3} className={`p-6 ${theme === 'dark' ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/5'} border rounded-2xl flex items-center gap-6 hover:bg-purple-500/5 transition-colors backdrop-blur-sm`}>
-                    <div className="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400"><Music size={24} /></div>
-                    <div>
-                      <h4 className={`${theme === 'dark' ? 'text-white' : 'text-black'} font-medium text-sm mb-1`}>Offline Mode</h4>
-                      <p className={`text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>When I'm not coding, I'm writing rap songs, cooking with friends, or exploring new tech ideas.</p>
-                    </div>
-                  </SectionWrapper>
+                <div className="mt-10 md:mt-14 grid grid-cols-1 md:grid-cols-12 gap-8 items-end">
+                  <p className="md:col-span-6 md:col-start-7 text-base md:text-lg text-muted leading-relaxed">
+                    I bridge the gap between <span className="text-fg">complex AI models</span> and{' '}
+                    <span className="text-fg">scalable web architectures</span> — building the next generation of intelligent digital products.
+                  </p>
                 </div>
-                <div className="md:col-span-5 relative flex justify-center mt-12 md:mt-0">
-                  <SectionWrapper delay={0.4} className={`relative w-64 md:w-72 h-80 md:h-96 rounded-2xl overflow-hidden border ${theme === 'dark' ? 'border-white/10' : 'border-black/5'} group transform transition-all duration-500 hover:scale-105 hover:rotate-1 shadow-2xl`}>
-                    <img src="images/myimg.jpg" alt="Abrar" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" />
-                    <div className={`absolute bottom-4 right-4 left-4 p-3 ${theme === 'dark' ? 'bg-black/60 border-white/10' : 'bg-white/60 border-black/10'} backdrop-blur-xl border rounded-lg z-30`}>
-                      <div className={`flex items-center gap-2 text-[10px] ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} mb-1`}><FileCode size={12} /><span>stack_overflow.py</span></div>
-                      <div className={`h-1 w-full ${theme === 'dark' ? 'bg-white/10' : 'bg-black/10'} rounded-full overflow-hidden`}><div className="h-full w-2/3 bg-green-500"></div></div>
-                    </div>
-                  </SectionWrapper>
-                </div>
-              </div>
-            </section>
 
-            {/* Projects */}
-            <section id="work" ref={sectionRef} className={`relative w-full overflow-hidden z-30 ${theme === 'dark' ? 'bg-[#030303]' : 'bg-[#f8f9fa]'}`}>
-              <div className="min-h-screen md:flex md:items-center overflow-x-hidden md:overflow-hidden py-24 md:py-0">
-                <div ref={scrollRef} className="flex flex-col md:flex-row md:items-center h-full gap-12 md:gap-0 md:pl-12 w-full md:w-max will-change-transform">
-                  <div className={`w-full md:w-[400px] flex-shrink-0 flex flex-col justify-center px-6 md:px-0 md:mr-24 md:ml-12 md:pr-12 md:border-r ${theme === 'dark' ? 'md:border-white/10' : 'md:border-black/10'} h-auto md:h-[60vh]`}>
-                    <div className="mb-8"><SectionHeader title="Selected Works" number="1" theme={theme} /></div>
-                    <h3 className={`text-4xl md:text-5xl font-light ${theme === 'dark' ? 'text-white' : 'text-black'} mb-6 leading-tight`}>
-                      Crafting <br /><span className="text-purple-500">Tomorrow’s</span> <br />Intelligence.
-                    </h3>
+                <SectionWrapper delay={0.3} className="mt-14 md:mt-20 grid grid-cols-1 sm:grid-cols-3 gap-6 border-t border-line pt-8">
+                  {[
+                    ['Focus', 'AI/ML · Full-Stack'],
+                    ['Stack', 'Python · React · Django'],
+                    ['Based in', 'Gujarat, India'],
+                  ].map(([k, v]) => (
+                    <div key={k}>
+                      <p className="text-[10px] font-mono text-faint uppercase tracking-widest mb-2">{k}</p>
+                      <p className="text-sm text-fg font-medium">{v}</p>
+                    </div>
+                  ))}
+                </SectionWrapper>
+
+              </section>
+
+              {/* ── Tech crawler (right after hero) ── */}
+              <section className="py-6 md:py-8 border-y border-line bg-surface/50 overflow-hidden">
+                <Marquee duration={40}>
+                  {TECH_CRAWLER.map((item, i) => (
+                    <span key={i} className="flex items-center font-display text-2xl md:text-4xl font-medium tracking-tight px-6 md:px-10">
+                      <span className={i % 2 ? 'text-accent' : 'text-fg'}>{item}</span>
+                      <span className="text-accent mx-6 md:mx-10 text-lg">✦</span>
+                    </span>
+                  ))}
+                </Marquee>
+              </section>
+
+              {/* ── HorizontalWords statement band (pinned scrub — truus) ── */}
+              <HorizontalWords words={HWORDS} />
+
+              {/* ── About ── */}
+              <section id="about-me" className="py-24 md:py-40 max-w-[1400px] mx-auto px-6 md:px-12 relative">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16 items-start">
+                  <div className="md:col-span-7 space-y-10">
+                    <span className="font-mono text-xs text-accent">( About )</span>
+
+                    {/* interactive spring headline — letters flee the cursor/finger (pretext DNA) */}
+                    <RepelText
+                      text="I teach machines to see & think."
+                      className="font-serif text-fg text-4xl sm:text-5xl md:text-6xl leading-[1.05] tracking-tight cursor-default"
+                    />
+
+                    <SectionWrapper delay={0.1} className="space-y-6 text-muted text-sm md:text-base leading-relaxed max-w-xl pt-2">
+                      <p>
+                        I'm an <span className="text-fg">AI/ML &amp; Python developer</span> specializing in backend
+                        systems and modern web development. I enjoy turning ideas into real applications — whether it's
+                        detecting brain tumors from MRI scans or classifying 41 cattle breeds with Vision Transformers.
+                      </p>
+                    </SectionWrapper>
+
+                    <SectionWrapper delay={0.2} className="font-mono text-xs md:text-sm leading-relaxed bg-surface border border-line rounded-xl p-6 max-w-xl">
+                      <p className="text-faint mb-3">// identity.ts</p>
+                      <p>
+                        <span className="text-accent">const</span> <span className="text-fg">abrar</span> = {'{'}<br />
+                        &nbsp;&nbsp;role: <span className="text-accent-soft">"AI/ML Engineer + Full-Stack Dev"</span>,<br />
+                        &nbsp;&nbsp;location: <span className="text-accent-soft">"Gujarat, India"</span>,<br />
+                        &nbsp;&nbsp;passion: <span className="text-accent-soft">"Teaching machines to see &amp; think"</span>,<br />
+                        {'}'};
+                      </p>
+                    </SectionWrapper>
+
+                    <SectionWrapper delay={0.3} className="p-6 bg-surface border border-line rounded-xl flex items-center gap-6 max-w-xl hover:border-accent/40 transition-colors">
+                      <div className="w-12 h-12 rounded-full bg-elevated flex items-center justify-center text-accent flex-shrink-0">
+                        <Music size={22} />
+                      </div>
+                      <div>
+                        <h4 className="text-fg font-medium text-sm mb-1">Offline Mode</h4>
+                        <p className="text-xs text-muted">When I'm not coding, I'm writing rap songs, cooking with friends, or exploring new tech ideas.</p>
+                      </div>
+                    </SectionWrapper>
                   </div>
-                  <div className="flex flex-col md:flex-row gap-12 md:gap-16 px-6 md:px-0 md:pr-24">
-                    {PROJECTS.map((project, idx) => (
-                      <ProjectCard key={idx} project={project} theme={theme} />
-                    ))}
+
+                  <div className="md:col-span-5 md:sticky md:top-32 flex justify-center">
+                    <div className="relative w-64 md:w-full max-w-sm">
+                      <SectionWrapper className="relative rounded-2xl overflow-hidden border border-line group aspect-[4/5]">
+                        <div data-cursor="Hey 👋" className="w-full h-full">
+                          <img src="/images/myimg.webp" alt="Portrait of Abrar Akhunji" loading="lazy" decoding="async"
+                            onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/images/myimg.jpg'; }}
+                            className="w-full h-full object-cover grayscale group-hover:grayscale-0 scale-105 group-hover:scale-100 transition-all duration-700" />
+                        </div>
+                      </SectionWrapper>
+                      <div className="absolute -bottom-4 -left-4 px-4 py-2 bg-accent text-[#0F0E0C] rounded-lg font-mono text-[10px] uppercase tracking-widest shadow-xl">
+                        Open to work
+                      </div>
+                    </div>
                   </div>
-                  <div className="w-full md:w-[300px] flex-shrink-0 flex items-center justify-center py-12 md:py-0">
-                    <a href="https://github.com/abrar225" className="group flex flex-col items-center gap-6">
-                      <div className={`w-20 md:w-24 h-20 md:h-24 rounded-full border ${theme === 'dark' ? 'border-white/20 hover:bg-white hover:text-black' : 'border-black/20 hover:bg-black hover:text-white'} flex items-center justify-center transition-all duration-500`}><ArrowUpRight size={32} /></div>
-                      <span className={`text-lg md:text-xl font-light ${theme === 'dark' ? 'text-gray-400 group-hover:text-white' : 'text-gray-600 group-hover:text-black'}`}>View All Projects</span>
+                </div>
+              </section>
+
+              {/* ── Work (Live Browser Split showcase) ── */}
+              <section id="work" className="relative w-full bg-canvas py-20 md:py-28">
+                <div className="max-w-[1400px] mx-auto px-6 md:px-12">
+                  <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14 md:mb-20">
+                    <div className="max-w-2xl">
+                      <SectionHeader title="Selected Works" number="01" kicker="Scroll to explore" />
+                      <h3 className="text-mega font-serif text-fg leading-[0.95] mt-2">
+                        Crafting tomorrow's <span className="text-accent">intelligence.</span>
+                      </h3>
+                    </div>
+                    <Magnetic strength={0.4} className="hidden md:block">
+                      <a href="https://github.com/abrar225" target="_blank" rel="noopener noreferrer"
+                        data-cursor="GitHub" className="group flex items-center gap-4">
+                        <span className="text-sm font-display text-muted group-hover:text-fg transition-colors">All projects</span>
+                        <span className="w-14 h-14 rounded-full border border-line group-hover:bg-accent group-hover:border-accent text-fg group-hover:text-[#0F0E0C] flex items-center justify-center transition-all duration-500">
+                          <ArrowUpRight size={22} />
+                        </span>
+                      </a>
+                    </Magnetic>
+                  </div>
+
+                  <ProjectShowcase projects={PROJECTS} />
+
+                  <div className="flex md:hidden justify-center mt-12">
+                    <a href="https://github.com/abrar225" target="_blank" rel="noopener noreferrer"
+                      className="flex items-center gap-3 px-6 py-3 border border-line rounded-full text-sm font-medium text-fg">
+                      View all projects <ArrowUpRight size={16} className="text-accent" />
                     </a>
                   </div>
                 </div>
-              </div>
-            </section>
+              </section>
 
-            {/* Experience, Education & Skills */}
-            <section id="experience" className={`py-24 md:py-32 max-w-6xl mx-auto px-6 relative z-40 ${theme === 'dark' ? 'bg-[#030303]' : 'bg-[#f8f9fa]'}`}>
-              <SectionWrapper>
-                <SectionHeader title="Experience, Education & Skills" number="2" theme={theme} />
-              </SectionWrapper>
-              
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
-                {/* Left Column: Career & Education */}
-                <div className="space-y-20">
-                  {/* Career History */}
+              {/* ── The Stack (vertical double marquee of logos) ── */}
+              <section className="py-24 md:py-32 max-w-[1400px] mx-auto px-6 md:px-12">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
                   <div>
-                    <h3 className={`text-xs font-mono ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'} uppercase tracking-widest mb-10 flex items-center gap-3`}>
-                      <Briefcase size={14} className="text-purple-500" /> Career History
-                    </h3>
-                    <div className={`relative border-l ${theme === 'dark' ? 'border-white/10' : 'border-black/10'} ml-2 pl-8 space-y-12`}>
-                      {EXPERIENCE.map((job, i) => (
-                        <div key={i} className="relative group">
-                          <span className="absolute -left-[37px] top-1.5 w-2.5 h-2.5 rounded-full bg-purple-500 ring-4 ring-purple-500/20 group-hover:scale-125 transition-transform"></span>
-                          <span className="text-[10px] font-mono text-purple-400 mb-2 block tracking-wider">{job.date}</span>
-                          <h4 className={`text-xl ${theme === 'dark' ? 'text-white' : 'text-black'} font-medium tracking-tight`}>{job.role}</h4>
-                          <p className={`text-sm ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'} mt-3 leading-relaxed max-w-md`}>{job.desc}</p>
-                        </div>
+                    <SectionHeader title="The Stack" number="02" kicker="Always shipping" />
+                    <p className="text-muted text-sm md:text-base leading-relaxed max-w-md mt-6">
+                      A living toolkit spanning machine learning, computer vision and full-stack web —
+                      the tools I reach for to take an idea from notebook to production.
+                    </p>
+                    <div className="flex flex-wrap gap-2.5 mt-8">
+                      {['AI / ML', 'Computer Vision', 'Backend', 'Full-Stack', 'Realtime'].map((t) => (
+                        <span key={t} className="tag px-4 py-2 text-xs font-mono">{t}</span>
                       ))}
                     </div>
                   </div>
+                  <VerticalMarquee />
+                </div>
+              </section>
 
-                  {/* Education */}
-                  <div>
-                    <h3 className={`text-xs font-mono ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'} uppercase tracking-widest mb-10 flex items-center gap-3`}>
-                      <GraduationCap size={16} className="text-blue-500" /> Education
-                    </h3>
-                    <div className={`relative border-l ${theme === 'dark' ? 'border-white/10' : 'border-black/10'} ml-2 pl-8 space-y-12`}>
-                      {EDUCATION.map((edu, i) => (
-                        <div key={i} className="relative group">
-                          <span className={`absolute -left-[37px] top-1.5 w-2.5 h-2.5 rounded-full ${edu.color || 'bg-blue-500'} ring-4 ring-blue-500/20 group-hover:scale-125 transition-transform`}></span>
-                          <span className="text-[10px] font-mono text-blue-400 mb-2 block tracking-wider">{edu.date}</span>
-                          <h4 className={`text-xl ${theme === 'dark' ? 'text-white' : 'text-black'} font-medium tracking-tight`}>{edu.degree}</h4>
-                          <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'} mt-1`}>{edu.school}</p>
-                        </div>
-                      ))}
+              {/* ── Experience / Education / Skills / Certs ── */}
+              <section id="experience" className="py-24 md:py-32 max-w-[1400px] mx-auto px-6 md:px-12 relative bg-canvas">
+                <SectionWrapper><SectionHeader title="Path & Recognition" number="03" kicker="Experience · Education · Certs" /></SectionWrapper>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
+                  <div className="space-y-20">
+                    <div>
+                      <h3 className="text-xs font-mono text-muted uppercase tracking-widest mb-10 flex items-center gap-3">
+                        <Briefcase size={14} className="text-accent" /> Career History
+                      </h3>
+                      <div className="relative border-l border-line ml-2 pl-8 space-y-12">
+                        {EXPERIENCE.map((job, i) => (
+                          <SectionWrapper key={i} delay={i * 0.05} className="relative group">
+                            <span className="absolute -left-[37px] top-1.5 w-2.5 h-2.5 rounded-full bg-accent ring-4 ring-accent/20 group-hover:scale-125 transition-transform" />
+                            <span className="text-[10px] font-mono text-accent mb-2 block tracking-wider">{job.date}</span>
+                            <h4 className="text-xl text-fg font-medium tracking-tight">{job.role}</h4>
+                            <p className="text-sm text-muted mt-2 leading-relaxed max-w-md">{job.desc}</p>
+                          </SectionWrapper>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <h3 className="text-xs font-mono text-muted uppercase tracking-widest mb-10 flex items-center gap-3">
+                        <GraduationCap size={16} className="text-accent" /> Education
+                      </h3>
+                      <div className="relative border-l border-line ml-2 pl-8 space-y-12">
+                        {EDUCATION.map((edu, i) => (
+                          <SectionWrapper key={i} delay={i * 0.05} className="relative group">
+                            <span className="absolute -left-[37px] top-1.5 w-2.5 h-2.5 rounded-full bg-accent ring-4 ring-accent/20 group-hover:scale-125 transition-transform" />
+                            <span className="text-[10px] font-mono text-accent mb-2 block tracking-wider">{edu.date}</span>
+                            <h4 className="text-xl text-fg font-medium tracking-tight">{edu.degree}</h4>
+                            <p className="text-sm text-muted mt-1">{edu.school}</p>
+                          </SectionWrapper>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-20">
+                    <div>
+                      <h3 className="text-xs font-mono text-muted uppercase tracking-widest mb-10 flex items-center gap-3">
+                        <Cpu size={16} className="text-accent" /> Technical Arsenal
+                      </h3>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {SKILLS.map((skill, i) => (
+                          <SectionWrapper key={i} delay={i * 0.04}
+                            className="p-5 border border-line bg-surface rounded-xl hover:border-accent/40 transition-all duration-300 group">
+                            <div className="flex items-start gap-4">
+                              <div className="p-2 rounded-lg bg-elevated text-accent group-hover:scale-110 transition-transform">
+                                {skill.icon && <skill.icon size={20} />}
+                              </div>
+                              <div>
+                                <h4 className="text-fg text-base font-medium mb-1 tracking-tight">{skill.t}</h4>
+                                <p className="text-[11px] text-muted leading-relaxed">{skill.d}</p>
+                              </div>
+                            </div>
+                          </SectionWrapper>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <h3 className="text-xs font-mono text-muted uppercase tracking-widest mb-10 flex items-center gap-3">
+                        <Trophy size={16} className="text-accent" /> Certifications
+                      </h3>
+                      <div className="space-y-3">
+                        {CERTIFICATIONS.map((cert, i) => {
+                          const Inner = (
+                            <div className={`p-5 border border-line bg-surface rounded-xl transition-all duration-300 flex items-center gap-5 ${cert.driveLink ? 'hover:border-accent/50 hover:bg-elevated' : ''}`}>
+                              <div className="w-11 h-11 flex-shrink-0 rounded-full bg-elevated flex items-center justify-center text-accent">
+                                {cert.icon && <cert.icon size={20} />}
+                              </div>
+                              <div className="flex-1">
+                                <h4 className="text-fg text-base font-medium tracking-tight">{cert.title}</h4>
+                                <p className="text-xs text-muted mt-1">{cert.desc}</p>
+                              </div>
+                              {cert.driveLink && <ArrowUpRight size={16} className="text-accent flex-shrink-0" />}
+                            </div>
+                          );
+                          return cert.driveLink ? (
+                            <a key={i} href={cert.driveLink} target="_blank" rel="noopener noreferrer" data-cursor="View" className="block">{Inner}</a>
+                          ) : <div key={i}>{Inner}</div>;
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              {/* ── Contact / Footer ── */}
+              <footer id="contact" className="pt-24 md:pt-32 border-t border-line bg-canvas relative">
+                <div className="max-w-[1400px] mx-auto px-6 md:px-12">
+                  <span className="font-mono text-xs text-accent">( Contact )</span>
+                  <SplitText
+                    text="Let's build the future."
+                    type="word"
+                    className="text-hero font-serif text-fg mt-6 mb-10"
+                  />
+                  <div className="flex flex-col md:flex-row md:items-end justify-between gap-10 mb-20">
+                    <Magnetic strength={0.25}>
+                      <a href="mailto:moabrarakhunji@gmail.com" data-cursor="Email"
+                        className="inline-flex items-center gap-3 text-2xl md:text-4xl font-display font-medium text-fg link-underline">
+                        moabrarakhunji@gmail.com <ArrowUpRight size={28} className="text-accent" />
+                      </a>
+                    </Magnetic>
+                    <div className="flex flex-col gap-4">
+                      <a href="https://drive.google.com/file/d/1dV5ukxF-i-9JcWCaxsbQljNwL7Dni8Jc/view?usp=sharing"
+                        target="_blank" rel="noopener noreferrer" data-cursor="Download"
+                        className="flex items-center gap-3 px-6 py-3 border border-line text-fg hover:bg-accent hover:border-accent hover:text-[#0F0E0C] rounded-full text-sm font-medium transition-all">
+                        <Download size={16} /> Download Resume
+                      </a>
+                      <div className="flex gap-3">
+                        {[
+                          { icon: Github, href: 'https://github.com/abrar225' },
+                          { icon: Linkedin, href: 'https://www.linkedin.com/in/abrar-akhunji/' },
+                          { icon: Instagram, href: 'https://www.instagram.com/strick.9_/' },
+                        ].map((s, i) => (
+                          <Magnetic as="span" key={i} strength={0.4} className="inline-block">
+                            <a href={s.href} target="_blank" rel="noopener noreferrer"
+                              className="w-11 h-11 flex items-center justify-center rounded-full border border-line text-muted hover:text-accent hover:border-accent transition-colors">
+                              <s.icon size={18} />
+                            </a>
+                          </Magnetic>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Right Column: Skills & Certifications */}
-                <div className="space-y-20">
-                  {/* Technical Arsenal */}
-                  <div>
-                    <h3 className={`text-xs font-mono ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'} uppercase tracking-widest mb-10 flex items-center gap-3`}>
-                      <Cpu size={16} className="text-purple-500" /> Technical Arsenal
-                    </h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      {SKILLS.map((skill, i) => (
-                        <div key={i} className={`p-5 border ${theme === 'dark' ? 'border-white/10 bg-white/[0.02]' : 'border-black/5 bg-black/[0.02]'} rounded-xl backdrop-blur-sm hover:border-purple-500/40 hover:bg-purple-500/5 transition-all duration-300 group`}>
-                          <div className="flex items-start gap-4">
-                            <div className={`p-2 rounded-lg ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} text-purple-500 group-hover:scale-110 transition-transform`}>
-                              {skill.icon && <skill.icon size={20} />}
-                            </div>
-                            <div>
-                              <h4 className={`${theme === 'dark' ? 'text-white' : 'text-black'} text-base font-medium mb-1 tracking-tight`}>{skill.t}</h4>
-                              <p className={`text-[10px] ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'} leading-relaxed`}>{skill.d}</p>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Certifications */}
-                  <div>
-                    <h3 className={`text-xs font-mono ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'} uppercase tracking-widest mb-10 flex items-center gap-3`}>
-                      <Trophy size={16} className="text-yellow-500" /> Certifications
-                    </h3>
-                    <div className="space-y-4">
-                      {CERTIFICATIONS.map((cert, i) => {
-                        const Content = () => (
-                          <div className={`p-5 border ${theme === 'dark' ? 'border-white/10 bg-white/[0.02]' : 'border-black/5 bg-black/[0.02]'} rounded-xl backdrop-blur-sm transition-all duration-300 flex items-center gap-6 ${cert.driveLink ? 'hover:border-purple-500/50 hover:bg-purple-500/5 hover:scale-[1.02]' : ''}`}>
-                            <div className={`w-12 h-12 flex-shrink-0 rounded-full ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} flex items-center justify-center ${cert.color}`}>
-                              {cert.icon && <cert.icon size={24} />}
-                            </div>
-                            <div className="flex-1">
-                              <h4 className={`${theme === 'dark' ? 'text-white' : 'text-black'} text-lg font-medium tracking-tight`}>{cert.title}</h4>
-                              <p className={`text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'} mt-1`}>{cert.desc}</p>
-                              {cert.driveLink && (
-                                <div className="flex items-center gap-2 mt-3">
-                                  <span className="text-[10px] text-purple-500 font-mono opacity-80">View on Drive ↗</span>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        );
-
-                        return cert.driveLink ? (
-                          <a key={i} href={cert.driveLink} target="_blank" rel="noopener noreferrer" className="block">
-                            <Content />
-                          </a>
-                        ) : (
-                          <div key={i}>
-                            <Content />
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
+                <div className="overflow-hidden border-t border-line py-6">
+                  <Marquee duration={30} reverse>
+                    {['AVAILABLE FOR WORK', 'AI / ML ENGINEER', 'FULL-STACK DEVELOPER', 'LET\'S TALK'].map((t, i) => (
+                      <span key={i} className="flex items-center font-display text-xl md:text-2xl font-medium px-6 text-muted">
+                        {t} <span className="text-accent mx-6">✦</span>
+                      </span>
+                    ))}
+                  </Marquee>
                 </div>
-              </div>
-            </section>
 
-            {/* Footer */}
-            <footer id="contact" className={`py-12 md:py-24 border-t ${theme === 'dark' ? 'border-white/5 bg-[#030303]' : 'border-black/5 bg-[#f8f9fa]'} max-w-5xl mx-auto px-6 relative z-50`}>
-              <SectionWrapper>
-                <div className="flex flex-col md:flex-row justify-between gap-12">
-                  <div className="max-w-xl">
-                    <h2 className={`text-4xl md:text-5xl font-light ${theme === 'dark' ? 'text-white' : 'text-black'} mb-6`}>Let's build the future.</h2>
-                    <a href="mailto:moabrarakhunji@gmail.com" className={`inline-flex items-center gap-2 ${theme === 'dark' ? 'text-white' : 'text-black'} border-b border-purple-500 pb-1 hover:text-purple-400 transition-colors text-lg`}>moabrarakhunji@gmail.com <ArrowUpRight size={16} /></a>
-                  </div>
-                  <div className="flex flex-col gap-4 justify-end">
-                    <a href="https://drive.google.com/file/d/1dV5ukxF-i-9JcWCaxsbQljNwL7Dni8Jc/view?usp=sharing" target="_blank" rel="noopener noreferrer" className={`flex items-center gap-3 px-6 py-3 border ${theme === 'dark' ? 'border-white/10 text-gray-400 hover:bg-white/5 hover:text-white' : 'border-black/10 text-gray-600 hover:bg-black/5 hover:text-black'} rounded-lg text-sm transition-colors`}><Download size={16} /> Download Resume</a>
-                  </div>
-                </div>
-                <div className={`mt-12 md:mt-24 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left text-[10px] ${theme === 'dark' ? 'text-gray-700' : 'text-gray-400'} font-mono uppercase border-t ${theme === 'dark' ? 'border-white/5' : 'border-black/5'} pt-8`}>
+                <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-8 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-mono uppercase tracking-widest text-faint">
                   <span>© 2026 Abrar Akhunji</span>
+                  <a href="#home" className="hover:text-accent transition-colors">Back to top ↑</a>
+                  <span>Built with React · GSAP · Three.js</span>
                 </div>
-              </SectionWrapper>
-            </footer>
-          </main>
-        </>
-      )}
-    </div>
+              </footer>
+            </main>
+          </>
+        )}
+      </div>
+    </ErrorBoundary>
   );
 }
