@@ -145,23 +145,7 @@ export default function BlogPost() {
             ))}
           </motion.div>
 
-          {/* Hero Image */}
-          {blog.heroImage && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.98 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.15, duration: 0.6 }}
-              className="relative rounded-2xl overflow-hidden border border-line mb-8 aspect-video"
-            >
-              <img
-                src={blog.heroImage}
-                alt={blog.title}
-                className="w-full h-full object-cover"
-                loading="eager"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-canvas/60 to-transparent" />
-            </motion.div>
-          )}
+
 
           {/* Title */}
           <motion.h1
@@ -184,7 +168,7 @@ export default function BlogPost() {
               <Calendar size={14} className="text-accent" /> {blog.date}
             </span>
             <span className="flex items-center gap-2">
-              <User size={14} className="text-accent" /> {blog.author}
+              <User size={14} className="text-accent" /> Written by {blog.author}
             </span>
             <span className="flex items-center gap-2">
               <Clock size={14} className="text-accent" /> {blog.readingTime} min read
