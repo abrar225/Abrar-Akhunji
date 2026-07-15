@@ -3,8 +3,10 @@ import {
   Github, Linkedin, ArrowUpRight, Briefcase, GraduationCap,
   Trophy, Download, Instagram, Music, Cpu,
   ScanEye, BrainCircuit, Network, Blocks, Rocket, Send,
+  PenLine, Calendar,
 } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
@@ -30,6 +32,7 @@ import RepelText from '../components/RepelText';
 const ThreeBackground = lazy(() => import('../components/ThreeBackground'));
 
 import { PROJECTS, EXPERIENCE, SKILLS, EDUCATION, CERTIFICATIONS } from '../constants/portfolio';
+import { getAllBlogs } from '../lib/blogUtils';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -134,6 +137,10 @@ export default function App() {
                       {s.label}
                     </a>
                   ))}
+                  <Link to="/blog" className="relative text-xs font-mono text-white/70 hover:text-accent transition-colors">
+                    BLOG
+                    <span className="absolute -top-1 -right-2 w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+                  </Link>
                   <span className="text-xs font-mono text-white/40">IND · GJ</span>
                 </div>
                 <div className="mix-blend-normal"><ThemeToggle theme={theme} toggleTheme={toggleTheme} /></div>
@@ -404,6 +411,62 @@ export default function App() {
                   </div>
                 </div>
               </section>
+
+              {/* ── Latest from the Blog ── */}
+              {(() => {
+                const latestBlogs = getAllBlogs().slice(0, 3);
+                if (latestBlogs.length === 0) return null;
+                return (
+                  <section className="py-24 md:py-32 max-w-[1400px] mx-auto px-6 md:px-12">
+                    <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14 md:mb-20">
+                      <div className="max-w-2xl">
+                        <SectionHeader title="The Neural Log" number="04" kicker="Fresh insights" />
+                        <h3 className="text-mega font-serif text-fg leading-[0.95] mt-2">
+                          Latest from the <span className="text-accent">blog.</span>
+                        </h3>
+                      </div>
+                      <Magnetic strength={0.4} className="hidden md:block">
+                        <Link to="/blog" data-cursor="Blog" className="group flex items-center gap-4">
+                          <span className="text-sm font-display text-muted group-hover:text-fg transition-colors">View all posts</span>
+                          <span className="w-14 h-14 rounded-full border border-line group-hover:bg-accent group-hover:border-accent text-fg group-hover:text-[#0F0E0C] flex items-center justify-center transition-all duration-500">
+                            <ArrowUpRight size={22} />
+                          </span>
+                        </Link>
+                      </Magnetic>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      {latestBlogs.map((blog, i) => (
+                        <SectionWrapper key={blog.slug} delay={i * 0.1} className="group">
+                          <Link to={`/blog/${blog.slug}`} className="block h-full p-6 rounded-2xl border border-line bg-surface hover:border-accent/40 transition-all duration-300">
+                            {blog.heroImage && (
+                              <div className="rounded-xl overflow-hidden border border-line mb-4 aspect-video">
+                                <img src={blog.heroImage} alt={blog.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
+                              </div>
+                            )}
+                            <div className="flex items-center gap-3 text-[10px] font-mono text-faint uppercase tracking-widest mb-3">
+                              <span className="flex items-center gap-1"><Calendar size={10} /> {blog.date}</span>
+                              {blog.tags.slice(0, 2).map((tag) => (
+                                <span key={tag} className="px-1.5 py-0.5 bg-elevated rounded text-accent">{tag}</span>
+                              ))}
+                            </div>
+                            <h4 className="text-lg font-medium text-fg group-hover:text-accent transition-colors tracking-tight mb-2 line-clamp-2">
+                              {blog.title}
+                            </h4>
+                            <p className="text-xs text-muted leading-relaxed line-clamp-2">{blog.description}</p>
+                          </Link>
+                        </SectionWrapper>
+                      ))}
+                    </div>
+
+                    <div className="flex md:hidden justify-center mt-10">
+                      <Link to="/blog" className="flex items-center gap-3 px-6 py-3 border border-line rounded-full text-sm font-medium text-fg">
+                        <PenLine size={16} className="text-accent" /> View all posts <ArrowUpRight size={16} className="text-accent" />
+                      </Link>
+                    </div>
+                  </section>
+                );
+              })()}
 
               {/* ── Contact / Footer ── */}
               <footer id="contact" className="pt-24 md:pt-32 border-t border-line bg-canvas relative">

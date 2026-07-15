@@ -1,5 +1,6 @@
 import React from 'react';
-import { Home, User, Layers, Briefcase, Mail, FileText } from 'lucide-react';
+import { Home, User, Layers, Briefcase, Mail, FileText, PenLine } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import Magnetic from './Magnetic';
 
 const FloatingDock = () => {
@@ -36,6 +37,19 @@ const FloatingDock = () => {
             </a>
           </Magnetic>
         ))}
+        <div className="w-px h-6 bg-line mx-1" />
+        <Magnetic as="span" strength={0.4} className="inline-block">
+          <Link
+            to="/blog"
+            aria-label="Blog"
+            className="group relative flex p-2.5 md:p-3 rounded-full text-muted hover:text-accent hover:bg-elevated transition-colors duration-300"
+          >
+            <PenLine size={17} />
+            <span className="absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-fg text-canvas rounded text-[10px] font-mono opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+              Blog
+            </span>
+          </Link>
+        </Magnetic>
         <div className="w-px h-6 bg-line mx-1" />
         <Magnetic as="span" strength={0.4} className="inline-block">
           <a
