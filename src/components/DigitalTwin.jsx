@@ -16,7 +16,7 @@ import { canAsk, consume, remaining, mirror, DAILY_LIMIT } from '../lib/rateLimi
 
 const RESUME_URL = 'https://drive.google.com/file/d/1dV5ukxF-i-9JcWCaxsbQljNwL7Dni8Jc/view?usp=sharing';
 const FIXO_URL = 'https://fixo.firehox.com/';
-const EMAIL = 'moabrarakhunji@gmail.com';
+const EMAIL = 'abrar@abrarakhunji.com';
 
 const SUGGESTIONS = ['Who is Abrar?', 'Best project?', 'AI/ML skills', 'Open to work?'];
 

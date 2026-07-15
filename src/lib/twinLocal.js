@@ -91,7 +91,7 @@ const INTENTS = [
     id: 'contact',
     phrases: ['contact', 'email', 'reach', 'get in touch', 'hire', 'available', 'open to work', 'freelance', 'work with', 'collaborat', 'connect'],
     build: () => ({
-      text: `Reach Abrar at **moabrarakhunji@gmail.com** ✉️ — he's **open to work** and replies fast. Scrolling you to the contact section ↓`,
+      text: `Reach Abrar at **abrar@abrarakhunji.com** ✉️ — he's **open to work** and replies fast. Scrolling you to the contact section ↓`,
       actions: [{ type: 'scroll', arg: 'contact' }],
     }),
   },

@@ -373,3 +373,78 @@ html.lenis body { height: auto; }
     .split-inner { transform: none !important; }
     .clip-reveal, .clip-reveal-circle { clip-path: none !important; }
 }
+
+/* ── Markdown Blog Styles ── */
+.markdown-body {
+    color: var(--color-fg);
+    font-size: 1.125rem;
+    line-height: 1.75;
+}
+.markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4 {
+    color: var(--color-fg);
+    font-family: var(--font-display);
+    font-weight: 500;
+    margin-top: 2em;
+    margin-bottom: 1em;
+    letter-spacing: -0.025em;
+}
+.markdown-body h2 { font-size: 2rem; }
+.markdown-body h3 { font-size: 1.5rem; }
+.markdown-body p, .markdown-body ul, .markdown-body ol {
+    margin-bottom: 1.5em;
+    color: var(--color-muted);
+}
+.markdown-body a {
+    color: var(--color-accent);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+}
+.markdown-body a:hover {
+    border-bottom-color: var(--color-accent);
+}
+.markdown-body strong {
+    color: var(--color-fg);
+    font-weight: 600;
+}
+.markdown-body blockquote {
+    border-left: 2px solid var(--color-accent);
+    padding-left: 1.5em;
+    font-style: italic;
+    color: var(--color-muted);
+    margin-left: 0;
+}
+.markdown-body pre {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line);
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+    overflow-x: auto;
+    font-size: 0.875rem;
+    margin-bottom: 1.5em;
+}
+.markdown-body code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    background-color: var(--color-elevated);
+    padding: 0.2em 0.4em;
+    border-radius: 0.25rem;
+    font-size: 0.875em;
+}
+.markdown-body pre code {
+    background-color: transparent;
+    padding: 0;
+}
+.markdown-body ul {
+    list-style-type: disc;
+    padding-left: 1.5em;
+}
+.markdown-body ol {
+    list-style-type: decimal;
+    padding-left: 1.5em;
+}
+.markdown-body img {
+    max-width: 100%;
+    border-radius: 1rem;
+    border: 1px solid var(--color-line);
+    margin: 2em 0;
+}
