@@ -1,5 +1,5 @@
 import { useParams, Link, Navigate } from 'react-router-dom';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { getBlogBySlug, markdownToHtml, markPostAsRead, getAllBlogs } from '../lib/blogUtils';
 import SEO from '../components/SEO';
 import ModeToggle from '../components/blog/ModeToggle';
@@ -14,7 +14,14 @@ export default function BlogPost() {
   const { slug } = useParams();
   const blog = getBlogBySlug(slug);
   const [mode, setMode] = useState('eli5');
-  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(() => {
+    try {
+      const bookmarks = JSON.parse(localStorage.getItem('bookmarkedPosts') || '[]');
+      return bookmarks.includes(slug);
+    } catch { 
+      return false; 
+    }
+  });
   const contentRef = useRef(null);
 
   // Mark post as read when user visits
@@ -24,23 +31,12 @@ export default function BlogPost() {
     }
   }, [slug, blog]);
 
-  // Check bookmark state
-  useEffect(() => {
-    try {
-      const bookmarks = JSON.parse(localStorage.getItem('bookmarkedPosts') || '[]');
-      setIsBookmarked(bookmarks.includes(slug));
-    } catch { /* ignore */ }
-  }, [slug]);
-
-  if (!blog) {
-    return <Navigate to="/blog" replace />;
-  }
-
   // Determine if the blog has dual-mode content
-  const hasDualMode = blog.sections.some((s) => s.type === 'eli5' || s.type === 'dev');
+  const hasDualMode = blog ? blog.sections.some((s) => s.type === 'eli5' || s.type === 'dev') : false;
 
   // Build the rendered HTML from sections based on current mode
   const renderedContent = useMemo(() => {
+    if (!blog) return [];
     return blog.sections.map((section, i) => {
       if (section.type === 'neutral') {
         return { type: 'html', html: markdownToHtml(section.content), key: `neutral-${i}` };
@@ -56,13 +52,11 @@ export default function BlogPost() {
       }
       return null;
     }).filter(Boolean);
-  }, [blog.sections, mode]);
+  }, [blog, mode]);
 
-  // Combined HTML for caption highlighting
-  const combinedHtml = renderedContent
-    .filter((r) => r.type === 'html')
-    .map((r) => r.html)
-    .join('');
+  if (!blog) {
+    return <Navigate to="/blog" replace />;
+  }
 
   // Get next/previous posts for navigation
   const allBlogs = getAllBlogs();
