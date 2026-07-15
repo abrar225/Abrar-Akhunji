@@ -1,16 +1,26 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, Pause, Headphones, User, UserPlus } from "lucide-react";
+import { Play, Pause, Headphones, Settings2 } from "lucide-react";
+
+const MALE_VOICES = ['siri male', 'alex', 'daniel', 'microsoft david', 'google uk english male'];
+const FEMALE_VOICES = ['siri female', 'samantha', 'microsoft zira', 'google us english'];
 
 export default function WebSpeechPlayer({ contentRef }) {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [voices, setVoices] = useState([]);
-  const [selectedVoice, setSelectedVoice] = useState(null);
   const [isSupported, setIsSupported] = useState(true);
   
+  // Options
+  const [voiceGender, setVoiceGender] = useState('female');
+  const [playbackRate, setPlaybackRate] = useState(1);
+  const [availableVoices, setAvailableVoices] = useState({ male: null, female: null });
+  
+  // Progress tracking
+  const [progress, setProgress] = useState(0);
+  
   const synth = window.speechSynthesis;
+  const globalOffsetRef = useRef(0);
+  const totalLengthRef = useRef(0);
   const utteranceRef = useRef(null);
-  const originalNodes = useRef([]); // To restore DOM after highlighting
 
   // Initialize voices
   useEffect(() => {
@@ -19,13 +29,21 @@ export default function WebSpeechPlayer({ contentRef }) {
       return;
     }
     const loadVoices = () => {
-      const allVoices = synth.getVoices();
-      // Try to find a good male and female voice
-      const engVoices = allVoices.filter(v => v.lang.startsWith('en'));
-      setVoices(engVoices);
-      if (engVoices.length > 0 && !selectedVoice) {
-        setSelectedVoice(engVoices[0]);
-      }
+      const voices = synth.getVoices();
+      
+      const findBestVoice = (priorities) => {
+        for (const p of priorities) {
+          const found = voices.find(v => v.name.toLowerCase().includes(p));
+          if (found) return found;
+        }
+        // Fallback
+        return voices.find(v => v.lang.startsWith('en')) || voices[0];
+      };
+      
+      setAvailableVoices({
+        male: findBestVoice(MALE_VOICES),
+        female: findBestVoice(FEMALE_VOICES)
+      });
     };
     
     loadVoices();
@@ -52,7 +70,7 @@ export default function WebSpeechPlayer({ contentRef }) {
     });
   }, [contentRef]);
 
-  const highlightWord = useCallback((charIndex) => {
+  const highlightWord = useCallback((absoluteCharIndex) => {
     if (!contentRef.current) return;
     removeHighlight();
 
@@ -64,16 +82,15 @@ export default function WebSpeechPlayer({ contentRef }) {
     while (walker.nextNode()) {
       const node = walker.currentNode;
       const len = node.nodeValue.length;
-      if (currentLength + len > charIndex) {
+      if (currentLength + len > absoluteCharIndex) {
         targetNode = node;
-        offset = charIndex - currentLength;
+        offset = absoluteCharIndex - currentLength;
         break;
       }
       currentLength += len;
     }
 
     if (targetNode) {
-      // Find the end of the word
       const text = targetNode.nodeValue;
       let endOffset = offset;
       while (endOffset < text.length && !/\s/.test(text[endOffset])) {
@@ -95,12 +112,65 @@ export default function WebSpeechPlayer({ contentRef }) {
         
         range.surroundContents(mark);
         
-        mark.scrollIntoView({ behavior: "smooth", block: "center" });
+        // Smart scroll: only scroll if out of viewport
+        const rect = mark.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+        const topThreshold = 100; // Header offset
+        const bottomThreshold = viewportHeight - 100;
+        
+        if (rect.top < topThreshold || rect.bottom > bottomThreshold) {
+           mark.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
       } catch (e) {
-        // Ignore range errors if boundaries are weird
+        // Ignore range errors
       }
     }
   }, [contentRef, removeHighlight]);
+
+  const speak = (startIndex = 0, overrideGender = null, overrideRate = null) => {
+    if (!contentRef.current) return;
+    
+    synth.cancel();
+    removeHighlight();
+    
+    const fullText = contentRef.current.textContent;
+    totalLengthRef.current = fullText.length;
+    
+    const textToSpeak = fullText.substring(startIndex);
+    if (!textToSpeak.trim()) return;
+    
+    globalOffsetRef.current = startIndex;
+    
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+    const activeGender = overrideGender || voiceGender;
+    const selectedVoice = availableVoices[activeGender];
+    if (selectedVoice) {
+      utterance.voice = selectedVoice;
+    }
+    utterance.rate = overrideRate || playbackRate;
+    
+    utterance.onboundary = (e) => {
+      if (e.name === 'word') {
+        const absoluteIndex = globalOffsetRef.current + e.charIndex;
+        highlightWord(absoluteIndex);
+        
+        // Update progress bar
+        if (totalLengthRef.current > 0) {
+           setProgress((absoluteIndex / totalLengthRef.current) * 100);
+        }
+      }
+    };
+    
+    utterance.onend = () => {
+      setIsPlaying(false);
+      setProgress(100);
+      removeHighlight();
+    };
+    
+    utteranceRef.current = utterance;
+    synth.speak(utterance);
+    setIsPlaying(true);
+  };
 
   const togglePlay = () => {
     if (isPlaying) {
@@ -111,91 +181,124 @@ export default function WebSpeechPlayer({ contentRef }) {
         synth.resume();
         setIsPlaying(true);
       } else {
-        // Start fresh
-        if (!contentRef.current) return;
-        removeHighlight();
-        synth.cancel();
-        
-        const text = contentRef.current.textContent;
-        const utterance = new SpeechSynthesisUtterance(text);
-        if (selectedVoice) {
-          utterance.voice = selectedVoice;
-        }
-        
-        utterance.onboundary = (e) => {
-          if (e.name === 'word') {
-            highlightWord(e.charIndex);
-          }
-        };
-        
-        utterance.onend = () => {
-          setIsPlaying(false);
-          removeHighlight();
-        };
-        
-        utteranceRef.current = utterance;
-        synth.speak(utterance);
-        setIsPlaying(true);
+        // Start fresh or resume from last progress if stopped
+        const startIdx = Math.floor((progress / 100) * totalLengthRef.current) || 0;
+        speak(startIdx);
       }
+    }
+  };
+
+  const handleSeek = (e) => {
+    if (!contentRef.current) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const percentage = Math.max(0, Math.min(1, clickX / rect.width));
+    
+    setProgress(percentage * 100);
+    
+    const fullText = contentRef.current.textContent;
+    totalLengthRef.current = fullText.length;
+    let targetIndex = Math.floor(percentage * totalLengthRef.current);
+    
+    // Backup to nearest word boundary
+    while(targetIndex > 0 && !/\s/.test(fullText[targetIndex - 1])) {
+       targetIndex--;
+    }
+    
+    if (isPlaying || synth.paused) {
+       speak(targetIndex);
+    }
+  };
+
+  const handleGenderToggle = () => {
+    const newGender = voiceGender === 'female' ? 'male' : 'female';
+    setVoiceGender(newGender);
+    if (isPlaying || synth.paused) {
+       const currentAbsolute = Math.floor((progress / 100) * totalLengthRef.current) || 0;
+       setTimeout(() => speak(currentAbsolute, newGender, null), 10);
+    }
+  };
+
+  const cycleSpeed = () => {
+    const speeds = [1, 1.25, 1.5, 2];
+    const nextIdx = (speeds.indexOf(playbackRate) + 1) % speeds.length;
+    const newSpeed = speeds[nextIdx];
+    setPlaybackRate(newSpeed);
+    
+    if (isPlaying || synth.paused) {
+       const currentAbsolute = Math.floor((progress / 100) * totalLengthRef.current) || 0;
+       setTimeout(() => speak(currentAbsolute, null, newSpeed), 10);
     }
   };
 
   if (!isSupported) return null;
 
   return (
-    <div className="bg-surface border border-line rounded-2xl p-5 space-y-4">
+    <div className="bg-surface border border-line rounded-2xl p-5 space-y-5">
       {/* Header */}
-      <div className="flex items-center gap-2 font-mono text-xs text-accent">
-        <Headphones size={14} strokeWidth={2.5} />
-        <span>🎧 Listen to this article (Free AI TTS)</span>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2 font-mono text-xs text-accent">
+          <Headphones size={14} strokeWidth={2.5} />
+          <span>🎧 Advanced Neural Narrator</span>
+        </div>
+        <div className="flex items-center gap-3">
+          {/* Speed Control */}
+          <button 
+            onClick={cycleSpeed}
+            className="text-xs font-mono px-2 py-1 rounded bg-elevated border border-line text-muted hover:text-fg hover:border-accent transition-colors"
+          >
+            {playbackRate}x
+          </button>
+          
+          {/* Voice Gender Toggle */}
+          <button 
+            onClick={handleGenderToggle}
+            className="flex items-center bg-elevated border border-line rounded-full p-1 relative w-16 h-8 cursor-pointer transition-colors"
+          >
+            <div className={`absolute top-1 w-6 h-6 rounded-full shadow-sm bg-accent flex items-center justify-center transition-transform duration-300 ${voiceGender === 'male' ? 'translate-x-8' : 'translate-x-0'}`}>
+              <span className="text-xs">{voiceGender === 'female' ? '👩' : '👨'}</span>
+            </div>
+            <div className="w-full flex justify-between px-2 text-xs opacity-50 select-none">
+               <span>👩</span>
+               <span>👨</span>
+            </div>
+          </button>
+        </div>
       </div>
 
-      {/* Controls row */}
+      {/* Controls & Timeline */}
       <div className="flex items-center gap-4">
         {/* Play / Pause */}
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={togglePlay}
-          className="flex-shrink-0 w-10 h-10 rounded-full bg-accent flex items-center justify-center
-                     text-white cursor-pointer shadow-lg shadow-accent/20 transition-shadow
-                     hover:shadow-accent/40"
+          className="flex-shrink-0 w-12 h-12 rounded-full bg-accent flex items-center justify-center
+                     text-white shadow-lg shadow-accent/20 hover:shadow-accent/40 transition-all"
         >
           <AnimatePresence mode="wait" initial={false}>
             {isPlaying ? (
               <motion.span key="pause" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
-                <Pause size={18} fill="currentColor" />
+                <Pause size={20} fill="currentColor" />
               </motion.span>
             ) : (
               <motion.span key="play" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
-                <Play size={18} fill="currentColor" className="ml-0.5" />
+                <Play size={20} fill="currentColor" className="ml-1" />
               </motion.span>
             )}
           </AnimatePresence>
         </motion.button>
         
-        {/* Voice Selector */}
-        <div className="flex-1">
-           <select 
-             className="w-full bg-elevated border border-line rounded-lg px-3 py-2 text-sm font-mono text-fg focus:border-accent outline-none appearance-none cursor-pointer"
-             onChange={(e) => {
-               const voice = voices.find(v => v.name === e.target.value);
-               if (voice) {
-                 setSelectedVoice(voice);
-                 if (isPlaying) {
-                    synth.cancel();
-                    setIsPlaying(false);
-                 }
-               }
-             }}
-             value={selectedVoice?.name || ''}
-           >
-             {voices.map(v => (
-               <option key={v.name} value={v.name}>
-                 {v.name.includes('Female') || v.name.includes('Samantha') || v.name.includes('Google US English') ? '👩 ' : '👨 ' } 
-                 {v.name}
-               </option>
-             ))}
-           </select>
+        {/* Timeline Bar */}
+        <div 
+          className="flex-1 h-3 bg-elevated border border-line rounded-full cursor-pointer relative overflow-hidden group"
+          onClick={handleSeek}
+        >
+          <motion.div 
+            className="absolute top-0 left-0 h-full bg-accent"
+            style={{ width: `${progress}%` }}
+            layout
+          />
+          <div className="absolute inset-0 bg-fg/0 group-hover:bg-fg/5 transition-colors" />
         </div>
       </div>
     </div>
