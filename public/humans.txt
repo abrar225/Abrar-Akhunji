@@ -1,0 +1,17 @@
+/* TEAM */
+Developer: Abrar Akhunji
+Role: AI/ML Engineer & Full-Stack Developer
+Contact: moabrarakhunji@gmail.com
+LinkedIn: https://www.linkedin.com/in/abrar-akhunji/
+GitHub: https://github.com/abrar225
+Location: Gujarat, India
+
+/* SITE */
+Last updated: 2026-07-15
+Language: English
+Standards: HTML5, CSS3, ES6+
+Framework: React 19, Vite 6
+Styling: Tailwind CSS 4
+Animation: GSAP, Framer Motion, Three.js, Lenis
+Hosting: Vercel (primary), GitHub Pages (mirror)
+Domain: abrarakhunji.com

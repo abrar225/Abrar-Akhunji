@@ -16,11 +16,12 @@ export default function BlogList() {
     "@context": "https://schema.org",
     "@type": "Blog",
     "name": "Abrar Akhunji's Tech & AI Blog",
-    "url": "https://abrar225.github.io/Abrar-Akhunji/blog",
+    "url": "https://abrarakhunji.com/blog",
     "description": "Deep dives into new AI technologies and IT sector news, explained simply.",
     "author": {
       "@type": "Person",
-      "name": "Abrar Akhunji"
+      "name": "Abrar Akhunji",
+      "url": "https://abrarakhunji.com"
     }
   };
 
@@ -115,17 +116,9 @@ export default function BlogList() {
               blogs.map((blog, i) => (
                 <SectionWrapper key={blog.slug} delay={i * 0.08} className="block group">
                   <Link to={`/blog/${blog.slug}`} className="block p-6 rounded-2xl border border-line bg-surface hover:border-accent/40 transition-all duration-300 hover:bg-surface/80">
-                    {/* Hero image thumbnail */}
-                    {blog.heroImage && (
-                      <div className="rounded-xl overflow-hidden border border-line mb-4 aspect-[3/1]">
-                        <img src={blog.heroImage} alt={blog.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
-                      </div>
-                    )}
-
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-3">
                       <div className="flex items-center gap-4 text-xs font-mono text-faint">
                         <span className="flex items-center gap-1.5"><Calendar size={12} /> {blog.date}</span>
-                        <span className="flex items-center gap-1.5"><User size={12} /> {blog.author}</span>
                         <span className="flex items-center gap-1.5"><Clock size={12} /> {blog.readingTime} min</span>
                       </div>
                       <div className="flex gap-2 flex-wrap">
@@ -144,11 +137,17 @@ export default function BlogList() {
                       {blog.description}
                     </p>
 
-                    {/* Feature indicators */}
-                    <div className="flex items-center gap-3 mt-4 text-[10px] font-mono text-faint uppercase tracking-widest">
-                      {blog.audio && <span className="flex items-center gap-1">🎧 Audio</span>}
-                      {blog.sections.some((s) => s.type === 'eli5') && <span className="flex items-center gap-1">🧒 ELI5</span>}
-                      {blog.sections.some((s) => s.type === 'interactive') && <span className="flex items-center gap-1">🎮 Interactive</span>}
+                    {/* Footer: byline + feature indicators */}
+                    <div className="flex items-center justify-between gap-3 mt-4">
+                      <span className="flex items-center gap-1.5 text-[11px] font-mono text-muted">
+                        <User size={12} className="text-accent" />
+                        Written by <span className="text-fg">{blog.author}</span>
+                      </span>
+                      <div className="flex items-center gap-3 text-[10px] font-mono text-faint uppercase tracking-widest">
+                        <span className="flex items-center gap-1">🎧 Audio</span>
+                        {blog.sections.some((s) => s.type === 'eli5') && <span className="flex items-center gap-1">🧒 ELI5</span>}
+                        {blog.sections.some((s) => s.type === 'interactive') && <span className="flex items-center gap-1">🎮 Interactive</span>}
+                      </div>
                     </div>
                   </Link>
                 </SectionWrapper>

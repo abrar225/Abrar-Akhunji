@@ -72,10 +72,19 @@ export default function BlogPost() {
     "author": {
       "@type": "Person",
       "name": blog.author,
-      "url": "https://abrar225.github.io/Abrar-Akhunji"
+      "url": "https://abrarakhunji.com"
     },
     "datePublished": blog.date,
-    "url": `https://abrar225.github.io/Abrar-Akhunji/blog/${slug}`
+    "url": `https://abrarakhunji.com/blog/${slug}`,
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `https://abrarakhunji.com/blog/${slug}`
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "Abrar Akhunji",
+      "url": "https://abrarakhunji.com"
+    }
   };
 
   const handleShare = () => {

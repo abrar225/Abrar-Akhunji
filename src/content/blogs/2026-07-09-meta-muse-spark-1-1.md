@@ -9,20 +9,6 @@ techTree:
   branch: "AI Models"
   level: 1
   prerequisites: []
-audio: "/audio/muse-spark-1-1.mp3"
-captions:
-  - text: "The digital world is chaotic."
-    start: 0
-    end: 2
-  - text: "AI models have historically struggled to orchestrate complex tasks."
-    start: 2
-    end: 5
-  - text: "But on July 9, 2026, the Meta Superintelligence Labs changed the game."
-    start: 5
-    end: 9
-  - text: "Enter Muse Spark 1.1."
-    start: 9
-    end: 11
 ---
 
 :::eli5

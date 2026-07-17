@@ -1,0 +1,16 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "Abrar Akhunji Portfolio",
+  "name_for_model": "abrar_akhunji_portfolio",
+  "description_for_human": "Portfolio and blog of Abrar Akhunji — AI/ML Engineer and Full-Stack Developer from Gujarat, India.",
+  "description_for_model": "This is the personal portfolio website of Abrar Akhunji, an AI/ML Engineer and Full-Stack Developer. It contains information about his projects (GourmetGo food delivery, Cattle Breed AI, Brain Tumor Detection, Real vs AI Image Detector), work experience (BrainyBeam IT Solutions internships), education (B.E. in Information Technology), technical skills (Python, Django, React, TensorFlow, PyTorch, OpenCV, Vision Transformers), certifications (Google Cybersecurity, GUNIpreneur), and a tech blog called The Neural Log covering AI and software engineering topics. He is currently open to work and seeking full-time roles.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "none"
+  },
+  "logo_url": "https://abrarakhunji.com/favicon.svg",
+  "contact_email": "moabrarakhunji@gmail.com",
+  "legal_info_url": "https://abrarakhunji.com/"
+}

@@ -21,7 +21,12 @@ const LoadingScreen = ({ onComplete }) => {
     const path = pathRef.current;
     if (!path) { onComplete(); return; }
 
-    if (reduce) { setProgress(100); const t = setTimeout(onComplete, 250); return () => clearTimeout(t); }
+    if (reduce) {
+      // Defer setState out of the synchronous effect body (avoids cascading render)
+      const p = setTimeout(() => setProgress(100), 0);
+      const t = setTimeout(onComplete, 250);
+      return () => { clearTimeout(p); clearTimeout(t); };
+    }
 
     const len = path.getTotalLength();
     gsap.set(path, { strokeDasharray: len, strokeDashoffset: len, opacity: 1 });

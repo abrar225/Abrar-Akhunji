@@ -1,0 +1,3 @@
+Contact: moabrarakhunji@gmail.com
+Preferred-Languages: en
+Canonical: https://abrarakhunji.com/.well-known/security.txt

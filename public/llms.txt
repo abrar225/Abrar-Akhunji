@@ -1,0 +1,48 @@
+# Abrar Akhunji — AI/ML Engineer & Full-Stack Developer
+
+> Personal portfolio and tech blog at https://abrarakhunji.com
+
+## About
+
+Abrar Akhunji is an AI/ML Engineer and Full-Stack Developer from Gujarat, India. He builds production-ready applications spanning food delivery ecosystems, computer vision systems, and healthcare AI. Currently pursuing a B.E. in Information Technology at Kalol Institute of Technology & Research Center.
+
+## Core Skills
+
+- **AI/ML:** Python, TensorFlow, PyTorch, OpenCV, Vision Transformers, Deep Learning, Computer Vision, NumPy, Pandas
+- **Full-Stack:** Django, React, Next.js, REST APIs, JavaScript, HTML5, CSS3, Tailwind CSS
+- **Databases:** MySQL, SQLite, Redis, Firebase Firestore
+- **Tools:** Git, GitHub, Linux, VS Code, Docker, Vite, GSAP, Three.js
+
+## Featured Projects
+
+1. **GourmetGo** — Full-stack food delivery ecosystem (Next.js, Django, Redis, Razorpay) → https://gourmet-go.vercel.app/
+2. **Cattle Breed ID** — AI system classifying 41 Indian cattle breeds using Vision Transformers → https://huggingface.co/spaces/abrar225/BreedAI
+3. **Brain Tumor Detection** — Healthcare AI for MRI-based tumor detection (OpenCV, ML)
+4. **Real vs AI Image Detector** — Deep learning system to identify AI-generated images
+5. **Library Management System** — Full-stack ecosystem (Django, MySQL)
+
+## Experience
+
+- Full-Stack Python Intern at BrainyBeam IT Solutions (Jan–Mar 2026)
+- Python Django Intern at BrainyBeam IT Solutions (Jul 2025)
+- Web Developer & Designer Intern (Jun–Aug 2024)
+
+## Certifications
+
+- Google Cybersecurity Professional Certificate
+- GUNIpreneur Bootcamp — 2nd Runner Up: Most Innovative Idea
+- Smart India Hackathon participant
+
+## Contact
+
+- Email: moabrarakhunji@gmail.com
+- LinkedIn: https://www.linkedin.com/in/abrar-akhunji/
+- GitHub: https://github.com/abrar225
+- Portfolio: https://abrarakhunji.com
+- Blog: https://abrarakhunji.com/blog
+
+## Pages
+
+- Home: https://abrarakhunji.com/
+- Blog: https://abrarakhunji.com/blog
+- Extended info: https://abrarakhunji.com/llms-full.txt

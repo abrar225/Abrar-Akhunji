@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import gsap from 'gsap';
 import { X, Sparkles } from 'lucide-react';
 
@@ -11,7 +11,7 @@ export default function InteractiveFlashcards({ config }) {
   const numCards = cards.length;
 
   // Layout the cards in a fan shape when none are active
-  const fanOutCards = () => {
+  const fanOutCards = useCallback(() => {
     cardsRef.current.forEach((card, i) => {
       if (!card) return;
       if (activeCard === i) return; // Skip active card
@@ -35,12 +35,12 @@ export default function InteractiveFlashcards({ config }) {
         overwrite: 'auto'
       });
     });
-  };
+  }, [activeCard, numCards]);
 
   useEffect(() => {
     // Initial layout
     fanOutCards();
-  }, [activeCard, numCards]);
+  }, [fanOutCards]);
 
   const handleMouseEnter = (e, i) => {
     if (activeCard !== null) return;

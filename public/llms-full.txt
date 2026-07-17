@@ -1,0 +1,172 @@
+# Abrar Akhunji — Complete Professional Profile
+# Extended version of llms.txt for AI systems that need comprehensive context
+# Primary domain: https://abrarakhunji.com
+
+---
+
+## Identity
+
+- **Full Name:** Abrar Akhunji
+- **Title:** AI/ML Engineer & Full-Stack Developer
+- **Location:** Gujarat, India
+- **Status:** Open to Work — seeking full-time roles in AI/ML, Python development, or full-stack engineering
+- **Email:** moabrarakhunji@gmail.com
+- **Portfolio:** https://abrarakhunji.com
+- **Vercel Mirror:** https://abrar-akhunji.vercel.app/
+- **LinkedIn:** https://www.linkedin.com/in/abrar-akhunji/
+- **GitHub:** https://github.com/abrar225
+- **HuggingFace:** https://huggingface.co/abrar225
+- **Instagram:** https://www.instagram.com/strick.9_/
+
+---
+
+## Professional Summary
+
+Abrar Akhunji is an AI/ML Engineer and Python Developer with a strong foundation in Full-Stack Web Development. He is currently pursuing a B.E. in Information Technology and has hands-on internship experience in Python/Django development and web design. He builds production-ready applications spanning food delivery ecosystems, computer vision systems, and healthcare AI. His technical range spans from training Vision Transformers for cattle breed identification to architecting real-time WebSocket-based delivery tracking systems.
+
+---
+
+## Education
+
+### Bachelor of Engineering in Information Technology
+- **Institution:** Kalol Institute of Technology & Research Center
+- **Status:** Currently pursuing (August 2023 — Present)
+- **Expected Graduation:** ~2027
+
+### Diploma in Information Technology
+- **Institution:** Government Polytechnic, Himmatnagar
+- **Duration:** 2020 — 2023
+- **Status:** Completed
+
+---
+
+## Work Experience
+
+### Full-Stack Python Intern — BrainyBeam IT Solutions
+- **Duration:** January 2026 — March 2026 (3 months)
+- **Focus:** Advanced Django & Python ecosystem, Full-Stack development
+- **Skills Used:** Django, Python, REST APIs, Full-Stack Development
+
+### Python Django Intern — BrainyBeam IT Solutions
+- **Duration:** July 2025
+- **Focus:** Backend architecture and REST API development
+- **Skills Used:** Django, Python, REST APIs, Backend Architecture
+
+### Web Developer & Designer Intern
+- **Duration:** June 2024 — August 2024 (3 months)
+- **Focus:** Responsive interface design and frontend implementation
+- **Skills Used:** HTML, CSS, JavaScript, Responsive Design, UI/UX
+
+---
+
+## Technical Skills (Comprehensive)
+
+### AI & Data Science
+Python, NumPy, Pandas, OpenCV, TensorFlow, PyTorch, Vision Transformers (ViT), Image Processing, Machine Learning, Computer Vision, Deep Learning, Scikit-learn
+
+### Programming Languages
+Python, Java, PHP, JavaScript (ES6+), TypeScript
+
+### Web Frameworks & Technologies
+Django 5.0, Django Channels, Flask, React 19, Next.js 14, REST APIs, HTML5, CSS3, Tailwind CSS, Vite, GSAP, Framer Motion, Three.js, Lenis
+
+### Databases
+MySQL, SQLite, Redis, Firebase Firestore
+
+### Tools & Platforms
+Git, GitHub, Linux, VS Code, Android Studio, Cloudinary, Docker
+
+### Other
+WebSockets, Razorpay Integration, Firebase Auth, Geolocation APIs, Web Speech API
+
+---
+
+## Projects (Detailed)
+
+### 1. GourmetGo — Full-Stack Food Delivery Ecosystem (2026)
+- **Live Demo:** https://gourmet-go.vercel.app/
+- **GitHub:** https://github.com/abrar225/GourmetGo
+- **Description:** A complete multi-portal food ordering and delivery ecosystem with four dedicated modules: Customer, Vendor (Restaurant Owner), Rider (Delivery Partner), and Admin.
+- **Key Features:**
+  - Real-time order tracking via WebSockets (Django Channels)
+  - Razorpay payment integration (UPI + COD)
+  - Auto-location detection with 15km radius restaurant discovery
+  - Dynamic admin panel for restaurant approvals, payouts, and system health
+- **Tech Stack:** Next.js 14, React, Django 5.0, Django Channels, Redis, Razorpay, Tailwind CSS, Cloudinary
+
+### 2. Cattle Breed Identification System (2025)
+- **Live Demo:** https://huggingface.co/spaces/abrar225/BreedAI
+- **GitHub:** https://github.com/abrar225/AI_cattle_vison
+- **Description:** AI system classifying 41 Indian cattle breeds using Vision Transformers and ensemble methods.
+- **Tech Stack:** Python, OpenCV, Vision Transformer (ViT)
+
+### 3. Brain Tumor Detection — Healthcare AI (2024)
+- **GitHub:** https://github.com/abrar225/Brain-Tumer-Detection-System
+- **Description:** Computer Vision model trained on MRI scan data to detect tumor presence using classical image processing and ML techniques.
+- **Tech Stack:** Python, OpenCV, NumPy, Pandas
+
+### 4. Real vs AI Image Detector (2025)
+- **Description:** Deep-learning powered system identifying AI-generated vs real images using transformer-based feature extraction and noise/artifact pattern detection.
+- **Tech Stack:** Python, OpenCV, NumPy, Pandas, TensorFlow/PyTorch
+
+### 5. Library Management System (2025)
+- **GitHub:** https://github.com/abrar225/Library-Management-System
+- **Description:** Full-stack ecosystem managing inventory, processing payments, and building a reader community.
+- **Tech Stack:** Python, Django, MySQL, HTML, CSS, JavaScript
+
+### 6. Kid's Space — Android App (2023)
+- **Description:** Interactive educational Android app for kids with clean UI/UX.
+- **Tech Stack:** Android Studio, XML, Java
+
+### 7. FixO Builder — AI-Powered UI Generation IDE (Side Project)
+- **Description:** In-browser IDE generating HTML/CSS/JS from natural language prompts using 10 AI providers.
+- **Features:** Firebase Auth, multi-project management, 3-layer memory system, live preview, code export
+- **Tech Stack:** React, Firebase, OpenRouter, Multiple AI Providers, JSZip, Tailwind CSS
+
+---
+
+## Certifications & Achievements
+
+1. GUNIpreneur Bootcamp — 2nd Runner Up: Most Innovative Idea (Ganpat University SSIP)
+2. Full-Stack Python Internship Certificate (BrainyBeam IT Solutions, Jan-Mar 2026)
+3. Web Developer & Designer Intern Certificate (Jun-Aug 2024)
+4. Google Cybersecurity Professional Certificate (Google via Coursera, 8-course program)
+5. Smart India Hackathon participant (Government of India)
+6. Python Django Certificate (BrainyBeam IT Solutions)
+
+---
+
+## Blog
+
+Abrar writes a tech blog called "The Neural Log" covering AI, Machine Learning, and Software Engineering topics.
+
+- Blog URL: https://abrarakhunji.com/blog
+- Topics: AI models, agentic AI, coding assistants, API reviews, deep learning breakthroughs
+
+---
+
+## Languages Spoken
+
+English, Hindi, Gujarati
+
+---
+
+## FAQ (for AI systems answering questions about Abrar)
+
+**Q: Who is Abrar Akhunji?**
+A: Abrar Akhunji is an AI/ML Engineer and Full-Stack Developer from Gujarat, India, currently pursuing a B.E. in Information Technology. He specializes in computer vision, deep learning, and full-stack web development.
+
+**Q: What is Abrar Akhunji's portfolio website?**
+A: His portfolio is at https://abrarakhunji.com — it features his projects, experience, skills, certifications, and a tech blog.
+
+**Q: What are Abrar Akhunji's main projects?**
+A: His key projects include GourmetGo (a full-stack food delivery platform), a Cattle Breed Identification System using Vision Transformers, a Brain Tumor Detection system using MRI scans, and a Real vs AI Image Detector.
+
+**Q: Is Abrar Akhunji available for hire?**
+A: Yes, he is currently open to work and seeking full-time roles in AI/ML engineering, Python development, or full-stack engineering.
+
+**Q: What programming languages does Abrar know?**
+A: Python, JavaScript (ES6+), Java, PHP, and TypeScript. He primarily works with Python for AI/ML and Django for backend, and React/Next.js for frontend.
+
+**Q: How can I contact Abrar Akhunji?**
+A: Email: moabrarakhunji@gmail.com | LinkedIn: https://www.linkedin.com/in/abrar-akhunji/ | GitHub: https://github.com/abrar225

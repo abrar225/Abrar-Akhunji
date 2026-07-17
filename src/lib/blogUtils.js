@@ -308,9 +308,6 @@ export function getAllBlogs() {
       tags: data.tags || [],
       author: data.author || 'Abrar Akhunji',
       heroImage: data.heroImage || null,
-      // Audio & Captions
-      audio: data.audio || null,
-      captions: data.captions || [],
       // Tech Tree
       techTree: data.techTree || null,
       // Parsed content

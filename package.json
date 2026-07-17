@@ -3,7 +3,7 @@
     "private": true,
     "version": "0.0.0",
     "type": "module",
-    "homepage": "https://abrar225.github.io/Abrar-Akhunji/",
+    "homepage": "https://abrarakhunji.com",
     "scripts": {
         "dev": "vite",
         "build": "vite build && node scripts/gen-php-config.mjs && node scripts/generate-seo.mjs",

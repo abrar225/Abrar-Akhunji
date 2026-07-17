@@ -23,7 +23,15 @@ export default defineConfig([
       },
     },
     rules: {
-      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      // NOTE: core no-unused-vars can't see JSX usage (that needs
+      // eslint-plugin-react's jsx-uses-vars, not installed). Components are
+      // ignored via ^[A-Z_] and framer-motion's lowercase `motion` namespace
+      // explicitly, so <motion.div> / <Tag> don't false-positive.
+      'no-unused-vars': ['error', {
+        varsIgnorePattern: '^[A-Z_]|^motion$',
+        argsIgnorePattern: '^_|^[A-Z]',
+        caughtErrors: 'none',
+      }],
     },
   },
 ])

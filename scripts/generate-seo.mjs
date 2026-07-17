@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 
-const SITE_URL = 'https://abrar225.github.io/Abrar-Akhunji';
+const SITE_URL = 'https://abrarakhunji.com';
 
 // Paths
 const distDir = path.resolve('dist');
@@ -118,11 +118,67 @@ sitemap += `</urlset>`;
 fs.writeFileSync(path.join(distDir, 'sitemap.xml'), sitemap);
 console.log(`Generated sitemap.xml with ${blogs.length + 2} URLs.`);
 
-// 3. Generate Robots.txt
-const robots = `User-agent: *
+// 3. Generate Robots.txt (with AI crawler directives for maximum discoverability)
+const robots = `# ${SITE_URL} - Abrar Akhunji Portfolio
+# Primary domain: abrarakhunji.com
+
+User-agent: *
 Allow: /
 
+# Sitemap
 Sitemap: ${SITE_URL}/sitemap.xml
+
+# AI Crawler Directives — Allow all major AI bots for maximum discoverability
+# Google AI (Gemini, SGE, AI Overviews)
+User-agent: Google-Extended
+Allow: /
+
+# OpenAI / ChatGPT
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+# Microsoft / Bing AI / Copilot
+User-agent: Bingbot
+Allow: /
+
+# Anthropic / Claude
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+# Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+
+# Meta AI
+User-agent: FacebookBot
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+# Apple
+User-agent: Applebot
+Allow: /
+User-agent: Applebot-Extended
+Allow: /
+
+# Other AI crawlers
+User-agent: Bytespider
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+# LLMs.txt reference (AI discovery standard)
+# See: ${SITE_URL}/llms.txt
+# See: ${SITE_URL}/llms-full.txt
 `;
 fs.writeFileSync(path.join(distDir, 'robots.txt'), robots);
-console.log(`Generated robots.txt.`);
+console.log(`Generated robots.txt with AI crawler directives.`);
+

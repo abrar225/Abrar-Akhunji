@@ -33,8 +33,8 @@ export default function ReadingProgress() {
 
   useEffect(() => {
     window.addEventListener("scroll", onScroll, { passive: true });
-    // Initial calculation
-    updateProgress();
+    // Initial calculation — via rAF so it doesn't setState synchronously in the effect
+    onScroll();
 
     return () => {
       window.removeEventListener("scroll", onScroll);

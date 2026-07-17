@@ -20,7 +20,9 @@ const ThreeBackground = ({ theme }) => {
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    if (mountRef.current) mountRef.current.appendChild(renderer.domElement);
+    // Snapshot the mount node — ref.current may differ by cleanup time
+    const mountNode = mountRef.current;
+    if (mountNode) mountNode.appendChild(renderer.domElement);
 
     // faint wireframe core
     const geo = new THREE.IcosahedronGeometry(2.1, 1);
@@ -80,7 +82,7 @@ const ThreeBackground = ({ theme }) => {
       cancelAnimationFrame(raf);
       window.removeEventListener('resize', onResize);
       window.removeEventListener('mousemove', onMouse);
-      if (mountRef.current) mountRef.current.innerHTML = '';
+      if (mountNode) mountNode.innerHTML = '';
       geo.dispose();
       mat.dispose();
       pGeo.dispose();

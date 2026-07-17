@@ -1,4 +1,59 @@
+# https://abrarakhunji.com - Abrar Akhunji Portfolio
+# Primary domain: abrarakhunji.com
+
 User-agent: *
 Allow: /
 
-Sitemap: https://abrar225.github.io/Abrar-Akhunji/sitemap.xml
+# Sitemap
+Sitemap: https://abrarakhunji.com/sitemap.xml
+
+# AI Crawler Directives — Allow all major AI bots for maximum discoverability
+# Google AI (Gemini, SGE, AI Overviews)
+User-agent: Google-Extended
+Allow: /
+
+# OpenAI / ChatGPT
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+# Microsoft / Bing AI / Copilot
+User-agent: Bingbot
+Allow: /
+
+# Anthropic / Claude
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+# Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+
+# Meta AI
+User-agent: FacebookBot
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+# Apple
+User-agent: Applebot
+Allow: /
+User-agent: Applebot-Extended
+Allow: /
+
+# Other AI crawlers
+User-agent: Bytespider
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+# LLMs.txt reference (AI discovery standard)
+# See: https://abrarakhunji.com/llms.txt
+# See: https://abrarakhunji.com/llms-full.txt
