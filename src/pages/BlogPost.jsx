@@ -64,11 +64,13 @@ export default function BlogPost() {
   const prevPost = currentIndex < allBlogs.length - 1 ? allBlogs[currentIndex + 1] : null;
   const nextPost = currentIndex > 0 ? allBlogs[currentIndex - 1] : null;
 
-  const schema = {
+  const schemas = [];
+  const mainSchema = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": blog.title,
     "description": blog.description,
+    "image": blog.heroImage ? (blog.heroImage.startsWith('http') ? blog.heroImage : `https://abrarakhunji.com${blog.heroImage}`) : `https://abrarakhunji.com/images/myimg.webp`,
     "author": {
       "@type": "Person",
       "name": blog.author,
@@ -86,6 +88,22 @@ export default function BlogPost() {
       "url": "https://abrarakhunji.com"
     }
   };
+  schemas.push(mainSchema);
+
+  if (blog.faq && Array.isArray(blog.faq)) {
+    schemas.push({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": blog.faq.map(item => ({
+        "@type": "Question",
+        "name": item.question,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": item.answer
+        }
+      }))
+    });
+  }
 
   const handleShare = () => {
     if (navigator.share) {
@@ -117,7 +135,7 @@ export default function BlogPost() {
         url={`/blog/${slug}`}
         type="article"
         image={blog.heroImage}
-        schema={schema}
+        schema={schemas.length === 1 ? schemas[0] : schemas}
       />
 
       <article className="min-h-screen bg-canvas text-fg">

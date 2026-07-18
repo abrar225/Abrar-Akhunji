@@ -39,11 +39,14 @@ for (const file of mdFiles) {
 
   blogs.push({ slug, date: data.date, url });
 
-  const schema = {
+  const schemas = [];
+
+  const mainSchema = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": data.title,
     "description": description,
+    "image": data.heroImage ? (data.heroImage.startsWith('http') ? data.heroImage : `${SITE_URL}${data.heroImage}`) : `${SITE_URL}/images/myimg.webp`,
     "author": {
       "@type": "Person",
       "name": data.author || "Abrar Akhunji",
@@ -52,6 +55,22 @@ for (const file of mdFiles) {
     "datePublished": data.date,
     "url": url
   };
+  schemas.push(mainSchema);
+
+  if (data.faq && Array.isArray(data.faq)) {
+    schemas.push({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": data.faq.map(item => ({
+        "@type": "Question",
+        "name": item.question,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": item.answer
+        }
+      }))
+    });
+  }
 
   // Inject Meta tags and Schema into <head>
   const seoHead = `
@@ -66,7 +85,7 @@ for (const file of mdFiles) {
     <meta property="twitter:url" content="${url}" />
     <meta property="twitter:title" content="${title}" />
     <meta property="twitter:description" content="${description}" />
-    <script type="application/ld+json">${JSON.stringify(schema)}</script>
+    <script type="application/ld+json">${JSON.stringify(schemas.length === 1 ? schemas[0] : schemas)}</script>
   `;
 
   // Replace existing <title> (if any) or just insert before </head>

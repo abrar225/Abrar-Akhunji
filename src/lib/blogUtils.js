@@ -310,6 +310,8 @@ export function getAllBlogs() {
       heroImage: data.heroImage || null,
       // Tech Tree
       techTree: data.techTree || null,
+      // FAQ
+      faq: data.faq || null,
       // Parsed content
       sections,
       content, // raw markdown body (kept for fallback)
