@@ -105,3 +105,4 @@
 - [2026-07-07T14:28:29] style: improve code formatting and comments
 - [2026-07-10T19:40:02] refactor: optimize internal helper functions
 - [2026-07-14T16:04:35] refactor: clean up unused variables and imports
+- [2026-07-19T18:54:36] chore: update configuration and build scripts
