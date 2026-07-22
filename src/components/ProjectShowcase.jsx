@@ -1,5 +1,6 @@
 import React, { useRef, useState, useMemo } from 'react';
-import { ArrowUpRight, Github, Play, RotateCw, Lock, Loader2 } from 'lucide-react';
+import { ArrowUpRight, Github, Play, RotateCw, Lock, Loader2, Layers } from 'lucide-react';
+import ProjectModal from './ProjectModal';
 import {
   motion,
   useMotionValue,
@@ -226,7 +227,7 @@ function BrowserFrame({ project, reduced }) {
   );
 }
 
-function ProjectRow({ project, index, reduced }) {
+function ProjectRow({ project, index, reduced, onOpenModal }) {
   const num = String(index + 1).padStart(2, '0');
   const flip = index % 2 === 1; // alternate sides on desktop
 
@@ -289,7 +290,15 @@ function ProjectRow({ project, index, reduced }) {
         ))}
       </div>
 
-      <div className="flex gap-6">
+      <div className="flex flex-wrap items-center gap-6">
+        <button
+          type="button"
+          onClick={() => onOpenModal?.(project)}
+          data-cursor="Inspect"
+          className="flex items-center gap-1.5 text-sm font-mono font-semibold text-accent hover:text-accent-soft transition-colors cursor-pointer"
+        >
+          <Layers size={14} /> Specs &amp; Architecture ↗
+        </button>
         {project.demo ? (
           <a
             href={project.demo}
@@ -345,11 +354,25 @@ function ProjectRow({ project, index, reduced }) {
 
 export default function ProjectShowcase({ projects = [] }) {
   const reduced = useReducedMotion();
+  const [selectedProject, setSelectedProject] = useState(null);
+
   return (
     <div className="flex flex-col gap-24 md:gap-40">
       {projects.map((project, idx) => (
-        <ProjectRow key={idx} project={project} index={idx} reduced={reduced} />
+        <ProjectRow
+          key={idx}
+          project={project}
+          index={idx}
+          reduced={reduced}
+          onOpenModal={(p) => setSelectedProject(p)}
+        />
       ))}
+
+      <ProjectModal
+        project={selectedProject}
+        isOpen={Boolean(selectedProject)}
+        onClose={() => setSelectedProject(null)}
+      />
     </div>
   );
 }

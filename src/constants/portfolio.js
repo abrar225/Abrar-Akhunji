@@ -18,6 +18,7 @@ export const PROJECTS = [
     category: "AI DEVTOOL",
     year: "2026",
     description: "An autonomous, open-source AI coding platform that lives in your terminal. FixO connects 20+ free LLM providers directly to your codebase to fix bugs, refactor, run tests, and install packages — no browser round-trips, no billing.",
+    architecture: "Terminal CLI Engine (Node.js) -> Tree-Sitter AST Workspace Indexer -> Multi-Provider LLM Router (FreeLLMAPI) -> Shadow Staging & LSP Syntax Verifier -> Autonomous Test Loop.",
     features: [
       "Multi-AI router across 20+ free providers with automatic failover (FreeLLMAPI)",
       "Self-correcting autonomous loop with a built-in test runner that iterates until tests pass",
@@ -26,7 +27,7 @@ export const PROJECTS = [
     ],
     tech: ["Node.js", "SQLite", "Tree-Sitter", "LSP", "MCP", "Ollama"],
     image: "/images/fixo.svg",
-    github: null,
+    github: "https://github.com/abrar225/FixO",
     demo: "https://fixo.firehox.com/",
     embeddable: true
   },
@@ -35,6 +36,7 @@ export const PROJECTS = [
     category: "FULL STACK", 
     year: "2026", 
     description: "A complete, online multi-portal food ordering and delivery ecosystem (similar to Zomato/Swiggy) with four dedicated modules: Customer, Vendor (Restaurant Owner), Rider (Delivery Partner), and Admin.", 
+    architecture: "Next.js 14 Client App -> Django 5.0 REST API Backend -> Redis / WebSockets (Django Channels) -> Razorpay Gateway -> Cloudinary Asset Management.",
     features: [
       "Real-time order tracking and notifications via WebSockets (Django Channels)",
       "Secure payment processing with Razorpay integration (UPI and COD support)",
@@ -52,6 +54,7 @@ export const PROJECTS = [
     category: "FULL STACK", 
     year: "2025", 
     description: "A high-performance ecosystem designed to bridge the gap between physical pages and digital convenience. Manage inventory, process secure payments, and build a community of readers.", 
+    architecture: "Django ORM -> MySQL Relational Database Schema -> Session-based Auth -> Fine Calculation Engine -> Inventory & Loan Logs.",
     features: ["Inventory management system", "Secure payment processing", "Reader community platform", "Digital catalog integration"], 
     tech: ["Python", "Django", "MySQL", "HTML", "CSS", "JavaScript"], 
     image: "/images/library_management.webp",
@@ -63,10 +66,11 @@ export const PROJECTS = [
     category: "COMPUTER VISION", 
     year: "2025", 
     description: "A deep-learning powered system that identifies whether an image is AI-generated or real using advanced image forensics and transformer-based feature extraction.", 
+    architecture: "Input Image -> OpenCV Noise Residual Preprocessing -> Vision Transformer (ViT) Feature Embeddings -> Binary Classification Head (Real vs Generated).",
     features: ["AI-vs-Real image classification", "Vision Transformer–based feature embedding", "Noise & artifact pattern detection"], 
     tech: ["Python", "OpenCV", "NumPy", "Pandas", "TensorFlow/PyTorch"], 
-    image: "/images/Real vs AI.webp",
-    github: null, 
+    image: "/images/real-vs-ai.webp",
+    github: "https://github.com/abrar225/Real-vs-AI-Image-Detector", 
     demo: null 
   },
   { 
@@ -74,9 +78,10 @@ export const PROJECTS = [
     category: "AI/ML", 
     year: "2025", 
     description: "An ensemble-based AI tool capable of classifying 41 Indian cattle breeds using Vision Transformers and image preprocessing techniques.", 
+    architecture: "HuggingFace Gradio Space -> Vision Transformer (ViT) Backbone -> Softmax 41-Class Classification Head -> Confidence Score Analytics.",
     features: ["Recognition of 41 unique cattle breeds", "Vision Transformer (ViT) embeddings", "Clean dataset preprocessing pipeline"], 
     tech: ["Python", "OpenCV", "Vision Transformer"], 
-    image: "/images/Cattel Breed.webp",
+    image: "/images/cattle-breed.webp",
     github: "https://github.com/abrar225/AI_cattle_vison",
     demo: "https://huggingface.co/spaces/abrar225/BreedAI",
     embeddable: true
@@ -86,9 +91,10 @@ export const PROJECTS = [
     category: "HEALTHCARE AI", 
     year: "2024", 
     description: "A Computer Vision model trained on MRI scan data to detect tumor presence with high accuracy using classical image processing and ML techniques.", 
+    architecture: "MRI Scan DICOM/PNG -> Grayscale Masking & Thresholding -> Contour Extraction -> Feature Vector -> Classifier (Tumor / Healthy).",
     features: ["Automated MRI-based tumor detection", "Binary classification (tumor / no tumor)", "Mask processing + thresholding + contour analysis"], 
     tech: ["Python", "OpenCV", "NumPy", "Pandas"], 
-    image: "/images/Brain Tumor Detection.webp",
+    image: "/images/brain-tumor-detection.webp",
     github: "https://github.com/abrar225/Brain-Tumer-Detection-System", 
     demo: null 
   },
@@ -97,10 +103,11 @@ export const PROJECTS = [
     category: "ANDROID", 
     year: "2023", 
     description: "An interactive educational Android app designed for kids, focused on simple UI/UX and modular Java development.", 
+    architecture: "Android Activity Lifecycle -> XML ConstraintLayouts -> Java Event Handlers -> Local Asset Storage.",
     features: ["Clean, kid-friendly UI", "Built using XML layouts", "Focused on kid's study"], 
     tech: ["Android Studio", "XML", "Java"], 
     image: "/images/kids_space.webp",
-    github: null, 
+    github: "https://github.com/abrar225/Kids-Space-Android", 
     demo: null 
   }
 ];

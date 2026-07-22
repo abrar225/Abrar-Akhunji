@@ -19,7 +19,7 @@ import ThemeToggle from '../components/ThemeToggle';
 import FloatingDock from '../components/FloatingDock';
 import SectionHeader from '../components/SectionHeader';
 import SectionWrapper from '../components/SectionWrapper';
-import DigitalTwin from '../components/DigitalTwin';
+
 import ProjectShowcase from '../components/ProjectShowcase';
 import SplitText from '../components/SplitText';
 import Magnetic from '../components/Magnetic';
@@ -27,6 +27,8 @@ import Marquee from '../components/Marquee';
 import HorizontalWords from '../components/HorizontalWords';
 import VerticalMarquee from '../components/VerticalMarquee';
 import RepelText from '../components/RepelText';
+import CyberTerminal from '../components/CyberTerminal';
+import { soundFX } from '../lib/soundFX';
 
 // lazy (heavy deps)
 const ThreeBackground = lazy(() => import('../components/ThreeBackground'));
@@ -53,6 +55,7 @@ const HWORDS = [
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
+  const [isTerminalOpen, setIsTerminalOpen] = useState(false);
   const [theme, setTheme] = useState(() => {
     try { return localStorage.getItem('theme') || 'dark'; } catch { return 'dark'; }
   });
@@ -62,7 +65,27 @@ export default function App() {
     try { localStorage.setItem('theme', theme); } catch { /* storage unavailable */ }
   }, [theme]);
 
-  const toggleTheme = () => setTheme((p) => (p === 'dark' ? 'light' : 'dark'));
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setIsTerminalOpen((prev) => !prev);
+      } else if (e.key === '`' || e.key === '~') {
+        // Only trigger if not typing in an input
+        if (!['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) {
+          e.preventDefault();
+          setIsTerminalOpen((prev) => !prev);
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const toggleTheme = () => {
+    soundFX.playToggle();
+    setTheme((p) => (p === 'dark' ? 'light' : 'dark'));
+  };
 
   useLayoutEffect(() => {
     if (isLoading) return;
@@ -147,13 +170,14 @@ export default function App() {
               </div>
             </header>
 
-            <FloatingDock />
+            <FloatingDock onOpenTerminal={() => setIsTerminalOpen(true)} />
 
-            {/* AI Digital Twin — neural orb assistant (agentic: can drive the site) */}
-            <DigitalTwin
-              setTheme={setTheme}
-              highlightProject={() => document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' })}
+            <CyberTerminal
+              isOpen={isTerminalOpen}
+              onClose={() => setIsTerminalOpen(false)}
             />
+
+
 
             <main id="main-content" className="relative z-10">
               {/* ── Hero ── */}
