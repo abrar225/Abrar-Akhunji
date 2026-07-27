@@ -108,3 +108,4 @@
 - [2026-07-19T18:54:36] chore: update configuration and build scripts
 - [2026-07-22T11:00:47] fix: resolve edge cases in parameter validation
 - [2026-07-25T11:09:23] perf: improve execution speed in hot paths
+- [2026-07-27T20:27:17] feat: add utility methods for state management
