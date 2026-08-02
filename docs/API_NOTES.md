@@ -16,3 +16,4 @@
 <!-- [2026-06-23T12:07:29] docs: update API integration guidelines -->
 <!-- [2026-07-15T09:15:48] docs: update API integration guidelines -->
 <!-- [2026-07-31T10:03:56] docs: update API integration guidelines -->
+<!-- [2026-08-02T15:22:29] docs: update API integration guidelines -->
