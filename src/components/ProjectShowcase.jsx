@@ -184,7 +184,7 @@ function BrowserFrame({ project, reduced }) {
                 data-cursor="Run"
                 className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-canvas/45 opacity-0 group-hover/browser:opacity-100 transition-opacity duration-300 backdrop-blur-[1px]"
               >
-                <span className="flex items-center justify-center w-16 h-16 rounded-full bg-accent text-[#0F0E0C] shadow-xl transition-transform duration-300 group-hover/browser:scale-110">
+                <span className="flex items-center justify-center w-16 h-16 rounded-full bg-accent text-[#0F0E0C] shadow-xl transition-transform duration-300 group-hover/browser:scale-110 press-effect">
                   <Play size={26} className="ml-1" fill="currentColor" />
                 </span>
                 <span className="font-mono text-xs uppercase tracking-[0.2em] text-fg">
@@ -199,7 +199,7 @@ function BrowserFrame({ project, reduced }) {
                 data-cursor="Open"
                 className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-canvas/45 opacity-0 group-hover/browser:opacity-100 transition-opacity duration-300 backdrop-blur-[1px]"
               >
-                <span className="flex items-center justify-center w-16 h-16 rounded-full bg-accent text-[#0F0E0C] shadow-xl transition-transform duration-300 group-hover/browser:scale-110">
+                <span className="flex items-center justify-center w-16 h-16 rounded-full bg-accent text-[#0F0E0C] shadow-xl transition-transform duration-300 group-hover/browser:scale-110 press-effect">
                   <ArrowUpRight size={28} />
                 </span>
                 <span className="font-mono text-xs uppercase tracking-[0.2em] text-fg">
@@ -295,7 +295,7 @@ function ProjectRow({ project, index, reduced, onOpenModal }) {
           type="button"
           onClick={() => onOpenModal?.(project)}
           data-cursor="Inspect"
-          className="flex items-center gap-1.5 text-sm font-mono font-semibold text-accent hover:text-accent-soft transition-colors cursor-pointer"
+          className="flex items-center gap-1.5 text-sm font-mono font-semibold text-accent hover:text-accent-soft transition-colors cursor-pointer press-effect"
         >
           <Layers size={14} /> Specs &amp; Architecture ↗
         </button>

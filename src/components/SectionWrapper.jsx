@@ -8,16 +8,19 @@ const SectionWrapper = ({ children, className = "", delay = 0 }) => {
     const el = elementRef.current;
     if (!el) return;
 
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      gsap.set(el, { opacity: 1, y: 0 });
+      return;
+    }
+
     const animation = gsap.fromTo(el,
       {
         opacity: 0,
-        y: 40,
-        filter: "blur(10px)"
+        y: 40
       },
       {
         opacity: 1,
         y: 0,
-        filter: "blur(0px)",
         duration: 1.2,
         delay: delay,
         ease: "power3.out",

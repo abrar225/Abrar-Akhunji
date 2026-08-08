@@ -344,8 +344,8 @@ ${p.features.map((f) => `    > ${f}`).join('\n')}
             initial={{ opacity: 0, scale: 0.96, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 20 }}
-            transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
-            className="relative w-full h-full sm:h-[85vh] sm:max-h-[700px] max-w-5xl sm:mx-4 sm:rounded-xl flex flex-col overflow-hidden font-mono"
+            transition={{ type: 'spring', bounce: 0, duration: 0.4 }}
+            className="glass-subtle relative w-full h-full sm:h-[85vh] sm:max-h-[700px] max-w-5xl sm:mx-4 sm:rounded-xl flex flex-col overflow-hidden font-mono"
             style={{
               color: tc.text,
               borderColor: tc.border,

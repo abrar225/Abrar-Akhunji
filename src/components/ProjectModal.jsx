@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { X, ExternalLink, Github, Code2, Cpu, CheckCircle2, Layers, Terminal, Sparkles } from 'lucide-react';
 
 /**
@@ -8,6 +8,7 @@ import { X, ExternalLink, Github, Code2, Cpu, CheckCircle2, Layers, Terminal, Sp
  */
 export default function ProjectModal({ project, isOpen, onClose }) {
   const [activeTab, setActiveTab] = useState('overview');
+  const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -41,11 +42,12 @@ export default function ProjectModal({ project, isOpen, onClose }) {
 
           {/* Modal Card */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.94, y: 20 }}
+            initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.94, y: shouldReduceMotion ? 0 : 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.94, y: 15 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="relative w-full max-w-4xl bg-surface border border-line rounded-2xl shadow-2xl overflow-hidden z-10 my-auto flex flex-col max-h-[90vh]"
+            exit={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.94, y: shouldReduceMotion ? 0 : 15 }}
+            transition={{ type: 'spring', bounce: 0, duration: 0.4 }}
+            style={{ backdropFilter: 'blur(20px) saturate(180%)', WebkitBackdropFilter: 'blur(20px) saturate(180%)' }}
+            className="relative w-full max-w-4xl bg-surface/80 border border-line rounded-2xl shadow-2xl overflow-hidden z-10 my-auto flex flex-col max-h-[90vh]"
           >
             {/* Header Bar */}
             <div className="p-6 border-b border-line flex items-center justify-between bg-elevated/50 shrink-0">
@@ -59,7 +61,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                 type="button"
                 onClick={onClose}
                 aria-label="Close modal"
-                className="p-2 rounded-full text-muted hover:text-fg hover:bg-surface border border-line transition-colors"
+                className="p-2 rounded-full text-muted hover:text-fg hover:bg-surface border border-line transition-colors press-effect"
               >
                 <X size={18} />
               </button>
@@ -82,7 +84,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono transition-all shrink-0 ${
+                      className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono transition-all shrink-0 press-effect ${
                         active
                           ? 'bg-accent text-[#0F0E0C] font-semibold shadow-md'
                           : 'bg-elevated/60 text-muted hover:text-fg hover:bg-elevated border border-line'
@@ -175,7 +177,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                     href={project.demo}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-accent text-[#0F0E0C] text-xs font-mono font-semibold hover:bg-accent-soft transition-colors"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-accent text-[#0F0E0C] text-xs font-mono font-semibold hover:bg-accent-soft transition-colors press-effect"
                   >
                     Launch Live Demo <ExternalLink size={14} />
                   </a>
@@ -185,7 +187,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                     href={project.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-line bg-surface text-fg text-xs font-mono hover:bg-elevated transition-colors"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-line bg-surface text-fg text-xs font-mono hover:bg-elevated transition-colors press-effect"
                   >
                     View Source <Github size={14} />
                   </a>
@@ -194,7 +196,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
               <button
                 type="button"
                 onClick={onClose}
-                className="text-xs font-mono text-muted hover:text-fg transition-colors"
+                className="text-xs font-mono text-muted hover:text-fg transition-colors press-effect"
               >
                 Close Preview
               </button>

@@ -4,13 +4,13 @@ import {
   PenLine, Terminal, Volume2, VolumeX, LayoutGrid, X,
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import Magnetic from './Magnetic';
 import { soundFX } from '../lib/soundFX';
 
 const ARC_START_DEG = 5;
 const ARC_END_DEG = 175;
-const SPRING = { type: 'spring', stiffness: 420, damping: 24 };
+const SPRING = { type: 'spring', stiffness: 300, damping: 22 };
 
 /** Convert degrees → radians */
 const deg2rad = (d) => (d * Math.PI) / 180;
@@ -30,6 +30,7 @@ function arcPosition(i, total, radius) {
    ═══════════════════════════════════════════════════════════════════ */
 function MobileRadialNav({ onOpenTerminal }) {
   const [isOpen, setIsOpen] = useState(false);
+  const prefersReduced = useReducedMotion();
   const [muted, setMuted] = useState(() => soundFX.isMuted());
   const navigate = useNavigate();
 
@@ -51,10 +52,10 @@ function MobileRadialNav({ onOpenTerminal }) {
 
   /* Each item: { icon, label, action() } */
   const items = [
-    { icon: Home, label: 'Home', action: () => { location.href = '#home'; close(); } },
-    { icon: User, label: 'About', action: () => { location.href = '#about-me'; close(); } },
-    { icon: Layers, label: 'Work', action: () => { location.href = '#work'; close(); } },
-    { icon: Briefcase, label: 'Path', action: () => { location.href = '#experience'; close(); } },
+    { icon: Home, label: 'Home', action: () => { document.querySelector('#home')?.scrollIntoView({ behavior: 'smooth' }); close(); } },
+    { icon: User, label: 'About', action: () => { document.querySelector('#about-me')?.scrollIntoView({ behavior: 'smooth' }); close(); } },
+    { icon: Layers, label: 'Work', action: () => { document.querySelector('#work')?.scrollIntoView({ behavior: 'smooth' }); close(); } },
+    { icon: Briefcase, label: 'Path', action: () => { document.querySelector('#experience')?.scrollIntoView({ behavior: 'smooth' }); close(); } },
     {
       icon: FileText, label: 'CV',
       action: () => {
@@ -62,7 +63,6 @@ function MobileRadialNav({ onOpenTerminal }) {
         close();
       },
     },
-    { icon: Mail, label: 'Contact', action: () => { location.href = '#contact'; close(); } },
     {
       icon: Terminal, label: 'CLI',
       action: () => { close(); setTimeout(() => onOpenTerminal?.(), 150); },
@@ -123,18 +123,18 @@ function MobileRadialNav({ onOpenTerminal }) {
                   soundFX.playClick();
                   item.action();
                 }}
-                initial={{ opacity: 0, x: 0, y: 0, scale: 0 }}
+                initial={{ opacity: 0, x: 0, y: 0, scale: prefersReduced ? 1 : 0 }}
                 animate={{
                   opacity: 1,
-                  x: pos.x,
-                  y: pos.y,
+                  x: prefersReduced ? 0 : pos.x,
+                  y: prefersReduced ? 0 : pos.y,
                   scale: 1,
                 }}
                 exit={{
                   opacity: 0,
                   x: 0,
                   y: 0,
-                  scale: 0,
+                  scale: prefersReduced ? 1 : 0,
                 }}
                 transition={{
                   ...SPRING,
@@ -149,7 +149,7 @@ function MobileRadialNav({ onOpenTerminal }) {
                   className={`flex items-center justify-center w-11 h-11 rounded-full border shadow-lg transition-colors ${
                     item.accent
                       ? 'bg-accent text-[#0F0E0C] border-accent/50'
-                      : 'bg-surface/95 backdrop-blur-xl text-fg border-line hover:border-accent/50 hover:text-accent'
+                      : 'glass text-fg border-white/15 hover:border-accent/50 hover:text-accent'
                   }`}
                 >
                   <item.icon size={18} />
@@ -165,13 +165,8 @@ function MobileRadialNav({ onOpenTerminal }) {
           aria-label={isOpen ? 'Close navigation' : 'Open navigation'}
           onClick={toggle}
           className="relative z-[61] pointer-events-auto flex items-center justify-center w-14 h-14 rounded-full bg-accent text-[#0F0E0C] shadow-[0_0_30px_-5px_var(--color-accent)] mb-4"
-          whileTap={{ scale: 0.9 }}
+          whileTap={{ scale: 0.97 }}
         >
-          {/* Pulse ring (only when closed) */}
-          {!isOpen && (
-            <span className="absolute inset-0 rounded-full bg-accent/40 animate-ping" />
-          )}
-
           <motion.span
             animate={{ rotate: isOpen ? 45 : 0 }}
             transition={{ ...SPRING, duration: 0.3 }}
@@ -212,7 +207,7 @@ function DesktopDock({ onOpenTerminal }) {
 
   return (
     <div className="fixed bottom-7 left-1/2 -translate-x-1/2 z-[60] max-w-max pb-[env(safe-area-inset-bottom,0px)] mb-[env(safe-area-inset-bottom,0px)]">
-      <nav className="flex items-center justify-center gap-1 px-3 py-2 bg-surface/80 backdrop-blur-xl border border-line rounded-full shadow-2xl">
+      <nav className="flex items-center justify-center gap-1 px-3 py-2 glass border-white/[0.12] rounded-full shadow-2xl">
         {links.map((link, idx) => (
           <Magnetic as="span" key={idx} strength={0.4} className="inline-block">
             <a
@@ -221,7 +216,13 @@ function DesktopDock({ onOpenTerminal }) {
               rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
               aria-label={link.label}
               onMouseEnter={() => soundFX.playHover()}
-              onClick={() => soundFX.playClick()}
+              onClick={(e) => {
+                soundFX.playClick();
+                if (link.href.startsWith('#')) {
+                  e.preventDefault();
+                  document.querySelector(link.href)?.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
               className="group relative flex p-3 rounded-full text-muted hover:text-accent hover:bg-elevated transition-colors duration-300"
             >
               <link.icon size={17} />

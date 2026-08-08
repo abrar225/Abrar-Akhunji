@@ -106,14 +106,16 @@ export default function BlogPost() {
   }
 
   const handleShare = () => {
+    const shareUrl = `https://abrarakhunji.com/blog/${slug}`;
     if (navigator.share) {
       navigator.share({
         title: blog.title,
         text: blog.description,
-        url: window.location.href,
+        url: shareUrl,
       }).catch(() => {});
     } else {
-      navigator.clipboard.writeText(window.location.href);
+      navigator.clipboard.writeText(shareUrl);
+      alert('Link copied to clipboard!');
     }
   };
 

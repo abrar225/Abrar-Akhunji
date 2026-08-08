@@ -421,7 +421,7 @@ export default function WebSpeechPlayer({ contentRef }) {
             aria-label="Pause narration"
             className="fixed bottom-6 right-6 z-[90] w-14 h-14 rounded-full bg-accent text-white
                        flex items-center justify-center shadow-xl shadow-accent/30
-                       hover:scale-105 active:scale-95 transition-transform"
+                       hover:scale-105 press-effect transition-transform"
           >
             <Pause size={22} fill="currentColor" />
           </motion.button>
