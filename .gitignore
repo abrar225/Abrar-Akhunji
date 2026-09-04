@@ -149,3 +149,7 @@ _reference-repos/
 
 # X Autoposting session state
 x-autoposting/.auth/
+
+# WorkBuddy AI local cache
+.workbuddy-ai/
+
