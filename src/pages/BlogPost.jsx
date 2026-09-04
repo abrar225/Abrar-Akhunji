@@ -8,9 +8,8 @@ import WebSpeechPlayer from '../components/blog/WebSpeechPlayer';
 import InteractiveBlock from '../components/blog/InteractiveBlock';
 import ReadingProgress from '../components/blog/ReadingProgress';
 import MessageScroller from '../components/blog/MessageScroller';
-import { StreamingResponse } from '../components/agents/StreamingResponse';
+import { BlogPostActions } from '../components/blog/BlogPostActions';
 import { extractSourcesFromMarkdown } from '../components/agents/Citations';
-import { useBlogStream } from '../hooks/useBlogStream';
 import { ArrowLeft, Calendar, User, Share2, Clock, ChevronRight, Bookmark } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Magnetic from '../components/Magnetic';
@@ -69,75 +68,36 @@ export default function BlogPost() {
     }
   }, [slug, blog]);
 
-  // Typeset math. markdownToHtml leaves a `.math-slot` span for every
-  // $...$ / $$...$$ expression; KaTeX fills them in once it has loaded.
-  useEffect(() => {
-    let cancelled = false;
-    const root = contentRef.current;
-    if (!root) return undefined;
-
-    import('katex').then(({ default: katex }) => {
-      if (cancelled) return;
-      root.querySelectorAll('.math-slot').forEach((el) => {
-        if (el.dataset.rendered) return;
-        const tex = el.dataset.tex || '';
-        try {
-          katex.render(tex, el, {
-            displayMode: el.dataset.display === '1',
-            throwOnError: false,
-            strict: false,
-          });
-        } catch {
-          // Show the source rather than silently dropping the expression.
-          el.textContent = tex;
-        }
-        el.dataset.rendered = '1';
-      });
-      if (lenisRef.current) {
-        setTimeout(() => lenisRef.current?.resize(), 60);
-      }
-    });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [blog, mode]);
 
   // Determine if the blog has dual-mode content
   const hasDualMode = blog ? blog.sections.some((s) => s.type === 'eli5' || s.type === 'dev') : false;
 
-  // Stream state controller for BeUI streaming response
-  const { status, progress, renderedBlocks, skipToEnd, replay } = useBlogStream({
-    blog,
-    mode,
-    lenisRef,
-  });
+  // Build the rendered HTML from sections based on current mode
+  const renderedContent = useMemo(() => {
+    if (!blog) return [];
+    return blog.sections.map((section, i) => {
+      if (section.type === 'neutral') {
+        return { type: 'html', html: markdownToHtml(section.content), key: `neutral-${i}` };
+      }
+      if (section.type === 'eli5' && mode === 'eli5') {
+        return { type: 'html', html: markdownToHtml(section.content), key: `eli5-${i}` };
+      }
+      if (section.type === 'dev' && mode === 'dev') {
+        return { type: 'html', html: markdownToHtml(section.content), key: `dev-${i}` };
+      }
+      if (section.type === 'interactive') {
+        return { type: 'interactive', widgetType: section.widgetType, config: section.config, key: `interactive-${i}` };
+      }
+      return null;
+    }).filter(Boolean);
+  }, [blog, mode]);
 
   // Extract sources/citations from the blog markdown
   const sources = useMemo(() => {
     return blog ? extractSourcesFromMarkdown(blog.content) : [];
   }, [blog]);
 
-  // Feedback state stored in localStorage
-  const [feedback, setFeedback] = useState(() => {
-    try {
-      const feedbackMap = JSON.parse(localStorage.getItem('blogPostFeedback') || '{}');
-      return feedbackMap[slug] || null;
-    } catch {
-      return null;
-    }
-  });
-
-  const handleFeedbackChange = (newFeedback) => {
-    setFeedback(newFeedback);
-    try {
-      const feedbackMap = JSON.parse(localStorage.getItem('blogPostFeedback') || '{}');
-      feedbackMap[slug] = newFeedback;
-      localStorage.setItem('blogPostFeedback', JSON.stringify(feedbackMap));
-    } catch { /* ignore */ }
-  };
-
-  // Run KaTeX whenever newly streamed math elements arrive
+  // Typeset math expressions with KaTeX
   useEffect(() => {
     let cancelled = false;
     const root = contentRef.current;
@@ -167,7 +127,7 @@ export default function BlogPost() {
     return () => {
       cancelled = true;
     };
-  }, [renderedBlocks]);
+  }, [blog, mode, renderedContent]);
 
   if (!blog) {
     return <Navigate to="/blog" replace />;
@@ -338,10 +298,10 @@ export default function BlogPost() {
           </motion.div>
         </div>
 
-        {/* ── Section Navigation Rail & Viewport (BeUI Message Scroller) ── */}
-        <MessageScroller contentRef={contentRef} mode={mode} lenisRef={lenisRef} status={status} />
+        {/* ── Section Navigation Rail & Viewport (Anthropic Message Scroller) ── */}
+        <MessageScroller contentRef={contentRef} mode={mode} lenisRef={lenisRef} />
 
-        {/* ── Blog Content (BeUI Streaming Response) ── */}
+        {/* ── Blog Content (Instant Render with Luxury Actions) ── */}
         <div className="max-w-[800px] mx-auto px-6 md:px-12 pb-16" ref={contentRef}>
           <motion.div
             key={mode}
@@ -349,48 +309,34 @@ export default function BlogPost() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <StreamingResponse
-              status={status}
-              progress={progress}
+            <div className="space-y-4">
+              {renderedContent.map((section) => {
+                if (section.type === 'html') {
+                  return (
+                    <div
+                      key={section.key}
+                      className="markdown-body"
+                      dangerouslySetInnerHTML={{ __html: section.html }}
+                    />
+                  );
+                }
+                if (section.type === 'interactive') {
+                  return (
+                    <div key={section.key} className="my-8">
+                      <InteractiveBlock widgetType={section.widgetType} config={section.config} />
+                    </div>
+                  );
+                }
+                return null;
+              })}
+            </div>
+
+            {/* ── Post Actions (Copy Markdown, Helpful/Not Helpful, Sources Drawer) ── */}
+            <BlogPostActions
               copyText={blog.content}
-              onRetry={replay}
-              onSkip={skipToEnd}
               sources={sources}
-              feedback={feedback}
-              onFeedbackChange={handleFeedbackChange}
-              className="w-full"
-            >
-              <div className="space-y-4">
-                {renderedBlocks.map((block) => {
-                  if (block.type === 'html') {
-                    return (
-                      <motion.div
-                        key={block.id}
-                        initial={{ opacity: 0, y: 12, filter: 'blur(3px)' }}
-                        animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                        className="markdown-body"
-                        dangerouslySetInnerHTML={{ __html: block.html }}
-                      />
-                    );
-                  }
-                  if (block.type === 'interactive') {
-                    return (
-                      <motion.div
-                        key={block.id}
-                        initial={{ opacity: 0, scale: 0.98, y: 12 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                        className="my-8"
-                      >
-                        <InteractiveBlock widgetType={block.widgetType} config={block.config} />
-                      </motion.div>
-                    );
-                  }
-                  return null;
-                })}
-              </div>
-            </StreamingResponse>
+              slug={slug}
+            />
           </motion.div>
         </div>
 

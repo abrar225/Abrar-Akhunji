@@ -12,7 +12,7 @@ import { Compass, ChevronRight, ChevronLeft, ArrowUp, X, BookOpen } from 'lucide
  * 4. Butter-smooth Lenis inertial scrolling when clicking any chapter.
  * 5. Clean mobile floating island for responsive devices.
  */
-export default function MessageScroller({ contentRef, mode, lenisRef, status }) {
+export default function MessageScroller({ contentRef, mode, lenisRef }) {
   const [sections, setSections] = useState([]);
   const [activeId, setActiveId] = useState('');
   const [hoveredId, setHoveredId] = useState(null);
@@ -100,14 +100,14 @@ export default function MessageScroller({ contentRef, mode, lenisRef, status }) 
     });
   }, [sections]);
 
-  // Re-scan when mode changes, status changes, or layout shifts
+  // Re-scan when mode changes or layout shifts
   useEffect(() => {
     const timer = setTimeout(() => {
       scanSections();
       updateBounds();
     }, 120);
     return () => clearTimeout(timer);
-  }, [scanSections, updateBounds, mode, status]);
+  }, [scanSections, updateBounds, mode]);
 
   // Update bounds on window resize
   useEffect(() => {
