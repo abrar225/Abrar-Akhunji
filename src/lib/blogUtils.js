@@ -1,5 +1,16 @@
 import { marked } from 'marked';
 
+// Configure marked with custom heading renderer for section-aware navigation
+marked.use({
+  renderer: {
+    heading({ tokens, depth, text }) {
+      const slug = text.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-');
+      const innerHtml = this.parser.parseInline(tokens);
+      return `<h${depth} id="${slug}" data-slot="blog-heading">${innerHtml}</h${depth}>\n`;
+    }
+  }
+});
+
 // Vite's feature to import multiple files. 'query: "?raw"' brings them in as strings.
 const blogFiles = import.meta.glob('../content/blogs/*.md', { query: '?raw', eager: true });
 

@@ -6,6 +6,7 @@ import ModeToggle from '../components/blog/ModeToggle';
 import WebSpeechPlayer from '../components/blog/WebSpeechPlayer';
 import InteractiveBlock from '../components/blog/InteractiveBlock';
 import ReadingProgress from '../components/blog/ReadingProgress';
+import MessageScroller from '../components/blog/MessageScroller';
 import { ArrowLeft, Calendar, User, Share2, Clock, ChevronRight, Bookmark } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Magnetic from '../components/Magnetic';
@@ -256,6 +257,9 @@ export default function BlogPost() {
             )}
           </motion.div>
         </div>
+
+        {/* ── Section Navigation Rail & Viewport (BeUI Message Scroller) ── */}
+        <MessageScroller contentRef={contentRef} mode={mode} />
 
         {/* ── Blog Content ── */}
         <div className="max-w-[800px] mx-auto px-6 md:px-12 pb-16" ref={contentRef}>
