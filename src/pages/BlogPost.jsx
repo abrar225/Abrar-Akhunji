@@ -1,5 +1,6 @@
 import { useParams, Link, Navigate } from 'react-router-dom';
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import Lenis from 'lenis';
 import { getBlogBySlug, markdownToHtml, markPostAsRead, getAllBlogs } from '../lib/blogUtils';
 import SEO from '../components/SEO';
 import ModeToggle from '../components/blog/ModeToggle';
@@ -27,6 +28,36 @@ export default function BlogPost() {
     }
   });
   const contentRef = useRef(null);
+  const lenisRef = useRef(null);
+
+  // Initialize Lenis smooth inertial scrolling for the blog reader
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.15,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      wheelMultiplier: 1.0,
+      touchMultiplier: 1.5,
+    });
+    lenisRef.current = lenis;
+    window.__lenis = lenis;
+
+    let animId;
+    function raf(time) {
+      lenis.raf(time);
+      animId = requestAnimationFrame(raf);
+    }
+    animId = requestAnimationFrame(raf);
+
+    return () => {
+      cancelAnimationFrame(animId);
+      lenis.destroy();
+      lenisRef.current = null;
+      if (window.__lenis === lenis) {
+        delete window.__lenis;
+      }
+    };
+  }, []);
 
   // Mark post as read when user visits
   useEffect(() => {
@@ -59,6 +90,9 @@ export default function BlogPost() {
         }
         el.dataset.rendered = '1';
       });
+      if (lenisRef.current) {
+        setTimeout(() => lenisRef.current?.resize(), 60);
+      }
     });
 
     return () => {
@@ -259,7 +293,7 @@ export default function BlogPost() {
         </div>
 
         {/* ── Section Navigation Rail & Viewport (BeUI Message Scroller) ── */}
-        <MessageScroller contentRef={contentRef} mode={mode} />
+        <MessageScroller contentRef={contentRef} mode={mode} lenisRef={lenisRef} />
 
         {/* ── Blog Content ── */}
         <div className="max-w-[800px] mx-auto px-6 md:px-12 pb-16" ref={contentRef}>
