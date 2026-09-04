@@ -1,108 +1,119 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useReducedMotion } from 'framer-motion';
 import { markdownToHtml } from '../lib/blogUtils';
 
 /**
- * useBlogStream: High-performance streaming controller for rich blog posts.
+ * Splits HTML string into discrete, self-contained top-level DOM block elements.
+ * Each block represents a single paragraph, heading, code block, list, blockquote, or table.
+ */
+function parseHtmlBlocks(htmlString, prefix = 'block') {
+  if (typeof document === 'undefined') {
+    return [{ id: `${prefix}-0`, type: 'html', html: htmlString }];
+  }
+
+  const container = document.createElement('div');
+  container.innerHTML = htmlString;
+
+  const blocks = [];
+  const children = Array.from(container.children);
+
+  if (children.length === 0 && htmlString.trim()) {
+    // If no child tags found, treat text as a paragraph
+    return [{ id: `${prefix}-0`, type: 'html', html: `<p>${htmlString}</p>` }];
+  }
+
+  children.forEach((child, idx) => {
+    const tagName = child.tagName.toLowerCase();
+    const headingId = child.id || (tagName.startsWith('h') ? child.getAttribute('data-id') : null);
+
+    blocks.push({
+      id: `${prefix}-${idx}`,
+      type: 'html',
+      tagName,
+      headingId: headingId || null,
+      html: child.outerHTML,
+    });
+  });
+
+  return blocks;
+}
+
+/**
+ * useBlogStream: High-performance, paragraph-by-paragraph streaming controller.
  *
- * Provides:
- * 1. Frame-synced character & block streaming via requestAnimationFrame.
- * 2. Scroll-aware progressive acceleration: as the reader scrolls down,
- *    upcoming content streams in ahead of the viewport so reading is never stalled.
- * 3. Support for interleaved markdown sections and interactive widgets.
- * 4. Instant 'Skip to Complete' and 'Replay' controls.
- * 5. Reduced-motion accessibility bypass.
+ * Eliminates character slicing DOM churn in favor of discrete semantic block cascading.
+ * Blocks render with GPU-accelerated motion, smooth blur-to-sharp animation, and scroll-ahead anticipation.
  */
 export function useBlogStream({ blog, mode, lenisRef }) {
   const reduceMotion = useReducedMotion() ?? false;
 
-  // Build the array of active sections for the current mode
-  const activeSections = useRef([]);
-  activeSections.current = blog
-    ? blog.sections
-        .map((section, i) => {
-          if (section.type === 'neutral') {
-            return {
-              id: `neutral-${i}`,
-              type: 'markdown',
-              raw: section.content,
-              length: section.content.length,
-            };
-          }
-          if (section.type === 'eli5' && mode === 'eli5') {
-            return {
-              id: `eli5-${i}`,
-              type: 'markdown',
-              raw: section.content,
-              length: section.content.length,
-            };
-          }
-          if (section.type === 'dev' && mode === 'dev') {
-            return {
-              id: `dev-${i}`,
-              type: 'markdown',
-              raw: section.content,
-              length: section.content.length,
-            };
-          }
-          if (section.type === 'interactive') {
-            // Interactive blocks have an estimated virtual length to pace the stream
-            return {
-              id: `interactive-${i}`,
-              type: 'interactive',
-              widgetType: section.widgetType,
-              config: section.config,
-              length: 250,
-            };
-          }
-          return null;
-        })
-        .filter(Boolean)
-    : [];
+  // 1. Build all blocks for the active mode
+  const allBlocks = useMemo(() => {
+    if (!blog || !blog.sections) return [];
 
-  // Compute total character budget and cumulative starting offsets
-  const totalLength = activeSections.current.reduce((acc, s) => acc + s.length, 0);
+    const blocks = [];
 
-  const [cursor, setCursor] = useState(reduceMotion ? totalLength : 0);
+    blog.sections.forEach((section, secIdx) => {
+      if (section.type === 'neutral') {
+        const html = markdownToHtml(section.content);
+        const parsed = parseHtmlBlocks(html, `sec-neutral-${secIdx}`);
+        blocks.push(...parsed);
+      } else if (section.type === 'eli5' && mode === 'eli5') {
+        const html = markdownToHtml(section.content);
+        const parsed = parseHtmlBlocks(html, `sec-eli5-${secIdx}`);
+        blocks.push(...parsed);
+      } else if (section.type === 'dev' && mode === 'dev') {
+        const html = markdownToHtml(section.content);
+        const parsed = parseHtmlBlocks(html, `sec-dev-${secIdx}`);
+        blocks.push(...parsed);
+      } else if (section.type === 'interactive') {
+        blocks.push({
+          id: `sec-interactive-${secIdx}`,
+          type: 'interactive',
+          widgetType: section.widgetType,
+          config: section.config,
+        });
+      }
+    });
+
+    return blocks;
+  }, [blog, mode]);
+
+  const totalBlocks = allBlocks.length;
+
+  const [revealedCount, setRevealedCount] = useState(reduceMotion ? totalBlocks : 1);
   const [status, setStatus] = useState(reduceMotion ? 'complete' : 'streaming');
-  const [progress, setProgress] = useState(reduceMotion ? 100 : 0);
   const [runKey, setRunKey] = useState(0);
 
-  const cursorRef = useRef(reduceMotion ? totalLength : 0);
-  const animFrameRef = useRef(null);
-  const startTimeRef = useRef(null);
+  const revealedCountRef = useRef(reduceMotion ? totalBlocks : 1);
   const isCompleteRef = useRef(reduceMotion);
+  const timerRef = useRef(null);
 
-  // Streaming speed (characters per second)
-  // Tuned for engaging velocity: ~150 chars/sec base, auto-accelerated on scroll
-  const BASE_SPEED = 150;
+  // Cadence: ~190ms per block for an engaging, ultra-smooth cadence
+  const BLOCK_INTERVAL_MS = 190;
 
   // Skip to complete immediately
   const skipToEnd = useCallback(() => {
-    if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-    cursorRef.current = totalLength;
-    setCursor(totalLength);
-    setProgress(100);
+    if (timerRef.current) clearInterval(timerRef.current);
+    revealedCountRef.current = totalBlocks;
+    setRevealedCount(totalBlocks);
     setStatus('complete');
     isCompleteRef.current = true;
 
     if (lenisRef?.current) {
-      setTimeout(() => lenisRef.current?.resize(), 50);
+      setTimeout(() => lenisRef.current?.resize(), 60);
     }
-  }, [totalLength, lenisRef]);
+  }, [totalBlocks, lenisRef]);
 
-  // Replay stream from beginning
+  // Replay stream from first block
   const replay = useCallback(() => {
-    if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-    cursorRef.current = 0;
-    setCursor(0);
-    setProgress(0);
+    if (timerRef.current) clearInterval(timerRef.current);
+    revealedCountRef.current = 1;
+    setRevealedCount(1);
     setStatus('streaming');
     isCompleteRef.current = false;
-    startTimeRef.current = null;
     setRunKey((k) => k + 1);
 
-    // Scroll to top of content
     const lenis = lenisRef?.current || window.__lenis;
     if (lenis) {
       lenis.scrollTo(0, { duration: 0.8 });
@@ -111,139 +122,102 @@ export function useBlogStream({ blog, mode, lenisRef }) {
     }
   }, [lenisRef]);
 
-  // Main streaming loop
+  // Sequential block streaming timer
   useEffect(() => {
-    if (reduceMotion) {
+    if (reduceMotion || totalBlocks === 0) {
       skipToEnd();
       return;
     }
 
     isCompleteRef.current = false;
-    cursorRef.current = 0;
-    setCursor(0);
-    setProgress(0);
+    revealedCountRef.current = 1;
+    setRevealedCount(1);
     setStatus('streaming');
-    startTimeRef.current = performance.now();
 
-    const tick = (now) => {
-      if (isCompleteRef.current) return;
+    timerRef.current = setInterval(() => {
+      if (isCompleteRef.current) {
+        clearInterval(timerRef.current);
+        return;
+      }
 
-      if (!startTimeRef.current) startTimeRef.current = now;
-      const elapsedSec = (now - startTimeRef.current) / 1000;
-
-      // Base target cursor from elapsed time
-      const timeTarget = Math.floor(elapsedSec * BASE_SPEED);
-
-      // Use max between time-based progress and scroll-accelerated progress
-      const nextCursor = Math.min(totalLength, Math.max(cursorRef.current, timeTarget));
-      cursorRef.current = nextCursor;
-      setCursor(nextCursor);
-
-      const currentProgress = totalLength > 0 ? (nextCursor / totalLength) * 100 : 100;
-      setProgress(currentProgress);
-
-      if (nextCursor >= totalLength) {
+      const next = revealedCountRef.current + 1;
+      if (next >= totalBlocks) {
+        revealedCountRef.current = totalBlocks;
+        setRevealedCount(totalBlocks);
         setStatus('complete');
         isCompleteRef.current = true;
+        clearInterval(timerRef.current);
+
         if (lenisRef?.current) {
-          setTimeout(() => lenisRef.current?.resize(), 80);
+          setTimeout(() => lenisRef.current?.resize(), 60);
         }
       } else {
-        animFrameRef.current = requestAnimationFrame(tick);
-      }
-    };
+        revealedCountRef.current = next;
+        setRevealedCount(next);
 
-    animFrameRef.current = requestAnimationFrame(tick);
+        // Periodically notify Lenis of content growth
+        if (next % 4 === 0 && lenisRef?.current) {
+          lenisRef.current.resize();
+        }
+      }
+    }, BLOCK_INTERVAL_MS);
 
     return () => {
-      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+      if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [mode, runKey, reduceMotion, totalLength, skipToEnd, lenisRef]);
+  }, [mode, runKey, totalBlocks, reduceMotion, skipToEnd, lenisRef]);
 
-  // Scroll-Aware Progressive Acceleration:
-  // As the user scrolls down towards currently unrevealed content, advance stream
+  // Scroll-Ahead Anticipation:
+  // As reader scrolls down, automatically reveal any blocks approaching the viewport
   useEffect(() => {
-    if (status === 'complete' || isCompleteRef.current) return;
+    if (status === 'complete' || isCompleteRef.current || totalBlocks === 0) return;
 
     const handleScroll = () => {
       const scrollY = window.scrollY;
       const viewportHeight = window.innerHeight;
       const docHeight = document.documentElement.scrollHeight;
 
-      // Calculate how far down the document the user has scrolled
-      const scrollBottom = scrollY + viewportHeight;
-      const scrollRatio = docHeight > 0 ? scrollBottom / docHeight : 0;
+      const visibleBottom = scrollY + viewportHeight * 1.25;
+      const scrollRatio = docHeight > 0 ? visibleBottom / docHeight : 0;
 
-      // If user is scrolling down, pull more content into the stream
-      if (scrollRatio > 0.25) {
-        const scrollTargetCursor = Math.min(
-          totalLength,
-          Math.floor(totalLength * (scrollRatio * 1.2))
-        );
+      const targetCount = Math.min(
+        totalBlocks,
+        Math.max(revealedCountRef.current, Math.ceil(totalBlocks * scrollRatio))
+      );
 
-        if (scrollTargetCursor > cursorRef.current) {
-          cursorRef.current = scrollTargetCursor;
-          setCursor(scrollTargetCursor);
-          setProgress((scrollTargetCursor / totalLength) * 100);
+      if (targetCount > revealedCountRef.current) {
+        revealedCountRef.current = targetCount;
+        setRevealedCount(targetCount);
 
-          if (scrollTargetCursor >= totalLength) {
-            setStatus('complete');
-            isCompleteRef.current = true;
-          }
+        if (targetCount >= totalBlocks) {
+          setStatus('complete');
+          isCompleteRef.current = true;
+          if (timerRef.current) clearInterval(timerRef.current);
+        }
 
-          if (lenisRef?.current) {
-            lenisRef.current.resize();
-          }
+        if (lenisRef?.current) {
+          lenisRef.current.resize();
         }
       }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [status, totalLength, lenisRef]);
+  }, [status, totalBlocks, lenisRef]);
 
-  // Derive rendered sections based on current cursor
-  const renderedSections = [];
-  let accumulated = 0;
+  // Current visible slice of blocks
+  const renderedBlocks = useMemo(() => {
+    return allBlocks.slice(0, revealedCount);
+  }, [allBlocks, revealedCount]);
 
-  for (let i = 0; i < activeSections.current.length; i++) {
-    const sec = activeSections.current[i];
-    const secStart = accumulated;
-    const secEnd = accumulated + sec.length;
-    accumulated = secEnd;
-
-    if (cursor < secStart) {
-      // Not yet reached by stream
-      continue;
-    }
-
-    if (sec.type === 'interactive') {
-      // Interactive block is shown as soon as cursor reaches it
-      renderedSections.push({
-        id: sec.id,
-        type: 'interactive',
-        widgetType: sec.widgetType,
-        config: sec.config,
-        isPartial: false,
-      });
-    } else if (sec.type === 'markdown') {
-      const isCompleteSection = cursor >= secEnd;
-      const visibleLength = isCompleteSection ? sec.raw.length : Math.max(0, cursor - secStart);
-      const partialText = sec.raw.slice(0, visibleLength);
-
-      renderedSections.push({
-        id: sec.id,
-        type: 'html',
-        html: markdownToHtml(partialText),
-        isPartial: !isCompleteSection,
-      });
-    }
-  }
+  const progress = totalBlocks > 0 ? (revealedCount / totalBlocks) * 100 : 100;
 
   return {
     status,
     progress,
-    renderedSections,
+    renderedBlocks,
+    totalBlocks,
+    revealedCount,
     skipToEnd,
     replay,
   };

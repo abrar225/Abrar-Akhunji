@@ -1,24 +1,22 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Compass, ChevronRight, ChevronLeft, Sparkles, ArrowUp, X, BookOpen, Layers } from 'lucide-react';
+import { Compass, ChevronRight, ChevronLeft, ArrowUp, X, BookOpen } from 'lucide-react';
 
 /**
- * MessageScroller: Section-aware blog navigation rail and reading viewport.
+ * MessageScroller: Ultra-clean Anthropic-style section navigation rail.
  *
- * Implements the BeUI message-scroller & preview-rail interaction architecture:
- * 1. Precision Section Tracking: Computes exact document boundary ranges for each section.
- * 2. Lenis Integration: Smooth inertial scrolling via lenis.scrollTo with custom physics easing.
- * 3. Framer Motion Animations: Gliding active layout indicators, scale falloff magnification, spring-physics preview cards.
- * 4. Dual Viewport Support: Desktop luxury floating dock + Mobile bottom navigation island with chapter sheet.
- * 5. Reading Intelligence: Dynamic category classification, section reading times, and live percentage ring.
+ * Direct implementation of Anthropic's editorial navigation:
+ * 1. Left-margin vertical spine with subtle horizontal tick marks.
+ * 2. Active section connects directly to a sleek dark capsule pill that glides with spring physics.
+ * 3. Minimalist aesthetic: zero visual clutter, distraction-free reading.
+ * 4. Butter-smooth Lenis inertial scrolling when clicking any chapter.
+ * 5. Clean mobile floating island for responsive devices.
  */
 export default function MessageScroller({ contentRef, mode, lenisRef, status }) {
   const [sections, setSections] = useState([]);
   const [activeId, setActiveId] = useState('');
   const [hoveredId, setHoveredId] = useState(null);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [isTopHovered, setIsTopHovered] = useState(false);
   const [isMobileSheetOpen, setIsMobileSheetOpen] = useState(false);
   const boundsRef = useRef([]);
 
@@ -27,7 +25,6 @@ export default function MessageScroller({ contentRef, mode, lenisRef, status }) 
     if (!contentRef?.current) return;
     const root = contentRef.current;
 
-    // Collect headings (h2, h3) and interactive blocks with valid text
     const headingElements = Array.from(root.querySelectorAll('h2, h3, [data-slot="blog-heading"]'))
       .filter((el) => el.textContent && el.textContent.trim().length > 0);
 
@@ -45,59 +42,33 @@ export default function MessageScroller({ contentRef, mode, lenisRef, status }) 
 
       const text = el.textContent.trim();
 
-      // Determine description or use case from succeeding elements
-      let description = '';
-      let nextEl = el.nextElementSibling;
-      let wordCount = 0;
+      // Clean short label (strip numbers like "1. ", "### ", etc.)
+      const shortLabel = text.replace(/^[0-9]+[.\)]\s*/, '').trim();
 
-      while (nextEl && nextEl.tagName !== 'H2' && nextEl.tagName !== 'H3') {
-        if (!description && nextEl.tagName.toLowerCase() === 'p' && nextEl.textContent.trim()) {
-          const rawP = nextEl.textContent.trim();
-          description = rawP.length > 140 ? `${rawP.slice(0, 140)}...` : rawP;
-        } else if (!description && nextEl.classList?.contains('table-wrap')) {
-          description = 'Interactive benchmark matrix and structural comparison table.';
-        }
-        wordCount += (nextEl.textContent || '').split(/\s+/).length;
-        nextEl = nextEl.nextElementSibling;
-      }
-
-      if (!description) {
-        description = 'Architectural breakdown, key trade-offs, and technical insights.';
-      }
-
-      // Infer section badge and color
+      // Infer tag badge
       let tag = 'Analysis';
-      let tagColor = 'text-amber-400 border-amber-500/20 bg-amber-500/10';
       const lower = text.toLowerCase();
-
-      if (lower.includes('benchmark') || lower.includes('table') || lower.includes('exploitbench') || lower.includes('swe') || lower.includes('eval')) {
+      if (lower.includes('benchmark') || lower.includes('table') || lower.includes('eval')) {
         tag = 'Benchmark';
-        tagColor = 'text-amber-400 border-amber-500/20 bg-amber-500/10';
-      } else if (lower.includes('math') || lower.includes('equation') || lower.includes('economics') || lower.includes('formula') || lower.includes('loss')) {
-        tag = 'Formulation';
-        tagColor = 'text-purple-400 border-purple-500/20 bg-purple-500/10';
-      } else if (lower.includes('code') || lower.includes('architecture') || lower.includes('pipeline') || lower.includes('kernel') || lower.includes('engine') || lower.includes('scheduler')) {
+      } else if (lower.includes('math') || lower.includes('economics') || lower.includes('price')) {
+        tag = 'Economics';
+      } else if (lower.includes('code') || lower.includes('architecture') || lower.includes('pipeline')) {
         tag = 'Architecture';
-        tagColor = 'text-cyan-400 border-cyan-500/20 bg-cyan-500/10';
-      } else if (lower.includes('takeaway') || lower.includes('decision') || lower.includes('router') || lower.includes('rule') || lower.includes('strategy')) {
+      } else if (lower.includes('safety') || lower.includes('refusal') || lower.includes('gating')) {
+        tag = 'Safety';
+      } else if (lower.includes('takeaway') || lower.includes('router') || lower.includes('decision')) {
         tag = 'Strategy';
-        tagColor = 'text-emerald-400 border-emerald-500/20 bg-emerald-500/10';
-      } else if (lower.includes('source') || lower.includes('reading') || lower.includes('reference')) {
-        tag = 'References';
-        tagColor = 'text-blue-400 border-blue-500/20 bg-blue-500/10';
+      } else if (lower.includes('source') || lower.includes('reference')) {
+        tag = 'Sources';
       }
-
-      const estMinutes = Math.max(1, Math.round(wordCount / 180));
 
       return {
         id,
-        label: text,
-        description,
+        label: shortLabel,
+        fullTitle: text,
         tag,
-        tagColor,
         index: idx + 1,
         element: el,
-        readTime: `${estMinutes} min read`,
       };
     });
 
@@ -134,7 +105,7 @@ export default function MessageScroller({ contentRef, mode, lenisRef, status }) 
     const timer = setTimeout(() => {
       scanSections();
       updateBounds();
-    }, 150);
+    }, 120);
     return () => clearTimeout(timer);
   }, [scanSections, updateBounds, mode, status]);
 
@@ -145,7 +116,7 @@ export default function MessageScroller({ contentRef, mode, lenisRef, status }) 
     return () => window.removeEventListener('resize', handleResize);
   }, [updateBounds]);
 
-  // Precision Scroll Tracking with Lenis support
+  // Precision Scroll Tracking
   useEffect(() => {
     const handleScrollUpdate = () => {
       const scrollY = window.scrollY;
@@ -160,18 +131,17 @@ export default function MessageScroller({ contentRef, mode, lenisRef, status }) 
       const bounds = boundsRef.current;
       if (bounds.length === 0) return;
 
-      // When reader is near bottom of the page, activate the final section
+      // End of document snaps to final section
       if (scrollY + window.innerHeight >= document.documentElement.scrollHeight - 90) {
         setActiveId(bounds[bounds.length - 1].id);
         return;
       }
 
-      // Target reading line (header clearance + optical focus zone)
-      const readingLine = scrollY + 140;
+      const readingLine = scrollY + 160;
 
       for (let i = 0; i < bounds.length; i++) {
         const b = bounds[i];
-        if (readingLine >= b.top - 20 && readingLine < b.bottom - 20) {
+        if (readingLine >= b.top - 30 && readingLine < b.bottom - 30) {
           setActiveId(b.id);
           return;
         }
@@ -197,21 +167,20 @@ export default function MessageScroller({ contentRef, mode, lenisRef, status }) 
     };
   }, [lenisRef, updateBounds]);
 
-  // Butter-smooth teleport to target section via Lenis
+  // Teleport to target section via Lenis
   const scrollToSection = useCallback((id) => {
     const target = document.getElementById(id);
     if (!target) return;
 
     setActiveId(id);
     setHoveredId(null);
-    setIsDrawerOpen(false);
     setIsMobileSheetOpen(false);
 
     const lenis = lenisRef?.current || window.__lenis;
     if (lenis) {
       lenis.scrollTo(target, {
         offset: -96,
-        duration: 1.15,
+        duration: 1.1,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       });
     } else {
@@ -224,340 +193,102 @@ export default function MessageScroller({ contentRef, mode, lenisRef, status }) 
     }
   }, [lenisRef]);
 
-  // Scroll to very top
-  const scrollToTop = useCallback(() => {
-    const lenis = lenisRef?.current || window.__lenis;
-    if (lenis) {
-      lenis.scrollTo(0, {
-        duration: 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      });
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }, [lenisRef]);
-
-  // Keyboard navigation shortcuts (j / k or [ / ])
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      // Avoid triggering when user is typing in an input
-      if (['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) return;
-      if (sections.length === 0) return;
-
-      const currentIdx = sections.findIndex((s) => s.id === activeId);
-      if (e.key === 'j' || (e.key === 'ArrowDown' && e.altKey)) {
-        if (currentIdx < sections.length - 1) {
-          e.preventDefault();
-          scrollToSection(sections[currentIdx + 1].id);
-        }
-      } else if (e.key === 'k' || (e.key === 'ArrowUp' && e.altKey)) {
-        if (currentIdx > 0) {
-          e.preventDefault();
-          scrollToSection(sections[currentIdx - 1].id);
-        }
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [sections, activeId, scrollToSection]);
-
   if (sections.length < 2) return null;
 
   const activeIndex = sections.findIndex((s) => s.id === activeId);
   const activeSection = sections[activeIndex] || sections[0];
-  const hoveredSection = sections.find((s) => s.id === hoveredId);
-  const previewItem = hoveredSection;
-
-  // SVG circular progress parameters
-  const ringRadius = 12;
-  const ringCircumference = 2 * Math.PI * ringRadius;
-  const strokeDashoffset = ringCircumference - (scrollProgress / 100) * ringCircumference;
 
   return (
     <>
       {/* ─────────────────────────────────────────────────────────────
-          DESKTOP LUXURY FLOATING RAIL & PREVIEW ENGINE (>= lg)
+          ANTHROPIC-STYLE LEFT NAVIGATION RAIL (Desktop >= lg)
+          As seen in the official Anthropic announcement design:
+          Left-edge vertical track + horizontal tick marks + active capsule pill
           ───────────────────────────────────────────────────────────── */}
-      <aside
-        className="fixed right-4 xl:right-8 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col items-end select-none"
-        aria-label="Article chapters navigation"
+      <nav
+        aria-label="Table of contents"
+        className="fixed left-3 sm:left-6 xl:left-8 2xl:left-14 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col items-start select-none pointer-events-none"
       >
-        <div className="relative flex items-center">
-          {/* ── Active Chapter Pill (Ambient Chip Next to Rail) ── */}
-          <AnimatePresence>
-            {!hoveredId && !isDrawerOpen && activeSection && (
-              <motion.div
-                initial={{ opacity: 0, x: 8, filter: 'blur(4px)' }}
-                animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
-                exit={{ opacity: 0, x: 8, filter: 'blur(4px)' }}
-                transition={{ duration: 0.25 }}
-                className="absolute right-14 max-w-[240px] pointer-events-none hidden xl:block"
-                style={{
-                  top: `calc(${activeIndex * 28 + 48}px)`,
-                }}
-              >
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#141310]/90 backdrop-blur-xl border border-white/[0.08] shadow-2xl">
-                  <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse flex-shrink-0" />
-                  <span className="text-[11px] font-sans font-medium text-fg/90 truncate leading-snug">
-                    {activeSection.label}
-                  </span>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+        <div className="relative flex flex-col items-start py-3 pointer-events-auto">
+          {/* Continuous Vertical Spine */}
+          <div className="absolute left-0 top-0 bottom-0 w-[1.5px] bg-white/[0.12] rounded-full" />
 
-          {/* ── Rich Inspector Card (BeUI Floating Preview) ── */}
-          <AnimatePresence>
-            {previewItem && (
-              <motion.div
-                initial={{ opacity: 0, x: 16, scale: 0.95 }}
-                animate={{ opacity: 1, x: 0, scale: 1 }}
-                exit={{ opacity: 0, x: 10, scale: 0.95 }}
-                transition={{ type: 'spring', stiffness: 420, damping: 28 }}
-                className="absolute right-16 w-88 p-4 rounded-2xl bg-[#141310]/95 backdrop-blur-2xl border border-white/[0.12] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.85)] pointer-events-auto"
-                style={{
-                  top: `calc(${sections.findIndex((s) => s.id === previewItem.id) * 28 + 40}px - 40px)`,
-                }}
-                onMouseEnter={() => setHoveredId(previewItem.id)}
-                onMouseLeave={() => setHoveredId(null)}
-              >
-                {/* Header Badge & Chapter Index */}
-                <div className="flex items-center justify-between mb-2.5">
-                  <div className="flex items-center gap-2">
-                    <span className={`text-[10px] font-mono uppercase tracking-widest px-2.5 py-0.5 rounded-full border ${previewItem.tagColor}`}>
-                      {previewItem.tag}
-                    </span>
-                    <span className="text-[10px] font-mono text-muted">
-                      {previewItem.readTime}
-                    </span>
-                  </div>
-                  <span className="text-[10px] font-mono font-semibold text-faint">
-                    0{previewItem.index} / 0{sections.length}
-                  </span>
-                </div>
+          {/* Section Notches */}
+          <div className="flex flex-col items-start gap-3.5 my-1">
+            {sections.map((sec, idx) => {
+              const isActive = sec.id === activeId;
+              const isHovered = hoveredId === sec.id;
 
-                {/* Section Title */}
-                <h4 className="text-sm font-display font-semibold text-fg mb-1.5 leading-snug">
-                  {previewItem.label}
-                </h4>
-
-                {/* Section Excerpt */}
-                <p className="text-xs font-body text-muted leading-relaxed line-clamp-3 mb-3">
-                  {previewItem.description}
-                </p>
-
-                {/* Action CTA */}
-                <button
-                  onClick={() => scrollToSection(previewItem.id)}
-                  className="w-full py-1.5 px-3 rounded-lg bg-white/[0.05] hover:bg-accent/15 border border-white/[0.08] hover:border-accent/40 flex items-center justify-between text-[11px] font-mono text-accent transition-all cursor-pointer group"
+              return (
+                <div
+                  key={sec.id}
+                  className="relative flex items-center h-6"
+                  onMouseEnter={() => setHoveredId(sec.id)}
+                  onMouseLeave={() => setHoveredId(null)}
                 >
-                  <span className="flex items-center gap-1.5">
-                    <Sparkles size={11} className="group-hover:rotate-12 transition-transform" />
-                    Teleport to chapter
-                  </span>
-                  <ChevronRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
-                </button>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* ── Main Navigation Dock Capsule ── */}
-          <motion.div
-            layout
-            className="flex flex-col items-center py-3 px-2 rounded-2xl bg-[#12110F]/90 backdrop-blur-2xl border border-white/[0.09] shadow-[0_20px_50px_rgba(0,0,0,0.65),0_1px_1px_rgba(255,255,255,0.06)]"
-            onMouseLeave={() => setHoveredId(null)}
-          >
-            {/* Top Status & Chapter Radar Toggle */}
-            <div className="flex flex-col items-center gap-1 mb-2.5 pb-2 border-b border-white/[0.08] w-full">
-              <button
-                onClick={() => setIsDrawerOpen(!isDrawerOpen)}
-                title={isDrawerOpen ? 'Close chapter radar' : 'View all chapters'}
-                className="w-7 h-7 rounded-xl flex items-center justify-center text-muted hover:text-accent hover:bg-white/[0.05] transition-colors cursor-pointer"
-              >
-                {isDrawerOpen ? <X size={14} /> : <Layers size={14} />}
-              </button>
-              <span className="text-[9px] font-mono text-faint tracking-tight font-semibold">
-                {activeIndex >= 0 ? `0${activeIndex + 1}` : '01'}
-              </span>
-            </div>
-
-            {/* Vertical Spine and Section Nodes */}
-            <div className="relative flex flex-col items-center gap-1 py-1">
-              {/* Subtle Vertical Spine Line */}
-              <div className="absolute top-2 bottom-2 w-[1.5px] bg-white/[0.07] rounded-full pointer-events-none" />
-
-              {sections.map((item, idx) => {
-                const isActive = item.id === activeId;
-                const isHovered = hoveredId === item.id;
-                const distance = activeIndex >= 0 ? Math.abs(idx - activeIndex) : Infinity;
-
-                // Scale falloff calculation (smooth magnetic curve)
-                let tickWidth = 12;
-                let opacity = 0.35;
-                if (isActive) {
-                  tickWidth = 26;
-                  opacity = 1;
-                } else if (isHovered) {
-                  tickWidth = 22;
-                  opacity = 0.9;
-                } else if (distance === 1) {
-                  tickWidth = 16;
-                  opacity = 0.6;
-                } else if (distance === 2) {
-                  tickWidth = 14;
-                  opacity = 0.45;
-                }
-
-                return (
+                  {/* Clickable Tick Mark extending horizontally to the right */}
                   <button
-                    key={item.id}
-                    onClick={() => scrollToSection(item.id)}
-                    onMouseEnter={() => setHoveredId(item.id)}
-                    aria-label={`Jump to chapter: ${item.label}`}
-                    className="group relative flex items-center justify-center h-6 w-9 cursor-pointer focus:outline-none"
+                    onClick={() => scrollToSection(sec.id)}
+                    aria-label={`Go to section: ${sec.label}`}
+                    aria-current={isActive ? 'true' : undefined}
+                    className="relative flex items-center h-full pl-0 pr-2 group cursor-pointer focus:outline-none"
                   >
-                    {/* Active Gliding Pill with Framer Motion layoutId */}
-                    {isActive && (
-                      <motion.div
-                        layoutId="active-rail-pill"
-                        className="absolute inset-0 rounded-lg bg-accent/15 border border-accent/40 shadow-[0_0_14px_rgba(255,90,31,0.35)]"
-                        transition={{ type: 'spring', stiffness: 450, damping: 32 }}
-                      />
-                    )}
-
-                    {/* Tactile Tick Bar */}
-                    <motion.span
+                    {/* Horizontal Notch */}
+                    <motion.div
                       animate={{
-                        width: tickWidth,
+                        width: isActive ? 22 : isHovered ? 16 : 10,
                         backgroundColor: isActive
-                          ? 'var(--color-accent)'
+                          ? 'var(--color-accent, #FF5A1F)'
                           : isHovered
-                          ? 'rgba(255, 255, 255, 0.9)'
-                          : 'rgba(255, 255, 255, 0.4)',
-                        opacity: opacity,
+                          ? 'rgba(255, 255, 255, 0.85)'
+                          : 'rgba(255, 255, 255, 0.28)',
+                        height: isActive ? 2 : 1.5,
                       }}
-                      transition={{ type: 'spring', stiffness: 500, damping: 35 }}
-                      className="h-[2.5px] rounded-full block z-10"
+                      transition={{ type: 'spring', stiffness: 450, damping: 32 }}
+                      className="rounded-full shadow-xs"
                       style={{
-                        boxShadow: isActive ? '0 0 10px rgba(255, 90, 31, 0.8)' : 'none',
+                        boxShadow: isActive ? '0 0 10px rgba(255, 90, 31, 0.6)' : 'none',
                       }}
                     />
                   </button>
-                );
-              })}
-            </div>
 
-            {/* Bottom Progress Ring & Scroll-to-Top Fast-Travel */}
-            <div className="mt-2.5 pt-2 border-t border-white/[0.08] w-full flex flex-col items-center">
-              <button
-                onClick={scrollToTop}
-                onMouseEnter={() => setIsTopHovered(true)}
-                onMouseLeave={() => setIsTopHovered(false)}
-                title="Scroll to top"
-                className="relative w-8 h-8 rounded-full flex items-center justify-center cursor-pointer group focus:outline-none transition-transform active:scale-95"
-              >
-                {/* Background Ring */}
-                <svg className="w-8 h-8 -rotate-90" viewBox="0 0 32 32">
-                  <circle
-                    cx="16"
-                    cy="16"
-                    r={ringRadius}
-                    className="stroke-white/[0.08]"
-                    strokeWidth="2"
-                    fill="transparent"
-                  />
-                  <circle
-                    cx="16"
-                    cy="16"
-                    r={ringRadius}
-                    className="stroke-accent"
-                    strokeWidth="2"
-                    fill="transparent"
-                    strokeDasharray={ringCircumference}
-                    strokeDashoffset={strokeDashoffset}
-                    strokeLinecap="round"
-                    style={{ transition: 'stroke-dashoffset 0.15s linear' }}
-                  />
-                </svg>
-
-                {/* Center Content: Percentage or Top Arrow */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  {isTopHovered ? (
-                    <ArrowUp size={12} className="text-accent group-hover:-translate-y-0.5 transition-transform" />
-                  ) : (
-                    <span className="text-[9px] font-mono font-semibold text-fg/80">
-                      {Math.round(scrollProgress)}
-                    </span>
-                  )}
-                </div>
-              </button>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* ── Slide-Out Chapter Radar Drawer (Expanded TOC) ── */}
-        <AnimatePresence>
-          {isDrawerOpen && (
-            <motion.div
-              initial={{ opacity: 0, x: 20, scale: 0.95 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
-              exit={{ opacity: 0, x: 20, scale: 0.95 }}
-              transition={{ type: 'spring', stiffness: 380, damping: 28 }}
-              className="absolute right-16 top-0 w-80 max-h-[75vh] flex flex-col p-4 rounded-2xl bg-[#141310]/95 backdrop-blur-2xl border border-white/[0.12] shadow-2xl z-50 overflow-hidden"
-            >
-              <div className="flex items-center justify-between pb-3 mb-2 border-b border-white/[0.08]">
-                <div className="flex items-center gap-2">
-                  <BookOpen size={14} className="text-accent" />
-                  <span className="text-xs font-mono font-semibold uppercase tracking-wider text-fg">
-                    Chapter Radar
-                  </span>
-                </div>
-                <span className="text-[10px] font-mono text-muted">
-                  {sections.length} sections
-                </span>
-              </div>
-
-              <div className="flex-1 overflow-y-auto space-y-1.5 pr-1 py-1 custom-scrollbar">
-                {sections.map((sec, idx) => {
-                  const isCurrent = sec.id === activeId;
-                  return (
-                    <button
-                      key={sec.id}
+                  {/* ── Active Chapter Pill (Attached directly to active tick) ── */}
+                  {isActive && (
+                    <motion.div
+                      layoutId="anthropic-active-chapter-pill"
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                      className="absolute left-6 flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#181714]/95 backdrop-blur-xl border border-white/[0.12] text-xs font-sans font-medium text-fg shadow-[0_10px_25px_-5px_rgba(0,0,0,0.8)] whitespace-nowrap cursor-pointer pointer-events-auto"
                       onClick={() => scrollToSection(sec.id)}
-                      className={`w-full text-left p-2.5 rounded-xl border transition-all cursor-pointer flex items-start gap-2.5 ${
-                        isCurrent
-                          ? 'bg-accent/15 border-accent/40 text-fg'
-                          : 'bg-white/[0.02] hover:bg-white/[0.06] border-white/[0.05] text-muted hover:text-fg'
-                      }`}
                     >
-                      <span className={`text-[10px] font-mono font-semibold mt-0.5 ${isCurrent ? 'text-accent' : 'text-faint'}`}>
-                        0{idx + 1}
-                      </span>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between gap-1 mb-0.5">
-                          <span className={`text-[9px] font-mono uppercase px-1.5 py-0.2 rounded border ${sec.tagColor}`}>
-                            {sec.tag}
-                          </span>
-                          <span className="text-[9px] font-mono text-faint">
-                            {sec.readTime}
-                          </span>
-                        </div>
-                        <p className="text-xs font-display font-medium text-fg truncate">
-                          {sec.label}
-                        </p>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </aside>
+                      <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse shrink-0" />
+                      <span className="truncate max-w-[200px]">{sec.label}</span>
+                    </motion.div>
+                  )}
+
+                  {/* ── Hover Tooltip Pill (When hovering inactive tick) ── */}
+                  <AnimatePresence>
+                    {isHovered && !isActive && (
+                      <motion.div
+                        initial={{ opacity: 0, x: -4 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -4 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute left-6 px-2.5 py-0.5 rounded-lg bg-[#181714]/90 backdrop-blur-md border border-white/[0.08] text-[11px] font-mono text-muted hover:text-fg whitespace-nowrap shadow-md cursor-pointer pointer-events-auto"
+                        onClick={() => scrollToSection(sec.id)}
+                      >
+                        {sec.label}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </nav>
 
       {/* ─────────────────────────────────────────────────────────────
-          MOBILE COMPACT NAVIGATION ISLAND (< lg)
+          MOBILE COMPACT FLOATING ISLAND (< lg)
           ───────────────────────────────────────────────────────────── */}
       <div className="lg:hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-40 w-[92vw] max-w-sm">
         <motion.div
@@ -566,12 +297,12 @@ export default function MessageScroller({ contentRef, mode, lenisRef, status }) 
           transition={{ type: 'spring', stiffness: 400, damping: 30 }}
           className="flex items-center justify-between px-3 py-2 rounded-2xl bg-[#141310]/95 backdrop-blur-2xl border border-white/[0.12] shadow-[0_15px_35px_rgba(0,0,0,0.7)]"
         >
-          {/* Chapter Info Tap Target */}
+          {/* Chapter Tap Target */}
           <button
             onClick={() => setIsMobileSheetOpen(true)}
             className="flex items-center gap-2.5 flex-1 min-w-0 text-left cursor-pointer mr-2"
           >
-            <div className="w-6 h-6 rounded-lg bg-accent/15 border border-accent/30 flex items-center justify-center text-accent flex-shrink-0">
+            <div className="w-6 h-6 rounded-lg bg-accent/15 border border-accent/30 flex items-center justify-center text-accent shrink-0">
               <Compass size={13} />
             </div>
             <div className="flex flex-col min-w-0">
@@ -580,13 +311,9 @@ export default function MessageScroller({ contentRef, mode, lenisRef, status }) 
                   {activeIndex >= 0 ? `0${activeIndex + 1}` : '01'}
                 </span>
                 <span className="text-white/20">/</span>
-                <span className="text-muted">
-                  0{sections.length}
-                </span>
+                <span className="text-muted">0{sections.length}</span>
                 <span className="text-white/20">•</span>
-                <span className="text-[9px] text-faint uppercase">
-                  {activeSection?.tag}
-                </span>
+                <span className="text-[9px] text-faint uppercase">{activeSection?.tag}</span>
               </div>
               <span className="text-xs font-sans font-medium text-fg truncate">
                 {activeSection?.label || 'Overview'}
@@ -628,7 +355,7 @@ export default function MessageScroller({ contentRef, mode, lenisRef, status }) 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex flex-col justify-end p-4"
+              className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex flex-col justify-end p-4"
               onClick={() => setIsMobileSheetOpen(false)}
             >
               <motion.div
@@ -661,31 +388,23 @@ export default function MessageScroller({ contentRef, mode, lenisRef, status }) 
                       <button
                         key={sec.id}
                         onClick={() => scrollToSection(sec.id)}
-                        className={`w-full text-left p-3 rounded-2xl border transition-all flex items-start gap-3 ${
+                        className={`w-full text-left p-3 rounded-2xl border transition-all flex items-center justify-between gap-3 ${
                           isCurrent
                             ? 'bg-accent/15 border-accent/40 text-fg'
-                            : 'bg-white/[0.03] border-white/[0.06] text-muted'
+                            : 'bg-white/[0.03] border-white/[0.06] text-muted hover:text-fg'
                         }`}
                       >
-                        <span className={`text-xs font-mono font-semibold mt-0.5 ${isCurrent ? 'text-accent' : 'text-faint'}`}>
-                          0{idx + 1}
-                        </span>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className={`text-[9px] font-mono uppercase px-2 py-0.5 rounded-full border ${sec.tagColor}`}>
-                              {sec.tag}
-                            </span>
-                            <span className="text-[10px] font-mono text-faint">
-                              {sec.readTime}
-                            </span>
-                          </div>
-                          <h4 className="text-xs font-display font-medium text-fg mb-1">
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <span className={`text-xs font-mono font-semibold ${isCurrent ? 'text-accent' : 'text-faint'}`}>
+                            0{idx + 1}
+                          </span>
+                          <span className="text-xs font-sans font-medium text-fg truncate">
                             {sec.label}
-                          </h4>
-                          <p className="text-[11px] font-body text-muted line-clamp-2">
-                            {sec.description}
-                          </p>
+                          </span>
                         </div>
+                        <span className="text-[9px] font-mono uppercase px-2 py-0.5 rounded-full border border-white/10 text-muted">
+                          {sec.tag}
+                        </span>
                       </button>
                     );
                   })}

@@ -107,7 +107,7 @@ export default function BlogPost() {
   const hasDualMode = blog ? blog.sections.some((s) => s.type === 'eli5' || s.type === 'dev') : false;
 
   // Stream state controller for BeUI streaming response
-  const { status, progress, renderedSections, skipToEnd, replay } = useBlogStream({
+  const { status, progress, renderedBlocks, skipToEnd, replay } = useBlogStream({
     blog,
     mode,
     lenisRef,
@@ -167,7 +167,7 @@ export default function BlogPost() {
     return () => {
       cancelled = true;
     };
-  }, [renderedSections]);
+  }, [renderedBlocks]);
 
   if (!blog) {
     return <Navigate to="/blog" replace />;
@@ -360,25 +360,36 @@ export default function BlogPost() {
               onFeedbackChange={handleFeedbackChange}
               className="w-full"
             >
-              {renderedSections.map((section) => {
-                if (section.type === 'html') {
-                  return (
-                    <div
-                      key={section.id}
-                      className="markdown-body"
-                      dangerouslySetInnerHTML={{ __html: section.html }}
-                    />
-                  );
-                }
-                if (section.type === 'interactive') {
-                  return (
-                    <div key={section.id} className="my-8">
-                      <InteractiveBlock widgetType={section.widgetType} config={section.config} />
-                    </div>
-                  );
-                }
-                return null;
-              })}
+              <div className="space-y-4">
+                {renderedBlocks.map((block) => {
+                  if (block.type === 'html') {
+                    return (
+                      <motion.div
+                        key={block.id}
+                        initial={{ opacity: 0, y: 12, filter: 'blur(3px)' }}
+                        animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                        className="markdown-body"
+                        dangerouslySetInnerHTML={{ __html: block.html }}
+                      />
+                    );
+                  }
+                  if (block.type === 'interactive') {
+                    return (
+                      <motion.div
+                        key={block.id}
+                        initial={{ opacity: 0, scale: 0.98, y: 12 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                        className="my-8"
+                      >
+                        <InteractiveBlock widgetType={block.widgetType} config={block.config} />
+                      </motion.div>
+                    );
+                  }
+                  return null;
+                })}
+              </div>
             </StreamingResponse>
           </motion.div>
         </div>
