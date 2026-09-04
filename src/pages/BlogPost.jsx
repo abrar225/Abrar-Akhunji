@@ -8,6 +8,9 @@ import WebSpeechPlayer from '../components/blog/WebSpeechPlayer';
 import InteractiveBlock from '../components/blog/InteractiveBlock';
 import ReadingProgress from '../components/blog/ReadingProgress';
 import MessageScroller from '../components/blog/MessageScroller';
+import { StreamingResponse } from '../components/agents/StreamingResponse';
+import { extractSourcesFromMarkdown } from '../components/agents/Citations';
+import { useBlogStream } from '../hooks/useBlogStream';
 import { ArrowLeft, Calendar, User, Share2, Clock, ChevronRight, Bookmark } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Magnetic from '../components/Magnetic';
@@ -103,25 +106,68 @@ export default function BlogPost() {
   // Determine if the blog has dual-mode content
   const hasDualMode = blog ? blog.sections.some((s) => s.type === 'eli5' || s.type === 'dev') : false;
 
-  // Build the rendered HTML from sections based on current mode
-  const renderedContent = useMemo(() => {
-    if (!blog) return [];
-    return blog.sections.map((section, i) => {
-      if (section.type === 'neutral') {
-        return { type: 'html', html: markdownToHtml(section.content), key: `neutral-${i}` };
-      }
-      if (section.type === 'eli5' && mode === 'eli5') {
-        return { type: 'html', html: markdownToHtml(section.content), key: `eli5-${i}` };
-      }
-      if (section.type === 'dev' && mode === 'dev') {
-        return { type: 'html', html: markdownToHtml(section.content), key: `dev-${i}` };
-      }
-      if (section.type === 'interactive') {
-        return { type: 'interactive', widgetType: section.widgetType, config: section.config, key: `interactive-${i}` };
-      }
+  // Stream state controller for BeUI streaming response
+  const { status, progress, renderedSections, skipToEnd, replay } = useBlogStream({
+    blog,
+    mode,
+    lenisRef,
+  });
+
+  // Extract sources/citations from the blog markdown
+  const sources = useMemo(() => {
+    return blog ? extractSourcesFromMarkdown(blog.content) : [];
+  }, [blog]);
+
+  // Feedback state stored in localStorage
+  const [feedback, setFeedback] = useState(() => {
+    try {
+      const feedbackMap = JSON.parse(localStorage.getItem('blogPostFeedback') || '{}');
+      return feedbackMap[slug] || null;
+    } catch {
       return null;
-    }).filter(Boolean);
-  }, [blog, mode]);
+    }
+  });
+
+  const handleFeedbackChange = (newFeedback) => {
+    setFeedback(newFeedback);
+    try {
+      const feedbackMap = JSON.parse(localStorage.getItem('blogPostFeedback') || '{}');
+      feedbackMap[slug] = newFeedback;
+      localStorage.setItem('blogPostFeedback', JSON.stringify(feedbackMap));
+    } catch { /* ignore */ }
+  };
+
+  // Run KaTeX whenever newly streamed math elements arrive
+  useEffect(() => {
+    let cancelled = false;
+    const root = contentRef.current;
+    if (!root) return undefined;
+
+    import('katex').then(({ default: katex }) => {
+      if (cancelled) return;
+      root.querySelectorAll('.math-slot').forEach((el) => {
+        if (el.dataset.rendered) return;
+        const tex = el.dataset.tex || '';
+        try {
+          katex.render(tex, el, {
+            displayMode: el.dataset.display === '1',
+            throwOnError: false,
+            strict: false,
+          });
+        } catch {
+          el.textContent = tex;
+        }
+        el.dataset.rendered = '1';
+      });
+      if (lenisRef.current) {
+        setTimeout(() => lenisRef.current?.resize(), 60);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [renderedSections]);
 
   if (!blog) {
     return <Navigate to="/blog" replace />;
@@ -293,9 +339,9 @@ export default function BlogPost() {
         </div>
 
         {/* ── Section Navigation Rail & Viewport (BeUI Message Scroller) ── */}
-        <MessageScroller contentRef={contentRef} mode={mode} lenisRef={lenisRef} />
+        <MessageScroller contentRef={contentRef} mode={mode} lenisRef={lenisRef} status={status} />
 
-        {/* ── Blog Content ── */}
+        {/* ── Blog Content (BeUI Streaming Response) ── */}
         <div className="max-w-[800px] mx-auto px-6 md:px-12 pb-16" ref={contentRef}>
           <motion.div
             key={mode}
@@ -303,26 +349,37 @@ export default function BlogPost() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
           >
-            {/* Render sections one by one, interleaving interactive blocks */}
-            {renderedContent.map((section) => {
-              if (section.type === 'html') {
-                return (
-                  <div
-                    key={section.key}
-                    className="markdown-body"
-                    dangerouslySetInnerHTML={{ __html: section.html }}
-                  />
-                );
-              }
-              if (section.type === 'interactive') {
-                return (
-                  <div key={section.key} className="my-8">
-                    <InteractiveBlock widgetType={section.widgetType} config={section.config} />
-                  </div>
-                );
-              }
-              return null;
-            })}
+            <StreamingResponse
+              status={status}
+              progress={progress}
+              copyText={blog.content}
+              onRetry={replay}
+              onSkip={skipToEnd}
+              sources={sources}
+              feedback={feedback}
+              onFeedbackChange={handleFeedbackChange}
+              className="w-full"
+            >
+              {renderedSections.map((section) => {
+                if (section.type === 'html') {
+                  return (
+                    <div
+                      key={section.id}
+                      className="markdown-body"
+                      dangerouslySetInnerHTML={{ __html: section.html }}
+                    />
+                  );
+                }
+                if (section.type === 'interactive') {
+                  return (
+                    <div key={section.id} className="my-8">
+                      <InteractiveBlock widgetType={section.widgetType} config={section.config} />
+                    </div>
+                  );
+                }
+                return null;
+              })}
+            </StreamingResponse>
           </motion.div>
         </div>
 

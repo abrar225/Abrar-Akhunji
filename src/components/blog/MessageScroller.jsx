@@ -12,7 +12,7 @@ import { Compass, ChevronRight, ChevronLeft, Sparkles, ArrowUp, X, BookOpen, Lay
  * 4. Dual Viewport Support: Desktop luxury floating dock + Mobile bottom navigation island with chapter sheet.
  * 5. Reading Intelligence: Dynamic category classification, section reading times, and live percentage ring.
  */
-export default function MessageScroller({ contentRef, mode, lenisRef }) {
+export default function MessageScroller({ contentRef, mode, lenisRef, status }) {
   const [sections, setSections] = useState([]);
   const [activeId, setActiveId] = useState('');
   const [hoveredId, setHoveredId] = useState(null);
@@ -129,14 +129,14 @@ export default function MessageScroller({ contentRef, mode, lenisRef }) {
     });
   }, [sections]);
 
-  // Re-scan when mode changes or layout shifts
+  // Re-scan when mode changes, status changes, or layout shifts
   useEffect(() => {
     const timer = setTimeout(() => {
       scanSections();
       updateBounds();
     }, 150);
     return () => clearTimeout(timer);
-  }, [scanSections, updateBounds, mode]);
+  }, [scanSections, updateBounds, mode, status]);
 
   // Update bounds on window resize
   useEffect(() => {
