@@ -1,7 +1,7 @@
 ---
 title: "Under the Hood of DualPipe & DeepEP: How Bidirectional Pipeline Parallelism & Low-Latency All-to-All Overlap Slashed MoE Training Bubbles to Under 5%"
 date: "2026-09-02"
-description: "Why standard 1F1B and Zero-Bubble pipeline schedules choke on massive Mixture-of-Experts (MoE) training. Here is the definitive systems teardown of DeepSeek's DualPipe bidirectional pipeline parallelism and DeepEP communication engine—exploring forward/backward dual-chunk scheduling, backward-for-weights (B_W) and backward-for-inputs (B_I) decoupling, low-latency NVLink/RDMA all-to-all kernels, and near-zero bubble execution."
+description: "Why standard 1F1B and Zero-Bubble pipeline schedules choke on massive Mixture-of-Experts (MoE) training. Here is the definitive systems teardown of DeepSeek's DualPipe bidirectional pipeline parallelism and DeepEP communication engine, exploring forward/backward dual-chunk scheduling, backward-for-weights (B_W) and backward-for-inputs (B_I) decoupling, low-latency NVLink/RDMA all-to-all kernels, and near-zero bubble execution."
 tags: ["AI", "LLM", "Distributed Training", "Pipeline Parallelism", "DualPipe", "DeepEP", "Mixture of Experts", "CUDA", "DeepSeek", "System Design"]
 author: "Abrar Akhunji"
 heroImage: "/images/blog/dualpipe-deepep-bidirectional-pipeline-parallelism/hero.jpg"

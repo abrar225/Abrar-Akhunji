@@ -1,7 +1,7 @@
 ---
 title: "Under the Hood of Multi-Head Latent Attention (MLA) & FlashMLA: How Low-Rank KV Compression & Matrix Absorption Cut VRAM by 93% with Zero Accuracy Loss"
 date: "2026-08-30"
-description: "Why standard Multi-Head Attention and Grouped-Query Attention hit memory walls in long-context inference. Here is the definitive systems teardown of Multi-Head Latent Attention (MLA) and FlashMLA—exploring low-rank KV compression, decoupled RoPE, the matrix absorption trick, and Hopper WGMMA kernel execution that slashes KV cache memory by 93%."
+description: "Why standard Multi-Head Attention and Grouped-Query Attention hit memory walls in long-context inference. Here is the definitive systems teardown of Multi-Head Latent Attention (MLA) and FlashMLA, covering low-rank KV compression, decoupled RoPE, the matrix absorption trick, and Hopper WGMMA kernel execution that slashes KV cache memory by 93%."
 tags: ["AI", "LLM", "Multi-Head Latent Attention", "FlashMLA", "Inference Optimization", "CUDA", "vLLM", "DeepSeek", "System Design"]
 author: "Abrar Akhunji"
 heroImage: "/images/blog/multi-head-latent-attention-mla-flashmla/hero.jpg"

@@ -32,7 +32,7 @@ This is the **KV Cache Crisis** currently plaguing autonomous AI agents.
 When an AI generates text, it calculates mathematical fingerprints called "Keys" and "Values" for every word in its memory (the KV Cache). In standard AI setups, when an agent runs a tool and gets a 2-line response, the AI engine throws away its previous memory and recalculates the mathematical vectors for all 30,000 previous tokens from scratch.
 
 Modern inference engines like **SGLang** and **vLLM** invented a smarter way:
-1. **Radix Trees (SGLang):** Like a tree branch system for memory, the engine keeps previous thoughts saved in ultra-fast GPU memory. When the agent appends a new tool result, the engine only calculates the 2 new lines—slashing wait times by 90%.
+1. **Radix Trees (SGLang):** Like a tree branch system for memory, the engine keeps previous thoughts saved in ultra-fast GPU memory. When the agent appends a new tool result, the engine only calculates the 2 new lines, slashing wait times by 90%.
 2. **Disaggregated Serving (vLLM):** Separating the "reading" machines from the "typing" machines so big file reads never pause active token generation.
 3. **Speculative Drafting (EAGLE-3):** Letting a tiny micro-model guess the next 5 tokens of predictable JSON syntax ahead of time, multiplying speed by 3x.
 
@@ -51,7 +51,7 @@ Under naive Transformer serving, this access pattern is catastrophic:
 - **VRAM Saturation:** The KV cache for a Llama-3-70B model ($n_{\text{layers}}=80$, $n_{\text{kv\_heads}}=8$, $d_{\text{head}}=128$, FP16) consumes $0.32\text{ MB}$ per token. At $64\text{k}$ context, a single agent session consumes $\approx 20.48\text{ GB}$ of high-bandwidth memory solely for attention state.
 - **Prefill-Decode Scheduling Interference:** Long prefill bursts starve concurrent token generation, introducing severe Inter-Token Latency (ITL) jitter and tail latency spikes.
 
-This post analyzes how the 2026 inference stack—specifically **SGLang’s RadixAttention**, **vLLM’s Disaggregated Prefill-Decode Architecture**, and **EAGLE-3 Speculative Verification**—eliminates redundant compute and turns agent serving into an optimized memory-graph problem.
+This post analyzes how the 2026 inference stack (specifically **SGLang’s RadixAttention**, **vLLM’s Disaggregated Prefill-Decode Architecture**, and **EAGLE-3 Speculative Verification**) eliminates redundant compute and turns agent serving into an optimized memory-graph problem.
 :::
 
 ---
@@ -258,7 +258,7 @@ Let us examine how these architectural innovations impact real-world agentic wor
 }
 :::
 
-At $128\text{k}$ context, standard naive serving incurs an unbearable **8.9-second TTFT penalty** per turn. SGLang RadixAttention combined with disaggregated prefill holds TTFT virtually flat at **34ms**—a **261x speedup**.
+At $128\text{k}$ context, standard naive serving incurs an unbearable **8.9-second TTFT penalty** per turn. SGLang RadixAttention combined with disaggregated prefill holds TTFT virtually flat at **34ms**, a **261x speedup**.
 
 ---
 

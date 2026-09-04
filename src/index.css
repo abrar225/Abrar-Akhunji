@@ -522,3 +522,92 @@ html.dark .cursor-ring {
     border: 1px solid var(--color-line);
     margin: 2em 0;
 }
+
+/* ── Tables ── */
+.markdown-body .table-wrap {
+    margin: 2.5em 0;
+    overflow-x: auto;
+    border: 1px solid var(--color-line);
+    border-radius: 0.875rem;
+    background-color: var(--color-surface);
+    box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.35);
+    -webkit-overflow-scrolling: touch;
+}
+.markdown-body table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.9375rem;
+    line-height: 1.65;
+}
+.markdown-body thead th {
+    position: sticky;
+    top: 0;
+    background-color: var(--color-elevated);
+    color: var(--color-fg);
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-align: left;
+    white-space: nowrap;
+    padding: 1rem 1.25rem;
+    border-bottom: 2px solid var(--color-line);
+    font-size: 0.875rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+.markdown-body tbody td {
+    padding: 0.95rem 1.25rem;
+    border-bottom: 1px solid var(--color-line);
+    color: var(--color-muted);
+    vertical-align: middle;
+}
+.markdown-body tbody tr:last-child td {
+    border-bottom: none;
+}
+.markdown-body tbody tr:nth-child(even) {
+    background-color: color-mix(in srgb, var(--color-elevated) 50%, transparent);
+}
+.markdown-body tbody tr:hover {
+    background-color: color-mix(in srgb, var(--color-accent) 8%, transparent);
+    transition: background-color 0.15s ease-out;
+}
+.markdown-body tbody td strong {
+    color: var(--color-fg);
+    font-weight: 600;
+}
+/* First column carries the row label: keep it readable and on-brand. */
+.markdown-body tbody td:first-child {
+    color: var(--color-fg);
+    font-weight: 600;
+    font-family: var(--font-display);
+}
+/* Numeric cells read better right-aligned. */
+.markdown-body td[style*="text-align:right"],
+.markdown-body td[style*="text-align: right"],
+.markdown-body th[style*="text-align:right"],
+.markdown-body th[style*="text-align: right"] {
+    font-variant-numeric: tabular-nums;
+}
+
+/* ── Horizontal rule ── */
+.markdown-body hr {
+    border: none;
+    border-top: 1px solid var(--color-line);
+    margin: 3em 0;
+}
+
+/* ── Math ── */
+.markdown-body .math-slot {
+    /* Reserve a little space so late-loading KaTeX does not jolt the layout. */
+    display: inline-block;
+    min-height: 1.1em;
+}
+.markdown-body .katex {
+    font-size: 1.05em;
+}
+.markdown-body .katex-display {
+    margin: 1.6em 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0.25rem 0;
+}

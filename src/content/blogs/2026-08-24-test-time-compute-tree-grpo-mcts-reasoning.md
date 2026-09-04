@@ -1,7 +1,7 @@
 ---
 title: "The Test-Time Compute Blueprint: How MCTS, Tree-GRPO, and Process Reward Models Scaled Reasoning Beyond Pre-Training"
 date: "2026-08-24"
-description: "Pre-training scaling laws have collided with data walls and diminishing returns. Here is how inference-time scaling—powered by Monte Carlo Tree Search, Tree-GRPO, and Process Reward Models (PRMs)—is enabling 7B and 32B models to out-reason 400B giants in production."
+description: "Pre-training scaling laws have collided with data walls and diminishing returns. Here is how inference-time scaling, powered by Monte Carlo Tree Search, Tree-GRPO, and Process Reward Models (PRMs), is enabling 7B and 32B models to out-reason 400B giants in production."
 tags: ["AI", "Test-Time Compute", "MCTS", "Tree-GRPO", "Process Reward Models", "Reasoning", "LLM Architecture"]
 author: "Abrar Akhunji"
 heroImage: "/images/blog/test-time-compute-tree-grpo-mcts-reasoning/hero.jpg"
@@ -30,7 +30,7 @@ Imagine two people taking the world's most difficult math exam:
 
 Who gets the higher score on complex, multi-step problems? **Student B wins every time.**
 
-For the past five years, the AI industry focused almost entirely on building bigger "Student As"—scaling models from 7 billion to 70 billion to 400+ billion parameters (Pre-Training Scaling). But models hit a fundamental ceiling: if an AI makes one tiny logical flaw at step 2 of a 20-step reasoning problem, standard autoregressive generation gets stuck and hallucinates all the way to the end.
+For the past five years, the AI industry focused almost entirely on building bigger "Student As", scaling models from 7 billion to 70 billion to 400+ billion parameters (Pre-Training Scaling). But models hit a fundamental ceiling: if an AI makes one tiny logical flaw at step 2 of a 20-step reasoning problem, standard autoregressive generation gets stuck and hallucinates all the way to the end.
 
 In 2026, the entire paradigm shifted to **Test-Time Compute (Inference-Time Scaling)**. Instead of blurting out the first word that comes to mind, modern reasoning engines use:
 1. **Monte Carlo Tree Search (MCTS):** Exploring a branching tree of possible thoughts, simulating multiple steps ahead, and backtracking when a path hits a dead end.
@@ -43,9 +43,9 @@ The result? A compact 7B or 32B model using smart search at test time can now ro
 :::dev
 *Written by Abrar Akhunji*
 
-The historical driver of LLM performance—Chinchilla pre-training scaling laws ($\mathcal{L}(N, D) = E + \frac{A}{N^\alpha} + \frac{B}{D^\beta}$)—has collided with two intractable physical realities: **the public pre-training data wall** and **exponential GPU cluster capex**. Doubling pre-training parameters yields diminishing marginal returns on downstream compositional reasoning benchmarks (AIME, SWE-bench Verified, OlympiadBench).
+The historical driver of LLM performance, Chinchilla pre-training scaling laws ($\mathcal{L}(N, D) = E + \frac{A}{N^\alpha} + \frac{B}{D^\beta}$), has collided with two intractable physical realities: **the public pre-training data wall** and **exponential GPU cluster capex**. Doubling pre-training parameters yields diminishing marginal returns on downstream compositional reasoning benchmarks (AIME, SWE-bench Verified, OlympiadBench).
 
-The breakthrough of 2025–2026 is the industrialization of **Inference-Time Scaling (Test-Time Compute / TTC)**. 
+The breakthrough of 2025-2026 is the industrialization of **Inference-Time Scaling (Test-Time Compute / TTC)**. 
 
 Under standard autoregressive decoding, token generation is a single-trajectory Markov chain:
 

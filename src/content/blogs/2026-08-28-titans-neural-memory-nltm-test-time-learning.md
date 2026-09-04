@@ -1,7 +1,7 @@
 ---
 title: "Inside Titans & Neural Long-Term Memory (NLTM): How Test-Time Memory Networks Replace Vector RAG and KV Cache Bloat in Autonomous Agents"
 date: "2026-08-28"
-description: "Why static vector RAG and quadratic KV caching collapse under multi-hour autonomous agent workflows. Here is the definitive systems teardown of Titans Neural Long-Term Memory (NLTM)—leveraging surprise-driven gradient updates, fast weight programmers, and test-time weight adaptation to achieve sub-millisecond memory recall across 2M+ token horizons."
+description: "Why static vector RAG and quadratic KV caching collapse under multi-hour autonomous agent workflows. Here is the definitive systems teardown of Titans Neural Long-Term Memory (NLTM), leveraging surprise-driven gradient updates, fast weight programmers, and test-time weight adaptation to achieve sub-millisecond memory recall across 2M+ token horizons."
 tags: ["AI", "LLM", "Agentic Systems", "Neural Memory", "Titans Architecture", "System Design", "Inference Optimization"]
 author: "Abrar Akhunji"
 heroImage: "/images/blog/titans-neural-memory-nltm-test-time-learning/hero.jpg"
@@ -32,9 +32,9 @@ Today's AI systems try to remember what happened using two deeply flawed methods
 In August 2026, researchers and engineers solved this with **Titans: Neural Long-Term Memory (NLTM)**.
 
 Instead of keeping static text notes or hoarding gigabytes of raw tokens, Titans mimics how the human brain actually learns:
-- **It Has a "Surprise Meter":** If you mention something routine, the model ignores it. But if you introduce a critical system architecture change or a new bug constraint, the model experiences "surprise"—and instantly rewrites its internal neural memory weights on the fly.
+- **It Has a "Surprise Meter":** If you mention something routine, the model ignores it. But if you introduce a critical system architecture change or a new bug constraint, the model experiences "surprise" and instantly rewrites its internal neural memory weights on the fly.
 - **Fixed-Size Brain, Infinite Horizon:** Its memory size never grows beyond a few megabytes, whether you feed it 1,000 tokens or 2,000,000 tokens.
-- **Zero Database Lookups:** Memory recall happens at the speed of a neural forward pass—taking under 2 milliseconds rather than 200 milliseconds of external database queries.
+- **Zero Database Lookups:** Memory recall happens at the speed of a neural forward pass, taking under 2 milliseconds rather than 200 milliseconds of external database queries.
 
 Here is the complete engineering and mathematical teardown of how Titans and Test-Time Neural Memory work under the hood.
 :::
@@ -389,7 +389,7 @@ class TitansNeuralMemory(nn.Module):
 
 1. **Retire Vector RAG for Cohesive Agent Memory:** Vector RAG is excellent for cold enterprise knowledge search, but catastrophic for active multi-hour reasoning. When building coding agents or multi-step planners, replace chunked embeddings with continuous neural associative memory.
 2. **Decouple Working Context from Memory Depth:** Use hybrid topologies. Keep a small 2k-token sliding window for ultra-fast local syntax generation, and offload all historical state into a differentiable fast-weight matrix.
-3. **Exploit the Surprise Metric for Token Filtering:** Don't waste compute updating weights on boilerplate tokens. Gate your memory updates with the gradient norm of the surprise loss—only mutating parameters when new information alters the model's predictive state.
+3. **Exploit the Surprise Metric for Token Filtering:** Don't waste compute updating weights on boilerplate tokens. Gate your memory updates with the gradient norm of the surprise loss, only mutating parameters when new information alters the model's predictive state.
 4. **Leverage $\mathcal{O}(1)$ Constant Footprint for Edge & Multi-Agent Pods:** Because Titans requires $< 2\text{GB}$ VRAM regardless of session duration, you can run dozens of parallel persistent agents on a single GPU node without running out of memory.
 
 *Sources & Further Reading:*

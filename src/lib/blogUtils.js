@@ -330,11 +330,88 @@ export function getBlogBySlug(slug) {
   return blogs.find((blog) => blog.slug === slug) || null;
 }
 
+/* ─────────────────────────────────────────────
+   Math protection
+   marked has no math support, so `$...$` / `$$...$$` would otherwise
+   reach the page as literal source text. We swap every expression for a
+   placeholder span carrying the LaTeX in a data attribute, run marked over
+   the result, and let BlogPost hydrate the spans with KaTeX afterwards.
+   Keeping KaTeX out of this module stops it from being pulled into the
+   bundle of every page that merely lists posts.
+   ───────────────────────────────────────────── */
+
+/** Escape a string for safe inclusion inside a double-quoted HTML attribute. */
+function escapeAttr(str) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+/**
+ * Decide whether a `$...$` candidate is real math or just money.
+ *
+ * Prices like `$5.00`, `$1.50 / $7.50` and `$0.75 per million tokens` must
+ * stay as plain text, while single-letter variables such as `$K$` or `$t_B$`
+ * have to be treated as math. A candidate qualifies when it carries an
+ * unmistakable LaTeX signal, or when it is a compact token with no leading
+ * digit and no padding whitespace.
+ */
+function isMathish(tex) {
+  const trimmed = tex.trim();
+  if (!trimmed || trimmed.length > 200) return false;
+  if (/\\[a-zA-Z]+/.test(trimmed)) return true; // \frac, \alpha, \cdot, \rightarrow ...
+  if (/^\d/.test(trimmed)) return false; // $5.00, $1.50 -> money
+  if (/^\s|\s$/.test(tex)) return false; // "$0.75 per million ... $" -> money
+  return true; // $K$, $t_B$, $P=16,32$, $T > 1000$
+}
+
+/**
+ * Replace math expressions with placeholder spans.
+ * Fenced code blocks and inline code are left untouched.
+ */
+function protectMath(markdown) {
+  // Split on fenced code blocks and interactive widget blocks so we never
+  // rewrite `$` inside code or inside a widget's JSON config.
+  const segments = markdown.split(
+    /(```[\s\S]*?```|~~~[\s\S]*?~~~|`[^`\n]*`|:::interactive \w+\n\{[\s\S]*?\n\}\n:::\n?)/g
+  );
+
+  return segments
+    .map((segment) => {
+      const isCode =
+        /^```/.test(segment) ||
+        /^~~~/.test(segment) ||
+        /^`/.test(segment) ||
+        /^:::interactive/.test(segment);
+      if (isCode) return segment;
+
+      return segment
+        // Display math first so `$$..$$` is not mistaken for inline math.
+        .replace(/\$\$([^$]+?)\$\$/g, (_match, tex) => {
+          const trimmed = tex.trim();
+          if (!trimmed) return _match;
+          return `<span class="math-slot" data-display="1" data-tex="${escapeAttr(trimmed)}"></span>`;
+        })
+        // Inline math.
+        .replace(/(^|[^\w$])\$(?!\$)([^$\n]+?)\$(?!\w)/g, (_match, lead, tex) => {
+          return isMathish(tex)
+            ? `${lead}<span class="math-slot" data-display="0" data-tex="${escapeAttr(tex.trim())}"></span>`
+            : _match;
+        });
+    })
+    .join('');
+}
+
 /**
  * Convert raw markdown string to HTML.
  */
 export function markdownToHtml(markdown) {
-  return marked(markdown);
+  return marked(protectMath(markdown))
+    // Wrap tables so wide benchmark grids can scroll on narrow screens
+    // instead of blowing out the reading column.
+    .replace(/<table>[\s\S]*?<\/table>/g, (table) => `<div class="table-wrap">${table}</div>`);
 }
 
 /**

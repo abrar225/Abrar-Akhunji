@@ -1,7 +1,7 @@
 ---
 title: "Inside DFlash & Block Diffusion Speculative Decoding: How Non-Causal Parallel Drafting Delivers 6x LLM Inference Speedups in vLLM & SGLang with Zero Loss"
 date: "2026-08-29"
-description: "Autoregressive decoding has kept LLM inference chained to memory-bandwidth-bound single-token generation. Here is the definitive systems teardown of DFlash and Block Diffusion Speculative Decoding—how non-causal diffusion drafters generate multi-token blocks in a single O(1) pass, achieving up to 6x wall-clock speedups in vLLM and SGLang with zero perplexity loss."
+description: "Autoregressive decoding has kept LLM inference chained to memory-bandwidth-bound single-token generation. Here is the definitive systems teardown of DFlash and Block Diffusion Speculative Decoding, which explains how non-causal diffusion drafters generate multi-token blocks in a single O(1) pass, achieving up to 6x wall-clock speedups in vLLM and SGLang with zero perplexity loss."
 tags: ["AI", "LLM", "Speculative Decoding", "DFlash", "Inference Optimization", "vLLM", "SGLang", "Diffusion Models", "System Design"]
 author: "Abrar Akhunji"
 heroImage: "/images/blog/dflash-block-diffusion-speculative-decoding/hero.jpg"

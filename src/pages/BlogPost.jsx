@@ -9,6 +9,9 @@ import ReadingProgress from '../components/blog/ReadingProgress';
 import { ArrowLeft, Calendar, User, Share2, Clock, ChevronRight, Bookmark } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Magnetic from '../components/Magnetic';
+// KaTeX is only needed when actually reading a post, so it is pulled into this
+// route's chunk rather than the bundle every visitor downloads.
+import 'katex/dist/katex.min.css';
 
 export default function BlogPost() {
   const { slug } = useParams();
@@ -30,6 +33,37 @@ export default function BlogPost() {
       markPostAsRead(slug);
     }
   }, [slug, blog]);
+
+  // Typeset math. markdownToHtml leaves a `.math-slot` span for every
+  // $...$ / $$...$$ expression; KaTeX fills them in once it has loaded.
+  useEffect(() => {
+    let cancelled = false;
+    const root = contentRef.current;
+    if (!root) return undefined;
+
+    import('katex').then(({ default: katex }) => {
+      if (cancelled) return;
+      root.querySelectorAll('.math-slot').forEach((el) => {
+        if (el.dataset.rendered) return;
+        const tex = el.dataset.tex || '';
+        try {
+          katex.render(tex, el, {
+            displayMode: el.dataset.display === '1',
+            throwOnError: false,
+            strict: false,
+          });
+        } catch {
+          // Show the source rather than silently dropping the expression.
+          el.textContent = tex;
+        }
+        el.dataset.rendered = '1';
+      });
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [blog, mode]);
 
   // Determine if the blog has dual-mode content
   const hasDualMode = blog ? blog.sections.some((s) => s.type === 'eli5' || s.type === 'dev') : false;
