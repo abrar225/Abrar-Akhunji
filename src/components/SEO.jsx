@@ -15,6 +15,11 @@ export default function SEO({ title, description, url, type = "website", image, 
       <meta name="title" content={title} />
       <meta name="description" content={description} />
 
+      {/* Robots & Search Engine Indexing Directives */}
+      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+      <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large" />
+      <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large" />
+
       {/* Canonical URL */}
       <link rel="canonical" href={fullUrl} />
 
@@ -24,11 +29,16 @@ export default function SEO({ title, description, url, type = "website", image, 
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={imageUrl} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
       <meta property="og:image:alt" content={title} />
-      <meta property="og:site_name" content="Abrar Akhunji Portfolio" />
+      <meta property="og:site_name" content="Abrar Akhunji" />
+      <meta property="og:locale" content="en_US" />
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:site" content="@Abrarakhunji" />
+      <meta name="twitter:creator" content="@Abrarakhunji" />
       <meta name="twitter:url" content={fullUrl} />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />

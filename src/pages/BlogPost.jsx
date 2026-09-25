@@ -134,28 +134,39 @@ export default function BlogPost() {
   }
 
   // Get next/previous posts for navigation
+  // Get next/previous posts for navigation
   const allBlogs = getAllBlogs();
-  const currentIndex = allBlogs.findIndex((b) => b.slug === slug);
+  const currentIndex = allBlogs.findIndex((b) => b.slug === blog.slug);
   const prevPost = currentIndex < allBlogs.length - 1 ? allBlogs[currentIndex + 1] : null;
   const nextPost = currentIndex > 0 ? allBlogs[currentIndex - 1] : null;
+
+  const canonicalUrl = `https://abrarakhunji.com/blog/${blog.slug}`;
 
   const schemas = [];
   const mainSchema = {
     "@context": "https://schema.org",
-    "@type": "BlogPosting",
+    "@type": ["TechArticle", "BlogPosting"],
     "headline": blog.title,
     "description": blog.description,
     "image": blog.heroImage ? (blog.heroImage.startsWith('http') ? blog.heroImage : `https://abrarakhunji.com${blog.heroImage}`) : `https://abrarakhunji.com/images/myimg.webp`,
+    "inLanguage": "en-US",
     "author": {
       "@type": "Person",
-      "name": blog.author,
-      "url": "https://abrarakhunji.com"
+      "name": blog.author || "Abrar Akhunji",
+      "url": "https://abrarakhunji.com",
+      "jobTitle": "Senior AI & Full-Stack Systems Engineer",
+      "sameAs": [
+        "https://github.com/abrar225",
+        "https://x.com/Abrarakhunji",
+        "https://linkedin.com/in/abrarakhunji"
+      ]
     },
     "datePublished": blog.date,
-    "url": `https://abrarakhunji.com/blog/${slug}`,
+    "dateModified": blog.date,
+    "url": canonicalUrl,
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": `https://abrarakhunji.com/blog/${slug}`
+      "@id": canonicalUrl
     },
     "publisher": {
       "@type": "Person",
@@ -164,6 +175,32 @@ export default function BlogPost() {
     }
   };
   schemas.push(mainSchema);
+
+  // Breadcrumb Schema for Google Rich Snippets
+  schemas.push({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://abrarakhunji.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Blog",
+        "item": "https://abrarakhunji.com/blog"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": blog.title,
+        "item": canonicalUrl
+      }
+    ]
+  });
 
   if (blog.faq && Array.isArray(blog.faq)) {
     schemas.push({
@@ -181,7 +218,7 @@ export default function BlogPost() {
   }
 
   const handleShare = () => {
-    const shareUrl = `https://abrarakhunji.com/blog/${slug}`;
+    const shareUrl = canonicalUrl;
     if (navigator.share) {
       navigator.share({
         title: blog.title,
@@ -197,7 +234,8 @@ export default function BlogPost() {
   const toggleBookmark = () => {
     try {
       const bookmarks = JSON.parse(localStorage.getItem('bookmarkedPosts') || '[]');
-      const updated = isBookmarked ? bookmarks.filter((s) => s !== slug) : [...bookmarks, slug];
+      const targetSlug = blog.slug;
+      const updated = isBookmarked ? bookmarks.filter((s) => s !== targetSlug && s !== slug) : [...bookmarks, targetSlug];
       localStorage.setItem('bookmarkedPosts', JSON.stringify(updated));
       setIsBookmarked(!isBookmarked);
     } catch { /* ignore */ }
@@ -209,7 +247,7 @@ export default function BlogPost() {
       <SEO
         title={`${blog.title} | Abrar Akhunji`}
         description={blog.description}
-        url={`/blog/${slug}`}
+        url={`/blog/${blog.slug}`}
         type="article"
         image={blog.heroImage}
         schema={schemas.length === 1 ? schemas[0] : schemas}

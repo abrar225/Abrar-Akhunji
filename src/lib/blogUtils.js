@@ -300,7 +300,9 @@ export function getAllBlogs() {
   for (const path in blogFiles) {
     const rawContent = blogFiles[path].default;
     const { data, content } = parseFrontmatter(rawContent);
-    const slug = path.split('/').pop().replace('.md', '');
+    const rawSlug = path.split('/').pop().replace('.md', '');
+    // Clean evergreen topic slug without leading YYYY-MM-DD- date prefix
+    const cleanSlug = rawSlug.replace(/^\d{4}-\d{2}-\d{2}-/, '');
 
     // Parse content blocks for dual-mode rendering
     const sections = parseContentBlocks(content);
@@ -312,7 +314,8 @@ export function getAllBlogs() {
       .join(' ');
 
     blogs.push({
-      slug,
+      slug: cleanSlug,
+      legacySlug: rawSlug,
       title: data.title || 'Untitled',
       date: data.date || '',
       description: data.description || '',
@@ -334,11 +337,13 @@ export function getAllBlogs() {
 }
 
 /**
- * Get a single blog by slug.
+ * Get a single blog by slug (matches either clean topic slug or legacy date-prefixed slug).
  */
 export function getBlogBySlug(slug) {
+  if (!slug) return null;
   const blogs = getAllBlogs();
-  return blogs.find((blog) => blog.slug === slug) || null;
+  const cleanTarget = slug.replace(/^\d{4}-\d{2}-\d{2}-/, '');
+  return blogs.find((blog) => blog.slug === cleanTarget || blog.slug === slug || blog.legacySlug === slug) || null;
 }
 
 /* ─────────────────────────────────────────────
@@ -453,7 +458,9 @@ export function getTechTreeBranches() {
 export function isPostRead(slug) {
   try {
     const read = JSON.parse(localStorage.getItem('readPosts') || '[]');
-    return read.includes(slug);
+    if (!slug) return false;
+    const clean = slug.replace(/^\d{4}-\d{2}-\d{2}-/, '');
+    return read.some((s) => s === slug || s.replace(/^\d{4}-\d{2}-\d{2}-/, '') === clean);
   } catch {
     return false;
   }
