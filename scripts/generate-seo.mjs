@@ -516,9 +516,21 @@ const prerenderedBlogList = `
 fs.writeFileSync(path.join(blogOutDir, 'index.html'), blogListHtml);
 console.log(`✓ Blog List SEO Page: /blog`);
 
-// 4. Generate Enhanced Google-Compliant Sitemap (with image extensions)
+/** Helper to strictly escape XML special characters */
+function escapeXml(unsafe) {
+  if (!unsafe) return '';
+  return String(unsafe)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
+// 4. Generate Enhanced Google-Compliant Sitemap (with XSLT design & image extensions)
 const today = new Date().toISOString().split('T')[0];
 let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <!-- Core Pages -->
@@ -538,16 +550,18 @@ let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 
 for (const b of blogs) {
   const modDate = b.date ? new Date(b.date).toISOString().split('T')[0] : today;
-  sitemap += `  <!-- ${b.title.replace(/&/g, '&amp;')} -->
+  const safeTitle = escapeXml(b.title);
+  const commentTitle = b.title.replace(/--/g, '-').replace(/&/g, '&amp;');
+  sitemap += `  <!-- ${commentTitle} -->
   <url>
-    <loc>${b.canonicalUrl}</loc>
+    <loc>${escapeXml(b.canonicalUrl)}</loc>
     <lastmod>${modDate}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     ${b.heroImageUrl ? `
     <image:image>
-      <image:loc>${b.heroImageUrl}</image:loc>
-      <image:title>${b.title.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')}</image:title>
+      <image:loc>${escapeXml(b.heroImageUrl)}</image:loc>
+      <image:title>${safeTitle}</image:title>
     </image:image>` : ''}
   </url>
 `;
@@ -556,6 +570,14 @@ for (const b of blogs) {
 sitemap += `</urlset>\n`;
 fs.writeFileSync(path.join(distDir, 'sitemap.xml'), sitemap);
 console.log(`✓ Generated sitemap.xml with ${blogs.length + 2} URLs & Image Extensions.`);
+
+// Ensure public/sitemap.xsl is copied to dist/sitemap.xsl
+const xslSrc = path.resolve('public/sitemap.xsl');
+const xslDest = path.join(distDir, 'sitemap.xsl');
+if (fs.existsSync(xslSrc)) {
+  fs.copyFileSync(xslSrc, xslDest);
+  console.log(`✓ Copied sitemap.xsl to dist/sitemap.xsl`);
+}
 
 // 5. Generate llms.txt & llms-full.txt (GEO / AEO Specification)
 let llmsTxt = `# ${AUTHOR_NAME} — Technical Portfolio & Neural Log
