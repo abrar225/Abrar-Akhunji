@@ -408,8 +408,8 @@ for (const blog of blogs) {
   <meta http-equiv="refresh" content="0;url=${canonicalUrl}" />
   <script>window.location.replace("${canonicalUrl}");</script>
 </head>
-<body style="background:#0F0E0C;color:#fff;font-family:sans-serif;padding:2rem;">
-  <p>Redirecting to <a href="${canonicalUrl}" style="color:#FF5A1F;">${canonicalUrl}</a>...</p>
+<body style="background:#070B12;color:#E8EEF6;font-family:sans-serif;padding:2rem;">
+  <p>Redirecting to <a href="${canonicalUrl}" style="color:#79D0E0;">${canonicalUrl}</a>...</p>
 </body>
 </html>`;
     fs.writeFileSync(path.join(legacyDir, 'index.html'), redirectHtml);
@@ -495,7 +495,7 @@ const prerenderedBlogList = `
       <ul style="list-style:none;padding:0;">
         ${blogs.map(b => `
           <li style="margin-bottom:2rem;padding-bottom:2rem;border-bottom:1px solid #222;">
-            <time datetime="${b.date}" style="font-size:0.875rem;color:#FF5A1F;display:block;margin-bottom:0.25rem;">${b.date}</time>
+            <time datetime="${b.date}" style="font-size:0.875rem;color:#79D0E0;display:block;margin-bottom:0.25rem;">${b.date}</time>
             <h2 style="font-size:1.5rem;margin:0 0 0.5rem 0;">
               <a href="/blog/${b.cleanSlug}" style="text-decoration:none;color:#fff;">${b.title}</a>
             </h2>

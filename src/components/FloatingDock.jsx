@@ -148,7 +148,7 @@ function MobileRadialNav({ onOpenTerminal }) {
                 <span
                   className={`flex items-center justify-center w-11 h-11 rounded-full border shadow-lg transition-colors ${
                     item.accent
-                      ? 'bg-accent text-[#0F0E0C] border-accent/50'
+                      ? 'bg-accent text-on-accent border-accent/50'
                       : 'glass text-fg border-white/15 hover:border-accent/50 hover:text-accent'
                   }`}
                 >
@@ -164,7 +164,7 @@ function MobileRadialNav({ onOpenTerminal }) {
           type="button"
           aria-label={isOpen ? 'Close navigation' : 'Open navigation'}
           onClick={toggle}
-          className="relative z-[61] pointer-events-auto flex items-center justify-center w-14 h-14 rounded-full bg-accent text-[#0F0E0C] shadow-[0_0_30px_-5px_var(--color-accent)] mb-4"
+          className="relative z-[61] pointer-events-auto flex items-center justify-center w-14 h-14 rounded-full bg-accent text-on-accent shadow-[0_0_30px_-5px_var(--color-accent)] mb-4"
           whileTap={{ scale: 0.97 }}
         >
           <motion.span
@@ -286,7 +286,7 @@ function DesktopDock({ onOpenTerminal }) {
             data-cursor="Say hi"
             onMouseEnter={() => soundFX.playHover()}
             onClick={() => soundFX.playClick()}
-            className="block px-4 py-2 bg-accent text-[#0F0E0C] rounded-full text-sm font-semibold hover:bg-accent-soft transition-colors"
+            className="block px-4 py-2 bg-accent text-on-accent rounded-full text-sm font-semibold hover:bg-accent-soft transition-colors"
           >
             Hire Me
           </a>

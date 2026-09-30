@@ -33,7 +33,7 @@ export const soundFX = {
     muted = !muted;
     try {
       localStorage.setItem('sound_muted', String(muted));
-    } catch {}
+    } catch { /* storage or audio unavailable */ }
     return muted;
   },
 
@@ -57,7 +57,7 @@ export const soundFX = {
 
       osc.start();
       osc.stop(ac.currentTime + 0.03);
-    } catch {}
+    } catch { /* storage or audio unavailable */ }
   },
 
   playClick() {
@@ -80,7 +80,7 @@ export const soundFX = {
 
       osc.start();
       osc.stop(ac.currentTime + 0.05);
-    } catch {}
+    } catch { /* storage or audio unavailable */ }
   },
 
   playSciFi() {
@@ -113,7 +113,7 @@ export const soundFX = {
       osc2.start();
       osc1.stop(ac.currentTime + 0.14);
       osc2.stop(ac.currentTime + 0.14);
-    } catch {}
+    } catch { /* storage or audio unavailable */ }
   },
 
   playToggle() {
@@ -136,6 +136,6 @@ export const soundFX = {
 
       osc.start();
       osc.stop(ac.currentTime + 0.08);
-    } catch {}
+    } catch { /* storage or audio unavailable */ }
   },
 };

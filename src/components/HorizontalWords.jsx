@@ -80,7 +80,7 @@ export default function HorizontalWords({ words = [], className = '' }) {
 
         stickers.forEach((sticker) => {
           gsap.from(sticker, {
-            scale: 0,
+            scale: 0.62,
             yPercent: (Math.random() - 0.5) * 400,
             rotation: (Math.random() - 0.5) * 60,
             ease: 'elastic.out(1.2, 1)',

@@ -7,10 +7,18 @@ import TechTree from '../components/blog/TechTree';
 import { ArrowLeft, Calendar, User, List, GitBranch, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Magnetic from '../components/Magnetic';
+import ThemeToggle from '../components/ThemeToggle';
+import { soundFX } from '../lib/soundFX';
+import { useTheme } from '../lib/useTheme';
 
 export default function BlogList() {
   const blogs = getAllBlogs();
   const [view, setView] = useState('list'); // 'list' | 'tree'
+  const { theme, toggleTheme } = useTheme();
+  const onToggleTheme = () => {
+    soundFX.playToggle();
+    toggleTheme();
+  };
 
   const schema = {
     "@context": "https://schema.org",
@@ -26,7 +34,7 @@ export default function BlogList() {
   };
 
   return (
-    <div className="min-h-screen bg-canvas text-fg pt-28 pb-16 max-w-[1000px] mx-auto px-6 md:px-12">
+    <div className="min-h-dvh bg-canvas text-fg pt-28 pb-16 max-w-[1000px] mx-auto px-6 md:px-12">
       <SEO
         title="Blog | Abrar Akhunji"
         description="Deep dives into new AI technologies and IT sector news, explained simply."
@@ -63,11 +71,14 @@ export default function BlogList() {
               into simple, actionable insights. Daily.
             </motion.p>
           </div>
-          <Magnetic strength={0.2}>
-            <Link to="/" className="hidden md:flex items-center gap-2 text-sm font-mono text-muted hover:text-accent transition-colors mt-2">
-              <ArrowLeft size={16} /> Portfolio
-            </Link>
-          </Magnetic>
+          <div className="flex items-center gap-3 mt-2">
+            <ThemeToggle theme={theme} toggleTheme={onToggleTheme} />
+            <Magnetic strength={0.2}>
+              <Link to="/" className="hidden md:flex items-center gap-2 text-sm font-mono text-muted hover:text-accent transition-colors">
+                <ArrowLeft size={16} /> Portfolio
+              </Link>
+            </Magnetic>
+          </div>
         </div>
 
         {/* ── View Toggle ── */}

@@ -5,6 +5,8 @@ import { ExternalLink, Globe2, BookOpenText, ChevronDown } from 'lucide-react';
 /**
  * Extracts domain name from a URL safely.
  */
+// Shared by the blog page; not a component, so Fast Refresh doesn't own it.
+// eslint-disable-next-line react-refresh/only-export-components
 export function extractDomain(url) {
   try {
     const parsed = new URL(url);
@@ -17,6 +19,7 @@ export function extractDomain(url) {
 /**
  * Parses sources from markdown text (e.g. from '### Sources' section or general links).
  */
+// eslint-disable-next-line react-refresh/only-export-components
 export function extractSourcesFromMarkdown(markdown) {
   if (!markdown) return [];
   const sources = [];
@@ -27,7 +30,7 @@ export function extractSourcesFromMarkdown(markdown) {
   const textToScan = sourcesMatch ? sourcesMatch[1] : markdown;
 
   // Regex for markdown links: [Title](url)
-  const linkRegex = /\[([^\]]+)\]\((https?:\/\/[^\s\)]+)\)/g;
+  const linkRegex = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g;
   let match;
 
   while ((match = linkRegex.exec(textToScan)) !== null) {

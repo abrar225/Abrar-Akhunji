@@ -1,5 +1,5 @@
 import { useParams, Link, Navigate } from 'react-router-dom';
-import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import Lenis from 'lenis';
 import { getBlogBySlug, markdownToHtml, markPostAsRead, getAllBlogs } from '../lib/blogUtils';
 import SEO from '../components/SEO';
@@ -13,12 +13,16 @@ import { extractSourcesFromMarkdown } from '../components/agents/Citations';
 import { ArrowLeft, Calendar, User, Share2, Clock, ChevronRight, Bookmark } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Magnetic from '../components/Magnetic';
+import ThemeToggle from '../components/ThemeToggle';
+import { soundFX } from '../lib/soundFX';
+import { useTheme } from '../lib/useTheme';
 // KaTeX is only needed when actually reading a post, so it is pulled into this
 // route's chunk rather than the bundle every visitor downloads.
 import 'katex/dist/katex.min.css';
 
 export default function BlogPost() {
   const { slug } = useParams();
+  const { theme, toggleTheme } = useTheme();
   const blog = getBlogBySlug(slug);
   const [mode, setMode] = useState('eli5');
   const [isBookmarked, setIsBookmarked] = useState(() => {
@@ -253,14 +257,15 @@ export default function BlogPost() {
         schema={schemas.length === 1 ? schemas[0] : schemas}
       />
 
-      <article className="min-h-screen bg-canvas text-fg">
+      <article className="min-h-dvh bg-canvas text-fg">
         {/* ── Top Bar ── */}
         <div className="fixed top-0 left-0 w-full px-6 md:px-12 py-4 flex justify-between items-center z-50 bg-canvas/80 backdrop-blur-xl border-b border-line/50">
           <Link to="/blog" className="flex items-center gap-2 text-sm font-mono text-muted hover:text-accent transition-colors">
             <ArrowLeft size={16} /> Posts
           </Link>
           <div className="flex items-center gap-3">
-            <button onClick={toggleBookmark} className={`w-9 h-9 rounded-full border flex items-center justify-center transition-colors ${isBookmarked ? 'bg-accent border-accent text-[#0F0E0C]' : 'bg-surface border-line text-muted hover:text-accent hover:border-accent'}`}>
+            <ThemeToggle theme={theme} toggleTheme={() => { soundFX.playToggle(); toggleTheme(); }} />
+            <button onClick={toggleBookmark} className={`w-9 h-9 rounded-full border flex items-center justify-center transition-colors ${isBookmarked ? 'bg-accent border-accent text-on-accent' : 'bg-surface border-line text-muted hover:text-accent hover:border-accent'}`}>
               <Bookmark size={14} fill={isBookmarked ? 'currentColor' : 'none'} />
             </button>
             <Magnetic strength={0.3}>

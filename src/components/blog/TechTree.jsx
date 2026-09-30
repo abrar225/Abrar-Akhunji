@@ -5,7 +5,7 @@ import { Lock, CheckCircle2, ChevronRight, Zap } from 'lucide-react';
 import { isPostRead } from '../../lib/blogUtils';
 
 const BRANCH_COLORS = {
-  'LLMs': { bg: 'rgba(255, 90, 31, 0.1)', border: 'rgba(255, 90, 31, 0.3)', text: '#FF5A1F', glow: 'rgba(255, 90, 31, 0.2)' },
+  'LLMs': { bg: 'color-mix(in srgb, var(--color-accent) 12%, transparent)', border: 'color-mix(in srgb, var(--color-accent) 38%, transparent)', text: 'var(--color-accent)', glow: 'color-mix(in srgb, var(--color-accent) 22%, transparent)' },
   'Computer Vision': { bg: 'rgba(31, 111, 92, 0.1)', border: 'rgba(31, 111, 92, 0.3)', text: '#1F6F5C', glow: 'rgba(31, 111, 92, 0.2)' },
   'Web Dev': { bg: 'rgba(59, 91, 219, 0.1)', border: 'rgba(59, 91, 219, 0.3)', text: '#3B5BDB', glow: 'rgba(59, 91, 219, 0.2)' },
   'DevOps': { bg: 'rgba(160, 50, 90, 0.1)', border: 'rgba(160, 50, 90, 0.3)', text: '#A0325A', glow: 'rgba(160, 50, 90, 0.2)' },

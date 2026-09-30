@@ -3,10 +3,10 @@ import { motion } from 'framer-motion';
 import gsap from 'gsap';
 
 /**
- * LoadingScreen — truus-clone-style scribble intro.
- * An ember scribble draws itself across the canvas (strokeDashoffset), the
- * "ABRAR." wordmark fades in mid-draw, a small counter ticks 000→100, then the
- * whole overlay wipes up to reveal the site. Reduced-motion: instant.
+ * LoadingScreen — one-shot scribble intro.
+ * A halide stroke draws itself (strokeDashoffset), the wordmark fades in
+ * mid-draw, a counter ticks 000→100, then the overlay wipes up.
+ * Reduced-motion: instant.
  */
 const SCRIBBLE =
   'M8 170 C 130 30, 210 320, 330 165 C 430 40, 520 40, 620 205 C 705 330, 830 30, 905 165 C 955 235, 980 110, 1112 150';
@@ -28,21 +28,22 @@ const LoadingScreen = ({ onComplete }) => {
       return () => { clearTimeout(p); clearTimeout(t); };
     }
 
-    const len = path.getTotalLength();
-    gsap.set(path, { strokeDasharray: len, strokeDashoffset: len, opacity: 1 });
-    gsap.set(markRef.current, { opacity: 0, y: 12 });
+    const ctx = gsap.context(() => {
+      const len = path.getTotalLength();
+      gsap.set(path, { strokeDasharray: len, strokeDashoffset: len, opacity: 1 });
+      gsap.set(markRef.current, { opacity: 0, y: 12 });
 
-    const counter = { v: 0 };
-    const tl = gsap.timeline({ onComplete: () => setTimeout(onComplete, 500) });
+      const counter = { v: 0 };
+      gsap.timeline({ onComplete: () => setTimeout(onComplete, 420) })
+        .to(path, { strokeDashoffset: 0, duration: 1.35, ease: 'power3.inOut' }, 0)
+        .to(counter, {
+          v: 100, duration: 1.35, ease: 'power2.out',
+          onUpdate: () => setProgress(Math.round(counter.v)),
+        }, 0)
+        .to(markRef.current, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0.45);
+    });
 
-    tl.to(path, { strokeDashoffset: 0, duration: 1.5, ease: 'power2.inOut' }, 0)
-      .to(counter, {
-        v: 100, duration: 1.5, ease: 'power2.inOut',
-        onUpdate: () => setProgress(Math.round(counter.v)),
-      }, 0)
-      .to(markRef.current, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 0.55);
-
-    return () => tl.kill();
+    return () => ctx.revert();
   }, [onComplete]);
 
   return (
@@ -50,7 +51,7 @@ const LoadingScreen = ({ onComplete }) => {
       className="fixed inset-0 z-[999] bg-canvas overflow-hidden flex items-center justify-center"
       initial={{ y: 0 }}
       exit={{ y: '-100%' }}
-      transition={{ duration: 0.9, ease: [0.86, 0, 0.07, 1] }}
+      transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
     >
       <svg
         className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[130vw] md:w-[80vw] h-auto"
@@ -61,8 +62,8 @@ const LoadingScreen = ({ onComplete }) => {
       </svg>
 
       <div ref={markRef} className="relative z-10 text-center">
-        <span className="font-display font-bold tracking-tight text-fg text-5xl md:text-7xl">
-          ABRAR<span className="text-accent">.</span>
+        <span className="font-display font-semibold tracking-[-0.045em] text-fg text-5xl md:text-7xl">
+          ABRAR.
         </span>
       </div>
 

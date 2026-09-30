@@ -16,7 +16,6 @@ export default function MessageScroller({ contentRef, mode, lenisRef }) {
   const [sections, setSections] = useState([]);
   const [activeId, setActiveId] = useState('');
   const [hoveredId, setHoveredId] = useState(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
   const [isMobileSheetOpen, setIsMobileSheetOpen] = useState(false);
   const boundsRef = useRef([]);
 
@@ -43,7 +42,7 @@ export default function MessageScroller({ contentRef, mode, lenisRef }) {
       const text = el.textContent.trim();
 
       // Clean short label (strip numbers like "1. ", "### ", etc.)
-      const shortLabel = text.replace(/^[0-9]+[.\)]\s*/, '').trim();
+      const shortLabel = text.replace(/^[0-9]+[.)]\s*/, '').trim();
 
       // Infer tag badge
       let tag = 'Analysis';
@@ -120,9 +119,6 @@ export default function MessageScroller({ contentRef, mode, lenisRef }) {
   useEffect(() => {
     const handleScrollUpdate = () => {
       const scrollY = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = docHeight > 0 ? (scrollY / docHeight) * 100 : 0;
-      setScrollProgress(progress);
 
       if (boundsRef.current.length === 0) {
         updateBounds();
@@ -215,7 +211,7 @@ export default function MessageScroller({ contentRef, mode, lenisRef }) {
 
           {/* Section Notches */}
           <div className="flex flex-col items-start gap-3.5 my-1">
-            {sections.map((sec, idx) => {
+            {sections.map((sec) => {
               const isActive = sec.id === activeId;
               const isHovered = hoveredId === sec.id;
 
@@ -238,16 +234,16 @@ export default function MessageScroller({ contentRef, mode, lenisRef }) {
                       animate={{
                         width: isActive ? 22 : isHovered ? 16 : 10,
                         backgroundColor: isActive
-                          ? 'var(--color-accent, #FF5A1F)'
+                          ? 'var(--color-accent)'
                           : isHovered
-                          ? 'rgba(255, 255, 255, 0.85)'
-                          : 'rgba(255, 255, 255, 0.28)',
+                          ? 'color-mix(in srgb, var(--color-fg) 85%, transparent)'
+                          : 'color-mix(in srgb, var(--color-fg) 28%, transparent)',
                         height: isActive ? 2 : 1.5,
                       }}
                       transition={{ type: 'spring', stiffness: 450, damping: 32 }}
                       className="rounded-full shadow-xs"
                       style={{
-                        boxShadow: isActive ? '0 0 10px rgba(255, 90, 31, 0.6)' : 'none',
+                        boxShadow: isActive ? '0 0 10px color-mix(in srgb, var(--color-accent) 55%, transparent)' : 'none',
                       }}
                     />
                   </button>
@@ -257,7 +253,7 @@ export default function MessageScroller({ contentRef, mode, lenisRef }) {
                     <motion.div
                       layoutId="anthropic-active-chapter-pill"
                       transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                      className="absolute left-6 flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#181714]/95 backdrop-blur-xl border border-white/[0.12] text-xs font-sans font-medium text-fg shadow-[0_10px_25px_-5px_rgba(0,0,0,0.8)] whitespace-nowrap cursor-pointer pointer-events-auto"
+                      className="absolute left-6 flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#101722]/95 backdrop-blur-xl border border-white/[0.12] text-xs font-sans font-medium text-fg shadow-[0_10px_25px_-5px_rgba(0,0,0,0.8)] whitespace-nowrap cursor-pointer pointer-events-auto"
                       onClick={() => scrollToSection(sec.id)}
                     >
                       <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse shrink-0" />
@@ -273,7 +269,7 @@ export default function MessageScroller({ contentRef, mode, lenisRef }) {
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: -4 }}
                         transition={{ duration: 0.15 }}
-                        className="absolute left-6 px-2.5 py-0.5 rounded-lg bg-[#181714]/90 backdrop-blur-md border border-white/[0.08] text-[11px] font-mono text-muted hover:text-fg whitespace-nowrap shadow-md cursor-pointer pointer-events-auto"
+                        className="absolute left-6 px-2.5 py-0.5 rounded-lg bg-[#101722]/90 backdrop-blur-md border border-white/[0.08] text-[11px] font-mono text-muted hover:text-fg whitespace-nowrap shadow-md cursor-pointer pointer-events-auto"
                         onClick={() => scrollToSection(sec.id)}
                       >
                         {sec.label}
@@ -295,7 +291,7 @@ export default function MessageScroller({ contentRef, mode, lenisRef }) {
           initial={{ y: 25, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-          className="flex items-center justify-between px-3 py-2 rounded-2xl bg-[#141310]/95 backdrop-blur-2xl border border-white/[0.12] shadow-[0_15px_35px_rgba(0,0,0,0.7)]"
+          className="flex items-center justify-between px-3 py-2 rounded-2xl bg-[#070B12]/95 backdrop-blur-2xl border border-white/[0.12] shadow-[0_15px_35px_rgba(0,0,0,0.7)]"
         >
           {/* Chapter Tap Target */}
           <button
@@ -363,7 +359,7 @@ export default function MessageScroller({ contentRef, mode, lenisRef }) {
                 animate={{ y: 0 }}
                 exit={{ y: '100%' }}
                 transition={{ type: 'spring', damping: 28, stiffness: 300 }}
-                className="w-full max-h-[80vh] bg-[#141310] border border-white/[0.12] rounded-3xl p-5 flex flex-col shadow-2xl overflow-hidden"
+                className="w-full max-h-[80vh] bg-[#070B12] border border-white/[0.12] rounded-3xl p-5 flex flex-col shadow-2xl overflow-hidden"
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/[0.08]">

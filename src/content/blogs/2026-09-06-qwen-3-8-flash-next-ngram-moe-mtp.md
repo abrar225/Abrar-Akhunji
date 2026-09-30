@@ -224,7 +224,7 @@ This microscopic partitioning allows each expert to specialize in narrow syntact
   "type": "bar",
   "xKey": "model",
   "series": [
-    { "dataKey": "throughput", "name": "Throughput (Tokens/Sec)", "color": "#FF5A1F" },
+    { "dataKey": "throughput", "name": "Throughput (Tokens/Sec)", "color": "#5EC4D6" },
     { "dataKey": "vramUsage", "name": "VRAM Required (GB)", "color": "#06B6D4" }
   ],
   "data": [

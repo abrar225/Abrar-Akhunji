@@ -29,6 +29,7 @@ import VerticalMarquee from '../components/VerticalMarquee';
 import RepelText from '../components/RepelText';
 import CyberTerminal from '../components/CyberTerminal';
 import { soundFX } from '../lib/soundFX';
+import { useTheme } from '../lib/useTheme';
 
 // lazy (heavy deps)
 const ThreeBackground = lazy(() => import('../components/ThreeBackground'));
@@ -56,14 +57,7 @@ const HWORDS = [
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
-  const [theme, setTheme] = useState(() => {
-    try { return localStorage.getItem('theme') || 'dark'; } catch { return 'dark'; }
-  });
-
-  useEffect(() => {
-    document.documentElement.className = theme;
-    try { localStorage.setItem('theme', theme); } catch { /* storage unavailable */ }
-  }, [theme]);
+  const { theme, toggleTheme: flipTheme } = useTheme();
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -84,7 +78,7 @@ export default function App() {
 
   const toggleTheme = () => {
     soundFX.playToggle();
-    setTheme((p) => (p === 'dark' ? 'light' : 'dark'));
+    flipTheme();
   };
 
   useLayoutEffect(() => {
@@ -130,7 +124,7 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-      <div className="min-h-screen bg-canvas text-fg font-body antialiased">
+      <div className="min-h-dvh bg-canvas text-fg font-body antialiased">
         <a href="#main-content" className="skip-link">Skip to content</a>
         <div className="grain" aria-hidden="true" />
         <CursorBubble />
@@ -145,28 +139,30 @@ export default function App() {
               <ThreeBackground theme={theme} />
             </Suspense>
 
-            {/* ── Header ── */}
-            <header className="fixed top-0 left-0 w-full px-6 md:px-12 py-5 flex justify-between items-center z-50 mix-blend-difference pointer-events-none">
-              <Magnetic as="div" strength={0.3} className="pointer-events-auto">
-                <a href="#home" className="font-display font-bold tracking-tight text-lg text-white">
-                  ABRAR<span className="text-accent">.</span>
-                </a>
-              </Magnetic>
-              <div className="flex items-center gap-5 md:gap-7 pointer-events-auto">
-                <div className="hidden md:flex items-center gap-6">
-                  {socials.map((s) => (
-                    <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
-                      className="text-xs font-mono text-white/70 hover:text-accent transition-colors">
-                      {s.label}
-                    </a>
-                  ))}
-                  <Link to="/blog" className="relative text-xs font-mono text-white/70 hover:text-accent transition-colors">
-                    BLOG
-                    <span className="absolute -top-1 -right-2 w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-                  </Link>
-                  <span className="text-xs font-mono text-white/40">IND · GJ</span>
+            {/* ── Header — glass capsule, so it frames the work instead of inverting into it ── */}
+            <header className="fixed top-0 left-0 w-full z-50 px-3 md:px-6 pt-3 pointer-events-none">
+              <div className="pointer-events-auto flex items-center justify-between gap-4 px-4 md:px-5 py-2.5 rounded-full border border-line bg-canvas/75 backdrop-blur-xl">
+                <Magnetic as="div" strength={0.3}>
+                  <a href="#home" className="font-display font-semibold tracking-[-0.04em] text-lg text-fg">
+                    ABRAR.
+                  </a>
+                </Magnetic>
+                <div className="flex items-center gap-5 md:gap-7">
+                  <div className="hidden md:flex items-center gap-6">
+                    {socials.map((s) => (
+                      <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
+                        className="text-xs font-mono text-muted hover:text-fg transition-colors duration-200 ease-[cubic-bezier(0.23,1,0.32,1)]">
+                        {s.label}
+                      </a>
+                    ))}
+                    <Link to="/blog" className="relative text-xs font-mono text-muted hover:text-fg transition-colors duration-200 ease-[cubic-bezier(0.23,1,0.32,1)]">
+                      BLOG
+                      <span className="absolute -top-1 -right-2 w-1.5 h-1.5 rounded-full bg-accent" />
+                    </Link>
+                    <span className="text-xs font-mono text-faint">IND · GJ</span>
+                  </div>
+                  <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
                 </div>
-                <div className="mix-blend-normal"><ThemeToggle theme={theme} toggleTheme={toggleTheme} /></div>
               </div>
             </header>
 
@@ -181,7 +177,7 @@ export default function App() {
 
             <main id="main-content" className="relative z-10">
               {/* ── Hero ── */}
-              <section id="home" className="min-h-screen flex flex-col justify-center max-w-[1400px] mx-auto px-6 md:px-12 pt-28 pb-16 relative">
+              <section id="home" className="min-h-dvh flex flex-col justify-center md:justify-start max-w-[1400px] mx-auto px-6 md:px-12 pt-28 pb-28 relative">
                 <div className="flex items-center justify-between font-mono text-[10px] md:text-xs uppercase tracking-[0.25em] text-muted mb-10 md:mb-16">
                   <span>( Portfolio — 2026 )</span>
                   <span className="hidden md:inline">Full-Stack · AI / ML</span>
@@ -195,18 +191,18 @@ export default function App() {
                 <h1 className="text-hero font-display font-medium text-fg">
                   <SplitText text="Engineer of" type="word" trigger="mount" delay={0.15} as="span" className="block" />
                   <SplitText text="Intelligent" type="char" trigger="mount" delay={0.35} stagger={0.045}
-                    as="span" className="block font-serif text-accent" />
+                    as="span" className="block font-serif italic font-normal" />
                   <SplitText text="Systems." type="word" trigger="mount" delay={0.55} as="span" className="block" />
                 </h1>
 
-                <div className="mt-10 md:mt-14 grid grid-cols-1 md:grid-cols-12 gap-8 items-end">
-                  <p className="md:col-span-6 md:col-start-7 text-base md:text-lg text-muted leading-relaxed">
+                <div className="mt-8 md:mt-10 grid grid-cols-1 md:grid-cols-12 gap-8 items-end">
+                  <p className="md:col-span-5 md:col-start-8 max-w-[38rem] text-base md:text-lg text-muted leading-relaxed">
                     I bridge the gap between <span className="text-fg">complex AI models</span> and{' '}
                     <span className="text-fg">scalable web architectures</span> — building the next generation of intelligent digital products.
                   </p>
                 </div>
 
-                <SectionWrapper delay={0.3} className="mt-14 md:mt-20 grid grid-cols-1 sm:grid-cols-3 gap-6 border-t border-line pt-8">
+                <SectionWrapper delay={0.3} className="mt-8 md:mt-10 grid grid-cols-1 sm:grid-cols-3 gap-6 border-t border-line pt-6">
                   {[
                     ['Focus', 'AI/ML · Full-Stack'],
                     ['Stack', 'Python · React · Django'],
@@ -287,7 +283,7 @@ export default function App() {
                             className="w-full h-full object-cover grayscale group-hover:grayscale-0 scale-105 group-hover:scale-100 transition-all duration-700" />
                         </div>
                       </SectionWrapper>
-                      <div className="absolute -bottom-4 -left-4 px-4 py-2 bg-accent text-[#0F0E0C] rounded-lg font-mono text-[10px] uppercase tracking-widest shadow-xl">
+                      <div className="absolute -bottom-4 -left-4 px-4 py-2 bg-accent text-on-accent rounded-lg font-mono text-[10px] uppercase tracking-widest shadow-xl">
                         Open to work
                       </div>
                     </div>
@@ -309,7 +305,7 @@ export default function App() {
                       <a href="https://github.com/abrar225" target="_blank" rel="noopener noreferrer"
                         data-cursor="GitHub" className="group flex items-center gap-4">
                         <span className="text-sm font-display text-muted group-hover:text-fg transition-colors">All projects</span>
-                        <span className="w-14 h-14 rounded-full border border-line group-hover:bg-accent group-hover:border-accent text-fg group-hover:text-[#0F0E0C] flex items-center justify-center transition-all duration-500">
+                        <span className="w-14 h-14 rounded-full border border-line group-hover:bg-accent group-hover:border-accent text-fg group-hover:text-on-accent flex items-center justify-center transition-all duration-500">
                           <ArrowUpRight size={22} />
                         </span>
                       </a>
@@ -452,7 +448,7 @@ export default function App() {
                       <Magnetic strength={0.4} className="hidden md:block">
                         <Link to="/blog" data-cursor="Blog" className="group flex items-center gap-4">
                           <span className="text-sm font-display text-muted group-hover:text-fg transition-colors">View all posts</span>
-                          <span className="w-14 h-14 rounded-full border border-line group-hover:bg-accent group-hover:border-accent text-fg group-hover:text-[#0F0E0C] flex items-center justify-center transition-all duration-500">
+                          <span className="w-14 h-14 rounded-full border border-line group-hover:bg-accent group-hover:border-accent text-fg group-hover:text-on-accent flex items-center justify-center transition-all duration-500">
                             <ArrowUpRight size={22} />
                           </span>
                         </Link>
@@ -511,7 +507,7 @@ export default function App() {
                     <div className="flex flex-col gap-4">
                       <a href="https://drive.google.com/file/d/1dV5ukxF-i-9JcWCaxsbQljNwL7Dni8Jc/view?usp=sharing"
                         target="_blank" rel="noopener noreferrer" data-cursor="Download"
-                        className="flex items-center gap-3 px-6 py-3 border border-line text-fg hover:bg-accent hover:border-accent hover:text-[#0F0E0C] rounded-full text-sm font-medium transition-all">
+                        className="flex items-center gap-3 px-6 py-3 border border-line text-fg hover:bg-accent hover:border-accent hover:text-on-accent rounded-full text-sm font-medium transition-all">
                         <Download size={16} /> Download Resume
                       </a>
                       <div className="flex gap-3">

@@ -246,7 +246,7 @@ The project maintains an agentic benchmark running a headless Claude Code sessio
   "series": [
     { "dataKey": "baseline", "name": "No Skill (Baseline)", "color": "#71717A" },
     { "dataKey": "caveman", "name": "Terse Prose Control", "color": "#EAB308" },
-    { "dataKey": "ponytail", "name": "Ponytail", "color": "#FF5A1F" },
+    { "dataKey": "ponytail", "name": "Ponytail", "color": "#5EC4D6" },
     { "dataKey": "yagni", "name": "Naive YAGNI", "color": "#8B5CF6" }
   ]
 }

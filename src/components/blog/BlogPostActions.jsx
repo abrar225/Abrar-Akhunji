@@ -25,7 +25,7 @@ function ActionButton({
       whileTap={reduce ? undefined : { scale: 0.92 }}
       className={`relative grid size-8 place-items-center rounded-lg border transition-all cursor-pointer ${
         active
-          ? 'bg-accent/20 border-accent text-accent shadow-[0_0_12px_rgba(255,90,31,0.3)]'
+          ? 'bg-accent/20 border-accent text-accent glow-accent'
           : 'bg-surface/80 border-line text-muted hover:text-fg hover:border-accent/40 hover:bg-elevated'
       } ${className}`}
     >

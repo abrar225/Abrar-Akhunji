@@ -184,7 +184,7 @@ NVIDIA evaluated Switchyard across 500 multi-turn software engineering tasks com
   "type": "bar",
   "xKey": "strategy",
   "series": [
-    { "dataKey": "cost", "name": "Cost ($ per 1k Tasks)", "color": "#FF5A1F" },
+    { "dataKey": "cost", "name": "Cost ($ per 1k Tasks)", "color": "#5EC4D6" },
     { "dataKey": "accuracy", "name": "Task Success Rate (%)", "color": "#1F6F5C" }
   ],
   "data": [

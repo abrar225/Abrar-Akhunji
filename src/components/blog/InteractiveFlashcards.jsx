@@ -54,7 +54,7 @@ export default function InteractiveFlashcards({ config }) {
       zIndex: 100, // Bring to absolute front on hover
       duration: 0.4,
       ease: 'power3.out',
-      boxShadow: '0 20px 40px -10px rgba(255, 90, 31, 0.15)',
+      boxShadow: '0 20px 40px -10px color-mix(in srgb, var(--color-accent) 22%, transparent)',
       borderColor: 'var(--color-accent)'
     });
 
@@ -215,7 +215,7 @@ export default function InteractiveFlashcards({ config }) {
           className="absolute bg-surface border border-line rounded-3xl p-8 cursor-pointer overflow-hidden transform-gpu will-change-transform"
           style={{
             transformStyle: 'preserve-3d',
-            backgroundImage: `radial-gradient(circle at top right, rgba(255, 90, 31, 0.03), transparent 60%)`,
+            backgroundImage: `radial-gradient(circle at top right, color-mix(in srgb, var(--color-accent) 7%, transparent), transparent 60%)`,
             width: 280,
             height: 380,
           }}

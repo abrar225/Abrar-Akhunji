@@ -184,7 +184,7 @@ function BrowserFrame({ project, reduced }) {
                 data-cursor="Run"
                 className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-canvas/45 opacity-0 group-hover/browser:opacity-100 transition-opacity duration-300 backdrop-blur-[1px]"
               >
-                <span className="flex items-center justify-center w-16 h-16 rounded-full bg-accent text-[#0F0E0C] shadow-xl transition-transform duration-300 group-hover/browser:scale-110 press-effect">
+                <span className="flex items-center justify-center w-16 h-16 rounded-full bg-accent text-on-accent shadow-xl transition-transform duration-300 group-hover/browser:scale-110 press-effect">
                   <Play size={26} className="ml-1" fill="currentColor" />
                 </span>
                 <span className="font-mono text-xs uppercase tracking-[0.2em] text-fg">
@@ -199,7 +199,7 @@ function BrowserFrame({ project, reduced }) {
                 data-cursor="Open"
                 className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-canvas/45 opacity-0 group-hover/browser:opacity-100 transition-opacity duration-300 backdrop-blur-[1px]"
               >
-                <span className="flex items-center justify-center w-16 h-16 rounded-full bg-accent text-[#0F0E0C] shadow-xl transition-transform duration-300 group-hover/browser:scale-110 press-effect">
+                <span className="flex items-center justify-center w-16 h-16 rounded-full bg-accent text-on-accent shadow-xl transition-transform duration-300 group-hover/browser:scale-110 press-effect">
                   <ArrowUpRight size={28} />
                 </span>
                 <span className="font-mono text-xs uppercase tracking-[0.2em] text-fg">

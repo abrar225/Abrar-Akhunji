@@ -54,7 +54,7 @@ function PromptPlayground({ config }) {
             whileTap={{ scale: 0.95 }}
             onClick={handleSubmit}
             disabled={isThinking}
-            className="flex items-center gap-2 px-5 py-2.5 bg-accent text-[#0F0E0C] rounded-full text-sm font-medium hover:bg-accent-soft transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 px-5 py-2.5 bg-accent text-on-accent rounded-full text-sm font-medium hover:bg-accent-soft transition-colors disabled:opacity-50"
           >
             <Play size={14} /> Run
           </motion.button>
@@ -122,7 +122,7 @@ function QuizBlock({ config }) {
               bgColor = 'rgba(160, 50, 90, 0.1)';
             } else if (!submitted && i === selected) {
               borderColor = 'var(--color-accent)';
-              bgColor = 'rgba(255, 90, 31, 0.05)';
+              bgColor = 'color-mix(in srgb, var(--color-accent) 8%, transparent)';
             }
 
             return (
@@ -149,7 +149,7 @@ function QuizBlock({ config }) {
             whileTap={{ scale: 0.95 }}
             onClick={() => selected !== null && setSubmitted(true)}
             disabled={selected === null}
-            className="flex items-center gap-2 px-5 py-2.5 bg-accent text-[#0F0E0C] rounded-full text-sm font-medium hover:bg-accent-soft transition-colors disabled:opacity-30"
+            className="flex items-center gap-2 px-5 py-2.5 bg-accent text-on-accent rounded-full text-sm font-medium hover:bg-accent-soft transition-colors disabled:opacity-30"
           >
             Check Answer
           </motion.button>
@@ -191,7 +191,7 @@ function TimelineBlock({ config }) {
                 style={{
                   borderColor: i <= activeStep ? 'var(--color-accent)' : 'var(--color-line)',
                   backgroundColor: i <= activeStep ? 'var(--color-accent)' : 'var(--color-surface)',
-                  boxShadow: i === activeStep ? '0 0 8px rgba(255,90,31,0.4)' : 'none',
+                  boxShadow: i === activeStep ? '0 0 8px color-mix(in srgb, var(--color-accent) 45%, transparent)' : 'none',
                 }}
               />
               <p className={`text-xs font-mono uppercase tracking-widest mb-1 transition-colors ${i === activeStep ? 'text-accent' : 'text-faint'}`}>

@@ -151,11 +151,11 @@ export default function WebSpeechPlayer({ contentRef }) {
 
         const mark = document.createElement("mark");
         mark.className = "tts-highlight";
-        mark.style.backgroundColor = "rgba(255, 90, 31, 0.25)";
+        mark.style.backgroundColor = "color-mix(in srgb, var(--color-accent) 28%, transparent)";
         mark.style.color = "var(--color-fg)";
         mark.style.borderRadius = "4px";
         mark.style.padding = "0 2px";
-        mark.style.boxShadow = "0 0 12px rgba(255, 90, 31, 0.2)";
+        mark.style.boxShadow = "0 0 12px color-mix(in srgb, var(--color-accent) 22%, transparent)";
 
         range.surroundContents(mark);
 
@@ -374,15 +374,15 @@ export default function WebSpeechPlayer({ contentRef }) {
           onClick={togglePlay}
           aria-label={isPlaying ? 'Pause narration' : 'Play narration'}
           className="flex-shrink-0 w-12 h-12 rounded-full bg-accent flex items-center justify-center
-                     text-white shadow-lg shadow-accent/20 hover:shadow-accent/40 transition-all"
+                     text-on-accent shadow-lg shadow-accent/20 hover:shadow-accent/40 transition-[transform,box-shadow] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)]"
         >
           <AnimatePresence mode="wait" initial={false}>
             {isPlaying ? (
-              <motion.span key="pause" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
+              <motion.span key="pause" initial={{ scale: 0.86, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.86, opacity: 0 }}>
                 <Pause size={20} fill="currentColor" />
               </motion.span>
             ) : (
-              <motion.span key="play" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
+              <motion.span key="play" initial={{ scale: 0.86, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.86, opacity: 0 }}>
                 <Play size={20} fill="currentColor" className="ml-1" />
               </motion.span>
             )}
@@ -419,7 +419,7 @@ export default function WebSpeechPlayer({ contentRef }) {
             transition={{ type: 'spring', stiffness: 300, damping: 22 }}
             onClick={togglePlay}
             aria-label="Pause narration"
-            className="fixed bottom-6 right-6 z-[90] w-14 h-14 rounded-full bg-accent text-white
+            className="fixed bottom-6 right-6 z-[90] w-14 h-14 rounded-full bg-accent text-on-accent
                        flex items-center justify-center shadow-xl shadow-accent/30
                        hover:scale-105 press-effect transition-transform"
           >

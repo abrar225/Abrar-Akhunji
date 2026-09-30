@@ -56,7 +56,7 @@ export default function ReadingProgress() {
         className="h-full bg-accent origin-left"
         style={{
           transform: `scaleX(${progress / 100})`,
-          boxShadow: "0 0 10px rgba(255, 90, 31, 0.5)",
+          boxShadow: "0 0 10px color-mix(in srgb, var(--color-accent) 55%, transparent)",
           transition: "transform 0.1s linear",
         }}
       />

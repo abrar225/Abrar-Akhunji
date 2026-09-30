@@ -149,7 +149,7 @@ export const CERTIFICATIONS = [
     title: "GUNIpreneur Bootcamp", 
     desc: "2nd Runner-up: Most Innovative Idea • Ganpat University SSIP", 
     icon: Award,
-    color: "text-orange-500",
+    color: "text-accent",
     driveLink: "https://drive.google.com/drive/folders/17HvrHOJFwXCgIoHz8rF1I6p3O-kH_jpd?usp=sharing"
   },
   { 

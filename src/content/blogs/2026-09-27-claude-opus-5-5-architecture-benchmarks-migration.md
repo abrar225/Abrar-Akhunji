@@ -202,7 +202,7 @@ Anthropic evaluated `claude-opus-5-5` across the late-2026 frontier agentic benc
   "type": "bar",
   "xKey": "benchmark",
   "series": [
-    { "dataKey": "opus55", "name": "Claude Opus 5.5 ($4/$20)", "color": "#FF5A1F" },
+    { "dataKey": "opus55", "name": "Claude Opus 5.5 ($4/$20)", "color": "#5EC4D6" },
     { "dataKey": "fable51", "name": "Claude Fable 5.1 ($6/$30)", "color": "#10B981" },
     { "dataKey": "opus5", "name": "Claude Opus 5 ($5/$25)", "color": "#6366F1" },
     { "dataKey": "gpt6astra", "name": "GPT-6 Astra ($5/$25)", "color": "#F59E0B" }

@@ -159,8 +159,8 @@ export default function CursorBubble() {
 
     // Click feedback: squeeze → spring back
     const onDown = () => {
-      gsap.to(dot, { scale: 0.6, duration: 0.1, ease: 'power2.in' });
-      gsap.to(ring, { scale: 0.85, duration: 0.12, ease: 'power2.in' });
+      gsap.to(dot, { scale: 0.6, duration: 0.1, ease: 'power3.out' });
+      gsap.to(ring, { scale: 0.85, duration: 0.12, ease: 'power3.out' });
     };
     const onUp = () => {
       gsap.to(dot, {

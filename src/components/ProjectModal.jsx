@@ -86,7 +86,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                       onClick={() => setActiveTab(tab.id)}
                       className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono transition-all shrink-0 press-effect ${
                         active
-                          ? 'bg-accent text-[#0F0E0C] font-semibold shadow-md'
+                          ? 'bg-accent text-on-accent font-semibold shadow-md'
                           : 'bg-elevated/60 text-muted hover:text-fg hover:bg-elevated border border-line'
                       }`}
                     >
@@ -177,7 +177,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                     href={project.demo}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-accent text-[#0F0E0C] text-xs font-mono font-semibold hover:bg-accent-soft transition-colors press-effect"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-accent text-on-accent text-xs font-mono font-semibold hover:bg-accent-soft transition-colors press-effect"
                   >
                     Launch Live Demo <ExternalLink size={14} />
                   </a>

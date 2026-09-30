@@ -48,17 +48,23 @@ export default function CyberTerminal({ isOpen, onClose }) {
 
   // Init terminal on open
   useEffect(() => {
-    if (isOpen) {
-      soundFX.playSciFi();
+    if (!isOpen) {
+      abortRef.current?.abort();
+      return undefined;
+    }
+    soundFX.playSciFi();
+    const frame = requestAnimationFrame(() => {
       setHistory([
         { text: isMobile ? ASCII_BANNER_COMPACT : ASCII_BANNER_FULL, type: 'banner' },
         { text: "Type 'help' for commands, or just ask me anything.", type: 'sys' },
         { text: `[AI Engine: Online | ${remaining()}/${DAILY_LIMIT} queries remaining]`, type: 'sys' },
       ]);
-      setTimeout(() => inputRef.current?.focus(), 150);
-    } else {
-      abortRef.current?.abort();
-    }
+    });
+    const focusTimer = setTimeout(() => inputRef.current?.focus(), 150);
+    return () => {
+      cancelAnimationFrame(frame);
+      clearTimeout(focusTimer);
+    };
   }, [isOpen, isMobile]);
 
   // Auto-scroll

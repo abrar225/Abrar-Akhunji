@@ -14,23 +14,23 @@
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500&amp;family=Instrument+Sans:ital,wght@0,400..600;1,400..600&amp;family=Instrument+Serif:ital@0;1&amp;family=Syne:wght@500..800&amp;display=swap" rel="stylesheet" />
         <style>
           :root {
-            --bg-canvas: #0F0E0C;
-            --bg-surface: #17150F;
-            --bg-elevated: #211D15;
-            --text-fg: #F4F1EA;
-            --text-muted: #8A8578;
-            --text-faint: #57534A;
-            --border-line: rgba(244, 241, 234, 0.12);
-            --color-accent: #FF5A1F;
-            --color-accent-soft: #FF7A45;
+            --bg-canvas: #070B12;
+            --bg-surface: #101722;
+            --bg-elevated: #182232;
+            --text-fg: #E8EEF6;
+            --text-muted: #8B9BB0;
+            --text-faint: #5C6B80;
+            --border-line: rgba(186, 208, 232, 0.14);
+            --color-accent: #79D0E0;
+            --color-accent-soft: #A9E4EE;
             --color-emerald: #10B981;
-            --font-display: 'Space Grotesk', -apple-system, sans-serif;
-            --font-serif: 'Fraunces', Georgia, serif;
-            --font-mono: 'JetBrains Mono', monospace;
-            --font-body: 'Inter', -apple-system, sans-serif;
+            --font-display: 'Syne', 'Instrument Sans', sans-serif;
+            --font-serif: 'Instrument Serif', Georgia, serif;
+            --font-mono: 'DM Mono', ui-monospace, monospace;
+            --font-body: 'Instrument Sans', sans-serif;
           }
 
           * {
@@ -65,10 +65,10 @@
             font-family: var(--font-mono);
             font-size: 0.75rem;
             color: var(--color-accent);
-            background: rgba(255, 90, 31, 0.1);
+            background: rgba(121, 208, 224, 0.1);
             padding: 0.35rem 0.85rem;
             border-radius: 9999px;
-            border: 1px solid rgba(255, 90, 31, 0.25);
+            border: 1px solid rgba(121, 208, 224, 0.25);
             text-transform: uppercase;
             letter-spacing: 0.08em;
             margin-bottom: 1.25rem;
@@ -262,12 +262,12 @@
           }
 
           tbody tr {
-            border-bottom: 1px solid rgba(244, 241, 234, 0.05);
+            border-bottom: 1px solid rgba(186, 208, 232, 0.06);
             transition: background 0.15s ease;
           }
 
           tbody tr:hover {
-            background: rgba(255, 90, 31, 0.03);
+            background: rgba(121, 208, 224, 0.05);
           }
 
           tbody tr:last-child {
@@ -321,9 +321,9 @@
           }
 
           .badge-blog {
-            background: rgba(255, 90, 31, 0.12);
+            background: rgba(121, 208, 224, 0.12);
             color: var(--color-accent);
-            border: 1px solid rgba(255, 90, 31, 0.25);
+            border: 1px solid rgba(121, 208, 224, 0.28);
           }
 
           .priority-meter {
