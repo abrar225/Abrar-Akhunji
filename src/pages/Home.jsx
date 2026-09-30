@@ -223,19 +223,9 @@ export default function App() {
 
             <main id="main-content" className="relative z-10">
               <section id="home" className="relative min-h-[100svh] overflow-hidden">
-                <div className="ascii-stage absolute inset-0" aria-hidden="true">
-                  <Suspense fallback={null}>
-                    <ThreeBackground theme={theme} seekRef={seekRef} onPhase={onPhase} />
-                  </Suspense>
-                </div>
-
-                <div className="pointer-events-auto absolute z-20 left-6 top-[70%] max-w-[calc(100%-3rem)] [text-shadow:0_1px_0_var(--color-canvas)] lg:left-auto lg:right-14 lg:top-28 lg:max-w-[320px]">
-                  <SimReadout sim={sim} seekRef={seekRef} />
-                </div>
-
-                <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-12 pt-28 pb-16 lg:pb-32 min-h-[100svh] flex flex-col justify-start lg:justify-end">
-                  <div className="max-w-3xl">
-                    <div className="hero-kicker flex flex-wrap items-center gap-x-5 gap-y-2 mb-7 text-[11px] font-mono tracking-[0.18em] uppercase text-muted">
+                <div className="max-w-[1440px] mx-auto px-5 sm:px-6 md:px-12 pt-16 sm:pt-24 lg:pt-28 pb-24 lg:pb-32 min-h-[100svh] flex flex-col justify-start lg:justify-end">
+                  <div className="relative z-10 max-w-3xl">
+                    <div className="hero-kicker flex flex-wrap items-center gap-x-4 sm:gap-x-5 gap-y-1.5 mb-2.5 sm:mb-5 md:mb-7 text-[10px] sm:text-[11px] font-mono tracking-[0.18em] uppercase text-muted">
                       <span className="inline-flex items-center gap-2 text-accent">
                         <span className="status-dot w-1.5 h-1.5 rounded-full bg-accent" />
                         Open to work
@@ -257,38 +247,53 @@ export default function App() {
                       <SplitText text="Systems." type="word" trigger="mount" delay={0.42} as="span" className="block" />
                     </h1>
 
-                    <p className="hero-lead mt-6 md:mt-8 max-w-xl text-base md:text-[1.125rem] text-muted leading-relaxed">
+                    <p className="hero-lead mt-3 sm:mt-6 md:mt-8 max-w-xl text-[0.88rem] sm:text-base md:text-[1.125rem] text-muted leading-[1.52] sm:leading-relaxed">
                       I bridge the gap between <span className="hl-mark">complex AI models</span> and{' '}
                       <span className="hl-mark">scalable web architectures</span> — building the next generation of{' '}
                       <span className="hl-mark">intelligent digital products</span>.
                     </p>
 
-                    <div className="hero-actions mt-6 md:mt-8 flex flex-wrap items-center gap-3">
+                    <div className="hero-actions mt-3.5 sm:mt-7 md:mt-8 flex flex-wrap items-center gap-1.5 sm:gap-3">
                       <motion.a
                         href="#work"
                         onClick={(e) => scrollToId(e, '#work')}
                         initial="rest"
                         whileHover="hover"
-                        className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-accent text-on-accent text-sm font-medium press-effect"
+                        className="inline-flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-5 py-2.5 sm:py-3 rounded-full bg-accent text-on-accent text-[12.5px] sm:text-sm font-medium press-effect"
                       >
-                        Selected works <ArrowNudge size={16} />
+                        Selected works <ArrowNudge size={15} />
                       </motion.a>
                       <a
                         href={RESUME}
                         target="_blank"
                         rel="noopener noreferrer"
                         data-cursor="Resume"
-                        className="inline-flex items-center gap-2 px-5 py-3 rounded-full border border-line text-fg text-sm font-medium hover:border-accent transition-colors press-effect"
+                        className="inline-flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-5 py-2.5 sm:py-3 rounded-full border border-line text-fg text-[12.5px] sm:text-sm font-medium hover:border-accent transition-colors press-effect"
                       >
-                        <Download size={15} /> Resume
+                        <Download size={14} /> Resume
                       </a>
                       <a
                         href="#contact"
                         onClick={(e) => scrollToId(e, '#contact')}
-                        className="inline-flex items-center px-3 py-3 text-sm text-fg/80 hover:text-fg transition-colors"
+                        className="inline-flex items-center px-2 sm:px-3 py-2.5 sm:py-3 text-[12.5px] sm:text-sm text-fg/80 hover:text-fg transition-colors"
                       >
                         Contact
                       </a>
+                    </div>
+                  </div>
+
+                  <div className="relative mt-4 sm:mt-7 w-full lg:static lg:mt-0">
+                    <div className="pointer-events-auto relative z-20 mb-1.5 max-w-full [text-shadow:0_1px_0_var(--color-canvas)] lg:mb-0 lg:absolute lg:right-14 lg:top-28 lg:max-w-[320px]">
+                      <SimReadout sim={sim} seekRef={seekRef} />
+                    </div>
+
+                    <div
+                      className="ascii-stage relative -mx-5 sm:-mx-6 md:-mx-12 h-[240px] sm:h-[320px] md:h-[370px] w-[calc(100%+2.5rem)] sm:w-[calc(100%+3rem)] md:w-[calc(100%+6rem)] lg:absolute lg:inset-0 lg:mx-0 lg:h-full lg:w-full"
+                      aria-hidden="true"
+                    >
+                      <Suspense fallback={null}>
+                        <ThreeBackground theme={theme} seekRef={seekRef} onPhase={onPhase} />
+                      </Suspense>
                     </div>
                   </div>
                 </div>

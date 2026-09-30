@@ -38,24 +38,40 @@ function limit(vx, vy, vz, max) {
 }
 
 function makeFish(i, count) {
-  const lane = i - (count - 1) / 2;
-  const gap = count <= 3 ? 0.56 : 0.34;
-  const depths = count <= 3 ? [-0.32, -0.64, -0.96] : [-0.24, -0.46, -0.7, -0.92, -0.4];
-  const homeX = lane * gap;
-  const homeY = depths[i] ?? -0.6;
+  const dir = i === 0 ? 1 : i === 1 ? -1 : (Math.random() < 0.5 ? 1 : -1);
+  const spread = count <= 1 ? 0 : (i / (count - 1) - 0.5) * 1.45;
+  const x = clamp(spread + (Math.random() - 0.5) * 0.36, -0.88, 0.88);
+  const y = clamp(-0.18 - ((i * 0.27 + Math.random() * 0.25) % 0.76), -0.96, -0.14);
+  const z = (Math.random() - 0.5) * 0.68;
+  const spd = 0.26 + Math.random() * 0.16;
+  const vx = dir * spd;
+  const vy = (Math.random() - 0.5) * 0.14;
+  const vz = (Math.random() - 0.5) * 0.16;
+  const wpX = clamp(x + dir * (0.48 + Math.random() * 0.65), -0.94, 0.94);
+  const wpY = -0.14 - Math.random() * 0.8;
+  const wpZ = (Math.random() - 0.5) * 0.76;
   return {
-    x: homeX,
-    y: homeY,
-    z: (hash(i + 5) - 0.5) * 0.2,
-    vx: 0.18,
-    vy: 0,
-    vz: 0.02,
-    seed: hash(i + 12),
+    x,
+    y,
+    z,
+    vx,
+    vy,
+    vz,
+    faceX: vx,
+    faceY: vy,
+    faceZ: vz,
+    wpX,
+    wpY,
+    wpZ,
+    speedMul: 0.85 + Math.random() * 0.65,
+    nextDecision: 0.9 + Math.random() * 1.8,
+    burstX: 0,
+    burstY: 0,
+    burstZ: 0,
+    seed: Math.random() * 0.7 + hash(i + 12) * 0.3,
     kind: 'fish',
-    heading: 0,
+    heading: Math.atan2(vz, vx),
     bank: 0,
-    homeX,
-    homeY,
   };
 }
 
@@ -121,8 +137,8 @@ function updateAttitude(agent, dt) {
 }
 
 function boundRange(value, min, max) {
-  if (value < min) return (min - value) * 2.4;
-  if (value > max) return (max - value) * 2.4;
+  if (value < min) return (min - value) * 2.8;
+  if (value > max) return (max - value) * 2.8;
   return 0;
 }
 
@@ -130,13 +146,6 @@ function stepFish(agent, flock, other, dt, cursor, time) {
   let sx = 0;
   let sy = 0;
   let sz = 0;
-  let ax = 0;
-  let ay = 0;
-  let az = 0;
-  let cx = 0;
-  let cy = 0;
-  let cz = 0;
-  let n = 0;
 
   for (let i = 0; i < flock.length; i += 1) {
     const o = flock[i];
@@ -145,85 +154,179 @@ function stepFish(agent, flock, other, dt, cursor, time) {
     const dy = agent.y - o.y;
     const dz = agent.z - o.z;
     const d = Math.hypot(dx, dy, dz);
-    if (d < 1.35 && d > 1e-4) {
-      if (d < 0.9) {
-        sx += dx / d;
-        sy += dy / d;
-        sz += dz / d;
-      }
-      ax += o.vx;
-      ay += o.vy;
-      az += o.vz;
-      cx += o.x;
-      cy += o.y;
-      cz += o.z;
-      n += 1;
+    if (d < 0.44 && d > 1e-4) {
+      const rep = (1 - d / 0.44) * 1.65;
+      sx += (dx / d) * rep;
+      sy += (dy / d) * rep;
+      sz += (dz / d) * rep;
     }
   }
 
-  let fx = sx * 2.2;
-  let fy = sy * 2.2;
-  let fz = sz * 2.2;
-  if (n > 0) {
-    fx += (ax / n - agent.vx) * 0.4;
-    fy += (ay / n - agent.vy) * 0.4;
-    fz += (az / n - agent.vz) * 0.4;
-    fx += (cx / n - agent.x) * 0.04;
-    fy += (cy / n - agent.y) * 0.04;
-    fz += (cz / n - agent.z) * 0.04;
+  let fx = sx;
+  let fy = sy;
+  let fz = sz;
+
+  agent.nextDecision -= dt;
+  const wdx = agent.wpX - agent.x;
+  const wdy = agent.wpY - agent.y;
+  const wdz = agent.wpZ - agent.z;
+  const wd = Math.hypot(wdx, wdy, wdz);
+
+  if (agent.nextDecision <= 0 || wd < 0.18) {
+    const roll = Math.random();
+    const curDir = agent.vx >= 0 ? 1 : -1;
+    if (roll < 0.35) {
+      // 1. Direction Reversal / U-Turn (~35% chance)
+      const revDir = -curDir;
+      let nextX = agent.x + revDir * (0.55 + Math.random() * 0.78);
+      if (nextX > 0.94 || nextX < -0.94) nextX = revDir * (0.35 + Math.random() * 0.55);
+      agent.wpX = clamp(nextX, -0.94, 0.94);
+      agent.wpY = -0.12 - Math.random() * 0.82;
+      agent.wpZ = (agent.z >= 0 ? -1 : 1) * (0.18 + Math.random() * 0.26);
+      agent.speedMul = 0.95 + Math.random() * 0.55;
+      agent.burstX = revDir * (0.32 + Math.random() * 0.24);
+      agent.burstY = (Math.random() - 0.5) * 0.24;
+      agent.burstZ = (agent.wpZ - agent.z) * 0.65;
+      agent.nextDecision = 1.05 + Math.random() * 1.85;
+    } else if (roll < 0.60) {
+      // 2. Playful Dart / Diagonal Burst (~25% chance)
+      const dartDir = Math.random() < 0.48 ? -curDir : curDir;
+      let nextX = agent.x + dartDir * (0.52 + Math.random() * 0.82);
+      if (nextX > 0.94 || nextX < -0.94) nextX = -dartDir * (0.4 + Math.random() * 0.5);
+      agent.wpX = clamp(nextX, -0.94, 0.94);
+      agent.wpY = clamp(agent.y + (Math.random() - 0.5) * 0.68, -0.96, -0.1);
+      agent.wpZ = (Math.random() - 0.5) * 0.84;
+      agent.speedMul = 1.5 + Math.random() * 0.35;
+      agent.burstX = Math.sign(agent.wpX - agent.x || dartDir) * (0.44 + Math.random() * 0.28);
+      agent.burstY = (agent.wpY - agent.y) * 0.85;
+      agent.burstZ = (agent.wpZ - agent.z) * 0.65;
+      agent.nextDecision = 0.9 + Math.random() * 1.4;
+    } else {
+      // 3. Curved Meander / Depth Glide (~40% chance)
+      let nextX = (Math.random() - 0.5) * 1.84;
+      if (Math.abs(nextX - agent.x) < 0.42) {
+        nextX = clamp(-agent.x + (Math.random() - 0.5) * 0.5, -0.94, 0.94);
+      }
+      agent.wpX = nextX;
+      agent.wpY = -0.1 - Math.random() * 0.86;
+      agent.wpZ = (Math.random() - 0.5) * 0.84;
+      agent.speedMul = 0.68 + Math.random() * 0.72;
+      agent.burstX = Math.sign(agent.wpX - agent.x || 1) * 0.18;
+      agent.burstY = (Math.random() - 0.5) * 0.18;
+      agent.burstZ = (Math.random() - 0.5) * 0.18;
+      agent.nextDecision = 1.25 + Math.random() * 1.95;
+    }
   }
 
+  const decay = Math.exp(-dt * 2.6);
+  agent.burstX *= decay;
+  agent.burstY *= decay;
+  agent.burstZ *= decay;
+
+  const targetDx = agent.wpX - agent.x;
+  const targetDy = agent.wpY - agent.y;
+  const targetDz = agent.wpZ - agent.z;
+  const targetDist = Math.max(0.08, Math.hypot(targetDx, targetDy, targetDz));
+  const desiredSpeed = 0.34 * (agent.speedMul || 1);
+  const desVx = (targetDx / targetDist) * desiredSpeed;
+  const desVy = (targetDy / targetDist) * desiredSpeed;
+  const desVz = (targetDz / targetDist) * desiredSpeed;
+
+  fx += (desVx - agent.vx) * 2.7 + agent.burstX * 2.2;
+  fy += (desVy - agent.vy) * 2.7 + agent.burstY * 2.2;
+  fz += (desVz - agent.vz) * 2.3 + agent.burstZ * 2.0;
+
+  // Multi-frequency 3D turbulence so trajectories curve organically
+  const w1 = time * 1.43 + agent.seed * 19.7;
+  const w2 = time * 2.31 + agent.seed * 37.1;
+  fx += Math.sin(w1) * 0.24 + Math.cos(w2 * 0.83) * 0.15;
+  fy += Math.cos(w1 * 1.17) * 0.18 + Math.sin(w2 * 1.37) * 0.12;
+  fz += Math.sin(w1 * 0.79 + 1.4) * 0.18 + Math.cos(w2) * 0.11 - agent.z * 0.35;
+
+  // Dynamic scatter away from diving / rising dolphins
   for (let i = 0; i < other.length; i += 1) {
     const o = other[i];
     const dx = agent.x - o.x;
     const dy = agent.y - o.y;
     const dz = agent.z - o.z;
     const d = Math.hypot(dx, dy, dz);
-    if (d < 0.16 && d > 1e-4) {
-      fx += (dx / d) * 0.8;
-      fy += (dy / d) * 0.8;
-      fz += (dz / d) * 0.8;
+    if (d < 0.48 && d > 1e-4) {
+      const push = (1 - d / 0.48) * (o.mode === 'plunge' || o.mode === 'rise' ? 2.8 : 1.6);
+      fx += (dx / d) * push;
+      fy += (dy / d) * push * 0.85;
+      fz += (dz / d) * push;
+      if (d < 0.26) {
+        const escDir = dx >= 0 ? 1 : -1;
+        agent.wpX = clamp(agent.x + escDir * (0.45 + Math.random() * 0.45), -0.94, 0.94);
+        agent.wpY = clamp(agent.y + (dy >= 0 ? 0.22 : -0.25), -0.96, -0.1);
+        agent.speedMul = 1.65;
+        agent.nextDecision = 0.85 + Math.random() * 0.9;
+      }
     }
   }
 
-  fy += (agent.homeY - agent.y) * 2.4;
-  fx += (agent.homeX - agent.x) * 2.2;
-  fx += Math.sin(time * 0.85 + agent.seed * 9) * 0.18;
-  fy += Math.sin(time * 0.7 + agent.seed * 12) * 0.08;
-  fz -= agent.vz * 1.1;
-  fx += (0.18 - agent.vx) * 1.6;
-  fy += boundRange(agent.y, -1.05, 0.02);
-  fz += boundRange(agent.z, -0.55, 0.55);
+  fy += boundRange(agent.y, -1.0, -0.08);
+  fz += boundRange(agent.z, -0.46, 0.46);
 
   if (cursor) {
-    const dx = cursor.x - agent.x;
-    const dy = cursor.y - agent.y;
+    const dx = agent.x - cursor.x;
+    const dy = agent.y - cursor.y;
     const d = Math.hypot(dx, dy) + 0.0001;
-    if (d < 0.9) {
-      const push = d < 0.16 ? -1.25 : 0.42;
-      fx += (dx / d) * push;
-      fy += (dy / d) * push;
-      const swirl = (1 - d / 0.9) * 0.62;
-      fx += (-dy / d) * swirl;
-      fy += (dx / d) * swirl;
+    if (d < 0.75) {
+      const scatter = (1 - d / 0.75) * 2.1;
+      fx += (dx / d) * scatter + (-dy / d) * scatter * 0.45;
+      fy += (dy / d) * scatter + (dx / d) * scatter * 0.35;
+      if (d < 0.32) {
+        agent.wpX = clamp(agent.x + Math.sign(dx || 1) * (0.5 + Math.random() * 0.4), -0.94, 0.94);
+        agent.wpY = clamp(agent.y + Math.sign(dy || -1) * 0.3, -0.96, -0.1);
+        agent.speedMul = 1.65;
+      }
     }
   }
 
-  [fx, fy, fz] = limit(fx, fy, fz, 2.3);
+  [fx, fy, fz] = limit(fx, fy, fz, 2.9);
   const vx = agent.vx + fx * dt;
   const vy = agent.vy + fy * dt;
   const vz = agent.vz + fz * dt;
-  const [lx, ly, lz] = limit(vx, vy, vz, 0.36);
+  const maxSpd = 0.34 * Math.max(1, agent.speedMul || 1);
+  const [lx, ly, lz] = limit(vx, vy, vz, maxSpd);
   agent.vx = lx;
   agent.vy = ly;
   agent.vz = lz;
   agent.x += agent.vx * dt;
   agent.y += agent.vy * dt;
   agent.z += agent.vz * dt;
-  if (agent.x > 0.92) agent.x = 0.92;
-  if (agent.x < -0.92) agent.x = -0.92;
-  if (agent.y > 0.02) agent.y = 0.02;
-  if (agent.y < -1.05) agent.y = -1.05;
+
+  // Soft-bounce and pick inward waypoint at river boundaries
+  if (agent.x > 0.96) {
+    agent.x = 0.96;
+    agent.vx = -Math.abs(agent.vx) * 0.85 - 0.12;
+    agent.wpX = -0.2 - Math.random() * 0.68;
+  } else if (agent.x < -0.96) {
+    agent.x = -0.96;
+    agent.vx = Math.abs(agent.vx) * 0.85 + 0.12;
+    agent.wpX = 0.2 + Math.random() * 0.68;
+  }
+  if (agent.y > -0.06) {
+    agent.y = -0.06;
+    agent.vy = -Math.abs(agent.vy) * 0.75 - 0.05;
+    agent.wpY = -0.28 - Math.random() * 0.6;
+  } else if (agent.y < -1.02) {
+    agent.y = -1.02;
+    agent.vy = Math.abs(agent.vy) * 0.75 + 0.05;
+    agent.wpY = -0.18 - Math.random() * 0.55;
+  }
+  if (agent.z > 0.48 || agent.z < -0.48) {
+    agent.z = clamp(agent.z, -0.48, 0.48);
+    agent.vz = -agent.vz * 0.8;
+    agent.wpZ = -agent.z * (0.5 + Math.random() * 0.4);
+  }
+
+  const faceSmooth = Math.min(1, dt * 7.5);
+  agent.faceX = (agent.faceX ?? agent.vx) + (agent.vx - (agent.faceX ?? agent.vx)) * faceSmooth;
+  agent.faceY = (agent.faceY ?? agent.vy) + (agent.vy - (agent.faceY ?? agent.vy)) * faceSmooth;
+  agent.faceZ = (agent.faceZ ?? agent.vz) + (agent.vz - (agent.faceZ ?? agent.vz)) * faceSmooth;
+
   updateAttitude(agent, dt);
 }
 
@@ -406,11 +509,22 @@ function dolphinPose(time, seed, bend, fin) {
 }
 
 function facingOf(agent) {
+  const fx = agent.faceX ?? agent.vx;
+  const fy = (agent.faceY ?? agent.vy) * 0.72;
+  const fz = (agent.faceZ ?? agent.vz) * 0.52;
+  if (Math.hypot(fx, fy, fz) < 0.04) {
+    return {
+      ...agent,
+      vx: Math.cos(agent.heading || 0) * 0.28,
+      vy: fy,
+      vz: Math.sin(agent.heading || 0) * 0.28,
+    };
+  }
   return {
     ...agent,
-    vx: 0.34,
-    vy: agent.vy * 0.4,
-    vz: agent.vz * 0.3 + 0.02,
+    vx: fx,
+    vy: fy,
+    vz: fz,
   };
 }
 
@@ -479,6 +593,7 @@ export default function FooterAsciiLife({ theme = 'dark' }) {
     const dolphinCount = narrow ? DOLPHIN_N_NARROW : DOLPHIN_N;
     const fish = Array.from({ length: fishCount }, (_, i) => makeFish(i, fishCount));
     const dolphins = Array.from({ length: dolphinCount }, (_, i) => makeDolphin(i, dolphinCount, narrow));
+    canvas.__asciiSim = { fish, dolphins };
     const bubbles = Array.from({ length: narrow ? 10 : 18 }, (_, i) => makeBubble(i));
     const ripples = [];
     const motes = [];

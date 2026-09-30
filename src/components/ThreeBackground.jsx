@@ -218,7 +218,7 @@ export default function ThreeBackground({ theme = 'dark', onPhase, seekRef }) {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const mobile = window.matchMedia('(max-width: 767px)').matches;
     const isDark = theme !== 'light';
-    const count = mobile ? 96 : 180;
+    const count = mobile ? 144 : 180;
     const stages = buildStages(count);
     const maxEdges = stages.reduce((max, stage) => Math.max(max, stage.edges.length / 2), 1);
 
@@ -427,10 +427,11 @@ export default function ThreeBackground({ theme = 'dark', onPhase, seekRef }) {
     const layout = () => {
       const w = mountNode.clientWidth || 1;
       const h = mountNode.clientHeight || 1;
-      const narrow = w < 980;
-      const mid = w >= 1024 && w < 1280;
-      const dpr = Math.min(window.devicePixelRatio || 1, narrow ? 1.15 : 1.35);
+      const narrow = window.innerWidth < 1024;
+      const mid = !narrow && w < 1280;
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.35);
       camera.aspect = w / Math.max(1, h);
+      camera.position.set(0, narrow ? 0.02 : 0.06, narrow ? 3.55 : 6.2);
       camera.updateProjectionMatrix();
       renderer.setPixelRatio(dpr);
       renderer.setSize(w, h, false);
@@ -438,16 +439,16 @@ export default function ThreeBackground({ theme = 'dark', onPhase, seekRef }) {
       const bh = renderer.domElement.height || 1;
       rt.setSize(bw, bh);
       uResolution.value.set(bw, bh);
-      const cell = (narrow ? 8 : 14) * dpr;
+      const cell = (narrow ? (w < 640 ? 9.5 : 11) : 14) * dpr;
       postUniforms.uCell.value = cell;
-      uWidth.value = cell * 0.7;
-      uPoint.value = cell * 0.92;
-      // Phone: the whole schematic sits in the band under the HUD and above the dock.
+      uWidth.value = cell * (narrow ? 0.78 : 0.7);
+      uPoint.value = cell * (narrow ? 1.02 : 0.92);
+      // Mobile/tablet (<1024): centered at large scale inside the dedicated stage box.
       // 1024–1279: shift right so the field clears the hero copy. ≥1280 stays put.
-      const shortPhone = narrow && h < 820;
-      group.scale.setScalar(narrow ? 0.21 : mid ? 0.5 : 0.88);
+      const mobileScale = w < 480 ? 0.68 : w < 768 ? 0.74 : 0.78;
+      group.scale.setScalar(narrow ? mobileScale : mid ? 0.5 : 0.88);
       group.position.x = narrow ? 0 : mid ? 1.62 : 1.18;
-      group.position.y = narrow ? (shortPhone ? -1.14 : -1.04) : mid ? 0.04 : -0.04;
+      group.position.y = narrow ? 0 : mid ? 0.04 : -0.04;
     };
     layout();
     const ro = new ResizeObserver(layout);

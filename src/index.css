@@ -131,6 +131,11 @@ footer[id] {
     letter-spacing: -0.04em;
     font-weight: 640;
 }
+@media (max-width: 767px) {
+    .text-hero {
+        font-size: clamp(2.05rem, 8.4vw, 3.6rem);
+    }
+}
 .hero-lines .split-mask {
     padding-top: 0.06em;
     padding-bottom: 0.14em;
@@ -156,11 +161,6 @@ footer[id] {
 @keyframes hl-wipe {
     from { clip-path: inset(0 100% 0 0 round 3px); }
     to { clip-path: inset(0 0 0 0 round 3px); }
-}
-@media (max-width: 767px) and (max-height: 820px) {
-    .hero-kicker { margin-bottom: 1rem; }
-    .hero-lead,
-    .hero-actions { margin-top: 0.75rem; }
 }
 
 /* Editorial highlights. The solid plate is a section anchor.
@@ -509,8 +509,8 @@ html.light .glass-subtle {
 }
 @media (max-width: 1023px) {
     .ascii-stage {
-        -webkit-mask-image: linear-gradient(180deg, transparent 0%, transparent 74%, #000 77.5%, #000 89.5%, transparent 91.5%, transparent 100%);
-        mask-image: linear-gradient(180deg, transparent 0%, transparent 74%, #000 77.5%, #000 89.5%, transparent 91.5%, transparent 100%);
+        -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 8%, #000 90%, transparent 100%);
+        mask-image: linear-gradient(180deg, transparent 0%, #000 8%, #000 90%, transparent 100%);
     }
 }
 @media (min-width: 1024px) and (max-width: 1279px) {
