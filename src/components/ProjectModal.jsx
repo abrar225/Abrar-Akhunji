@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { X, ExternalLink, Github, Code2, Cpu, CheckCircle2, Layers, Terminal, Sparkles } from 'lucide-react';
+import { X, ExternalLink, Github, Code2, CheckCircle2, Layers } from 'lucide-react';
 
 /**
  * ProjectModal — Interactive glassmorphic modal for deep-diving into
@@ -26,10 +27,10 @@ export default function ProjectModal({ project, isOpen, onClose }) {
 
   if (!project) return null;
 
-  return (
+  const modal = (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 md:p-10 overflow-y-auto">
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6 md:p-10 overflow-y-auto">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -74,9 +75,9 @@ export default function ProjectModal({ project, isOpen, onClose }) {
               </h2>
               <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
                 {[
-                  { id: 'overview', label: 'Overview & Architecture', icon: Layers },
-                  { id: 'features', label: 'Key Features & Specs', icon: CheckCircle2 },
-                  { id: 'tech', label: 'Stack Breakdown', icon: Terminal },
+                  { id: 'overview', label: 'Overview', icon: Layers },
+                  { id: 'features', label: 'Capabilities', icon: CheckCircle2 },
+                  { id: 'tech', label: 'Stack', icon: Code2 },
                 ].map((tab) => {
                   const Icon = tab.icon;
                   const active = activeTab === tab.id;
@@ -113,18 +114,23 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                   </div>
 
                   <div>
-                    <h3 className="text-xs font-mono text-accent uppercase tracking-widest mb-2 flex items-center gap-2">
-                      <Sparkles size={14} /> Deep Dive Summary
-                    </h3>
+                    <h3 className="font-serif italic text-xl text-fg mb-2">The brief</h3>
                     <p className="text-muted text-sm md:text-base leading-relaxed">
                       {project.description}
                     </p>
                   </div>
 
                   {project.architecture && (
-                    <div className="p-5 rounded-xl bg-canvas border border-line font-mono text-xs text-muted leading-relaxed space-y-2">
-                      <p className="text-accent font-semibold">// Architecture &amp; Data Pipeline</p>
-                      <p>{project.architecture}</p>
+                    <div>
+                      <h3 className="font-serif italic text-xl text-fg mb-3">How it is built</h3>
+                      <ol className="border-t border-line">
+                        {project.architecture.split('->').map((step) => step.trim()).filter(Boolean).map((step, i) => (
+                          <li key={step} className="grid grid-cols-[2.5rem_1fr] gap-3 py-3 border-b border-line">
+                            <span className="font-mono text-[11px] text-accent pt-0.5">{String(i + 1).padStart(2, '0')}</span>
+                            <span className="text-sm text-fg leading-snug">{step}</span>
+                          </li>
+                        ))}
+                      </ol>
                     </div>
                   )}
                 </div>
@@ -132,8 +138,8 @@ export default function ProjectModal({ project, isOpen, onClose }) {
 
               {activeTab === 'features' && (
                 <div className="space-y-4">
-                  <h3 className="text-xs font-mono text-accent uppercase tracking-widest mb-3">
-                    Core Capabilities
+                  <h3 className="font-serif italic text-xl text-fg mb-3">
+                    What it does
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {project.features?.map((feat, i) => (
@@ -151,8 +157,8 @@ export default function ProjectModal({ project, isOpen, onClose }) {
 
               {activeTab === 'tech' && (
                 <div className="space-y-4">
-                  <h3 className="text-xs font-mono text-accent uppercase tracking-widest mb-3">
-                    Technology &amp; Frameworks
+                  <h3 className="font-serif italic text-xl text-fg mb-3">
+                    Materials
                   </h3>
                   <div className="flex flex-wrap gap-2.5">
                     {project.tech?.map((t) => (
@@ -206,4 +212,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
       )}
     </AnimatePresence>
   );
+
+  if (typeof document === 'undefined') return modal;
+  return createPortal(modal, document.body);
 }

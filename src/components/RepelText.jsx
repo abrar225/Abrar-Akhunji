@@ -18,7 +18,7 @@ const MAX_PUSH = 30;  // px max displacement
 const MAX_ROT = 16;   // deg max rotation
 const LERP = 0.16;    // easing toward target (stable, springy)
 
-export default function RepelText({ text = '', className = '', as: Tag = 'div' }) {
+export default function RepelText({ text = '', className = '', as: Tag = 'div', plate = '' }) {
   const ref = useRef(null);
 
   useEffect(() => {
@@ -117,14 +117,36 @@ export default function RepelText({ text = '', className = '', as: Tag = 'div' }
   }, [text]);
 
   const words = text.split(' ');
+  const plateWords = new Set(plate.split(' ').filter(Boolean));
+  const groups = [];
+  for (let i = 0; i < words.length; i += 1) {
+    const marked = plateWords.has(words[i]);
+    const prev = groups[groups.length - 1];
+    if (prev && prev.marked === marked) prev.words.push(words[i]);
+    else groups.push({ marked, words: [words[i]] });
+  }
+  let letterKey = 0;
   return (
     <Tag ref={ref} className={`select-none ${className}`} aria-label={text}>
-      {words.map((w, wi) => (
-        <span key={wi} className="inline-block whitespace-nowrap" aria-hidden="true">
-          {w.split('').map((ch, ci) => (
-            <span key={ci} className="rl inline-block will-change-transform">{ch}</span>
-          ))}
-          {wi < words.length - 1 && <span className="inline-block">&nbsp;</span>}
+      {groups.map((group, gi) => (
+        <span key={`${group.words.join('-')}-${gi}`}>
+          {gi > 0 && <span className="inline-block" aria-hidden="true">&nbsp;</span>}
+          <span
+            className={group.marked ? 'hl-solid inline-block whitespace-nowrap' : 'inline'}
+            aria-hidden="true"
+          >
+            {group.words.map((w, wi) => (
+              <span key={`${w}-${wi}`} className="inline-block whitespace-nowrap">
+                {w.split('').map((ch) => {
+                  letterKey += 1;
+                  return (
+                    <span key={letterKey} className="rl inline-block will-change-transform">{ch}</span>
+                  );
+                })}
+                {wi < group.words.length - 1 && <span className="inline-block">&nbsp;</span>}
+              </span>
+            ))}
+          </span>
         </span>
       ))}
     </Tag>

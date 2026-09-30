@@ -40,7 +40,7 @@ const STACK = [
 function LogoTile({ tech }) {
   const [failed, setFailed] = useState(false);
   return (
-    <div className="group/tile shrink-0 rounded-2xl bg-surface border border-line px-4 py-6 flex flex-col items-center justify-center gap-3 transition-colors duration-300 hover:border-accent/50">
+    <div className="group/tile shrink-0 bg-canvas border border-line px-4 py-5 flex flex-col items-center justify-center gap-3 transition-colors duration-300 hover:bg-surface">
       <div className="h-9 md:h-10 flex items-center justify-center">
         {failed ? (
           <span className="w-9 h-9 rounded-lg bg-elevated text-accent flex items-center justify-center font-display font-bold text-sm">
@@ -84,7 +84,7 @@ export default function VerticalMarquee({ className = '' }) {
   }, []);
 
   return (
-    <div className={`flex gap-3 md:gap-4 h-[460px] sm:h-[560px] md:h-[680px] ${className}`}>
+    <div className={`flex gap-3 md:gap-4 h-full min-h-0 ${className}`}>
       <Column list={colA} dir="up" dur={30} />
       <Column list={colB} dir="down" dur={26} />
     </div>

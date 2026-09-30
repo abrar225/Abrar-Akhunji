@@ -49,17 +49,17 @@ export default function BlogList() {
             <motion.p
               initial={{ opacity: 0, y: 5 }}
               animate={{ opacity: 1, y: 0 }}
-              className="font-mono text-xs text-accent mb-3"
+              className="font-serif italic text-accent text-lg mb-3"
             >
-              ( Blog )
+              Writing
             </motion.p>
             <motion.h1
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-4xl md:text-6xl font-serif text-fg mb-4"
+              className="text-4xl md:text-6xl font-serif text-fg mb-4 leading-[1.05]"
             >
-              The Neural <span className="text-accent">Log.</span>
+              Field notes.
             </motion.h1>
             <motion.p
               initial={{ opacity: 0 }}
@@ -126,38 +126,24 @@ export default function BlogList() {
             ) : (
               blogs.map((blog, i) => (
                 <SectionWrapper key={blog.slug} delay={i * 0.08} className="block group">
-                  <Link to={`/blog/${blog.slug}`} className="block p-6 rounded-2xl border border-line bg-surface hover:border-accent/40 transition-all duration-300 hover:bg-surface/80">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-3">
-                      <div className="flex items-center gap-4 text-xs font-mono text-faint">
-                        <span className="flex items-center gap-1.5"><Calendar size={12} /> {blog.date}</span>
-                        <span className="flex items-center gap-1.5"><Clock size={12} /> {blog.readingTime} min</span>
-                      </div>
-                      <div className="flex gap-2 flex-wrap">
-                        {blog.tags.map((tag) => (
-                          <span key={tag} className="px-2 py-0.5 bg-elevated text-[10px] uppercase tracking-widest rounded-full text-accent font-mono">
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
+                  <Link to={`/blog/${blog.slug}`} className="grid md:grid-cols-12 gap-4 md:gap-8 py-7 border-b border-line">
+                    <div className="md:col-span-3 font-mono text-[11px] tracking-[0.14em] uppercase text-faint pt-1">
+                      <span className="block text-accent mb-2">{String(i + 1).padStart(2, '0')}</span>
+                      <span className="flex items-center gap-1.5"><Calendar size={12} /> {blog.date}</span>
+                      <span className="flex items-center gap-1.5 mt-1"><Clock size={12} /> {blog.readingTime} min</span>
                     </div>
-
-                    <h2 className="text-xl md:text-2xl font-medium text-fg mb-2 group-hover:text-accent transition-colors tracking-tight">
-                      {blog.title}
-                    </h2>
-                    <p className="text-muted text-sm leading-relaxed line-clamp-2">
-                      {blog.description}
-                    </p>
-
-                    {/* Footer: byline + feature indicators */}
-                    <div className="flex items-center justify-between gap-3 mt-4">
-                      <span className="flex items-center gap-1.5 text-[11px] font-mono text-muted">
-                        <User size={12} className="text-accent" />
-                        Written by <span className="text-fg">{blog.author}</span>
-                      </span>
-                      <div className="flex items-center gap-3 text-[10px] font-mono text-faint uppercase tracking-widest">
-                        <span className="flex items-center gap-1">🎧 Audio</span>
-                        {blog.sections.some((s) => s.type === 'eli5') && <span className="flex items-center gap-1">🧒 ELI5</span>}
-                        {blog.sections.some((s) => s.type === 'interactive') && <span className="flex items-center gap-1">🎮 Interactive</span>}
+                    <div className="md:col-span-9">
+                      <h2 className="text-xl md:text-2xl font-display tracking-tight text-fg mb-2 group-hover:text-accent transition-colors">
+                        {blog.title}
+                      </h2>
+                      <p className="text-muted text-sm leading-relaxed line-clamp-2">
+                        {blog.description}
+                      </p>
+                      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-3 text-[11px] font-mono text-faint">
+                        <span className="inline-flex items-center gap-1.5"><User size={12} /> {blog.author}</span>
+                        {blog.tags.slice(0, 3).map((tag) => (
+                          <span key={tag} className="text-accent">{tag}</span>
+                        ))}
                       </div>
                     </div>
                   </Link>

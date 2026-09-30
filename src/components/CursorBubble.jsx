@@ -1,223 +1,142 @@
-import { useEffect, useRef, useCallback } from 'react';
-import { gsap } from 'gsap';
+import { useEffect, useRef } from 'react';
 
 /**
- * CursorBubble — Premium dual-element custom cursor.
- *
- * Three layers that follow the pointer with staggered lag:
- *   1. Inner dot   (8px solid accent)  — near-instant tracking
- *   2. Outer ring  (40px hollow ring)  — smooth trailing, mix-blend-difference
- *   3. Label text  (inside the ring)   — fades in on data-cursor elements
- *
- * Hover states:
- *   - Interactive elements (a, button, …) → ring expands to 60px
- *   - data-cursor="Label" elements       → ring expands to 80px + label shown
- *   - Mousedown                          → squeeze (scale 0.8), spring back
- *   - Mouse leaves window               → both fade out
- *
- * Only active on desktop (hover: hover, pointer: fine). Hidden on mobile/touch.
+ * Studio cursor.
+ * The root tracks the pointer 1:1 (a transform written on every move).
+ * Only the glyph crossfade and the press scale are eased.
+ * Arrow at rest, hand on controls, a solid pill when [data-cursor] is set.
+ * No glow. Native cursor stays on touch and reduced-motion.
  */
 export default function CursorBubble() {
-  const dotRef = useRef(null);
-  const ringRef = useRef(null);
-  const labelRef = useRef(null);
-
-  // Refs for GSAP quickTo functions — created once, reused every frame
-  const quickRefs = useRef({
-    dotX: null, dotY: null,
-    ringX: null, ringY: null,
-  });
-
-  // Track current hover state to avoid redundant GSAP calls
-  const stateRef = useRef('default'); // 'default' | 'hover' | 'label'
-
-  /**
-   * Resolve the cursor label for any hovered element.
-   * Returns { mode, label } or null if the element is not interactive.
-   */
-  const resolve = useCallback((el) => {
-    if (!el?.closest) return null;
-
-    // Explicit data-cursor label (highest priority)
-    const tagged = el.closest('[data-cursor]');
-    if (tagged) {
-      const label = tagged.getAttribute('data-cursor') || 'view';
-      return { mode: 'label', label };
-    }
-
-    // Generic interactive element
-    if (el.closest('a, button, input, textarea, select, [role="button"], [tabindex]')) {
-      return { mode: 'hover', label: '' };
-    }
-
-    return null;
-  }, []);
+  const rootRef = useRef(null);
+  const pillRef = useRef(null);
 
   useEffect(() => {
-    // Gate: only fine-pointer desktop devices
     const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
-    if (!fine.matches) return;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (!fine.matches || reduced.matches) return undefined;
 
-    // Respect reduced-motion: skip custom cursor entirely
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (prefersReduced.matches) return;
+    const root = rootRef.current;
+    const pill = pillRef.current;
+    if (!root || !pill) return undefined;
 
-    const dot = dotRef.current;
-    const ring = ringRef.current;
-    const label = labelRef.current;
-    if (!dot || !ring || !label) return;
-
-    // Hide the native cursor globally
     document.body.classList.add('cursor-none');
 
-    // ── GSAP quickTo for butter-smooth tracking ──
-    const q = quickRefs.current;
-    q.dotX = gsap.quickTo(dot, 'x', { duration: 0.08, ease: 'power2.out' });
-    q.dotY = gsap.quickTo(dot, 'y', { duration: 0.08, ease: 'power2.out' });
-    q.ringX = gsap.quickTo(ring, 'x', { duration: 0.45, ease: 'power2.out' });
-    q.ringY = gsap.quickTo(ring, 'y', { duration: 0.45, ease: 'power2.out' });
-
-    // Initial state
-    gsap.set([dot, ring], { opacity: 0 });
-    gsap.set(label, { opacity: 0, scale: 0.6 });
+    const modeRef = { current: 'arrow' };
+    const labelRef = { current: '' };
+    const downRef = { current: false };
     let visible = false;
 
-    // ── Handlers ──
+    const paint = (x, y) => {
+      root.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+      root.dataset.mode = modeRef.current;
+      root.dataset.down = downRef.current ? '1' : '0';
+      if (modeRef.current === 'pill') pill.dataset.label = labelRef.current;
+    };
 
-    const onMove = (e) => {
-      const cx = e.clientX;
-      const cy = e.clientY;
+    const resolve = (el) => {
+      if (!el?.closest) return null;
+      const tagged = el.closest('[data-cursor]');
+      if (tagged) {
+        return { mode: 'pill', label: tagged.getAttribute('data-cursor') || 'View' };
+      }
+      if (el.closest('a, button, input, textarea, select, summary, label, [role="button"]')) {
+        return { mode: 'hand', label: '' };
+      }
+      return null;
+    };
 
-      q.dotX(cx);
-      q.dotY(cy);
-      q.ringX(cx);
-      q.ringY(cy);
+    const apply = (next) => {
+      const mode = next?.mode || 'arrow';
+      const label = next?.label || '';
+      if (mode === modeRef.current && label === labelRef.current) return;
+      modeRef.current = mode;
+      labelRef.current = label;
+      root.dataset.mode = mode;
+      root.dataset.down = downRef.current ? '1' : '0';
+      if (mode === 'pill') pill.dataset.label = label;
+    };
 
-      // Fade in on first move
+    const onMove = (event) => {
+      paint(event.clientX, event.clientY);
       if (!visible) {
         visible = true;
-        gsap.to(dot, { opacity: 1, duration: 0.3 });
-        gsap.to(ring, { opacity: 1, duration: 0.4 });
+        root.classList.add('is-on');
       }
     };
 
-    const enterState = (mode, text) => {
-      if (stateRef.current === mode && label.textContent === text) return;
-      stateRef.current = mode;
-
-      gsap.killTweensOf(ring, 'width,height,margin,borderWidth');
-      gsap.killTweensOf(label);
-
-      if (mode === 'label') {
-        label.textContent = text;
-        gsap.to(ring, {
-          width: 64, height: 64, margin: -32,
-          borderWidth: 1.5,
-          duration: 0.4, ease: 'back.out(1.2)',
-        });
-        gsap.to(label, {
-          opacity: 1, scale: 1,
-          duration: 0.4, delay: 0.05, ease: 'back.out(1.2)',
-        });
-        gsap.to(dot, { scale: 0.5, opacity: 0.4, duration: 0.3, ease: 'power2.out' });
-      } else if (mode === 'hover') {
-        gsap.to(ring, {
-          width: 48, height: 48, margin: -24,
-          borderWidth: 1.5,
-          duration: 0.4, ease: 'back.out(1.2)',
-        });
-        gsap.to(label, { opacity: 0, scale: 0.6, duration: 0.15 });
-        gsap.to(dot, { scale: 0.6, opacity: 0.5, duration: 0.3, ease: 'power2.out' });
-      }
+    const onOver = (event) => {
+      apply(resolve(event.target));
     };
 
-    const exitState = () => {
-      if (stateRef.current === 'default') return;
-      stateRef.current = 'default';
-
-      gsap.killTweensOf(ring, 'width,height,margin,borderWidth');
-      gsap.killTweensOf(label);
-      gsap.killTweensOf(dot, 'scale,opacity');
-
-      gsap.to(ring, {
-        width: 24, height: 24, margin: -12,
-        borderWidth: 1.5,
-        duration: 0.4, ease: 'back.out(1.2)',
-      });
-      gsap.to(label, { opacity: 0, scale: 0.6, duration: 0.15 });
-      gsap.to(dot, { scale: 1, opacity: 1, duration: 0.3, ease: 'power2.out' });
-    };
-
-    const onOver = (e) => {
-      const result = resolve(e.target);
-      if (result) {
-        enterState(result.mode, result.label);
-      } else if (stateRef.current !== 'default') {
-        exitState();
-      }
-    };
-
-    // Click feedback: squeeze → spring back
     const onDown = () => {
-      gsap.to(dot, { scale: 0.6, duration: 0.1, ease: 'power3.out' });
-      gsap.to(ring, { scale: 0.85, duration: 0.12, ease: 'power3.out' });
+      downRef.current = true;
+      root.dataset.down = '1';
     };
     const onUp = () => {
-      gsap.to(dot, {
-        scale: stateRef.current === 'default' ? 1 : 0.5,
-        duration: 0.4, ease: 'back.out(1.2)',
-      });
-      gsap.to(ring, { scale: 1, duration: 0.4, ease: 'back.out(1.2)' });
+      downRef.current = false;
+      root.dataset.down = '0';
     };
 
-    // Window leave: fade out both
     const onLeave = () => {
       visible = false;
-      gsap.to([dot, ring], { opacity: 0, duration: 0.25 });
-      gsap.to(label, { opacity: 0, duration: 0.15 });
+      root.classList.remove('is-on');
     };
-    const onEnter = () => {
+    const onEnter = (event) => {
       visible = true;
-      gsap.to(dot, { opacity: 1, duration: 0.3 });
-      gsap.to(ring, { opacity: 1, duration: 0.4 });
+      root.classList.add('is-on');
+      paint(event.clientX, event.clientY);
     };
 
-    // ── Bind events ──
-    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mousemove', onMove, { passive: true });
     document.addEventListener('mouseover', onOver);
     document.addEventListener('mousedown', onDown);
     document.addEventListener('mouseup', onUp);
-    document.addEventListener('mouseleave', onLeave);
-    document.addEventListener('mouseenter', onEnter);
+    document.documentElement.addEventListener('mouseleave', onLeave);
+    document.documentElement.addEventListener('mouseenter', onEnter);
 
     return () => {
       window.removeEventListener('mousemove', onMove);
       document.removeEventListener('mouseover', onOver);
       document.removeEventListener('mousedown', onDown);
       document.removeEventListener('mouseup', onUp);
-      document.removeEventListener('mouseleave', onLeave);
-      document.removeEventListener('mouseenter', onEnter);
+      document.documentElement.removeEventListener('mouseleave', onLeave);
+      document.documentElement.removeEventListener('mouseenter', onEnter);
       document.body.classList.remove('cursor-none');
     };
-  }, [resolve]);
+  }, []);
 
   return (
-    <>
-      {/* Inner dot — fast, precise */}
-      <div
-        ref={dotRef}
-        className="cursor-dot hidden md:block"
-        aria-hidden="true"
-      />
-      {/* Outer ring — trailing, breathable */}
-      <div
-        ref={ringRef}
-        className="cursor-ring hidden md:block"
-        aria-hidden="true"
-      >
-        {/* Label — centered inside ring on data-cursor hover */}
-        <span ref={labelRef} className="cursor-label" />
+    <div ref={rootRef} className="cursor-root" aria-hidden="true">
+      <div className="cursor-press">
+        <svg className="cursor-glyph glyph-arrow" viewBox="0 0 24 24" width="20" height="20">
+          <path
+            fill="currentColor"
+            stroke="var(--color-canvas)"
+            strokeWidth="1.25"
+            strokeLinejoin="round"
+            d="M2.2 1.4 L2.2 16.6 L6.7 12.5 L10.2 20.1 L12.9 18.9 L9.3 11.2 L15.2 11 Z"
+          />
+        </svg>
+        <svg className="cursor-glyph glyph-hand" viewBox="0 0 32 32" width="28" height="28">
+          <path
+            className="hand-finger"
+            fill="currentColor"
+            stroke="var(--color-canvas)"
+            strokeWidth="1.25"
+            strokeLinejoin="round"
+            d="M13.1 12.4 V3.6 a1.7 1.7 0 0 1 3.4 0 v9.6 h-3.4 z"
+          />
+          <path
+            fill="currentColor"
+            stroke="var(--color-canvas)"
+            strokeWidth="1.25"
+            strokeLinejoin="round"
+            d="M16.5 13.1 V8.1 a1.55 1.55 0 0 1 3.1 0 v6.4 M19.6 14.4 v-4.1 a1.55 1.55 0 0 1 3.1 0 V16.2 M11.2 12.6 V9.8 a1.55 1.55 0 0 0-3.1 0 v6.7 c0 4.6 2.5 8.1 7.2 8.1 h2.6 c3.8 0 6.4-2.4 6.4-6 V16.2 a1.55 1.55 0 0 0-3.1 0"
+          />
+        </svg>
+        <div ref={pillRef} className="cursor-pill" data-label="" />
       </div>
-    </>
+    </div>
   );
 }

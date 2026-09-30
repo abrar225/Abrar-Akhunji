@@ -1,11 +1,12 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
   Home, User, Layers, Briefcase, Mail, FileText,
-  PenLine, Terminal, Volume2, VolumeX, LayoutGrid, X,
+  PenLine, Volume2, VolumeX, LayoutGrid, X, Cpu,
 } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import Magnetic from './Magnetic';
+import { MotionGlyph } from './icons/motionIcons';
 import { soundFX } from '../lib/soundFX';
 
 const ARC_START_DEG = 5;
@@ -28,7 +29,15 @@ function arcPosition(i, total, radius) {
 /* ═══════════════════════════════════════════════════════════════════
    MobileRadialNav — FAB + arc fan-out (only rendered on < md)
    ═══════════════════════════════════════════════════════════════════ */
-function MobileRadialNav({ onOpenTerminal }) {
+function scrollToId(hash) {
+  const el = document.querySelector(hash);
+  if (!el) return false;
+  if (window.__lenis?.scrollTo) window.__lenis.scrollTo(el, { offset: -72 });
+  else el.scrollIntoView({ behavior: 'smooth' });
+  return true;
+}
+
+function MobileRadialNav() {
   const [isOpen, setIsOpen] = useState(false);
   const prefersReduced = useReducedMotion();
   const [muted, setMuted] = useState(() => soundFX.isMuted());
@@ -52,10 +61,18 @@ function MobileRadialNav({ onOpenTerminal }) {
 
   /* Each item: { icon, label, action() } */
   const items = [
-    { icon: Home, label: 'Home', action: () => { document.querySelector('#home')?.scrollIntoView({ behavior: 'smooth' }); close(); } },
-    { icon: User, label: 'About', action: () => { document.querySelector('#about-me')?.scrollIntoView({ behavior: 'smooth' }); close(); } },
-    { icon: Layers, label: 'Work', action: () => { document.querySelector('#work')?.scrollIntoView({ behavior: 'smooth' }); close(); } },
-    { icon: Briefcase, label: 'Path', action: () => { document.querySelector('#experience')?.scrollIntoView({ behavior: 'smooth' }); close(); } },
+    { icon: Home, label: 'Home', action: () => { scrollToId('#home'); close(); } },
+    { icon: Layers, label: 'Work', action: () => { scrollToId('#work'); close(); } },
+    { icon: Cpu, label: 'Practice', action: () => { scrollToId('#practice'); close(); } },
+    { icon: Briefcase, label: 'Record', action: () => { scrollToId('#experience'); close(); } },
+    { icon: User, label: 'About', action: () => { scrollToId('#about-me'); close(); } },
+    {
+      icon: PenLine, label: 'Notes',
+      action: () => {
+        close();
+        if (!scrollToId('#writing')) setTimeout(() => navigate('/blog'), 150);
+      },
+    },
     {
       icon: FileText, label: 'CV',
       action: () => {
@@ -64,17 +81,9 @@ function MobileRadialNav({ onOpenTerminal }) {
       },
     },
     {
-      icon: Terminal, label: 'CLI',
-      action: () => { close(); setTimeout(() => onOpenTerminal?.(), 150); },
-    },
-    {
       icon: muted ? VolumeX : Volume2,
       label: muted ? 'Unmute' : 'Mute',
-      action: () => { toggleAudio(); /* don't close — let user see the toggle */ },
-    },
-    {
-      icon: PenLine, label: 'Blog',
-      action: () => { close(); setTimeout(() => navigate('/blog'), 150); },
+      action: () => { toggleAudio(); },
     },
     {
       icon: Mail, label: 'Hire',
@@ -164,7 +173,7 @@ function MobileRadialNav({ onOpenTerminal }) {
           type="button"
           aria-label={isOpen ? 'Close navigation' : 'Open navigation'}
           onClick={toggle}
-          className="relative z-[61] pointer-events-auto flex items-center justify-center w-14 h-14 rounded-full bg-accent text-on-accent shadow-[0_0_30px_-5px_var(--color-accent)] mb-4"
+          className="relative z-[61] pointer-events-auto flex items-center justify-center w-14 h-14 rounded-full bg-accent text-on-accent shadow-lg mb-4"
           whileTap={{ scale: 0.97 }}
         >
           <motion.span
@@ -182,8 +191,48 @@ function MobileRadialNav({ onOpenTerminal }) {
 /* ═══════════════════════════════════════════════════════════════════
    DesktopDock — horizontal pill (only rendered on md+, unchanged)
    ═══════════════════════════════════════════════════════════════════ */
-function DesktopDock({ onOpenTerminal }) {
+const PILL = { type: 'spring', bounce: 0, duration: 0.45 };
+
+function DockAnchor({ link, active, onHash }) {
+  const isActive = Boolean(link.id) && link.id === active;
+  return (
+    <motion.a
+      href={link.href}
+      target={link.target || '_self'}
+      rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
+      aria-label={link.label}
+      aria-current={isActive ? 'true' : undefined}
+      initial="rest"
+      whileHover="hover"
+      onMouseEnter={() => soundFX.playHover()}
+      onClick={(event) => {
+        soundFX.playClick();
+        if (link.href.startsWith('#')) {
+          event.preventDefault();
+          onHash(link.href);
+        }
+      }}
+      className={`group relative flex p-3 rounded-full transition-colors duration-300 ${isActive ? 'text-fg' : 'text-muted hover:text-accent'}`}
+    >
+      {isActive && (
+        <motion.span
+          layoutId="dock-pill"
+          className="absolute inset-0 rounded-full bg-elevated"
+          transition={PILL}
+        />
+      )}
+      <MotionGlyph icon={link.icon} active={isActive} />
+      <span className="absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-fg text-canvas rounded text-[10px] font-mono opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+        {link.label}
+      </span>
+    </motion.a>
+  );
+}
+
+function DesktopDock() {
+  const navigate = useNavigate();
   const [muted, setMuted] = useState(() => soundFX.isMuted());
+  const [active, setActive] = useState('home');
 
   const toggleAudio = () => {
     const nextMuted = soundFX.toggleMute();
@@ -191,94 +240,71 @@ function DesktopDock({ onOpenTerminal }) {
     if (!nextMuted) soundFX.playClick();
   };
 
+  useEffect(() => {
+    const ids = ['home', 'work', 'practice', 'experience', 'about-me', 'writing', 'contact'];
+    const nodes = ids.map((id) => document.getElementById(id)).filter(Boolean);
+    if (!nodes.length) return undefined;
+    const ratios = new Map();
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        ratios.set(entry.target.id, entry.isIntersecting ? entry.intersectionRatio : 0);
+      });
+      let best = null;
+      let bestRatio = 0;
+      ratios.forEach((ratio, id) => {
+        if (ratio > bestRatio) {
+          bestRatio = ratio;
+          best = id;
+        }
+      });
+      if (best) setActive(best);
+    }, { rootMargin: '-42% 0px -48% 0px', threshold: [0, 0.2, 0.45, 0.7] });
+    nodes.forEach((node) => observer.observe(node));
+    return () => observer.disconnect();
+  }, []);
+
+  const onHash = (hash) => {
+    const found = scrollToId(hash);
+    if (!found && hash === '#writing') navigate('/blog');
+  };
+
   const links = [
-    { icon: Home, label: 'Home', href: '#home' },
-    { icon: User, label: 'About', href: '#about-me' },
-    { icon: Layers, label: 'Work', href: '#work' },
-    { icon: Briefcase, label: 'Path', href: '#experience' },
+    { icon: Home, label: 'Home', href: '#home', id: 'home' },
+    { icon: Layers, label: 'Work', href: '#work', id: 'work' },
+    { icon: Cpu, label: 'Practice', href: '#practice', id: 'practice' },
+    { icon: Briefcase, label: 'Record', href: '#experience', id: 'experience' },
+    { icon: User, label: 'About', href: '#about-me', id: 'about-me' },
+    { icon: PenLine, label: 'Notes', href: '#writing', id: 'writing' },
     {
       icon: FileText,
       label: 'Resume',
       href: 'https://drive.google.com/file/d/1dV5ukxF-i-9JcWCaxsbQljNwL7Dni8Jc/view?usp=sharing',
       target: '_blank',
     },
-    { icon: Mail, label: 'Contact', href: '#contact' },
+    { icon: Mail, label: 'Contact', href: '#contact', id: 'contact' },
   ];
 
   return (
     <div className="fixed bottom-7 left-1/2 -translate-x-1/2 z-[60] max-w-max pb-[env(safe-area-inset-bottom,0px)] mb-[env(safe-area-inset-bottom,0px)]">
-      <nav className="flex items-center justify-center gap-1 px-3 py-2 glass border-white/[0.12] rounded-full shadow-2xl">
-        {links.map((link, idx) => (
-          <Magnetic as="span" key={idx} strength={0.4} className="inline-block">
-            <a
-              href={link.href}
-              target={link.target || '_self'}
-              rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
-              aria-label={link.label}
-              onMouseEnter={() => soundFX.playHover()}
-              onClick={(e) => {
-                soundFX.playClick();
-                if (link.href.startsWith('#')) {
-                  e.preventDefault();
-                  document.querySelector(link.href)?.scrollIntoView({ behavior: 'smooth' });
-                }
-              }}
-              className="group relative flex p-3 rounded-full text-muted hover:text-accent hover:bg-elevated transition-colors duration-300"
-            >
-              <link.icon size={17} />
-              <span className="absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-fg text-canvas rounded text-[10px] font-mono opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-                {link.label}
-              </span>
-            </a>
-          </Magnetic>
+      <nav className="flex items-center justify-center gap-1 px-3 py-2 glass border-white/[0.12] rounded-full shadow-2xl" aria-label="Sections">
+        {links.map((link) => (
+          <DockAnchor key={link.label} link={link} active={active} onHash={onHash} />
         ))}
         <div className="w-px h-6 bg-line mx-1" />
-        <Magnetic as="span" strength={0.4} className="inline-block">
-          <button
-            type="button"
-            onClick={() => {
-              soundFX.playClick();
-              onOpenTerminal?.();
-            }}
-            onMouseEnter={() => soundFX.playHover()}
-            aria-label="FixO CLI Terminal"
-            className="group relative flex p-3 rounded-full text-muted hover:text-accent hover:bg-elevated transition-colors duration-300 cursor-pointer"
-          >
-            <Terminal size={17} />
-            <span className="absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-fg text-canvas rounded text-[10px] font-mono opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-              CLI Mode (~ / Cmd+K)
-            </span>
-          </button>
-        </Magnetic>
-        <Magnetic as="span" strength={0.4} className="inline-block">
-          <button
-            type="button"
-            onClick={toggleAudio}
-            onMouseEnter={() => soundFX.playHover()}
-            aria-label="Toggle Sound Effects"
-            className="group relative flex p-3 rounded-full text-muted hover:text-accent hover:bg-elevated transition-colors duration-300 cursor-pointer"
-          >
-            {muted ? <VolumeX size={17} /> : <Volume2 size={17} />}
-            <span className="absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-fg text-canvas rounded text-[10px] font-mono opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-              {muted ? 'Unmute SFX' : 'Mute SFX'}
-            </span>
-          </button>
-        </Magnetic>
-        <div className="w-px h-6 bg-line mx-1" />
-        <Magnetic as="span" strength={0.4} className="inline-block">
-          <Link
-            to="/blog"
-            aria-label="Blog"
-            onMouseEnter={() => soundFX.playHover()}
-            onClick={() => soundFX.playClick()}
-            className="group relative flex p-3 rounded-full text-muted hover:text-accent hover:bg-elevated transition-colors duration-300"
-          >
-            <PenLine size={17} />
-            <span className="absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-fg text-canvas rounded text-[10px] font-mono opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-              Blog
-            </span>
-          </Link>
-        </Magnetic>
+        <motion.button
+          type="button"
+          onClick={toggleAudio}
+          onMouseEnter={() => soundFX.playHover()}
+          aria-label="Toggle Sound Effects"
+          initial="rest"
+          whileHover="hover"
+          className="group relative flex p-3 rounded-full text-muted hover:text-accent transition-colors duration-300 cursor-pointer"
+        >
+          <MotionGlyph icon={muted ? VolumeX : Volume2} />
+          <span className="absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-fg text-canvas rounded text-[10px] font-mono opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+            {muted ? 'Unmute SFX' : 'Mute SFX'}
+          </span>
+        </motion.button>
         <div className="w-px h-6 bg-line mx-1" />
         <Magnetic as="span" strength={0.4} className="inline-block">
           <a
@@ -299,14 +325,12 @@ function DesktopDock({ onOpenTerminal }) {
 /* ═══════════════════════════════════════════════════════════════════
    FloatingDock — renders the right nav for each breakpoint
    ═══════════════════════════════════════════════════════════════════ */
-const FloatingDock = ({ onOpenTerminal }) => {
+const FloatingDock = () => {
   return (
     <>
-      {/* Mobile: radial arc navigation */}
-      <MobileRadialNav onOpenTerminal={onOpenTerminal} />
-      {/* Desktop/tablet: horizontal pill dock */}
+      <MobileRadialNav />
       <div className="hidden md:block">
-        <DesktopDock onOpenTerminal={onOpenTerminal} />
+        <DesktopDock />
       </div>
     </>
   );
