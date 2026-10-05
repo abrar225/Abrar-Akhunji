@@ -431,7 +431,7 @@ export default function ThreeBackground({ theme = 'dark', onPhase, seekRef }) {
       const mid = !narrow && w < 1280;
       const dpr = Math.min(window.devicePixelRatio || 1, 1.35);
       camera.aspect = w / Math.max(1, h);
-      camera.position.set(0, narrow ? 0.02 : 0.06, narrow ? 3.55 : 6.2);
+      camera.position.set(0, narrow ? 0 : 0.06, narrow ? 3.15 : 6.2);
       camera.updateProjectionMatrix();
       renderer.setPixelRatio(dpr);
       renderer.setSize(w, h, false);
@@ -439,13 +439,13 @@ export default function ThreeBackground({ theme = 'dark', onPhase, seekRef }) {
       const bh = renderer.domElement.height || 1;
       rt.setSize(bw, bh);
       uResolution.value.set(bw, bh);
-      const cell = (narrow ? (w < 640 ? 9.5 : 11) : 14) * dpr;
+      const cell = (narrow ? (w < 640 ? 9 : 11) : 14) * dpr;
       postUniforms.uCell.value = cell;
       uWidth.value = cell * (narrow ? 0.78 : 0.7);
       uPoint.value = cell * (narrow ? 1.02 : 0.92);
       // Mobile/tablet (<1024): centered at large scale inside the dedicated stage box.
       // 1024–1279: shift right so the field clears the hero copy. ≥1280 stays put.
-      const mobileScale = w < 480 ? 0.68 : w < 768 ? 0.74 : 0.78;
+      const mobileScale = w < 480 ? 0.72 : w < 768 ? 0.76 : 0.78;
       group.scale.setScalar(narrow ? mobileScale : mid ? 0.5 : 0.88);
       group.position.x = narrow ? 0 : mid ? 1.62 : 1.18;
       group.position.y = narrow ? 0 : mid ? 0.04 : -0.04;
