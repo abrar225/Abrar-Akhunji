@@ -592,6 +592,11 @@ export default function FooterAsciiLife({ theme = 'dark' }) {
     const fish = Array.from({ length: fishCount }, (_, i) => makeFish(i, fishCount));
     const dolphins = Array.from({ length: dolphinCount }, (_, i) => makeDolphin(i, dolphinCount, narrow));
     canvas.__asciiSim = { fish, dolphins };
+    if (typeof window !== 'undefined') {
+      window.__riverSnapshot = () => fish.map((f) => ({
+        x: f.x, y: f.y, z: f.z, vx: f.vx, vy: f.vy, vz: f.vz,
+      }));
+    }
     const bubbles = Array.from({ length: narrow ? 10 : 18 }, (_, i) => makeBubble(i));
     const ripples = [];
     const motes = [];

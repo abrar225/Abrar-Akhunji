@@ -67,7 +67,7 @@ function SimReadout({ sim, seekRef }) {
   const phase = PHASES[sim.index] || PHASES[0];
   return (
     <div>
-      <p data-sim-phase={sim.index} aria-live="polite" className="font-mono text-[10px] tracking-[0.14em] uppercase text-fg/85 whitespace-nowrap">
+      <p data-sim-phase={sim.index} aria-live="polite" className="font-mono text-[9px] min-[380px]:text-[10px] tracking-[0.12em] min-[380px]:tracking-[0.14em] uppercase text-fg/85 whitespace-nowrap">
         <span className="text-accent">[0{sim.index + 1}/03]</span>
         <span className="ml-2">{phase}</span>
       </p>
@@ -284,7 +284,7 @@ export default function App() {
 
                   <div className="relative mt-6 sm:mt-8 w-full lg:static lg:mt-0">
                     <div
-                      className="ascii-stage relative -mx-5 sm:-mx-6 md:-mx-12 h-[270px] sm:h-[330px] md:h-[380px] w-[calc(100%+2.5rem)] sm:w-[calc(100%+3rem)] md:w-[calc(100%+6rem)] lg:absolute lg:inset-0 lg:mx-0 lg:h-full lg:w-full"
+                      className="ascii-stage relative -mx-5 sm:-mx-6 md:-mx-12 h-[270px] [@media(max-height:720px)]:h-[222px] sm:h-[330px] md:h-[380px] w-[calc(100%+2.5rem)] sm:w-[calc(100%+3rem)] md:w-[calc(100%+6rem)] lg:absolute lg:inset-0 lg:mx-0 lg:h-full lg:w-full"
                       aria-hidden="true"
                     >
                       <Suspense fallback={null}>
