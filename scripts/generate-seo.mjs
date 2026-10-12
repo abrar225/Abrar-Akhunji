@@ -516,6 +516,248 @@ const prerenderedBlogList = `
 fs.writeFileSync(path.join(blogOutDir, 'index.html'), blogListHtml);
 console.log(`✓ Blog List SEO Page: /blog`);
 
+// 3.5. Generate Pre-rendered Homepage for AI Assistants & Non-JS Crawlers
+const prerenderedHomepage = `
+  <main class="pre-rendered-portfolio" style="max-width:1050px;margin:0 auto;padding:3rem 1.5rem;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.7;color:#E8EEF6;background:#070B12;">
+    <header role="banner" style="margin-bottom:3rem;border-bottom:1px solid #1F2937;padding-bottom:2.5rem;">
+      <h1 style="font-size:2.75rem;line-height:1.2;margin:0 0 0.5rem 0;color:#F9FAFB;letter-spacing:-0.02em;">Abrar Akhunji</h1>
+      <p style="font-size:1.35rem;color:#79D0E0;margin:0 0 1rem 0;font-weight:600;">AI/ML Engineer &amp; Full-Stack Systems Developer</p>
+      <p style="font-size:1.1rem;color:#9CA3AF;max-width:850px;margin:0 0 1.5rem 0;">
+        Building production-ready systems spanning autonomous AI developer tooling, full-scale food delivery platforms, and healthcare computer vision models. Gujarat, India &bull; Open to Work.
+      </p>
+      <nav aria-label="Quick links" style="display:flex;gap:1.25rem;flex-wrap:wrap;font-size:0.95rem;">
+        <a href="#projects" style="color:#79D0E0;text-decoration:none;font-weight:500;">Featured Projects &darr;</a>
+        <a href="#skills" style="color:#79D0E0;text-decoration:none;font-weight:500;">Technical Skills &darr;</a>
+        <a href="#experience" style="color:#79D0E0;text-decoration:none;font-weight:500;">Experience &darr;</a>
+        <a href="/blog" style="color:#79D0E0;text-decoration:none;font-weight:500;">Neural Log (Blog) &rarr;</a>
+        <a href="/llms.txt" style="color:#79D0E0;text-decoration:none;font-weight:500;">AI Dossier (/llms.txt) &rarr;</a>
+        <a href="mailto:moabrarakhunji@gmail.com" style="color:#79D0E0;text-decoration:none;font-weight:500;">moabrarakhunji@gmail.com</a>
+      </nav>
+    </header>
+
+    <section id="about" style="margin-bottom:3.5rem;">
+      <h2 style="font-size:1.85rem;color:#F9FAFB;border-bottom:1px solid #1F2937;padding-bottom:0.75rem;margin-bottom:1.25rem;">About &amp; Systems Philosophy</h2>
+      <p style="color:#D1D5DB;font-size:1.05rem;margin-bottom:1rem;">
+        Abrar Akhunji is a Senior AI/ML Engineer and Full-Stack Systems Developer pursuing a B.E. in Information Technology at Kalol Institute of Technology &amp; Research Center. He specializes in designing robust architectures where deep learning intelligence tightly couples with production web backends.
+      </p>
+      <p style="color:#D1D5DB;font-size:1.05rem;margin-bottom:1rem;">
+        His work spans autonomous coding agent loops (FixO CLI), high-concurrency event-driven delivery platforms (GourmetGo), agricultural vision transformers (Cattle Breed ID), and clinical medical imaging diagnostics (Brain Tumor MRI detection).
+      </p>
+    </section>
+
+    <section id="projects" style="margin-bottom:3.5rem;">
+      <h2 style="font-size:1.85rem;color:#F9FAFB;border-bottom:1px solid #1F2937;padding-bottom:0.75rem;margin-bottom:1.5rem;">Featured Engineering Systems</h2>
+      
+      <article style="background:#0D1117;border:1px solid #1F2937;border-radius:12px;padding:2rem;margin-bottom:2rem;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.75rem;">
+          <h3 style="font-size:1.5rem;color:#F9FAFB;margin:0;">FixO CLI — Autonomous AI Coding Platform</h3>
+          <span style="background:#1E293B;color:#79D0E0;padding:0.25rem 0.75rem;border-radius:999px;font-size:0.8rem;font-weight:600;">AI DEVTOOL &bull; 2026</span>
+        </div>
+        <p style="color:#D1D5DB;font-size:1rem;margin-bottom:1rem;">
+          An autonomous, open-source AI coding platform that lives in your terminal. FixO connects 20+ free LLM providers directly to your codebase to fix bugs, refactor code, run tests, and install packages without browser round-trips or API billing hurdles.
+        </p>
+        <div style="background:#111827;border-left:3px solid #79D0E0;padding:0.75rem 1rem;margin-bottom:1rem;font-family:monospace;font-size:0.9rem;color:#A5F3FC;">
+          <strong>Architecture:</strong> Terminal CLI Engine (Node.js) &rarr; Tree-Sitter AST Workspace Indexer &rarr; Multi-Provider LLM Router (FreeLLMAPI) &rarr; Shadow Staging &amp; LSP Syntax Verifier &rarr; Autonomous Test Loop.
+        </div>
+        <ul style="color:#9CA3AF;margin-bottom:1.25rem;padding-left:1.25rem;">
+          <li>Multi-AI router across 20+ free providers with automatic failover and load balancing.</li>
+          <li>Self-correcting autonomous test execution loop that iterates until test suites pass.</li>
+          <li>Atomic shadow staging, LSP pre-save syntax checks, and credential scrubbing vault.</li>
+          <li>Tree-Sitter AST workspace indexing for JavaScript, TypeScript, Python, and Go.</li>
+        </ul>
+        <div style="margin-bottom:1rem;">
+          <strong style="color:#E5E7EB;font-size:0.9rem;">Tech Stack:</strong>
+          <span style="color:#9CA3AF;font-size:0.9rem;"> Node.js, SQLite, Tree-Sitter, LSP, MCP, Ollama</span>
+        </div>
+        <div>
+          <a href="https://github.com/abrar225/FixO" style="color:#79D0E0;margin-right:1.5rem;text-decoration:none;">GitHub Repository &rarr;</a>
+          <a href="https://fixo.firehox.com/" style="color:#79D0E0;text-decoration:none;">Live Platform Demo &rarr;</a>
+        </div>
+      </article>
+
+      <article style="background:#0D1117;border:1px solid #1F2937;border-radius:12px;padding:2rem;margin-bottom:2rem;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.75rem;">
+          <h3 style="font-size:1.5rem;color:#F9FAFB;margin:0;">GourmetGo — Multi-Portal Food Delivery Ecosystem</h3>
+          <span style="background:#1E293B;color:#79D0E0;padding:0.25rem 0.75rem;border-radius:999px;font-size:0.8rem;font-weight:600;">FULL STACK &bull; 2026</span>
+        </div>
+        <p style="color:#D1D5DB;font-size:1rem;margin-bottom:1rem;">
+          A production-scale food ordering and delivery ecosystem featuring four synchronized modules: Customer, Restaurant Vendor, Delivery Rider, and Master Admin panel.
+        </p>
+        <div style="background:#111827;border-left:3px solid #79D0E0;padding:0.75rem 1rem;margin-bottom:1rem;font-family:monospace;font-size:0.9rem;color:#A5F3FC;">
+          <strong>Architecture:</strong> Next.js 14 Client App &rarr; Django 5.0 REST API Backend &rarr; Redis / WebSockets (Django Channels) &rarr; Razorpay Gateway &rarr; Cloudinary Asset Management.
+        </div>
+        <ul style="color:#9CA3AF;margin-bottom:1.25rem;padding-left:1.25rem;">
+          <li>Real-time live order tracking and push notifications powered by Django Channels &amp; Redis.</li>
+          <li>End-to-end payment processing with Razorpay integration (UPI and COD support).</li>
+          <li>Browser geolocation-based restaurant discovery within a dynamic 15km operational radius.</li>
+          <li>Comprehensive administrator dashboard for vendor onboarding, payout reconciliation, and system metrics.</li>
+        </ul>
+        <div style="margin-bottom:1rem;">
+          <strong style="color:#E5E7EB;font-size:0.9rem;">Tech Stack:</strong>
+          <span style="color:#9CA3AF;font-size:0.9rem;"> Next.js 14, React, Django 5.0, Django Channels, Redis, Razorpay, Tailwind CSS</span>
+        </div>
+        <div>
+          <a href="https://github.com/abrar225/GourmetGo" style="color:#79D0E0;margin-right:1.5rem;text-decoration:none;">GitHub Repository &rarr;</a>
+          <a href="https://gourmet-go.vercel.app/" style="color:#79D0E0;text-decoration:none;">Live Platform &rarr;</a>
+        </div>
+      </article>
+
+      <article style="background:#0D1117;border:1px solid #1F2937;border-radius:12px;padding:2rem;margin-bottom:2rem;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.75rem;">
+          <h3 style="font-size:1.5rem;color:#F9FAFB;margin:0;">Cattle Breed Identification System</h3>
+          <span style="background:#1E293B;color:#79D0E0;padding:0.25rem 0.75rem;border-radius:999px;font-size:0.8rem;font-weight:600;">AI / COMPUTER VISION &bull; 2025</span>
+        </div>
+        <p style="color:#D1D5DB;font-size:1rem;margin-bottom:1rem;">
+          An ensemble-based computer vision tool capable of accurately classifying 41 indigenous Indian cattle breeds using Vision Transformers (ViT) and fine-grained feature extraction.
+        </p>
+        <div style="background:#111827;border-left:3px solid #79D0E0;padding:0.75rem 1rem;margin-bottom:1rem;font-family:monospace;font-size:0.9rem;color:#A5F3FC;">
+          <strong>Architecture:</strong> Gradio Web Interface &rarr; Vision Transformer (ViT) Backbone &rarr; Softmax 41-Class Classification Head &rarr; Real-time Inference Engine.
+        </div>
+        <div style="margin-bottom:1rem;">
+          <strong style="color:#E5E7EB;font-size:0.9rem;">Tech Stack:</strong>
+          <span style="color:#9CA3AF;font-size:0.9rem;"> Python, OpenCV, Vision Transformers (ViT), PyTorch, Gradio</span>
+        </div>
+        <div>
+          <a href="https://github.com/abrar225/AI_cattle_vison" style="color:#79D0E0;margin-right:1.5rem;text-decoration:none;">GitHub Repository &rarr;</a>
+          <a href="https://huggingface.co/spaces/abrar225/BreedAI" style="color:#79D0E0;text-decoration:none;">HuggingFace Space Demo &rarr;</a>
+        </div>
+      </article>
+
+      <article style="background:#0D1117;border:1px solid #1F2937;border-radius:12px;padding:2rem;margin-bottom:2rem;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.75rem;">
+          <h3 style="font-size:1.5rem;color:#F9FAFB;margin:0;">Brain Tumor Detection (MRI)</h3>
+          <span style="background:#1E293B;color:#79D0E0;padding:0.25rem 0.75rem;border-radius:999px;font-size:0.8rem;font-weight:600;">HEALTHCARE AI &bull; 2024</span>
+        </div>
+        <p style="color:#D1D5DB;font-size:1rem;margin-bottom:1rem;">
+          Clinical diagnostic computer vision model trained on medical MRI imaging datasets to identify brain neoplasms with high sensitivity using morphological filtering, contour extraction, and classifier pipelines.
+        </p>
+        <div style="background:#111827;border-left:3px solid #79D0E0;padding:0.75rem 1rem;margin-bottom:1rem;font-family:monospace;font-size:0.9rem;color:#A5F3FC;">
+          <strong>Architecture:</strong> MRI Scan Ingestion &rarr; Grayscale Masking &amp; Adaptive Thresholding &rarr; Morphological Contour Analysis &rarr; Feature Vector &rarr; Tumor Classification.
+        </div>
+        <div style="margin-bottom:1rem;">
+          <strong style="color:#E5E7EB;font-size:0.9rem;">Tech Stack:</strong>
+          <span style="color:#9CA3AF;font-size:0.9rem;"> Python, OpenCV, NumPy, Pandas, Scikit-Learn</span>
+        </div>
+        <div>
+          <a href="https://github.com/abrar225/Brain-Tumer-Detection-System" style="color:#79D0E0;text-decoration:none;">GitHub Repository &rarr;</a>
+        </div>
+      </article>
+
+      <article style="background:#0D1117;border:1px solid #1F2937;border-radius:12px;padding:2rem;margin-bottom:2rem;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.75rem;">
+          <h3 style="font-size:1.5rem;color:#F9FAFB;margin:0;">Real vs AI Image Detector</h3>
+          <span style="background:#1E293B;color:#79D0E0;padding:0.25rem 0.75rem;border-radius:999px;font-size:0.8rem;font-weight:600;">FORENSICS &bull; 2025</span>
+        </div>
+        <p style="color:#D1D5DB;font-size:1rem;margin-bottom:1rem;">
+          Image forensics and deep learning pipeline designed to distinguish authentic photographic images from diffusion- and GAN-generated synthetic artifacts.
+        </p>
+        <div>
+          <a href="https://github.com/abrar225/Real-vs-AI-Image-Detector" style="color:#79D0E0;text-decoration:none;">GitHub Repository &rarr;</a>
+        </div>
+      </article>
+
+      <article style="background:#0D1117;border:1px solid #1F2937;border-radius:12px;padding:2rem;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.75rem;">
+          <h3 style="font-size:1.5rem;color:#F9FAFB;margin:0;">Library Management System</h3>
+          <span style="background:#1E293B;color:#79D0E0;padding:0.25rem 0.75rem;border-radius:999px;font-size:0.8rem;font-weight:600;">FULL STACK &bull; 2025</span>
+        </div>
+        <p style="color:#D1D5DB;font-size:1rem;margin-bottom:1rem;">
+          High-performance relational library automation system handling physical cataloging, patron loan records, and fine assessment computations.
+        </p>
+        <div>
+          <a href="https://github.com/abrar225/Library-Management-System" style="color:#79D0E0;text-decoration:none;">GitHub Repository &rarr;</a>
+        </div>
+      </article>
+    </section>
+
+    <section id="skills" style="margin-bottom:3.5rem;">
+      <h2 style="font-size:1.85rem;color:#F9FAFB;border-bottom:1px solid #1F2937;padding-bottom:0.75rem;margin-bottom:1.5rem;">Technical Skills Matrix</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem;">
+        <div style="background:#0D1117;border:1px solid #1F2937;border-radius:8px;padding:1.5rem;">
+          <h3 style="color:#79D0E0;font-size:1.15rem;margin:0 0 0.5rem 0;">AI &amp; Data Science</h3>
+          <p style="color:#9CA3AF;margin:0;font-size:0.95rem;">Python, TensorFlow, PyTorch, OpenCV, Vision Transformers, NumPy, Pandas, Scikit-Learn, Deep Learning</p>
+        </div>
+        <div style="background:#0D1117;border:1px solid #1F2937;border-radius:8px;padding:1.5rem;">
+          <h3 style="color:#79D0E0;font-size:1.15rem;margin:0 0 0.5rem 0;">Full-Stack &amp; Frameworks</h3>
+          <p style="color:#9CA3AF;margin:0;font-size:0.95rem;">React, Next.js, Django, Django Channels, WebSockets, REST APIs, JavaScript, TypeScript, Tailwind CSS</p>
+        </div>
+        <div style="background:#0D1117;border:1px solid #1F2937;border-radius:8px;padding:1.5rem;">
+          <h3 style="color:#79D0E0;font-size:1.15rem;margin:0 0 0.5rem 0;">Databases &amp; Caching</h3>
+          <p style="color:#9CA3AF;margin:0;font-size:0.95rem;">Redis, MySQL, SQLite, Firebase Firestore, Cloudinary</p>
+        </div>
+        <div style="background:#0D1117;border:1px solid #1F2937;border-radius:8px;padding:1.5rem;">
+          <h3 style="color:#79D0E0;font-size:1.15rem;margin:0 0 0.5rem 0;">Developer Tooling</h3>
+          <p style="color:#9CA3AF;margin:0;font-size:0.95rem;">Git, GitHub, Linux, Docker, Vite, Three.js, GSAP, Lenis, AST Indexing</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="experience" style="margin-bottom:3.5rem;">
+      <h2 style="font-size:1.85rem;color:#F9FAFB;border-bottom:1px solid #1F2937;padding-bottom:0.75rem;margin-bottom:1.5rem;">Professional Experience &amp; Internships</h2>
+      <div style="margin-bottom:1.5rem;border-left:2px solid #79D0E0;padding-left:1.25rem;">
+        <h3 style="font-size:1.25rem;color:#F9FAFB;margin:0;">Full-Stack Python Intern &bull; BrainyBeam IT Solutions</h3>
+        <span style="color:#79D0E0;font-size:0.875rem;">JAN 2026 — MAR 2026</span>
+        <p style="color:#9CA3AF;margin:0.5rem 0 0 0;">Advanced Django architecture, enterprise Python ecosystems, database design, and asynchronous API integrations.</p>
+      </div>
+      <div style="margin-bottom:1.5rem;border-left:2px solid #79D0E0;padding-left:1.25rem;">
+        <h3 style="font-size:1.25rem;color:#F9FAFB;margin:0;">Python Django Intern &bull; BrainyBeam IT Solutions</h3>
+        <span style="color:#79D0E0;font-size:0.875rem;">JUL 2025</span>
+        <p style="color:#9CA3AF;margin:0.5rem 0 0 0;">Focused on backend REST API creation, authentication flows, and relational schema management.</p>
+      </div>
+      <div style="border-left:2px solid #79D0E0;padding-left:1.25rem;">
+        <h3 style="font-size:1.25rem;color:#F9FAFB;margin:0;">Web Developer &amp; Designer Intern</h3>
+        <span style="color:#79D0E0;font-size:0.875rem;">JUN 2024 — AUG 2024</span>
+        <p style="color:#9CA3AF;margin:0.5rem 0 0 0;">Crafted responsive frontend interfaces and interactive web components.</p>
+      </div>
+    </section>
+
+    <section id="education" style="margin-bottom:3.5rem;">
+      <h2 style="font-size:1.85rem;color:#F9FAFB;border-bottom:1px solid #1F2937;padding-bottom:0.75rem;margin-bottom:1.5rem;">Education &amp; Credentials</h2>
+      <ul style="list-style:none;padding:0;color:#D1D5DB;">
+        <li style="margin-bottom:1rem;">
+          <strong>Bachelor of Engineering in Information Technology:</strong> Kalol Institute of Technology &amp; Research Center (Aug 2023 — Present)
+        </li>
+        <li style="margin-bottom:1rem;">
+          <strong>Diploma in Information Technology:</strong> Government Polytechnic, Himmatnagar (2020 — 2023)
+        </li>
+        <li style="margin-bottom:1rem;">
+          <strong>Google Cybersecurity Professional Certificate:</strong> 8-course credential issued by Google (Coursera)
+        </li>
+        <li style="margin-bottom:1rem;">
+          <strong>GUNIpreneur Bootcamp:</strong> 2nd Runner Up for Most Innovative Idea (Ganpat University SSIP)
+        </li>
+        <li>
+          <strong>Smart India Hackathon:</strong> National participant in system engineering track
+        </li>
+      </ul>
+    </section>
+
+    <footer id="contact" role="contentinfo" style="border-top:1px solid #1F2937;padding-top:2.5rem;color:#9CA3AF;">
+      <h2 style="font-size:1.5rem;color:#F9FAFB;margin:0 0 1rem 0;">Connect &amp; Verify</h2>
+      <p style="margin-bottom:1.5rem;">
+        Email: <a href="mailto:moabrarakhunji@gmail.com" style="color:#79D0E0;">moabrarakhunji@gmail.com</a> &bull;
+        LinkedIn: <a href="https://linkedin.com/in/abrar-akhunji/" style="color:#79D0E0;">linkedin.com/in/abrar-akhunji/</a> &bull;
+        GitHub: <a href="https://github.com/abrar225" style="color:#79D0E0;">github.com/abrar225</a> &bull;
+        X (Twitter): <a href="https://x.com/Abrarakhunji" style="color:#79D0E0;">@Abrarakhunji</a>
+      </p>
+      <div style="background:#0D1117;border:1px solid #1F2937;border-radius:8px;padding:1rem;font-size:0.9rem;">
+        <strong>Machine-Readable Endpoints for AI Systems:</strong><br />
+        &bull; <a href="/llms.txt" style="color:#79D0E0;">/llms.txt</a> (Standard summary dossier)<br />
+        &bull; <a href="/llms-full.txt" style="color:#79D0E0;">/llms-full.txt</a> (Comprehensive markdown knowledge base)<br />
+        &bull; <a href="/sitemap.xml" style="color:#79D0E0;">/sitemap.xml</a> (Search and crawler index)
+      </div>
+      <p style="font-size:0.8rem;margin-top:1.5rem;color:#6B7280;">
+        &copy; 2026 Abrar Akhunji. All rights reserved.
+      </p>
+    </footer>
+  </main>
+`;
+
+let homepageHtml = fs.readFileSync(indexPath, 'utf-8');
+homepageHtml = homepageHtml.replace('<div id="root"></div>', `<div id="root">${prerenderedHomepage}</div>`);
+fs.writeFileSync(indexPath, homepageHtml);
+console.log(`✓ Homepage Pre-rendered with High-Density Semantic Shell: /index.html`);
+
 /** Helper to strictly escape XML special characters */
 function escapeXml(unsafe) {
   if (!unsafe) return '';
