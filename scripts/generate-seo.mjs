@@ -911,6 +911,12 @@ User-agent: ChatGPT-User
 Allow: /
 
 # Anthropic / Claude
+User-agent: Claude-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
 User-agent: ClaudeBot
 Allow: /
 
