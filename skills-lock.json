@@ -61,6 +61,12 @@
       "skillPath": "seo-geo/implement/geo-content-optimizer/SKILL.md",
       "computedHash": "fac3450697379f21b599abb658377b5661ba22278f8d53e8261ac579ca182d46"
     },
+    "gravitas": {
+      "source": "udaysharmadev/Gravitas",
+      "sourceType": "github",
+      "skillPath": "skills/gravitas/SKILL.md",
+      "computedHash": "e0675fce101522d4c080017bf40921b4d3bb30d8283d44240a1d4717f033cb47"
+    },
     "keyword-research": {
       "source": "aaron-he-zhu/aaron-marketing-skills",
       "sourceType": "github",
