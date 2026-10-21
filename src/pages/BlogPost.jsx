@@ -321,6 +321,23 @@ export default function BlogPost() {
               <Clock size={14} className="text-accent" /> {blog.readingTime} min read
             </span>
           </motion.div>
+
+          {/* Hero Image */}
+          {blog.heroImage && (
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.35, duration: 0.5 }}
+              className="mt-8 rounded-2xl overflow-hidden border border-line shadow-2xl bg-surface aspect-video"
+            >
+              <img
+                src={blog.heroImage}
+                alt={blog.title}
+                className="w-full h-full object-cover"
+                loading="eager"
+              />
+            </motion.div>
+          )}
         </div>
 
         {/* ── Control Panel (Audio + Mode Toggle) ── */}
