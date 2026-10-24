@@ -3,7 +3,12 @@ import path from 'node:path';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
-const tus = require('/Users/abrarakhunji/.npm/_npx/a7204b5813574340/node_modules/tus-js-client/lib.es5/node/index.js');
+let tus;
+try {
+  tus = require('/Users/abrarakhunji/.npm/_npx/4f48705995aa9bbd/node_modules/tus-js-client');
+} catch {
+  tus = require('tus-js-client');
+}
 
 const DOMAIN = 'abrarakhunji.com';
 const ARCHIVE_PATH = path.resolve('dist.zip');
@@ -120,40 +125,53 @@ async function main() {
     console.log('Pre-upload initialization OK.');
   }
 
-  // 4. Upload with tus.Upload
+  // 4. Upload with tus.Upload (with auto-retry wrapper)
   console.log('Uploading archive via TUS...');
-  const fileStream = fs.createReadStream(ARCHIVE_PATH);
+  const fileBuffer = fs.readFileSync(ARCHIVE_PATH);
 
-  await new Promise((resolve, reject) => {
-    let lastPercent = 0;
-    const upload = new tus.Upload(fileStream, {
-      uploadUrl: uploadUrlWithFile,
-      retryDelays: [1000, 2000, 4000, 8000, 16000, 20000],
-      uploadDataDuringCreation: false,
-      parallelUploads: 1,
-      chunkSize: 5242880, // 5MB chunks
-      headers: requestHeaders,
-      removeFingerprintOnSuccess: true,
-      uploadSize: stats.size,
-      metadata: { filename: archiveBasename },
-      onProgress: (bytesUploaded, bytesTotal) => {
-        const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(1);
-        if (Math.abs(percentage - lastPercent) >= 5 || bytesUploaded === bytesTotal) {
-          console.log(`[Upload] ${percentage}% (${(bytesUploaded / 1024 / 1024).toFixed(2)} / ${(bytesTotal / 1024 / 1024).toFixed(2)} MB)`);
-          lastPercent = percentage;
-        }
-      },
-      onError: (err) => {
-        reject(new Error(`TUS upload error: ${err.message}`));
-      },
-      onSuccess: () => {
-        console.log('TUS upload completed successfully!');
-        resolve();
+  async function performUpload(attempt = 1) {
+    try {
+      await new Promise((resolve, reject) => {
+        let lastPercent = 0;
+        const upload = new tus.Upload(fileBuffer, {
+          uploadUrl: uploadUrlWithFile,
+          retryDelays: [0, 1000, 3000, 5000, 10000, 20000],
+          uploadDataDuringCreation: false,
+          parallelUploads: 1,
+          chunkSize: 2097152, // 2MB chunks for stability
+          headers: requestHeaders,
+          removeFingerprintOnSuccess: true,
+          uploadSize: stats.size,
+          metadata: { filename: archiveBasename },
+          onProgress: (bytesUploaded, bytesTotal) => {
+            const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(1);
+            if (Math.abs(percentage - lastPercent) >= 5 || bytesUploaded === bytesTotal) {
+              console.log(`[Upload] ${percentage}% (${(bytesUploaded / 1024 / 1024).toFixed(2)} / ${(bytesTotal / 1024 / 1024).toFixed(2)} MB)`);
+              lastPercent = percentage;
+            }
+          },
+          onError: (err) => {
+            reject(err);
+          },
+          onSuccess: () => {
+            console.log('TUS upload completed successfully!');
+            resolve();
+          }
+        });
+
+        upload.start();
+      });
+    } catch (err) {
+      if (attempt < 4) {
+        console.warn(`[Upload Retry] Attempt ${attempt} failed: ${err.message}. Retrying in 5s...`);
+        await new Promise(r => setTimeout(r, 5000));
+        return performUpload(attempt + 1);
       }
-    });
+      throw err;
+    }
+  }
 
-    upload.start();
-  });
+  await performUpload();
 
   // 5. Trigger deployment
   console.log(`Triggering deployment on Hostinger for ${DOMAIN}...`);
