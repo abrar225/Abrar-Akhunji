@@ -87,7 +87,7 @@ function MobileRadialNav() {
     },
     {
       icon: Mail, label: 'Hire',
-      action: () => { window.location.href = 'mailto:abrar@abrarakhunji.com'; close(); },
+      action: () => { close(); navigate('/hire/'); },
       accent: true,
     },
   ];
@@ -308,10 +308,10 @@ function DesktopDock() {
         <div className="w-px h-6 bg-line mx-1" />
         <Magnetic as="span" strength={0.4} className="inline-block">
           <a
-            href="mailto:abrar@abrarakhunji.com"
-            data-cursor="Say hi"
+            href="/hire/"
+            data-cursor="Hire"
             onMouseEnter={() => soundFX.playHover()}
-            onClick={() => soundFX.playClick()}
+            onClick={(event) => { event.preventDefault(); soundFX.playClick(); navigate('/hire/'); }}
             className="block px-4 py-2 bg-accent text-on-accent rounded-full text-sm font-semibold hover:bg-accent-soft transition-colors"
           >
             Hire Me

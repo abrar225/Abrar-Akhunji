@@ -1,33 +1,45 @@
+#!/usr/bin/env node
+/**
+ * Deploys dist/ to Hostinger through their hosting API.
+ *
+ * Requires the credentials file created by the Hostinger MCP flow:
+ *   ~/.config/hostinger-mcp/credentials.json
+ * Override with HOSTINGER_CREDENTIALS. The domain defaults to
+ * abrarakhunji.com and can be overridden with HOSTINGER_DOMAIN.
+ *
+ * The archive is created locally from dist/ on every run, so there is no
+ * stale dist.zip to deploy by accident.
+ */
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
+import { execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
-let tus;
-try {
-  tus = require('/Users/abrarakhunji/.npm/_npx/4f48705995aa9bbd/node_modules/tus-js-client');
-} catch {
-  tus = require('tus-js-client');
-}
+const tusModule = require('tus-js-client');
+const TusUpload = tusModule.Upload || tusModule.default?.Upload || tusModule;
 
-const DOMAIN = 'abrarakhunji.com';
+const DOMAIN = process.env.HOSTINGER_DOMAIN || 'abrarakhunji.com';
+const DIST_DIR = path.resolve('dist');
 const ARCHIVE_PATH = path.resolve('dist.zip');
-const CREDENTIALS_PATH = '/Users/abrarakhunji/.config/hostinger-mcp/credentials.json';
+const CREDENTIALS_PATH = process.env.HOSTINGER_CREDENTIALS
+  || path.join(os.homedir(), '.config/hostinger-mcp/credentials.json');
 const BASE_URL = 'https://developers.hostinger.com/';
 const AUTH_URL = 'https://auth.hostinger.com/api/external/v1/oauth-server/token';
 
 async function getValidToken() {
   if (!fs.existsSync(CREDENTIALS_PATH)) {
-    throw new Error(`Credentials file not found at ${CREDENTIALS_PATH}`);
+    throw new Error(`Hostinger credentials not found at ${CREDENTIALS_PATH}. Set HOSTINGER_CREDENTIALS or complete the Hostinger auth flow.`);
   }
   const creds = JSON.parse(fs.readFileSync(CREDENTIALS_PATH, 'utf8'));
-  
-  if (creds.access_token && creds.expires_at && Date.now() < (creds.expires_at - 60000)) {
-    console.log('[Auth] Using active access token.');
+
+  if (creds.access_token && creds.expires_at && Date.now() < (creds.expires_at - 60_000)) {
+    console.log('[auth] Using active access token.');
     return creds.access_token;
   }
 
-  console.log('[Auth] Token expired or expiring soon, refreshing...');
+  console.log('[auth] Refreshing access token...');
   const params = new URLSearchParams();
   params.set('grant_type', 'refresh_token');
   params.set('refresh_token', creds.refresh_token);
@@ -36,172 +48,112 @@ async function getValidToken() {
   const res = await fetch(AUTH_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: params.toString()
+    body: params.toString(),
   });
-
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Token refresh failed with status ${res.status}: ${text}`);
-  }
+  if (!res.ok) throw new Error(`Token refresh failed (${res.status}): ${await res.text()}`);
 
   const data = await res.json();
-  const newCreds = {
+  const next = {
     client_id: creds.client_id,
     access_token: data.access_token,
     refresh_token: data.refresh_token,
-    expires_at: Date.now() + (data.expires_in - 60) * 1000
+    expires_at: Date.now() + (data.expires_in - 60) * 1000,
   };
-  fs.writeFileSync(CREDENTIALS_PATH, JSON.stringify(newCreds, null, 2));
-  console.log('[Auth] Successfully refreshed access token.');
-  return newCreds.access_token;
+  fs.writeFileSync(CREDENTIALS_PATH, JSON.stringify(next, null, 2));
+  console.log('[auth] Access token refreshed.');
+  return next.access_token;
+}
+
+function createArchive() {
+  if (!fs.existsSync(path.join(DIST_DIR, 'index.html'))) {
+    throw new Error('dist/index.html is missing. Run `npm run build` first.');
+  }
+  if (fs.existsSync(ARCHIVE_PATH)) fs.unlinkSync(ARCHIVE_PATH);
+  execFileSync('zip', ['-rq', ARCHIVE_PATH, '.'], { cwd: DIST_DIR });
+  const size = fs.statSync(ARCHIVE_PATH).size;
+  console.log(`[archive] ${path.basename(ARCHIVE_PATH)} (${(size / 1024 / 1024).toFixed(2)} MB)`);
+  return size;
+}
+
+async function uploadArchive(archiveSize, uploadUrl, authToken, authRestToken) {
+  const archiveName = path.basename(ARCHIVE_PATH);
+  const uploadUrlWithFile = `${uploadUrl.replace(/\/$/, '')}/${archiveName}?override=true`;
+  const headers = {
+    'X-Auth': authToken,
+    'X-Auth-Rest': authRestToken,
+    'upload-length': String(archiveSize),
+    'upload-offset': '0',
+  };
+
+  const preRes = await fetch(uploadUrlWithFile, { method: 'POST', headers });
+  if (preRes.status !== 201) {
+    console.warn(`[upload] Pre-upload returned ${preRes.status}; continuing with TUS.`);
+  }
+
+  const fileBuffer = fs.readFileSync(ARCHIVE_PATH);
+  await new Promise((resolve, reject) => {
+    const upload = new TusUpload(fileBuffer, {
+      uploadUrl: uploadUrlWithFile,
+      retryDelays: [0, 1000, 3000, 5000, 10000, 20000],
+      uploadDataDuringCreation: false,
+      parallelUploads: 1,
+      chunkSize: 2 * 1024 * 1024,
+      headers,
+      removeFingerprintOnSuccess: true,
+      uploadSize: archiveSize,
+      metadata: { filename: archiveName },
+      onProgress: (uploaded, total) => {
+        const percent = ((uploaded / total) * 100).toFixed(1);
+        if (percent.endsWith('.0') || uploaded === total) {
+          console.log(`[upload] ${percent}%`);
+        }
+      },
+      onError: reject,
+      onSuccess: resolve,
+    });
+    upload.start();
+  });
+  return archiveName;
 }
 
 async function main() {
-  console.log(`Starting deployment for domain: ${DOMAIN}`);
-  if (!fs.existsSync(ARCHIVE_PATH)) {
-    throw new Error(`Archive not found at ${ARCHIVE_PATH}`);
-  }
-  const stats = fs.statSync(ARCHIVE_PATH);
-  console.log(`Archive file: ${ARCHIVE_PATH} (${(stats.size / 1024 / 1024).toFixed(2)} MB)`);
-
+  const archiveSize = createArchive();
   const token = await getValidToken();
 
-  // 1. Resolve username
-  console.log(`Resolving username for ${DOMAIN}...`);
-  const sitesUrl = new URL(`api/hosting/v1/websites?domain=${encodeURIComponent(DOMAIN)}`, BASE_URL).toString();
-  const sitesRes = await fetch(sitesUrl, {
-    headers: { 'Authorization': `Bearer ${token}` }
-  });
-  if (!sitesRes.ok) {
-    throw new Error(`Failed to resolve username: ${sitesRes.status} ${await sitesRes.text()}`);
-  }
-  const sitesData = await sitesRes.json();
-  const username = sitesData.data?.[0]?.username;
-  if (!username) {
-    throw new Error(`Username not found in response: ${JSON.stringify(sitesData)}`);
-  }
-  console.log(`Resolved username: ${username}`);
+  const sitesRes = await fetch(
+    new URL(`api/hosting/v1/websites?domain=${encodeURIComponent(DOMAIN)}`, BASE_URL),
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  if (!sitesRes.ok) throw new Error(`Could not resolve site: ${sitesRes.status} ${await sitesRes.text()}`);
+  const sites = await sitesRes.json();
+  const username = sites.data?.[0]?.username;
+  if (!username) throw new Error('Hosting username missing from API response.');
 
-  // 2. Fetch upload credentials
-  console.log('Fetching upload credentials...');
-  const credsUrl = new URL('api/hosting/v1/files/upload-urls', BASE_URL).toString();
-  const credsRes = await fetch(credsUrl, {
+  const credsRes = await fetch(new URL('api/hosting/v1/files/upload-urls', BASE_URL), {
     method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ username, domain: DOMAIN })
+    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, domain: DOMAIN }),
   });
-  if (!credsRes.ok) {
-    throw new Error(`Failed to fetch upload credentials: ${credsRes.status} ${await credsRes.text()}`);
-  }
-  const credsData = await credsRes.json();
-  const uploadUrl = credsData.url;
-  const authToken = credsData.auth_key;
-  const authRestToken = credsData.rest_auth_key;
-  console.log(`Got upload URL: ${uploadUrl}`);
+  if (!credsRes.ok) throw new Error(`Upload credentials failed: ${credsRes.status} ${await credsRes.text()}`);
+  const uploadCreds = await credsRes.json();
 
-  // 3. Pre-upload POST & TUS upload
-  const archiveBasename = path.basename(ARCHIVE_PATH);
-  const cleanUploadUrl = uploadUrl.replace(/\/$/, '');
-  const uploadUrlWithFile = `${cleanUploadUrl}/${archiveBasename}?override=true`;
+  const archiveName = await uploadArchive(archiveSize, uploadCreds.url, uploadCreds.auth_key, uploadCreds.rest_auth_key);
 
-  const requestHeaders = {
-    'X-Auth': authToken,
-    'X-Auth-Rest': authRestToken,
-    'upload-length': stats.size.toString(),
-    'upload-offset': '0'
-  };
-
-  console.log(`Sending pre-upload POST to ${uploadUrlWithFile}...`);
-  const preRes = await fetch(uploadUrlWithFile, {
-    method: 'POST',
-    headers: requestHeaders
-  });
-  if (preRes.status !== 201) {
-    console.warn(`Pre-upload POST status was ${preRes.status}: ${await preRes.text()}`);
-  } else {
-    console.log('Pre-upload initialization OK.');
-  }
-
-  // 4. Upload with tus.Upload (with auto-retry wrapper)
-  console.log('Uploading archive via TUS...');
-  const fileBuffer = fs.readFileSync(ARCHIVE_PATH);
-
-  async function performUpload(attempt = 1) {
-    try {
-      await new Promise((resolve, reject) => {
-        let lastPercent = 0;
-        const upload = new tus.Upload(fileBuffer, {
-          uploadUrl: uploadUrlWithFile,
-          retryDelays: [0, 1000, 3000, 5000, 10000, 20000],
-          uploadDataDuringCreation: false,
-          parallelUploads: 1,
-          chunkSize: 2097152, // 2MB chunks for stability
-          headers: requestHeaders,
-          removeFingerprintOnSuccess: true,
-          uploadSize: stats.size,
-          metadata: { filename: archiveBasename },
-          onProgress: (bytesUploaded, bytesTotal) => {
-            const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(1);
-            if (Math.abs(percentage - lastPercent) >= 5 || bytesUploaded === bytesTotal) {
-              console.log(`[Upload] ${percentage}% (${(bytesUploaded / 1024 / 1024).toFixed(2)} / ${(bytesTotal / 1024 / 1024).toFixed(2)} MB)`);
-              lastPercent = percentage;
-            }
-          },
-          onError: (err) => {
-            reject(err);
-          },
-          onSuccess: () => {
-            console.log('TUS upload completed successfully!');
-            resolve();
-          }
-        });
-
-        upload.start();
-      });
-    } catch (err) {
-      if (attempt < 4) {
-        console.warn(`[Upload Retry] Attempt ${attempt} failed: ${err.message}. Retrying in 5s...`);
-        await new Promise(r => setTimeout(r, 5000));
-        return performUpload(attempt + 1);
-      }
-      throw err;
+  const deployRes = await fetch(
+    new URL(`api/hosting/v1/accounts/${username}/websites/${DOMAIN}/deploy`, BASE_URL),
+    {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ archive_path: archiveName }),
     }
-  }
+  );
+  if (!deployRes.ok) throw new Error(`Deploy failed: ${deployRes.status} ${await deployRes.text()}`);
 
-  await performUpload();
-
-  // 5. Trigger deployment
-  console.log(`Triggering deployment on Hostinger for ${DOMAIN}...`);
-  const deployUrl = new URL(`api/hosting/v1/accounts/${username}/websites/${DOMAIN}/deploy`, BASE_URL).toString();
-  const deployRes = await fetch(deployUrl, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ archive_path: archiveBasename })
-  });
-
-  if (!deployRes.ok) {
-    throw new Error(`Deploy trigger failed: ${deployRes.status} ${await deployRes.text()}`);
-  }
-
-  const deployResult = await deployRes.json();
-  console.log('Deploy response:', JSON.stringify(deployResult));
-
-  // Clean up archive
-  if (fs.existsSync(ARCHIVE_PATH)) {
-    fs.unlinkSync(ARCHIVE_PATH);
-    console.log(`Cleaned up ${ARCHIVE_PATH}`);
-  }
-
-  console.log('HOSTINGER DEPLOYMENT SUCCESSFUL!');
+  fs.unlinkSync(ARCHIVE_PATH);
+  console.log('[deploy] Hostinger deployment triggered successfully.');
 }
 
-main().catch(err => {
-  console.error('Deployment error:', err);
+main().catch((error) => {
+  console.error('[deploy] Failed:', error.message);
   process.exit(1);
 });

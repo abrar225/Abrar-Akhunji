@@ -1,3 +1,4 @@
-Contact: moabrarakhunji@gmail.com
-Preferred-Languages: en
+Contact: mailto:abrar@abrarakhunji.com
+Expires: 2027-10-25T00:00:00.000Z
+Preferred-Languages: en, hi, gu
 Canonical: https://abrarakhunji.com/.well-known/security.txt

@@ -14,9 +14,11 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
-            if (id.includes('three')) return 'vendor-three';
-            if (id.includes('gsap') || id.includes('lenis') || id.includes('framer-motion')) return 'vendor-animation';
-            if (id.includes('recharts')) return 'vendor-charts';
+            if (id.includes('/node_modules/three/')) return 'vendor-three';
+            if (id.includes('/node_modules/katex/')) return 'vendor-katex';
+            if (id.includes('/node_modules/marked/')) return 'vendor-markdown';
+            if (id.includes('/node_modules/gsap/') || id.includes('/node_modules/lenis/') || id.includes('/node_modules/framer-motion/')) return 'vendor-animation';
+            if (id.includes('/node_modules/recharts/')) return 'vendor-charts';
             return 'vendor-core';
           }
         }

@@ -1,0 +1,132 @@
+{
+  "headline": "AI/ML and full-stack engineering, built to ship.",
+  "intro": "I design and build production systems where models, data and the web layer meet. Based in Ahmedabad, working with teams in Gandhinagar, Bangalore and remotely.",
+  "availability": "Open to full-time AI/ML and full-stack roles, plus focused contract engagements.",
+  "email": "abrar@abrarakhunji.com",
+  "locations": [
+    {
+      "city": "Ahmedabad",
+      "note": "Home base. Available for on-site or hybrid work across the city."
+    },
+    {
+      "city": "Gandhinagar",
+      "note": "Regularly available for on-site delivery, reviews and workshops."
+    },
+    {
+      "city": "Bangalore",
+      "note": "Available for project travel and remote collaboration with product teams."
+    },
+    {
+      "city": "Remote",
+      "note": "Async-friendly across IST, with overlap for EU and US-East teams."
+    }
+  ],
+  "services": [
+    {
+      "id": "ai-ml",
+      "icon": "brain",
+      "title": "AI/ML Engineering",
+      "summary": "Models that leave the notebook and survive production traffic, retraining and messy real-world data.",
+      "outcomes": [
+        "Dataset design, preprocessing and evaluation pipelines",
+        "Model training, fine-tuning and error analysis",
+        "Inference services with monitoring and rollback paths"
+      ],
+      "tech": ["Python", "PyTorch", "TensorFlow", "scikit-learn", "FastAPI"]
+    },
+    {
+      "id": "computer-vision",
+      "icon": "eye",
+      "title": "Computer Vision",
+      "summary": "Vision systems for classification, detection and inspection, from MRI scans to agricultural imagery.",
+      "outcomes": [
+        "Vision Transformer and CNN pipelines",
+        "Preprocessing, augmentation and annotation strategy",
+        "Accuracy, latency and failure-mode reporting"
+      ],
+      "tech": ["OpenCV", "Vision Transformers", "PyTorch", "Gradio", "NumPy"]
+    },
+    {
+      "id": "llm-systems",
+      "icon": "sparkles",
+      "title": "LLM & Agent Systems",
+      "summary": "Retrieval, tool use and evaluation for products that need reliable language-model behaviour, not demos.",
+      "outcomes": [
+        "RAG pipelines with grounded citations",
+        "Agent tooling, guardrails and evaluation harnesses",
+        "Latency, cost and context-window optimisation"
+      ],
+      "tech": ["LLM APIs", "RAG", "Vector search", "Python", "Node.js"]
+    },
+    {
+      "id": "full-stack",
+      "icon": "layers",
+      "title": "Full-Stack Product Builds",
+      "summary": "End-to-end product delivery: the API, the database, the interface and the deployment path.",
+      "outcomes": [
+        "Django, Node and React application builds",
+        "Relational schema and API design",
+        "Performance, accessibility and release hardening"
+      ],
+      "tech": ["React", "Next.js", "Django", "PostgreSQL", "Redis", "Docker"]
+    }
+  ],
+  "engagements": [
+    {
+      "title": "Full-time role",
+      "description": "Joining an in-house AI/ML or product engineering team in Ahmedabad, Gandhinagar, Bangalore or remote."
+    },
+    {
+      "title": "Project sprint",
+      "description": "A scoped 2–6 week build with a clear deliverable, milestone plan and handover documentation."
+    },
+    {
+      "title": "Technical advisory",
+      "description": "Architecture reviews, model evaluation and delivery support for an existing team."
+    }
+  ],
+  "process": [
+    {
+      "title": "Brief",
+      "description": "A 30-minute call to understand the problem, constraints and what success looks like."
+    },
+    {
+      "title": "Scope",
+      "description": "A short written plan: architecture, milestones, risks and what is explicitly out of scope."
+    },
+    {
+      "title": "Build",
+      "description": "Weekly working sessions and visible progress, with the codebase and decisions documented as we go."
+    },
+    {
+      "title": "Handover",
+      "description": "Tests, deployment notes and a walkthrough so the system can be maintained without me."
+    }
+  ],
+  "faq": [
+    {
+      "question": "Are you available for full-time roles?",
+      "answer": "Yes. I am open to full-time AI/ML and full-stack engineering roles, as well as focused contract engagements. The fastest way to start is a short email with the problem, the team and the timeline."
+    },
+    {
+      "question": "Which locations do you work in?",
+      "answer": "I am based in Ahmedabad and regularly work with teams in Gandhinagar and Bangalore. I also take remote engagements across India and with teams in Europe and the United States, with overlap scheduled around IST."
+    },
+    {
+      "question": "What kinds of projects do you take?",
+      "answer": "Computer vision systems, LLM and retrieval pipelines, and full-stack product builds where the model and the product need to work together. I am most useful when there is a real deployment constraint: latency, cost, reliability or messy data."
+    },
+    {
+      "question": "Can you join an existing codebase?",
+      "answer": "Yes. I start with a code and architecture review, identify the highest-risk gaps, and work inside the team's existing conventions rather than rewriting for its own sake."
+    },
+    {
+      "question": "How do engagements usually start?",
+      "answer": "A 30-minute call, followed by a written scope with milestones, assumptions and a clear definition of done. No long discovery phase before you see a plan."
+    },
+    {
+      "question": "Do you offer fixed-price work?",
+      "answer": "For well-defined deliverables, yes: a milestone-based fixed scope. For exploratory model work or evolving product requirements, a weekly or monthly engagement is usually fairer to both sides."
+    }
+  ]
+}

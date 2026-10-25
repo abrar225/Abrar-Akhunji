@@ -1,189 +1,36 @@
-import { 
-  Cpu, 
-  Code2, 
-  Layers, 
-  Terminal, 
-  Database, 
-  Monitor, 
-  ShieldCheck, 
-  Trophy, 
+import {
+  Cpu,
+  Code2,
+  Layers,
+  Terminal,
+  Database,
+  Monitor,
+  ShieldCheck,
+  Trophy,
   Award,
   GraduationCap,
-  School
+  School,
 } from 'lucide-react';
+import data from '../data/portfolio.json';
 
-export const PROJECTS = [
-  {
-    title: "FixO CLI",
-    category: "AI DEVTOOL",
-    year: "2026",
-    description: "An autonomous, open-source AI coding platform that lives in your terminal. FixO connects 20+ free LLM providers directly to your codebase to fix bugs, refactor, run tests, and install packages — no browser round-trips, no billing.",
-    architecture: "Terminal CLI Engine (Node.js) -> Tree-Sitter AST Workspace Indexer -> Multi-Provider LLM Router (FreeLLMAPI) -> Shadow Staging & LSP Syntax Verifier -> Autonomous Test Loop.",
-    features: [
-      "Multi-AI router across 20+ free providers with automatic failover (FreeLLMAPI)",
-      "Self-correcting autonomous loop with a built-in test runner that iterates until tests pass",
-      "Atomic shadow staging, LSP pre-save syntax checks, and a credential vault that scrubs secrets before the LLM",
-      "Tree-Sitter AST workspace indexing for JS, TS, Python & Go"
-    ],
-    tech: ["Node.js", "SQLite", "Tree-Sitter", "LSP", "MCP", "Ollama"],
-    image: "/images/fixo.svg",
-    github: "https://github.com/abrar225/FixO",
-    demo: "https://fixo.firehox.com/",
-    embeddable: true
-  },
-  {
-    title: "GourmetGo",
-    category: "FULL STACK", 
-    year: "2026", 
-    description: "A complete, online multi-portal food ordering and delivery ecosystem (similar to Zomato/Swiggy) with four dedicated modules: Customer, Vendor (Restaurant Owner), Rider (Delivery Partner), and Admin.", 
-    architecture: "Next.js 14 Client App -> Django 5.0 REST API Backend -> Redis / WebSockets (Django Channels) -> Razorpay Gateway -> Cloudinary Asset Management.",
-    features: [
-      "Real-time order tracking and notifications via WebSockets (Django Channels)",
-      "Secure payment processing with Razorpay integration (UPI and COD support)",
-      "Auto-location detection (browser Geolocation) and 15km radius restaurant discovery",
-      "Dynamic admin panel for restaurant approvals, payouts, and system health checks"
-    ], 
-    tech: ["Next.js 14", "React", "Django 5.0", "Django Channels", "Redis", "Razorpay", "Tailwind CSS", "Cloudinary"], 
-    image: "/images/gourmetgo.webp",
-    github: "https://github.com/abrar225/GourmetGo",
-    demo: "https://gourmet-go.vercel.app/",
-    embeddable: false
-  },
-  { 
-    title: "Library Management System", 
-    category: "FULL STACK", 
-    year: "2025", 
-    description: "A high-performance ecosystem designed to bridge the gap between physical pages and digital convenience. Manage inventory, process secure payments, and build a community of readers.", 
-    architecture: "Django ORM -> MySQL Relational Database Schema -> Session-based Auth -> Fine Calculation Engine -> Inventory & Loan Logs.",
-    features: ["Inventory management system", "Secure payment processing", "Reader community platform", "Digital catalog integration"], 
-    tech: ["Python", "Django", "MySQL", "HTML", "CSS", "JavaScript"], 
-    image: "/images/library_management.webp",
-    github: "https://github.com/abrar225/Library-Management-System", 
-    demo: null 
-  },
-  { 
-    title: "Real vs AI Image Detector", 
-    category: "COMPUTER VISION", 
-    year: "2025", 
-    description: "A deep-learning powered system that identifies whether an image is AI-generated or real using advanced image forensics and transformer-based feature extraction.", 
-    architecture: "Input Image -> OpenCV Noise Residual Preprocessing -> Vision Transformer (ViT) Feature Embeddings -> Binary Classification Head (Real vs Generated).",
-    features: ["AI-vs-Real image classification", "Vision Transformer–based feature embedding", "Noise & artifact pattern detection"], 
-    tech: ["Python", "OpenCV", "NumPy", "Pandas", "TensorFlow/PyTorch"], 
-    image: "/images/real-vs-ai.webp",
-    github: "https://github.com/abrar225/Real-vs-AI-Image-Detector", 
-    demo: null 
-  },
-  { 
-    title: "Cattle Breed Identification System", 
-    category: "AI/ML", 
-    year: "2025", 
-    description: "An ensemble-based AI tool capable of classifying 41 Indian cattle breeds using Vision Transformers and image preprocessing techniques.", 
-    architecture: "HuggingFace Gradio Space -> Vision Transformer (ViT) Backbone -> Softmax 41-Class Classification Head -> Confidence Score Analytics.",
-    features: ["Recognition of 41 unique cattle breeds", "Vision Transformer (ViT) embeddings", "Clean dataset preprocessing pipeline"], 
-    tech: ["Python", "OpenCV", "Vision Transformer"], 
-    image: "/images/cattle-breed.webp",
-    github: "https://github.com/abrar225/AI_cattle_vison",
-    demo: "https://huggingface.co/spaces/abrar225/BreedAI",
-    embeddable: true
-  },
-  { 
-    title: "Brain Tumor Detection (MRI)", 
-    category: "HEALTHCARE AI", 
-    year: "2024", 
-    description: "A Computer Vision model trained on MRI scan data to detect tumor presence with high accuracy using classical image processing and ML techniques.", 
-    architecture: "MRI Scan DICOM/PNG -> Grayscale Masking & Thresholding -> Contour Extraction -> Feature Vector -> Classifier (Tumor / Healthy).",
-    features: ["Automated MRI-based tumor detection", "Binary classification (tumor / no tumor)", "Mask processing + thresholding + contour analysis"], 
-    tech: ["Python", "OpenCV", "NumPy", "Pandas"], 
-    image: "/images/brain-tumor-detection.webp",
-    github: "https://github.com/abrar225/Brain-Tumer-Detection-System", 
-    demo: null 
-  },
-  { 
-    title: "Kid's Space (Android App)", 
-    category: "ANDROID", 
-    year: "2023", 
-    description: "An interactive educational Android app designed for kids, focused on simple UI/UX and modular Java development.", 
-    architecture: "Android Activity Lifecycle -> XML ConstraintLayouts -> Java Event Handlers -> Local Asset Storage.",
-    features: ["Clean, kid-friendly UI", "Built using XML layouts", "Focused on kid's study"], 
-    tech: ["Android Studio", "XML", "Java"], 
-    image: "/images/kids_space.webp",
-    github: "https://github.com/abrar225/Kids-Space-Android", 
-    demo: null 
-  }
-];
+const ICONS = {
+  cpu: Cpu,
+  code2: Code2,
+  layers: Layers,
+  terminal: Terminal,
+  database: Database,
+  monitor: Monitor,
+  shield: ShieldCheck,
+  trophy: Trophy,
+  award: Award,
+  graduation: GraduationCap,
+  school: School,
+};
 
-export const EXPERIENCE = [
-  { role: "Full-Stack Python Intern", date: "JAN 2026 — MAR 2026", desc: "Completed 3-month intensive Full-Stack development program at BrainyBeam focusing on Advanced Django & Python ecosystem." },
-  { role: "Python Django Intern", date: "JUL 2025", desc: "Focused on backend architecture & REST API development at BrainyBeam IT Solutions." },
-  { role: "Web Developer & Designer Intern", date: "JUN 2024 — AUG 2024", desc: "Designed responsive interfaces & implemented frontend logic." }
-];
+const withIcon = (item) => ({ ...item, icon: ICONS[item.icon] || Layers });
 
-export const EDUCATION = [
-  { 
-    degree: "Bachelor of Engineering (IT)", 
-    school: "Kalol Institute of Technology & Research Center", 
-    date: "AUG 2023 — PRESENT",
-    icon: GraduationCap,
-    color: "bg-blue-500"
-  },
-  { 
-    degree: "Diploma in Information Technology", 
-    school: "Government Polytechnic, Himmatnagar", 
-    date: "2020 — 2023",
-    icon: School,
-    color: "bg-blue-400"
-  }
-];
-
-export const SKILLS = [
-  { t: "AI & Data Science", d: "Numpy, Pandas, OpenCV, Models", icon: Cpu },
-  { t: "Languages", d: "Python, Java, PHP, JS", icon: Code2 },
-  { t: "Web Frameworks", d: "Django, Flask, React", icon: Layers },
-  { t: "Tools", d: "Git, GitHub, Linux", icon: Terminal },
-  { t: "Databases", d: "MySQL, SQLite", icon: Database },
-  { t: "Others", d: "VSCode, Android Studio", icon: Monitor }
-];
-
-export const CERTIFICATIONS = [
-  { 
-    title: "GUNIpreneur Bootcamp", 
-    desc: "2nd Runner-up: Most Innovative Idea • Ganpat University SSIP", 
-    icon: Award,
-    color: "text-accent",
-    driveLink: "https://drive.google.com/drive/folders/17HvrHOJFwXCgIoHz8rF1I6p3O-kH_jpd?usp=sharing"
-  },
-  { 
-    title: "Full-Stack Python Internship", 
-    desc: "BrainyBeam IT Solutions • Jan-Mar 2026", 
-    icon: ShieldCheck,
-    color: "text-green-500",
-    driveLink: "https://drive.google.com/drive/folders/1nMbNFcxMUj4DncwNIC5IrBskZFZzTfMF?usp=sharing"
-  },
-  { 
-    title: "Web Developer & Designer Intern", 
-    desc: "3-Month Internship Completion • Oct-Dec 2024", 
-    icon: Code2,
-    color: "text-cyan-500",
-    driveLink: "https://drive.google.com/drive/folders/1aSFRrcX6aAdSxNrsQAu1_yJ9sggheJtq?usp=sharing"
-  },
-  { 
-    title: "Google Cybersecurity", 
-    desc: "Professional Certificate (8 Courses) • Coursera", 
-    icon: ShieldCheck,
-    color: "text-yellow-500",
-    driveLink: "https://drive.google.com/drive/folders/11yaAy0Mdhbh7ooy2aOvF6GubvYJ8M6vj?usp=sharing"
-  },
-  { 
-    title: "Smart India Hackathon", 
-    desc: "Participation", 
-    icon: Trophy,
-    color: "text-purple-500"
-  },
-  { 
-    title: "Python Django Certificate", 
-    desc: "15 Days Intensive Internship • BrainyBeam", 
-    icon: Layers,
-    color: "text-blue-500",
-    driveLink: "https://drive.google.com/drive/folders/1kGeWbI7MsmM63eIPEE551-hzHtFHTmrN?usp=sharing"
-  }
-];
+export const PROJECTS = data.projects;
+export const EXPERIENCE = data.experience;
+export const EDUCATION = data.education.map(withIcon);
+export const SKILLS = data.skills.map(withIcon);
+export const CERTIFICATIONS = data.certifications.map(withIcon);

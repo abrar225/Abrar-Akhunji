@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useLayoutEffect, useRef, useCallback, lazy, Suspense } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import {
   Github, Linkedin, ArrowUpRight, Download, Instagram,
-  Calendar,
+  Calendar, Brain, Eye, Sparkles, Layers,
 } from 'lucide-react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -35,7 +35,11 @@ import { useTheme } from '../lib/useTheme';
 const ThreeBackground = lazy(() => import('../components/ThreeBackground'));
 
 import { PROJECTS, EXPERIENCE, SKILLS, EDUCATION, CERTIFICATIONS } from '../constants/portfolio';
-import { getAllBlogs } from '../lib/blogUtils';
+import { getLatestBlogs } from '../lib/blogUtils';
+import { postPath } from '../lib/content/urls.js';
+import servicesData from '../data/services.json';
+
+const SERVICE_ICONS = { brain: Brain, eye: Eye, sparkles: Sparkles, layers: Layers };
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -71,14 +75,14 @@ function SimReadout({ sim, seekRef }) {
         <span className="text-accent">[0{sim.index + 1}/03]</span>
         <span className="ml-2">{phase}</span>
       </p>
-      <div className="mt-2 h-px w-36 overflow-hidden bg-line" aria-hidden="true">
+      <div className="mt-2 h-px w-36 overflow-hidden bg-line mx-auto xl:mx-0" aria-hidden="true">
         <div
           key={`${sim.index}-${sim.nonce}`}
           className="h-full w-full origin-left bg-accent"
           style={reduce ? { transform: 'scaleX(1)' } : { animation: `sim-fill ${STAGE_SECONDS}s linear forwards` }}
         />
       </div>
-      <div className="mt-1.5 flex items-center gap-1">
+      <div className="mt-1.5 flex items-center justify-center gap-1 xl:justify-start">
         {PHASES.map((name, i) => (
           <button
             key={name}
@@ -108,12 +112,19 @@ function scrollToId(event, hash) {
 }
 
 export default function App() {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(() => {
+    try { return sessionStorage.getItem('abrar_intro_seen') !== '1'; } catch { return true; }
+  });
   const { theme, toggleTheme: flipTheme } = useTheme();
   const seekRef = useRef(null);
   const [sim, setSim] = useState({ index: 0, nonce: 0 });
   const onPhase = useCallback((next) => {
     setSim((prev) => ({ index: next.index, nonce: prev.nonce + 1 }));
+  }, []);
+
+  const handleIntroComplete = useCallback(() => {
+    try { sessionStorage.setItem('abrar_intro_seen', '1'); } catch { /* storage unavailable */ }
+    setIsLoading(false);
   }, []);
 
   const toggleTheme = () => {
@@ -175,7 +186,7 @@ export default function App() {
     { label: 'IG', href: 'https://www.instagram.com/strick.9_/' },
   ];
 
-  const latestBlogs = getAllBlogs().slice(0, 4);
+  const latestBlogs = getLatestBlogs(4);
 
   return (
     <ErrorBoundary>
@@ -185,7 +196,7 @@ export default function App() {
         <CursorBubble />
 
         <AnimatePresence mode="wait">
-          {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
+          {isLoading && <LoadingScreen onComplete={handleIntroComplete} />}
         </AnimatePresence>
 
         {!isLoading && (
@@ -200,17 +211,20 @@ export default function App() {
                 <div className="flex items-center gap-4 md:gap-6">
                   <div className="hidden sm:flex items-center gap-4 md:gap-5">
                     {socials.map((s) => (
-                      <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
+                      <a key={s.label} href={s.href} target="_blank" rel="me noopener noreferrer"
                         className="text-[11px] font-mono text-muted hover:text-fg transition-colors">
                         {s.label}
                       </a>
                     ))}
                   </div>
-                  <Link to="/blog" className="relative text-[11px] font-mono uppercase tracking-[0.16em] text-muted hover:text-fg transition-colors">
+                  <Link to="/blog/" className="relative text-[11px] font-mono uppercase tracking-[0.16em] text-muted hover:text-fg transition-colors">
                     Blog
                     <span className="status-dot absolute -top-1 -right-2 w-1.5 h-1.5 rounded-full bg-accent" />
                   </Link>
-                  <span className="hidden md:inline font-mono text-[11px] tracking-[0.16em] text-muted">IND · GJ</span>
+                  <Link to="/hire/" className="hidden sm:inline text-[11px] font-mono uppercase tracking-[0.16em] text-muted hover:text-fg transition-colors">
+                    Hire
+                  </Link>
+                  <span className="hidden lg:inline font-mono text-[11px] tracking-[0.16em] text-muted">Ahmedabad, IN</span>
                   <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
                 </div>
               </div>
@@ -223,7 +237,7 @@ export default function App() {
 
             <main id="main-content" className="relative z-10">
               <section id="home" className="relative min-h-[100svh] overflow-hidden">
-                <div className="max-w-[1440px] mx-auto px-5 sm:px-6 md:px-12 pt-20 sm:pt-24 lg:pt-28 pb-24 lg:pb-32 min-h-[100svh] flex flex-col justify-start lg:justify-end">
+                <div className="max-w-[1440px] mx-auto px-5 sm:px-6 md:px-12 pt-20 sm:pt-24 lg:pt-28 pb-24 xl:pb-32 min-h-[100svh] flex flex-col justify-start xl:justify-end">
                   <div className="relative z-10 max-w-3xl">
                     <div className="hero-kicker flex flex-wrap items-center gap-x-4 sm:gap-x-5 gap-y-1.5 mb-4 md:mb-7 text-[10px] sm:text-[11px] font-mono tracking-[0.18em] uppercase text-muted">
                       <span className="inline-flex items-center gap-2 text-accent">
@@ -231,7 +245,7 @@ export default function App() {
                         Open to work
                       </span>
                       <span className="text-faint">Portfolio 2026</span>
-                      <span className="hidden sm:inline text-faint">Gujarat, India</span>
+                      <span className="hidden sm:inline text-faint">Ahmedabad, India</span>
                     </div>
 
                     <h1 className="text-hero hero-lines font-display font-medium text-fg">
@@ -247,7 +261,7 @@ export default function App() {
                       <SplitText text="Systems." type="word" trigger="mount" delay={0.42} as="span" className="block" />
                     </h1>
 
-                    <p className="hero-lead mt-4 sm:mt-6 md:mt-8 max-w-xl text-[0.95rem] sm:text-base md:text-[1.125rem] text-muted leading-[1.55] sm:leading-relaxed">
+                    <p className="hero-lead mt-4 sm:mt-6 md:mt-8 max-w-xl text-[0.95rem] sm:text-base md:text-[1.125rem] text-muted leading-[1.55] sm:leading-relaxed" data-speakable="true">
                       I bridge the gap between <span className="hl-mark">complex AI models</span> and{' '}
                       <span className="hl-mark">scalable web architectures</span> — building the next generation of{' '}
                       <span className="hl-mark">intelligent digital products</span>.
@@ -282,22 +296,23 @@ export default function App() {
                     </div>
                   </div>
 
-                  <div className="relative mt-6 sm:mt-8 w-full lg:static lg:mt-0">
+                  <div className="relative mt-6 sm:mt-8 w-full xl:static xl:mt-0">
+                    <div className="pointer-events-auto relative z-20 mx-auto w-fit max-w-[calc(100%-1rem)] p-0 text-center xl:absolute xl:left-auto xl:right-14 xl:top-28 xl:mx-0 xl:max-w-[320px] xl:text-left xl:[text-shadow:0_1px_0_var(--color-canvas)]">
+                      <SimReadout sim={sim} seekRef={seekRef} />
+                    </div>
                     <div
-                      className="ascii-stage relative -mx-5 sm:-mx-6 md:-mx-12 h-[270px] [@media(max-height:720px)]:h-[222px] sm:h-[330px] md:h-[380px] w-[calc(100%+2.5rem)] sm:w-[calc(100%+3rem)] md:w-[calc(100%+6rem)] lg:absolute lg:inset-0 lg:mx-0 lg:h-full lg:w-full"
+                      className="ascii-stage relative mt-4 -mx-5 sm:-mx-6 md:-mx-12 h-[240px] sm:h-[260px] md:h-[clamp(200px,24vh,240px)] w-[calc(100%+2.5rem)] sm:w-[calc(100%+3rem)] md:w-[calc(100%+6rem)] xl:absolute xl:inset-0 xl:mx-0 xl:mt-0 xl:h-full xl:w-full"
                       aria-hidden="true"
                     >
                       <Suspense fallback={null}>
                         <ThreeBackground theme={theme} seekRef={seekRef} onPhase={onPhase} />
                       </Suspense>
-                    </div>
-                    <div className="pointer-events-auto absolute z-20 top-0 left-0 max-w-[calc(100%-1rem)] p-3 sm:p-4 [text-shadow:0_1px_0_var(--color-canvas)] lg:left-auto lg:right-14 lg:top-28 lg:max-w-[320px] lg:p-0">
-                      <SimReadout sim={sim} seekRef={seekRef} />
+                      <div className="pointer-events-none absolute inset-0 z-[1] hidden bg-gradient-to-r from-canvas via-canvas/65 to-transparent xl:block" />
                     </div>
                   </div>
                 </div>
 
-                <div className="hidden lg:flex absolute right-14 bottom-40 z-10 items-end gap-10 pointer-events-none [text-shadow:0_1px_0_var(--color-canvas)]">
+                <div className="hidden xl:flex absolute right-14 bottom-40 z-10 items-end gap-10 pointer-events-none [text-shadow:0_1px_0_var(--color-canvas)]">
                   <div>
                     <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-faint mb-1">Focus</p>
                     <p className="text-sm text-fg">AI/ML · Full-Stack</p>
@@ -442,9 +457,10 @@ export default function App() {
                       />
                       </div>
                       <p className="mt-8 max-w-xl text-muted text-base leading-relaxed">
-                        I&apos;m an <span className="hl-mark">AI/ML &amp; Python developer</span> specializing in backend
-                        systems and modern web development. I enjoy turning ideas into real applications — whether it&apos;s
-                        detecting <span className="hl-mark">brain tumors from MRI scans</span> or classifying{' '}
+                        I&apos;m an <span className="hl-mark">AI/ML and full-stack engineer</span> specializing in backend
+                        systems, computer vision and the web layer that puts a model in someone&apos;s hands. I enjoy turning
+                        ideas into real applications — whether it&apos;s detecting{' '}
+                        <span className="hl-mark">brain tumors from MRI scans</span> or classifying{' '}
                         <span className="hl-mark">41 cattle breeds with Vision Transformers</span>.
                       </p>
                       <div className="mt-10 grid sm:grid-cols-3 border-y border-line">
@@ -466,7 +482,7 @@ export default function App() {
                           <p className="font-mono text-[10px] tracking-[0.18em] text-faint mb-4">03</p>
                           <h3 className="font-display text-lg text-fg tracking-tight">Off the bench</h3>
                           <p className="mt-2 text-sm text-muted leading-relaxed">
-                            Writing rap, cooking with friends, and chasing the next <span className="hl-mark">technical idea</span>. Based in Gujarat.
+                            Writing rap, cooking with friends, and chasing the next <span className="hl-mark">technical idea</span>. Based in Ahmedabad.
                           </p>
                         </article>
                       </div>
@@ -479,6 +495,7 @@ export default function App() {
                             alt="Portrait of Abrar Akhunji"
                             width="960"
                             height="1200"
+                            loading="lazy"
                             decoding="async"
                             onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/images/myimg.jpg'; }}
                             className="absolute inset-0 w-full h-full object-cover object-[center_20%] grayscale hover:grayscale-0 transition-[filter] duration-700"
@@ -500,7 +517,7 @@ export default function App() {
                     <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-2">
                       <SectionHeader title="Field notes" kicker={<>Writing on the <span className="hl-mark">systems</span> I study.</>} index="04 — Notes" className="mb-0 flex-1" />
                       <Magnetic strength={0.35} className="hidden md:block">
-                        <Link to="/blog" data-cursor="Notes" className="group flex items-center gap-4">
+                        <Link to="/blog/" data-cursor="Notes" className="group flex items-center gap-4">
                           <span className="text-sm text-muted group-hover:text-fg transition-colors">All notes</span>
                           <span className="w-12 h-12 rounded-full border border-line group-hover:bg-accent group-hover:border-accent text-fg group-hover:text-on-accent flex items-center justify-center transition-colors">
                             <ArrowUpRight size={18} />
@@ -514,7 +531,7 @@ export default function App() {
                         return (
                           <TiltSurface key={blog.slug} className={NOTE_SPANS[i]}>
                             <Link
-                              to={`/blog/${blog.slug}`}
+                              to={postPath(blog.slug)}
                               data-cursor="Read"
                               className="group bg-canvas flex h-full flex-col border border-line"
                             >
@@ -542,13 +559,62 @@ export default function App() {
                       })}
                     </div>
                     <div className="flex md:hidden justify-center mt-8">
-                      <Link to="/blog" className="inline-flex items-center gap-2 px-5 py-3 border border-line rounded-full text-sm text-fg">
+                      <Link to="/blog/" className="inline-flex items-center gap-2 px-5 py-3 border border-line rounded-full text-sm text-fg">
                         All notes <ArrowUpRight size={15} />
                       </Link>
                     </div>
                   </div>
                 </section>
               )}
+
+              <section id="services" className="py-20 md:py-28 border-t border-line">
+                <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+                  <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
+                    <SectionHeader
+                      title="Work with me"
+                      kicker={<>AI/ML, vision and product builds for teams in <span className="hl-mark">Ahmedabad, Gandhinagar and Bangalore</span>.</>}
+                      index="05 — Engagements"
+                      className="mb-0 flex-1"
+                    />
+                    <Magnetic strength={0.35} className="hidden md:block">
+                      <Link to="/hire/" className="group flex items-center gap-4">
+                        <span className="text-sm text-muted group-hover:text-fg transition-colors">Services &amp; availability</span>
+                        <span className="w-12 h-12 rounded-full border border-line group-hover:bg-accent group-hover:border-accent text-fg group-hover:text-on-accent flex items-center justify-center transition-colors">
+                          <ArrowUpRight size={18} />
+                        </span>
+                      </Link>
+                    </Magnetic>
+                  </div>
+
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-line border border-line rounded-2xl overflow-hidden">
+                    {servicesData.services.map((service) => {
+                      const Icon = SERVICE_ICONS[service.icon] || Layers;
+                      return (
+                        <Link key={service.id} to="/hire/" className="group bg-canvas p-6 hover:bg-surface transition-colors">
+                          <Icon size={18} className="text-accent mb-6" />
+                          <h3 className="font-display text-lg text-fg tracking-tight group-hover:text-accent transition-colors">{service.title}</h3>
+                          <p className="mt-2 text-sm text-muted leading-relaxed">{service.summary}</p>
+                        </Link>
+                      );
+                    })}
+                  </div>
+
+                  <div className="mt-6 flex flex-wrap items-center gap-2">
+                    {servicesData.locations.map((location) => (
+                      <span key={location.city} className="px-3 py-1.5 rounded-full border border-line text-[11px] font-mono text-muted">
+                        {location.city}
+                      </span>
+                    ))}
+                    <span className="text-[11px] font-mono text-faint">· {servicesData.availability}</span>
+                  </div>
+
+                  <div className="flex md:hidden mt-8">
+                    <Link to="/hire/" className="inline-flex items-center gap-2 px-5 py-3 border border-line rounded-full text-sm text-fg">
+                      Services &amp; availability <ArrowUpRight size={15} />
+                    </Link>
+                  </div>
+                </div>
+              </section>
 
               <footer id="contact" className="border-t border-line pt-16 md:pt-24">
                 <div className="mx-auto max-w-[1440px] px-6 pb-12 md:px-12 md:pb-16">
@@ -569,6 +635,9 @@ export default function App() {
                       >
                         abrar@abrarakhunji.com <ArrowUpRight size={26} className="shrink-0 text-accent" />
                       </a>
+                      <Link to="/hire/" className="mt-4 inline-flex items-center gap-2 text-sm text-muted hover:text-accent transition-colors">
+                        Services &amp; availability in Ahmedabad, Gandhinagar and Bangalore <ArrowUpRight size={14} />
+                      </Link>
                       <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
                         <a
                           href={RESUME}
@@ -589,7 +658,7 @@ export default function App() {
                               key={s.label}
                               href={s.href}
                               target="_blank"
-                              rel="noopener noreferrer"
+                              rel="me noopener noreferrer"
                               aria-label={s.label}
                               className="flex h-11 w-11 items-center justify-center rounded-full border border-line text-muted transition-colors hover:border-fg hover:text-fg"
                             >
@@ -606,8 +675,8 @@ export default function App() {
                 </div>
                 <div className="max-w-[1440px] mx-auto px-6 md:px-12 pt-8 pb-28 md:pb-32 border-t border-line flex flex-col md:flex-row justify-between items-center gap-4 text-[11px] font-mono uppercase tracking-[0.16em] text-faint">
                   <span>© 2026 Abrar Akhunji</span>
+                  <span className="text-center">Ahmedabad · Gandhinagar · Bangalore · Remote</span>
                   <a href="#home" onClick={(e) => scrollToId(e, '#home')} className="hover:text-fg transition-colors">Back to top</a>
-                  <span>React · GSAP · Three.js</span>
                 </div>
               </footer>
             </main>

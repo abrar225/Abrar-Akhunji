@@ -15,7 +15,8 @@ const LoadingScreen = ({ onComplete }) => {
   const lit = Math.round((progress / 100) * CELLS);
 
   useEffect(() => {
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      || Boolean(navigator.connection?.saveData);
     let cancelled = false;
 
     if (reduce) {
@@ -27,10 +28,10 @@ const LoadingScreen = ({ onComplete }) => {
     const counter = { v: 0 };
     const tween = gsap.to(counter, {
       v: 100,
-      duration: 1.45,
+      duration: 0.9,
       ease: 'power2.inOut',
       onUpdate: () => { if (!cancelled) setProgress(Math.round(counter.v)); },
-      onComplete: () => { if (!cancelled) setTimeout(onComplete, 380); },
+      onComplete: () => { if (!cancelled) setTimeout(onComplete, 160); },
     });
 
     return () => { cancelled = true; tween.kill(); };

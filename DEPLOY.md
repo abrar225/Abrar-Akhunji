@@ -1,66 +1,118 @@
 # Deploying to Hostinger
 
-This site is a static build **plus a tiny PHP proxy** for the AI Digital Twin.
-The proxy keeps the FreeLLMAPI key off the client and enforces the daily limit
-server-side. Everything ships inside the `dist/` folder — one upload.
+The site is a static build. There is no PHP, database, API key or server process to deploy.
 
 ## 1. Build
 
 ```bash
-npm install      # first time only (syncs the trimmed dependency list)
+npm install
 npm run build
 ```
 
-This produces `dist/`, including:
+This produces `dist/` containing:
 
 ```
 dist/
-├─ index.html, assets/…        ← static site (NO API key inside)
-└─ api/
-   ├─ twin.php                 ← the secure proxy
-   ├─ config.php               ← your key (generated from .env, server-side only)
-   └─ .htaccess                ← blocks config.php + the rate-limit store from the web
+├─ index.html                  home shell + crawler fallback
+├─ 404.html                    custom static 404
+├─ .htaccess                   headers, legacy 301s, caching, 404 wiring
+├─ assets/                     hashed JS/CSS
+├─ blog/<slug>/index.html      canonical static article
+├─ blog/index.html
+├─ hire/index.html
+├─ sitemap.xml
+├─ feed.xml
+├─ robots.txt
+├─ llms.txt
+├─ llms-full.txt
+└─ images/
 ```
 
-The build **fails safe**: `scripts/gen-php-config.mjs` bakes the key from
-`.env` into `dist/api/config.php`. If `.env` has no key, it warns you.
+The build fails if a post has malformed frontmatter, an unclosed `:::` block, invalid widget JSON, a missing image, a duplicate slug or unsafe HTML.
 
-## 2. Upload
+## 2. Deploy
 
-Upload the **contents of `dist/`** into Hostinger's `public_html/`
-(via hPanel File Manager or FTP). That's it.
+### Option A — Hostinger API
 
-## 3. Verify (2 minutes)
+Requires the credentials created by the Hostinger MCP flow at `~/.config/hostinger-mcp/credentials.json` (override with `HOSTINGER_CREDENTIALS`).
 
-- Open the site → click the orb → ask **"who is Abrar?"** → instant answer (free, local).
-- Ask something off-topic (e.g. "capital of France") → this hits the LLM through
-  the proxy. Open DevTools → Network → confirm the request goes to
-  `/api/twin.php` (not to the gateway) and **no key** is visible.
-- Confirm the key is hidden: visit `https://yourdomain.com/api/config.php`
-  directly → it must return **403/blank**, never the key.
-- Rate limit: the 11th LLM question in a day returns a friendly "limit reached"
-  message; local questions still work for free.
+```bash
+npm run deploy:hostinger
+```
 
-## Security model (only one credential: the FreeLLMAPI key)
+The script builds `dist.zip` fresh, uploads it with TUS and triggers the Hostinger deploy. It does not reuse a stale archive.
 
-| Concern | How it's handled |
-|---|---|
-| Key in client bundle | **Never** — verified at build; key lives only in `dist/api/config.php` |
-| Direct access to config | Blocked by `.htaccess` (`Require all denied`) |
-| Rate-limit bypass (clear storage / incognito) | Enforced **server-side per IP**; localStorage is only a UI mirror |
-| Parallel-request race | Slot is **reserved before** the upstream call; refunded only on upstream failure |
-| Other sites calling your proxy | Optional `TWIN_ALLOW_ORIGINS` allowlist in `.env` |
+### Option B — Upload manually
 
-### Hardening options
-- **Best:** instead of the baked key, set `FREELLM_API_KEY` as a real
-  environment variable in hPanel — `config.php` prefers it via `getenv()`.
-- Set `TWIN_ALLOW_ORIGINS=https://yourdomain.com` in `.env` before building.
-- **Rotate the current key** — it was shared in plaintext during development.
-- Change the cap anytime with `TWIN_DAILY_LIMIT` in `.env` (default 10).
+Upload the **contents** of `dist/` into Hostinger's `public_html/`. Keep `.htaccess` and `404.html`; both are required.
 
-## Local development
+## 3. Post-deploy verification
 
-`npm run dev` has no PHP, so it calls the gateway directly using the `VITE_*`
-dev keys in `.env` (dev server never ships to production). To test the real
-proxy locally, point the client at your deployed one:
-`VITE_TWIN_PROXY=https://yourdomain.com/api/twin.php`.
+```bash
+# Canonical URLs resolve
+curl -I https://abrarakhunji.com/
+curl -I https://abrarakhunji.com/blog/
+curl -I https://abrarakhunji.com/hire/
+
+# A post returns 200 and its canonical ends in a slash
+curl -s https://abrarakhunji.com/blog/hy-memory-2-0-tencent-30b-a3b-attributed-reinforcement-learning/ \
+  | grep -o '<link rel="canonical"[^>]*>'
+
+# Legacy URL redirects once, to the clean slug
+curl -I https://abrarakhunji.com/blog/2026-10-24-hy-memory-2-0-tencent-30b-a3b-attributed-reinforcement-learning
+
+# The dead API stays dead
+curl -I https://abrarakhunji.com/api/twin.php
+
+# Custom 404
+curl -I https://abrarakhunji.com/this-page-does-not-exist/
+
+# Security headers
+curl -I https://abrarakhunji.com/ | grep -Ei 'strict-transport|x-content-type|referrer-policy|permissions-policy'
+```
+
+Expected results:
+
+- `/blog/2026-...` → 301 to `/blog/<clean-slug>/`.
+- `/api/twin.php` → 404 (the file no longer exists).
+- Unknown paths → 404 with the branded page.
+- The sitemap contains only canonical URLs (no `/blog/2026-`).
+- `feed.xml` returns valid RSS.
+- `robots.txt` references the sitemap.
+- No `.DS_Store` or `.env` is publicly reachable.
+
+## 4. Caching
+
+`.htaccess` sets:
+
+- HTML: no cache, so publishing is immediate.
+- Hashed JS/CSS and images: one year.
+- XML/TXT: one hour.
+
+If Hostinger's CDN is enabled, purge it after a deploy if the new HTML does not appear.
+
+## 5. Search Console
+
+After the first deploy with this architecture:
+
+1. Inspect `/`, `/blog/`, `/hire/` and three posts; confirm the canonical matches the URL.
+2. Resubmit `sitemap.xml`.
+3. Request indexing for `/hire/`, `/blog/` and the five strongest posts.
+4. Expect the old date-prefixed redirect URLs to fall out of the index.
+5. Review "Page indexing" reasons in two weeks. If "Crawled – currently not indexed" persists on posts, improve sourcing and internal links rather than resubmitting.
+
+## 6. Rollback
+
+Before deploying, keep the previous build:
+
+```bash
+cp -R dist "dist-backup-$(date +%Y%m%d-%H%M)"
+```
+
+To roll back, restore that directory's contents to `public_html/`. The generated files are deterministic from the git revision, so rebuilding the previous revision is usually simpler.
+
+## 7. Cleanup from the old architecture
+
+- The PHP proxy (`public/api/`), `gen-php-config.mjs`, the terminal UI and the FreeLLM key are gone.
+- If `.env` still contains `FREELLM_*` keys, rotate them in the provider dashboard and delete the file. The build no longer reads it.
+- The old Hostinger/GitHub Pages dual deploy is gone; Hostinger is the only target.

@@ -1,0 +1,48 @@
+# Static hosting configuration for Hostinger (Apache/LiteSpeed).
+# Keep canonical URLs consistent with the generated pages: /blog/<slug>/.
+
+Options -Indexes
+DirectoryIndex index.html
+AddDefaultCharset UTF-8
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Old date-prefixed post URLs (2026-09-20-slug) -> clean canonical URL.
+  # These were previously emitted as hundreds of redirect HTML pages, which
+  # diluted crawl budget and showed up as "Page with redirect" in Search Console.
+  RewriteRule ^blog/[0-9]{4}-[0-9]{2}-[0-9]{2}-(.+?)/?$ /blog/$1/ [R=301,L]
+</IfModule>
+
+ErrorDocument 404 /404.html
+
+<IfModule mod_headers.c>
+  Header always set Strict-Transport-Security "max-age=31536000"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Cross-Origin-Opener-Policy "same-origin"
+</IfModule>
+
+# Never serve dotfiles (including leftover .DS_Store / .env files).
+<FilesMatch "^\.">
+  Require all denied
+</FilesMatch>
+
+<FilesMatch "\.(DS_Store|env|log|bak|sql|ini|zip)$">
+  Require all denied
+</FilesMatch>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType application/xml "access plus 1 hour"
+  ExpiresByType text/plain "access plus 1 hour"
+</IfModule>

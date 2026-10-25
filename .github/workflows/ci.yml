@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci --no-audit --no-fund
+      - run: npm run lint
+      - run: npm run validate:content
+      - run: npm test
+      - run: npm run build
+
+      - name: Verify generated SEO artifacts
+        run: |
+          test -f dist/sitemap.xml
+          test -f dist/feed.xml
+          test -f dist/robots.txt
+          test -f dist/.htaccess
+          test -f dist/404.html
+          test -f dist/hire/index.html
+          test -f "dist/blog/index.html"
+          ! grep -q "/blog/2026-" dist/sitemap.xml

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, RotateCcw, CheckCircle, XCircle, Terminal, HelpCircle, Clock } from 'lucide-react';
 
@@ -221,11 +221,19 @@ function TimelineBlock({ config }) {
 }
 
 /* ── Main InteractiveBlock Router ── */
-import InteractiveChart from './InteractiveChart';
-import InteractiveFlashcards from './InteractiveFlashcards';
-import ConceptVisualizer from './ConceptVisualizer';
+const InteractiveChart = lazy(() => import('./InteractiveChart'));
+const InteractiveFlashcards = lazy(() => import('./InteractiveFlashcards'));
+const ConceptVisualizer = lazy(() => import('./ConceptVisualizer'));
 
-export default function InteractiveBlock({ widgetType, config }) {
+function WidgetFallback() {
+  return (
+    <div className="rounded-2xl border border-line bg-surface p-6 text-sm text-muted animate-pulse" aria-busy="true">
+      Loading interactive…
+    </div>
+  );
+}
+
+function Widget({ widgetType, config }) {
   switch (widgetType) {
     case 'prompt-playground':
       return <PromptPlayground config={config} />;
@@ -246,4 +254,12 @@ export default function InteractiveBlock({ widgetType, config }) {
         </div>
       );
   }
+}
+
+export default function InteractiveBlock(props) {
+  return (
+    <Suspense fallback={<WidgetFallback />}>
+      <Widget {...props} />
+    </Suspense>
+  );
 }

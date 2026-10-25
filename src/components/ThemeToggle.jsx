@@ -41,7 +41,7 @@ const ThemeToggle = ({ theme, toggleTheme, className = '' }) => {
     <motion.button
       type="button"
       onClick={onClick}
-      aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+      aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
       className={`p-2 text-fg hover:text-accent transition-colors duration-300 ${className}`}
       whileTap={{ scale: 0.97 }}
       transition={{ type: 'spring', bounce: 0, duration: 0.4 }}

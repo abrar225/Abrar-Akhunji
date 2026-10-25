@@ -1,129 +1,90 @@
-# Abrar Akhunji — Portfolio
+# Abrar Akhunji — Portfolio & The Neural Log
 
-Hi, I'm **Abrar Akhunji**, an **AI/ML Engineer & Full-Stack Developer** building production-ready applications spanning food delivery ecosystems, computer vision systems, and healthcare AI.
+The production site at [abrarakhunji.com](https://abrarakhunji.com): a portfolio, a daily-ish engineering blog, and a hire page for AI/ML and full-stack work.
 
-This portfolio is built with **React 19**, **Vite 6**, and **Tailwind CSS 4** — and it embeds **[FixO](#-fixo--ai-assistant--builder-ide)**, a draggable AI chat assistant and in-browser UI builder IDE.
+Built with React 19 and Vite 6. Content is markdown in git. The deploy target is static hosting on Hostinger; there is no application server, database, CMS or API key.
 
----
+## What is in the site
 
-## 👨‍💻 About Me
+- **Portfolio** — hero, selected work, capabilities, experience, recognition, writing and contact, with a custom Three.js/ASCII hero and a footer ecosystem.
+- **The Neural Log** — 57 AI/systems posts with ELI5 and Developer reading modes, interactive widgets, topic filters, a prerequisite tech tree and related posts.
+- **Hire** — services, engagement models, process, FAQ and location coverage for Ahmedabad, Gandhinagar, Bangalore and remote work.
+- **Static SEO layer** — per-post semantic HTML, canonical URLs, Person/WebSite/Article/FAQ schema, sitemap, RSS, `llms.txt`, `llms-full.txt` and explicit AI crawler rules.
+- **Error handling** — app-level error boundary, branded recovery screen, custom client 404 and static `404.html`.
 
-- 🎓 B.E. in Information Technology (Kalol Institute of Technology)
-- 🧑‍💻 AI/ML Engineer + Python Developer + Full-Stack Learner
-- 🐍 Strong background in **Python, Django, OpenCV, Vision Transformers**
-- 🌐 Experience with **React, Next.js, JavaScript, GSAP, Three.js**
-- 🏢 Founder of **FireHawks** (tech brand)
-- 🚀 Building **FixO** — AI-powered UI generation IDE
+## Stack
 
----
+- React 19, React Router 7, Vite 6
+- Tailwind CSS 4
+- Framer Motion, GSAP, Lenis, Three.js
+- `marked` for markdown, KaTeX for math, Recharts for interactive charts
+- Vitest? No — `node:test` for units, Playwright for browser E2E
+- Hostinger (Apache/LiteSpeed) for static hosting
 
-## 🛠 Tech Stack
-
-**Frontend**
-- React 19, Next.js 14, JavaScript (ES6+)
-- Tailwind CSS 4, GSAP, Framer Motion, Three.js, Lenis
-
-**Backend**
-- Python, Django 5.0, Django Channels, Flask
-- REST APIs, WebSockets, Redis
-
-**AI / ML**
-- OpenCV, NumPy, Pandas
-- TensorFlow / PyTorch, Vision Transformers
-- Computer Vision, Deep Learning
-
-**Databases & Infra**
-- MySQL, SQLite, Redis, Firebase (Auth + Firestore)
-- Vite, GitHub Pages, Vercel
-
----
-
-## 📌 Featured Projects
-
-### 🔹 GourmetGo — Full-Stack Food Delivery Ecosystem
-A complete multi-portal food ordering system (Customer, Vendor, Rider, Admin) with real-time tracking via WebSockets, Razorpay payments, and geolocation-based discovery.
-**Tech:** Next.js 14, Django 5.0, Django Channels, Redis, Razorpay, Tailwind CSS
-**Live:** [gourmet-go.vercel.app](https://gourmet-go.vercel.app/) · [GitHub](https://github.com/abrar225/GourmetGo)
-
-### 🔹 Cattle Breed Identification — AI/ML
-Classifies 41 Indian cattle breeds using Vision Transformer embeddings and image preprocessing.
-**Tech:** Python, OpenCV, Vision Transformer (ViT)
-**Live:** [BreedAI on HuggingFace](https://huggingface.co/spaces/abrar225/BreedAI) · [GitHub](https://github.com/abrar225/AI_cattle_vison)
-
-### 🔹 Brain Tumor Detection (MRI) — Healthcare AI
-Computer vision model trained on MRI scans for automated tumor detection using classical image processing and ML.
-**Tech:** Python, OpenCV, NumPy, Pandas
-**GitHub:** [Brain-Tumer-Detection-System](https://github.com/abrar225/Brain-Tumer-Detection-System)
-
-### 🔹 Real vs AI Image Detector — Computer Vision
-Deep-learning system that distinguishes AI-generated images from real ones using transformer-based feature extraction.
-**Tech:** Python, OpenCV, TensorFlow/PyTorch
-
-### 🔹 Library Management System — Full Stack
-Full-featured library platform with inventory management, payments, and reader community.
-**Tech:** Python, Django, MySQL, HTML, CSS, JavaScript
-**GitHub:** [Library-Management-System](https://github.com/abrar225/Library-Management-System)
-
-### 🔹 Kid's Space — Android App
-Interactive educational Android app for children with clean, kid-friendly UI.
-**Tech:** Android Studio, XML, Java
-
----
-
-## 🤖 FixO — AI Assistant & Builder IDE
-
-Embedded directly in this portfolio:
-
-- **AI Chat Assistant** — 8+ free AI models via OpenRouter, draggable floating widget, text-to-speech, daily credit system
-- **Builder Mode IDE** — Describe a UI in natural language and get production HTML/CSS/JS. Supports 10 AI providers, project persistence via Firebase, ZIP export, and live preview
-
----
-
-## 🌐 Live Portfolio
-
-🔗 **Website:** [abrar225.github.io/Abrar-Akhunji](https://abrar225.github.io/Abrar-Akhunji/)
-🔗 **GitHub:** [github.com/abrar225](https://github.com/abrar225)
-🔗 **LinkedIn:** [linkedin.com/in/abrar-akhunji](https://www.linkedin.com/in/abrar-akhunji/)
-
----
-
-## 🚀 Getting Started
+## Quick start
 
 ```bash
 npm install
-npm run dev      # Start dev server (includes Vercel API mock)
-npm run build    # Production build
-npm run preview  # Preview production build
-npm run deploy   # Deploy to GitHub Pages
+npm run dev
 ```
 
----
+`predev` builds the content index from `src/content/blogs/*.md`. No environment variables are required.
 
-## 📄 License
+Production:
 
-This portfolio is for **personal and professional showcasing**.
-Do not reuse projects or designs without permission.
-<!-- [2024-09-17T18:27:26] style: improve formatting and badge alignment -->
-<!-- [2024-11-01T15:23:59] style: improve formatting and badge alignment -->
-<!-- [2024-11-04T22:04:18] docs(readme): update project documentation and overview -->
-<!-- [2025-02-07T16:19:46] docs(readme): update project documentation and overview -->
-<!-- [2025-02-28T15:26:00] style: improve formatting and badge alignment -->
-<!-- [2025-04-29T13:12:12] docs(readme): update project documentation and overview -->
-<!-- [2025-06-27T18:35:11] style: improve formatting and badge alignment -->
-<!-- [2025-08-18T20:59:19] style: improve formatting and badge alignment -->
-<!-- [2025-10-05T11:15:42] style: improve formatting and badge alignment -->
-<!-- [2025-10-30T14:47:24] docs(readme): update project documentation and overview -->
-<!-- [2025-11-30T14:05:10] docs(readme): update project documentation and overview -->
-<!-- [2026-01-25T12:37:41] docs(readme): update project documentation and overview -->
-<!-- [2026-01-26T12:30:39] docs(readme): update project documentation and overview -->
-<!-- [2026-02-12T11:59:33] style: improve formatting and badge alignment -->
-<!-- [2026-02-16T13:50:34] docs(readme): update project documentation and overview -->
-<!-- [2026-03-17T19:39:20] style: improve formatting and badge alignment -->
-<!-- [2026-03-18T12:55:08] docs(readme): update project documentation and overview -->
-<!-- [2026-04-13T11:57:21] docs(readme): update project documentation and overview -->
-<!-- [2026-04-24T22:32:59] style: improve formatting and badge alignment -->
-<!-- [2026-05-11T21:52:40] docs(readme): update project documentation and overview -->
-<!-- [2026-06-08T21:11:56] style: improve formatting and badge alignment -->
-<!-- [2026-06-11T22:44:39] style: improve formatting and badge alignment -->
-<!-- [2026-06-14T22:36:54] docs(readme): update project documentation and overview -->
-<!-- [2026-06-17T12:36:53] style: improve formatting and badge alignment -->
+```bash
+npm run build
+npm run preview
+```
+
+## Commands
+
+| Command | Purpose |
+|---|---|
+| `npm run dev` | Dev server |
+| `npm run build` | Content index → Vite build → static SEO artifacts |
+| `npm run preview` | Preview the built site |
+| `npm run lint` | ESLint |
+| `npm run validate:content` | Validate every post |
+| `npm test` | Unit tests |
+| `npm run test:e2e` | Build + Playwright browser checks |
+| `npm run deploy:hostinger` | Build and deploy `dist/` |
+
+Full setup, authoring and troubleshooting: [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md).
+
+## Architecture in one minute
+
+```
+src/content/blogs/*.md
+  ├─ build-blog-index.mjs → src/generated/blog-index.json (metadata, ~80KB)
+  └─ generate-seo.mjs     → dist/blog/<slug>/index.html + sitemap + feed + llms
+```
+
+`src/lib/blogUtils.js` loads one post body on demand; the full corpus never enters the entry bundle. The parser is split into `frontmatter.js` (no renderer) and `markdown.js` (marked) so the homepage does not ship markdown tooling. See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
+## Content
+
+Add a markdown file with frontmatter, a hero image and optional `:::eli5`, `:::dev` and `:::interactive` blocks. The build validates dates, slugs, prerequisites, images, JSON and unsafe HTML. Detailed authoring rules: [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md).
+
+## SEO / AEO / GEO
+
+The canonical policy is trailing-slash URLs. Legacy date-prefixed URLs are 301s in `.htaccess`, not redirect pages. Every article is pre-rendered for crawlers, has Article/Breadcrumb/FAQ schema, and is included in the sitemap and RSS feed. `llms.txt` and `llms-full.txt` expose the archive to AI crawlers.
+
+Read [docs/SEO_GUIDELINES.md](docs/SEO_GUIDELINES.md) and the keyword/location plan in [docs/KEYWORD_STRATEGY.md](docs/KEYWORD_STRATEGY.md).
+
+## Tests
+
+- Unit tests cover frontmatter, custom blocks, markdown/math, URL normalization, content-index integrity and hosting configuration.
+- E2E covers the home page, blog list, article, reading-mode toggle, tech tree, hire page, 404, theme, mobile navigation and console errors.
+- CI runs lint, content validation, unit tests and the production build on every push and pull request.
+
+## Deploy
+
+See [DEPLOY.md](DEPLOY.md). The short version: `npm run deploy:hostinger`, then verify canonical tags, the sitemap, the custom 404 and security headers.
+
+## Repo notes
+
+- `dist/` and `src/generated/` are build artifacts and ignored.
+- No secrets are required. If an old `.env` with `FREELLM_*` keys remains, rotate those keys and delete it; the AI proxy was removed.
+- `AGENTS.md` is agent instructions, not application code.
+- Reference clones and analysis output directories are local-only and ignored.

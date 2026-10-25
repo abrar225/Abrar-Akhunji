@@ -12,8 +12,18 @@ const BRANCH_COLORS = {
   'General': { bg: 'rgba(201, 212, 65, 0.1)', border: 'rgba(201, 212, 65, 0.3)', text: '#C9D441', glow: 'rgba(201, 212, 65, 0.2)' },
 };
 
+const FALLBACK_PALETTE = [
+  { bg: 'rgba(121, 208, 224, 0.10)', border: 'rgba(121, 208, 224, 0.32)', text: '#79D0E0', glow: 'rgba(121, 208, 224, 0.20)' },
+  { bg: 'rgba(154, 140, 255, 0.10)', border: 'rgba(154, 140, 255, 0.32)', text: '#9A8CFF', glow: 'rgba(154, 140, 255, 0.20)' },
+  { bg: 'rgba(240, 168, 104, 0.10)', border: 'rgba(240, 168, 104, 0.32)', text: '#F0A868', glow: 'rgba(240, 168, 104, 0.20)' },
+  { bg: 'rgba(116, 196, 150, 0.10)', border: 'rgba(116, 196, 150, 0.32)', text: '#74C496', glow: 'rgba(116, 196, 150, 0.20)' },
+];
+
 function getColor(branch) {
-  return BRANCH_COLORS[branch] || BRANCH_COLORS['General'];
+  if (BRANCH_COLORS[branch]) return BRANCH_COLORS[branch];
+  let hash = 0;
+  for (let i = 0; i < branch.length; i += 1) hash = (hash * 31 + branch.charCodeAt(i)) | 0;
+  return FALLBACK_PALETTE[Math.abs(hash) % FALLBACK_PALETTE.length];
 }
 
 function TreeNode({ blog, color, isUnlocked, index }) {
@@ -124,10 +134,10 @@ export default function TechTree({ blogs }) {
 
   const branchNames = Object.keys(branches);
 
-  // Check if a blog is "unlocked" (all prerequisites are read)
+  // Check if a blog is unlocked (all declared prerequisites are read)
   function checkUnlocked(blog) {
-    if (!blog.techTree?.requires || blog.techTree.requires.length === 0) return true;
-    return blog.techTree.requires.every((req) => isPostRead(req));
+    const prerequisites = blog.techTree?.prerequisites || [];
+    return prerequisites.length === 0 || prerequisites.every((slug) => isPostRead(slug));
   }
 
   return (

@@ -153,3 +153,9 @@ x-autoposting/.auth/
 # WorkBuddy AI local cache
 .workbuddy-ai/
 
+
+# Generated content index
+src/generated/
+
+# Deploy archive
+dist.zip
