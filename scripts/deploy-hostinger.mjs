@@ -28,6 +28,19 @@ const CREDENTIALS_PATH = process.env.HOSTINGER_CREDENTIALS
 const BASE_URL = 'https://developers.hostinger.com/';
 const AUTH_URL = 'https://auth.hostinger.com/api/external/v1/oauth-server/token';
 
+async function fetchWithRetry(url, options, retries = 3, backoff = 1000) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      return await fetch(url, options);
+    } catch (err) {
+      if (i === retries - 1) throw err;
+      console.warn(`[network] Fetch attempt ${i + 1} failed (${err.message}). Retrying in ${backoff}ms...`);
+      await new Promise(r => setTimeout(r, backoff));
+      backoff *= 2;
+    }
+  }
+}
+
 async function getValidToken() {
   if (!fs.existsSync(CREDENTIALS_PATH)) {
     throw new Error(`Hostinger credentials not found at ${CREDENTIALS_PATH}. Set HOSTINGER_CREDENTIALS or complete the Hostinger auth flow.`);
@@ -120,7 +133,7 @@ async function main() {
   const archiveSize = createArchive();
   const token = await getValidToken();
 
-  const sitesRes = await fetch(
+  const sitesRes = await fetchWithRetry(
     new URL(`api/hosting/v1/websites?domain=${encodeURIComponent(DOMAIN)}`, BASE_URL),
     { headers: { Authorization: `Bearer ${token}` } }
   );
@@ -129,7 +142,7 @@ async function main() {
   const username = sites.data?.[0]?.username;
   if (!username) throw new Error('Hosting username missing from API response.');
 
-  const credsRes = await fetch(new URL('api/hosting/v1/files/upload-urls', BASE_URL), {
+  const credsRes = await fetchWithRetry(new URL('api/hosting/v1/files/upload-urls', BASE_URL), {
     method: 'POST',
     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({ username, domain: DOMAIN }),
@@ -139,7 +152,7 @@ async function main() {
 
   const archiveName = await uploadArchive(archiveSize, uploadCreds.url, uploadCreds.auth_key, uploadCreds.rest_auth_key);
 
-  const deployRes = await fetch(
+  const deployRes = await fetchWithRetry(
     new URL(`api/hosting/v1/accounts/${username}/websites/${DOMAIN}/deploy`, BASE_URL),
     {
       method: 'POST',
