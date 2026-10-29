@@ -1,21 +1,44 @@
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
-const personalities=[{name:'Pip',kind:'seed',fear:150,speed:150,curiosity:.12,side:0,phase:.3},{name:'Spool',kind:'moth',fear:110,speed:110,curiosity:.5,side:1,phase:2.2}];
-export function createCreatures(width,height){return personalities.map((p,i)=>({...p,x:i?width-26:26,y:height*(i?.38:.69),vx:0,vy:0,angle:0,state:'wandering',energy:0}));}
-export function advanceCreatures(agents,seconds,time,pointer,width,height,obstacles=[]){
+export function createCreatures(width,height,habitat=null){
+ const homes=habitat||{web:{x:width-32,y:150},flowers:[{x:32,y:height*.7},{x:width-38,y:height*.8}]};
+ return [{name:'Pip',kind:'spider',x:homes.web.x-24,y:homes.web.y+27,vx:0,vy:0,state:'resting',until:10,phase:0,speed:85,home:{...homes.web},thread:36},{name:'Spool',kind:'butterfly',x:homes.flowers[0].x,y:homes.flowers[0].y-7,vx:0,vy:0,state:'perched',until:12,phase:0,speed:150,target:0,visits:0,flowers:homes.flowers.map(p=>({...p}))}];
+}
+export function advanceCreatures(agents,seconds,time,pointer,width,height){
  let left=clamp(Number.isFinite(seconds)?seconds:0,0,.06);
- const minX=16,maxX=Math.max(16,width-16),minY=100,maxY=Math.max(100,height-85);
  while(left>0){const dt=Math.min(left,1/120);left-=dt;
-  const forces=agents.map(a=>{
-   const margin=width<1024?16:26,homeX=a.side?width-margin:margin,homeY=height*(.5+.27*Math.sin(time*.12+a.phase));
-   let ax=(homeX-a.x)*1.7+Math.sin(time*.8+a.phase)*21,ay=(homeY-a.y)*.6+Math.cos(time*.6+a.phase)*16;
-   a.state='wandering';a.energy=0;
-   if(pointer){let dx=a.x-pointer.x,dy=a.y-pointer.y,d=Math.hypot(dx,dy);if(d<1){dx=a.side?-1:1;dy=Math.sin(a.phase);d=Math.hypot(dx,dy);}if(d<a.fear){const push=(1-d/a.fear)*780;ax+=dx/d*push;ay+=dy/d*push;if((a.x<minX+35&&dx<0)||(a.x>maxX-35&&dx>0))ay+=(dy<0?-1:dy>0?1:a.side?-1:1)*push*.8;if((a.y<minY+30&&dy<0)||(a.y>maxY-30&&dy>0))ax+=(dx<0?-1:1)*push*.8;a.state='fleeing';a.energy=1-d/a.fear;}else if(d<a.fear*1.8){ax-=(dx/d)*a.curiosity*16;ay-=(dy/d)*a.curiosity*16;a.state='watching';}}
-   for(const o of agents){if(o===a)continue;const dx=a.x-o.x,dy=a.y-o.y,d=Math.max(1,Math.hypot(dx,dy));if(d<65){ax+=dx/d*(65-d)*4;ay+=dy/d*(65-d)*4;}}
-   for(const r of obstacles){const x=clamp(a.x,r.left-22,r.right+22),y=clamp(a.y,r.top-22,r.bottom+22),dx=a.x-x,dy=a.y-y,d=Math.hypot(dx,dy);if(d<42){if(d<1){const distances=[{d:Math.abs(a.x-r.left),x:-1,y:0},{d:Math.abs(a.x-r.right),x:1,y:0},{d:Math.abs(a.y-r.top),x:0,y:-1},{d:Math.abs(a.y-r.bottom),x:0,y:1}].sort((x,y)=>x.d-y.d);ax+=distances[0].x*600;ay+=distances[0].y*600;}else{ax+=dx/d*(42-d)*12;ay+=dy/d*(42-d)*12;}}}
-   if(a.x<minX+8)ax+=200;if(a.x>maxX-8)ax-=200;if(a.y<minY+15)ay+=220;if(a.y>maxY-15)ay-=220;
-   return {ax,ay};
-  });
-  agents.forEach((a,i)=>{a.vx=(a.vx+forces[i].ax*dt)*Math.exp(-2.6*dt);a.vy=(a.vy+forces[i].ay*dt)*Math.exp(-2.6*dt);const speed=Math.hypot(a.vx,a.vy),max=a.speed;if(speed>max){a.vx*=max/speed;a.vy*=max/speed;}a.x=clamp(a.x+a.vx*dt,minX,maxX);a.y=clamp(a.y+a.vy*dt,minY,maxY);if(speed>2)a.angle=Math.atan2(a.vy,a.vx);});
+  for(const a of agents){
+   const distance=pointer?Math.hypot(a.x-pointer.x,a.y-pointer.y):Infinity;
+   if(a.kind==='spider'){
+    if(distance<100&&a.state!=='retreating'){a.state='retreating';a.until=time+6;}
+    if(time>=a.until){a.state=a.state==='resting'?'descending':a.state==='descending'?'returning':'resting';a.until=time+(a.state==='resting'?12:7);}
+    const hanging=a.state==='descending';a.thread=hanging?100:36;
+    const targetX=a.home.x-24+(hanging?Math.sin(time*.8)*9:0),targetY=a.home.y+(hanging?95:27);
+    // Gravity loads the silk; spring tension supports it at the chosen length.
+    const ax=(targetX-a.x)*18,ay=(targetY-20-a.y)*18+360;
+    a.vx=(a.vx+ax*dt)*Math.exp(-7*dt);a.vy=(a.vy+ay*dt)*Math.exp(-7*dt);
+    if(a.state==='retreating'){a.vx+=(a.home.x-8-a.x)*10*dt;a.vy+=(a.home.y+10-a.y)*10*dt;}
+   }else{
+    if(a.state==='perched'){
+     const flower=a.flowers[a.target];a.x=flower.x;a.y=flower.y-7;a.vx=a.vy=0;
+     if(distance<55){a.state='fleeing';a.until=time+2.5;a.target=(a.target+1)%a.flowers.length;}
+     else if(time>=a.until){a.visits++;a.target=(a.target+1)%a.flowers.length;a.state='flying';a.until=time+18;}
+     else continue;
+    }
+    if(distance<45&&a.state!=='fleeing'){a.state='fleeing';a.until=time+2.5;}
+    else if(a.state==='fleeing'&&time>a.until){a.state='flying';a.until=time+18;}
+    else if(pointer&&distance>90&&distance<210&&a.state==='flying'&&a.visits%3===1){a.state='curious';a.until=time+2.5;}
+    else if(a.state==='curious'&&time>a.until){a.state='returning';a.until=time+18;}
+    const flower=a.flowers[a.target];let tx=flower.x,ty=flower.y-7;
+    if(a.state==='curious'&&pointer){tx=pointer.x-75;ty=pointer.y-50;}
+    if(a.state==='fleeing'&&pointer){const d=Math.max(1,distance);tx=a.x+(a.x-pointer.x)/d*140;ty=a.y-100;}
+    const dx=tx-a.x,dy=ty-a.y,dist=Math.max(1,Math.hypot(dx,dy)),desired=Math.min(a.speed,dist*2);
+    const flap=Math.sin(time*27);const lift=340+flap*35;
+    a.vx+=(dx/dist*desired-a.vx)*3*dt;a.vy+=((dy/dist*desired-a.vy)*3+340-lift)*dt;
+    if(!['curious','fleeing'].includes(a.state)&&dist<7&&Math.hypot(a.vx,a.vy)<30){a.state='perched';a.until=time+10+(a.visits%3)*4;a.x=flower.x;a.y=flower.y-7;a.vx=a.vy=0;}
+   }
+   const speed=Math.hypot(a.vx,a.vy);if(speed>a.speed){a.vx*=a.speed/speed;a.vy*=a.speed/speed;}
+   a.x=clamp(a.x+a.vx*dt,16,Math.max(16,width-16));a.y=clamp(a.y+a.vy*dt,100,Math.max(100,height-40));a.phase+=Math.hypot(a.vx,a.vy)*dt*.09;
+  }
  }
  return agents;
 }

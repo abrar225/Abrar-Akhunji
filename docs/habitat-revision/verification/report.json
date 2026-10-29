@@ -1,0 +1,44 @@
+{
+  "checks": [
+    "Spider and butterfly have section-resident world positions; scrolling does not carry them",
+    "Offscreen habitats stop drawing instead of following the viewport",
+    "Complete evidenced toolkit supports category buttons, keyboard slider navigation and expandable sources",
+    "Eight responsive theme/viewport layouts fit without overflow; reduced motion stays static"
+  ],
+  "errors": [],
+  "views": [
+    {
+      "width": 360,
+      "theme": "light"
+    },
+    {
+      "width": 360,
+      "theme": "dark"
+    },
+    {
+      "width": 390,
+      "theme": "light"
+    },
+    {
+      "width": 390,
+      "theme": "dark"
+    },
+    {
+      "width": 768,
+      "theme": "light"
+    },
+    {
+      "width": 768,
+      "theme": "dark"
+    },
+    {
+      "width": 1440,
+      "theme": "light"
+    },
+    {
+      "width": 1440,
+      "theme": "dark"
+    }
+  ],
+  "verdict": "PASS"
+}

@@ -10,14 +10,13 @@ test('all available occupied buildings sound once at the same growth threshold, 
  for(const fps of [15,30,60,144]){let total=0,prior=0;for(let time=1000/fps;prior<3450;time+=1000/fps){const end=Math.min(3450,time);total+=cityCrossings(days,prior,end).length;prior=end;}assert.equal(total,expected);}
  assert.equal(cityBirthTime({week:0,weekday:0}),200);assert.equal(cityCrossings(days,0,199).length,0);assert.equal(cityCrossings(days,3450,3450).length,0);
 });
-test('creatures flee the pointer and preserve their own personality',()=>{
- const a=createCreatures(1400,900);a[0].x=200;a[0].y=500;const pointer={x:230,y:500},distance=Math.hypot(a[0].x-pointer.x,a[0].y-pointer.y);
- for(let i=0;i<45;i++)advanceCreatures(a,1/60,i/60,pointer,1400,900);
- assert.ok(Math.hypot(a[0].x-pointer.x,a[0].y-pointer.y)>distance+45);assert.notEqual(a[0].fear,a[1].fear);assert.deepEqual(a.map(x=>x.name),['Pip','Spool']);
+test('spider remains tethered to its section and butterfly rests then visits a real perch',()=>{
+ const a=createCreatures(1440,4000,{web:{x:1400,y:1400},flowers:[{x:30,y:1700},{x:1380,y:1900}]});
+ for(let i=0;i<12000;i++){const t=i/60;advanceCreatures(a,1/60,t,null,1440,4000);assert.ok(Math.hypot(a[0].x-1400,a[0].y-1400)<130);for(const c of a){assert.ok(Number.isFinite(c.x+c.y+c.vx+c.vy));assert.ok(Math.hypot(c.vx,c.vy)<=c.speed+.001);}}
+ assert.ok(a[1].visits>=2);assert.deepEqual(a.map(x=>x.name),['Pip','Spool']);
 });
-test('creature steering stays bounded and finite over three minutes, obstacles and viewport changes',()=>{
- const agents=createCreatures(1440,900);
- for(let i=0;i<10800;i++){const width=i<5400?1440:390,height=900;advanceCreatures(agents,1/60,i/60,{x:100+Math.sin(i*.02)*90,y:500},width,height,[{left:0,right:width,top:0,bottom:82},{left:50,right:width-50,top:800,bottom:850}]);for(const a of agents){assert.ok(Number.isFinite(a.x+a.y+a.vx+a.vy));assert.ok(a.x>=16&&a.x<=width-16&&a.y>=100&&a.y<=height-85);assert.ok(Math.hypot(a.vx,a.vy)<=a.speed+.001);}}
+test('butterfly rests exactly on the flower and leaves when approached',()=>{
+ const a=createCreatures(1440,4000,{web:{x:1400,y:1400},flowers:[{x:30,y:1700},{x:300,y:1900}]});advanceCreatures(a,1/60,1,null,1440,4000);assert.equal(a[1].state,'perched');assert.equal(a[1].y,1693);advanceCreatures(a,1/60,2,{x:30,y:1693},1440,4000);assert.equal(a[1].state,'fleeing');assert.ok(a[1].vy<0);
 });
 test('higher signature sensitivity produces a stronger but bounded response and still restores home',()=>{
  const points=()=>[{x:230,y:100,homeX:230,homeY:100,vx:0,vy:0}];const calm=points(),strong=points();for(let i=0;i<60;i++){advanceGlyphs(calm,1/60,{x:200,y:100,speed:1},500,250,.25);advanceGlyphs(strong,1/60,{x:200,y:100,speed:1},500,250,1.2);}assert.ok(strong[0].x-calm[0].x>15);
