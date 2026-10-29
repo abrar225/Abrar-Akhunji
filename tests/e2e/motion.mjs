@@ -1,0 +1,33 @@
+import { chromium } from 'playwright';
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+const root=process.env.DESIGN_OUTPUT||'docs/implementation/verification';await fs.mkdir(root,{recursive:true});
+const browser=await chromium.launch({headless:true});const base=process.env.PREVIEW_URL||'http://127.0.0.1:4180';
+const results=[];
+try {
+ const page=await browser.newPage({viewport:{width:1440,height:900},reducedMotion:'no-preference'});
+ await page.goto(base+'/');await page.waitForSelector('.build-canvas[data-ready=true]');await page.waitForTimeout(1500);
+ const camera=()=>page.locator('.build-canvas').getAttribute('data-camera');const initial=await camera();
+ await page.screenshot({path:root+'/motion-arrival.png'});
+ await page.getByRole('link',{name:'Explore my work',exact:true}).click();
+ await page.waitForFunction(()=>Math.abs(document.querySelector('#work').getBoundingClientRect().top-100)<10);await page.locator('.scene-sticky .build-canvas[data-ready=true]').waitFor();await page.waitForTimeout(1400);const work=await camera();assert.notEqual(work,initial,'camera must follow scroll');
+ await page.screenshot({path:root+'/motion-work.png'});
+ await page.locator('.project-selector').getByRole('button',{name:'PacketLark'}).click();
+ await page.waitForFunction(()=>document.querySelector('#selected-product h3').textContent==='PacketLark');
+ assert.ok(page.url().endsWith('#work'));await page.waitForTimeout(1100);
+ assert.ok(await page.locator('#work').evaluate(el=>Math.abs(el.getBoundingClientRect().top)<300),'selection retains work viewport');
+ await page.getByRole('button',{name:'Explore in 3D'}).click();await page.getByRole('button',{name:'Reset view'}).click();
+ await page.waitForTimeout(1600);const settled=await page.locator('.build-canvas').getAttribute('data-renders');await page.waitForTimeout(700);assert.equal(await page.locator('.build-canvas').getAttribute('data-renders'),settled);
+ await page.locator('#engineering').evaluate(el=>window.scrollTo({top:el.getBoundingClientRect().top+scrollY-90,behavior:'instant'}));
+ await page.getByRole('button',{name:'Inside the build',exact:true}).click();await page.waitForTimeout(1000);assert.ok(await page.locator('#engineering-layers').isVisible());
+ await page.screenshot({path:root+'/motion-inspection.png'});
+ await page.locator('#home').evaluate(el=>window.scrollTo({top:el.getBoundingClientRect().top+scrollY-82,behavior:'instant'}));await page.waitForTimeout(1400);assert.equal(await camera(),initial,'scroll choreography reverses to arrival');
+ results.push({test:'continuous camera, reversal, selection URL/viewport, Explore reset, inspection and settled rendering',result:'pass',arrivalCamera:initial,workCamera:work});
+ const mobile=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'});await mobile.goto(base+'/');await mobile.locator('.hero-copy h1').waitFor();await mobile.evaluate(()=>document.fonts.ready);await mobile.waitForTimeout(500);
+ const box=await mobile.locator('.hero-copy h1').boundingBox();const bounds=await mobile.locator('.hero-title-built').boundingBox();assert.ok(bounds.x+bounds.width<=390,'mobile headline must not clip');assert.ok(box.x>=0);
+ assert.equal(await mobile.locator('.build-canvas').count(),0,'offscreen mobile scene does not initialize');
+ await mobile.screenshot({path:root+'/motion-mobile-arrival.png'});
+ await mobile.locator('#work').evaluate(el=>window.scrollTo({top:el.getBoundingClientRect().top+scrollY-90,behavior:'instant'}));await mobile.waitForSelector('[data-ready=true]');await mobile.screenshot({path:root+'/motion-mobile-work.png'});
+ results.push({test:'mobile headline visibility and deferred scene initialization',result:'pass'});
+} finally {await browser.close();await fs.writeFile(root+'/motion-report.json',JSON.stringify(results,null,2));}
+console.log(results);

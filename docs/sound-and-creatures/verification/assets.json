@@ -1,0 +1,150 @@
+{
+  "assets": [
+    {
+      "name": "music",
+      "duration": 60,
+      "peak": 0.8141159415245056,
+      "rms": 0.10142892863609557,
+      "tailPeak": 0.008101602084934711,
+      "boundary": 0.002392833062913269,
+      "bytes": 960813
+    },
+    {
+      "name": "hover",
+      "duration": 0.035,
+      "peak": 0.1199951171875,
+      "rms": 0.025359181792769248,
+      "tailPeak": 0,
+      "boundary": 0,
+      "bytes": 6764
+    },
+    {
+      "name": "click",
+      "duration": 0.07,
+      "peak": 0.220001220703125,
+      "rms": 0.03127527432022364,
+      "tailPeak": 0,
+      "boundary": 0,
+      "bytes": 13484
+    },
+    {
+      "name": "select",
+      "duration": 0.11,
+      "peak": 0.199981689453125,
+      "rms": 0.04301999896371114,
+      "tailPeak": 0,
+      "boundary": 0,
+      "bytes": 21164
+    },
+    {
+      "name": "section",
+      "duration": 0.22,
+      "peak": 0.17999267578125,
+      "rms": 0.028696284216083636,
+      "tailPeak": 0,
+      "boundary": 0,
+      "bytes": 42284
+    },
+    {
+      "name": "chapter",
+      "duration": 0.45,
+      "peak": 0.199981689453125,
+      "rms": 0.03099866857940035,
+      "tailPeak": 0,
+      "boundary": 0,
+      "bytes": 86444
+    },
+    {
+      "name": "building",
+      "duration": 0.06,
+      "peak": 0.17999267578125,
+      "rms": 0.03624280132174025,
+      "tailPeak": 0,
+      "boundary": 0,
+      "bytes": 11564
+    },
+    {
+      "name": "replay",
+      "duration": 0.32,
+      "peak": 0.199981689453125,
+      "rms": 0.05025318049995553,
+      "tailPeak": 0,
+      "boundary": 0,
+      "bytes": 61484
+    },
+    {
+      "name": "city-complete",
+      "duration": 0.65,
+      "peak": 0.17999267578125,
+      "rms": 0.04329173803786504,
+      "tailPeak": 0,
+      "boundary": 0,
+      "bytes": 124844
+    },
+    {
+      "name": "scatter",
+      "duration": 0.25,
+      "peak": 0.160003662109375,
+      "rms": 0.016325185170681742,
+      "tailPeak": 0,
+      "boundary": 0,
+      "bytes": 48044
+    },
+    {
+      "name": "reform",
+      "duration": 0.4,
+      "peak": 0.17999267578125,
+      "rms": 0.04596206701410882,
+      "tailPeak": 0,
+      "boundary": 0,
+      "bytes": 76844
+    },
+    {
+      "name": "creature",
+      "duration": 0.09,
+      "peak": 0.139984130859375,
+      "rms": 0.028955965272437042,
+      "tailPeak": 0,
+      "boundary": 0,
+      "bytes": 17324
+    },
+    {
+      "name": "ripple",
+      "duration": 0.28,
+      "peak": 0.17999267578125,
+      "rms": 0.03374098929977825,
+      "tailPeak": 0,
+      "boundary": 0,
+      "bytes": 53804
+    },
+    {
+      "name": "breach",
+      "duration": 0.35,
+      "peak": 0.17999267578125,
+      "rms": 0.03410045423608396,
+      "tailPeak": 0,
+      "boundary": 0,
+      "bytes": 67244
+    },
+    {
+      "name": "splash",
+      "duration": 0.5,
+      "peak": 0.17999267578125,
+      "rms": 0.025391419148787245,
+      "tailPeak": 0,
+      "boundary": 0,
+      "bytes": 96044
+    }
+  ],
+  "source": {
+    "platform": "Flow Music",
+    "music": "https://www.flowmusic.app/song/a935ec22-3ca3-43fb-85cd-face5432a73c",
+    "musicSession": "https://www.flowmusic.app/session/f870e704-9742-4a47-9f78-919a7cba71f2",
+    "effectsSession": "https://www.flowmusic.app/session/bcd051bd-d3a5-4aa5-9a52-574cba482973",
+    "effectsMethod": "Flow Music Spaces authored the original instrument source; its code-view export was rendered locally without changing its DSP, then peak-matched for a quiet web mix",
+    "effectsVersion": 6,
+    "effectsExportNote": "The embedded Flow ZIP download did not complete; scripts/render-flow-space.mjs rendered the exported Flow source with native OfflineAudioContext and the Flow WAV/ZIP encoders.",
+    "musicMethod": "Flow Music Producer track, edited into a circular 60-second loop"
+  },
+  "verdict": "PASS"
+}

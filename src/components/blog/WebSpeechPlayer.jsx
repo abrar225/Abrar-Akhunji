@@ -1,432 +1,132 @@
-import { useState, useEffect, useRef, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Play, Pause, Headphones } from "lucide-react";
-
-const MALE_VOICES = ['siri male', 'alex', 'daniel', 'microsoft david', 'google uk english male'];
-const FEMALE_VOICES = ['siri female', 'samantha', 'microsoft zira', 'google us english'];
-
-// Average speaking speed (~150 wpm ≈ 14 chars/sec at 1x) — used to estimate
-// progress on browsers that never fire `onboundary` (e.g. Chrome on Android).
-const CHARS_PER_SECOND = 14;
+import { useEffect, useRef, useState } from 'react';
+import { Play, Pause, Headphones, RotateCcw, SkipBack, SkipForward } from 'lucide-react';
+import { siteAudio } from '../../lib/audio/siteAudio';
+import { collectNarration, locateNarration, wordBounds } from '../../lib/content/narration';
 
 export default function WebSpeechPlayer({ contentRef }) {
-  const [isPlaying, setIsPlaying] = useState(false);
-  // Feature-detect once, outside the render cycle
-  const [isSupported] = useState(() =>
-    typeof window !== 'undefined' &&
-    'speechSynthesis' in window &&
-    typeof SpeechSynthesisUtterance !== 'undefined'
-  );
-
-  // Options
-  const [voiceGender, setVoiceGender] = useState('female');
-  const [playbackRate, setPlaybackRate] = useState(1);
-  const [availableVoices, setAvailableVoices] = useState({ male: null, female: null });
-
-  // Progress tracking
-  const [progress, setProgress] = useState(0);
-
-  const synthRef = useRef(typeof window !== 'undefined' ? window.speechSynthesis : null);
-  const currentIndexRef = useRef(0);   // absolute char position in the article
-  const totalLengthRef = useRef(0);
-  const utteranceRef = useRef(null);
-  const boundaryFiredRef = useRef(false); // did this browser give us word events?
-  const estimatorRef = useRef(null);   // fallback progress timer
-  const keepAliveRef = useRef(null);   // Chrome >15s utterance watchdog
-  // While the user is manually scrolling (reading back, reaching for pause),
-  // karaoke auto-follow must yield — otherwise every spoken word yanks the
-  // viewport back to the highlight and the page becomes unscrollable.
-  const userScrollUntilRef = useRef(0);
-
-  // Detect USER-initiated scrolling only (wheel / touch / keys) — our own
-  // scrollIntoView doesn't fire these, so auto-follow never suspends itself.
+  const [supported] = useState(() => 'speechSynthesis' in window && typeof SpeechSynthesisUtterance !== 'undefined');
+  const [voices, setVoices] = useState([]), [voiceURI, setVoiceURI] = useState(''), [rate, setRate] = useState(1);
+  const [status, setStatus] = useState('idle'), [progress, setProgress] = useState(0), [estimated, setEstimated] = useState(false), [message, setMessage] = useState('');
+  const [following, setFollowing] = useState(false);
+  const session = useRef({ token: 0, utterance: null, timer: 0, queue: [], position: 0, playing: false, total: 0, element: null });
+  const follow = useRef(false), scrollUntil = useRef(0);
+  useEffect(()=>{siteAudio.narration(status==='playing');return()=>siteAudio.narration(false);},[status]);
+  function clearHighlight() {
+    session.current.element?.classList.remove('is-narrating'); session.current.element = null;
+    window.CSS?.highlights?.delete('narration');
+  }
+  function cancel() {
+    const active = session.current;
+    active.token++; active.utterance = null; active.playing = false;
+    clearInterval(active.timer); active.timer = 0;
+    if (supported) window.speechSynthesis.cancel();
+    clearHighlight();
+  }
   useEffect(() => {
-    const suspendAutoScroll = () => { userScrollUntilRef.current = Date.now() + 4000; };
-    const onKeyScroll = (e) => {
-      const scrollKeys = ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '];
-      if (scrollKeys.includes(e.key)) suspendAutoScroll();
+    if (!supported) return;
+    const synth = window.speechSynthesis;
+    const load = () => {
+      const available = synth.getVoices(), english = available.filter(voice => /^en\b/i.test(voice.lang));
+      const list = english.length ? english : available; setVoices(list);
+      const preferred = english.find(voice => /natural|enhanced|premium|neural/i.test(voice.name)) || english.find(voice => voice.default) || english[0] || list[0];
+      setVoiceURI(current => list.some(voice => voice.voiceURI === current) ? current : preferred?.voiceURI || '');
     };
-    window.addEventListener('wheel', suspendAutoScroll, { passive: true });
-    window.addEventListener('touchmove', suspendAutoScroll, { passive: true });
-    window.addEventListener('keydown', onKeyScroll);
+    load(); synth.addEventListener?.('voiceschanged', load);
+    const suspend = () => { scrollUntil.current = Date.now() + 4000; };
+    const key = event => { if (['PageUp', 'PageDown', 'ArrowUp', 'ArrowDown', 'Home', 'End', ' '].includes(event.key)) suspend(); };
+    window.addEventListener('wheel', suspend, { passive: true }); window.addEventListener('touchmove', suspend, { passive: true }); window.addEventListener('keydown', key);
+    const active = session.current;
     return () => {
-      window.removeEventListener('wheel', suspendAutoScroll);
-      window.removeEventListener('touchmove', suspendAutoScroll);
-      window.removeEventListener('keydown', onKeyScroll);
+      active.token++; active.utterance = null; active.playing = false; clearInterval(active.timer); synth.cancel();
+      active.element?.classList.remove('is-narrating'); window.CSS?.highlights?.delete('narration');
+      synth.removeEventListener?.('voiceschanged', load); window.removeEventListener('wheel', suspend); window.removeEventListener('touchmove', suspend); window.removeEventListener('keydown', key);
     };
-  }, []);
-
-  const removeHighlight = useCallback(() => {
-    if (!contentRef.current) return;
-    const marks = contentRef.current.querySelectorAll("mark.tts-highlight");
-    marks.forEach(mark => {
-      const parent = mark.parentNode;
-      while (mark.firstChild) {
-        parent.insertBefore(mark.firstChild, mark);
+  }, [supported]);
+  function prepare() {
+    const active = session.current;
+    if (!active.queue.length) { active.queue = collectNarration(contentRef.current); active.total = active.queue.reduce((sum, part) => sum + part.text.length, 0); }
+    return active;
+  }
+  function showPosition(part, char, precise) {
+    const active = session.current; active.position = part.offset + char;
+    setProgress(active.total ? active.position / active.total * 100 : 0);
+    if (active.element !== part.element) {
+      clearHighlight(); active.element = part.element; part.element.classList.add('is-narrating');
+      if (follow.current && Date.now() >= scrollUntil.current) {
+        const rect = part.element.getBoundingClientRect();
+        if (rect.top < 120 || rect.bottom > innerHeight - 100) part.element.scrollIntoView({ block: 'center', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
       }
-      parent.removeChild(mark);
-      parent.normalize();
-    });
-  }, [contentRef]);
-
-  const stopTimers = useCallback(() => {
-    if (estimatorRef.current) { clearInterval(estimatorRef.current); estimatorRef.current = null; }
-    if (keepAliveRef.current) { clearInterval(keepAliveRef.current); keepAliveRef.current = null; }
-  }, []);
-
-  // Initialize voices + full cleanup on unmount
-  useEffect(() => {
-    if (!isSupported) return;
-    const synth = synthRef.current;
-    const loadVoices = () => {
-      const voices = synth.getVoices();
-      if (!voices.length) return; // some browsers populate late — wait for the event
-
-      const findBestVoice = (priorities) => {
-        for (const p of priorities) {
-          const found = voices.find(v => v.name.toLowerCase().includes(p));
-          if (found) return found;
-        }
-        // Fallback
-        return voices.find(v => v.lang && v.lang.startsWith('en')) || voices[0] || null;
+    }
+    if (!precise || !window.CSS?.highlights || typeof Highlight === 'undefined') return;
+    const bounds = wordBounds(part.fullText, part.start + char);
+    const locate = value => [...part.points].reverse().find(point => point.start <= value);
+    const a = locate(bounds.start), b = locate(Math.max(bounds.start, bounds.end - 1));
+    if (!a || !b || !a.node.isConnected || !b.node.isConnected) return;
+    const range = new Range(); range.setStart(a.node, bounds.start - a.start); range.setEnd(b.node, bounds.end - b.start);
+    CSS.highlights.set('narration', new Highlight(range));
+  }
+  function playFrom(position, nextRate = rate, nextURI = voiceURI) {
+    if (!supported) return;
+    const active = prepare(); cancel();
+    if (!active.total) { setStatus('error'); setMessage('There is no article text to read yet.'); return; }
+    const token = active.token, synth = window.speechSynthesis, voice = voices.find(item => item.voiceURI === nextURI);
+    const initial = locateNarration(active.queue, position >= active.total ? 0 : position);
+    setMessage(''); setStatus('playing'); active.playing = true;
+    function speakPart(index, char = 0) {
+      if (active.token !== token) return;
+      const part = active.queue[index];
+      if (!part) { active.playing = false; active.position = active.total; clearInterval(active.timer); clearHighlight(); setProgress(100); setStatus('ended'); return; }
+      const utterance = new SpeechSynthesisUtterance(part.text.slice(char));
+      utterance.rate = nextRate; utterance.lang = voice?.lang || 'en-IN'; if (voice) utterance.voice = voice;
+      active.utterance = utterance;
+      let boundary = false, startedAt = 0;
+      setEstimated(false); showPosition(part, char, false);
+      utterance.onstart = () => {
+        if (active.token !== token) return;
+        startedAt = performance.now(); clearInterval(active.timer);
+        active.timer = setInterval(() => {
+          if (active.token !== token || boundary || !active.playing || !startedAt) return;
+          const current = Math.min(part.text.length - 1, char + Math.floor((performance.now() - startedAt) / 1000 * 14 * nextRate));
+          setEstimated(true); showPosition(part, current, false);
+        }, 500);
       };
-
-      setAvailableVoices({
-        male: findBestVoice(MALE_VOICES),
-        female: findBestVoice(FEMALE_VOICES)
-      });
-    };
-
-    loadVoices();
-    // addEventListener is safer than overwriting onvoiceschanged (Safari fires it repeatedly)
-    if (typeof synth.addEventListener === 'function') {
-      synth.addEventListener('voiceschanged', loadVoices);
-    } else if (synth.onvoiceschanged !== undefined) {
-      synth.onvoiceschanged = loadVoices;
+      utterance.onboundary = event => {
+        if (active.token !== token || (event.name !== 'word' && event.name !== 'sentence')) return;
+        boundary = true; setEstimated(false); showPosition(part, Math.min(part.text.length, char + event.charIndex), true);
+      };
+      utterance.onend = () => { if (active.token !== token) return; clearInterval(active.timer); speakPart(index + 1); };
+      utterance.onerror = event => {
+        if (active.token !== token) return;
+        cancel(); setStatus('error');
+        setMessage(event.error === 'not-allowed' ? 'Your browser blocked playback. Press Play again or choose another voice.' : 'This voice could not finish reading. Choose another voice and press Play to continue.');
+      };
+      try { synth.speak(utterance); } catch { cancel(); setStatus('error'); setMessage('Playback could not start. Choose another voice and try again.'); }
     }
-
-    return () => {
-      if (typeof synth.removeEventListener === 'function') {
-        synth.removeEventListener('voiceschanged', loadVoices);
-      } else if (synth.onvoiceschanged !== undefined) {
-        synth.onvoiceschanged = null;
-      }
-      synth.cancel();
-      stopTimers();
-      removeHighlight();
-    };
-  }, [isSupported, removeHighlight, stopTimers]);
-
-  const highlightWord = useCallback((absoluteCharIndex) => {
-    if (!contentRef.current) return;
-    removeHighlight();
-
-    let currentLength = 0;
-    let targetNode = null;
-    let offset = 0;
-
-    const walker = document.createTreeWalker(contentRef.current, NodeFilter.SHOW_TEXT, null, false);
-    while (walker.nextNode()) {
-      const node = walker.currentNode;
-      const len = node.nodeValue.length;
-      if (currentLength + len > absoluteCharIndex) {
-        targetNode = node;
-        offset = absoluteCharIndex - currentLength;
-        break;
-      }
-      currentLength += len;
-    }
-
-    if (targetNode) {
-      const text = targetNode.nodeValue;
-      let endOffset = offset;
-      while (endOffset < text.length && !/\s/.test(text[endOffset])) {
-        endOffset++;
-      }
-
-      try {
-        const range = document.createRange();
-        range.setStart(targetNode, offset);
-        range.setEnd(targetNode, endOffset);
-
-        const mark = document.createElement("mark");
-        mark.className = "tts-highlight";
-        mark.style.backgroundColor = "color-mix(in srgb, var(--color-accent) 28%, transparent)";
-        mark.style.color = "var(--color-fg)";
-        mark.style.borderRadius = "4px";
-        mark.style.padding = "0 2px";
-        mark.style.boxShadow = "0 0 12px color-mix(in srgb, var(--color-accent) 22%, transparent)";
-
-        range.surroundContents(mark);
-
-        // Smart scroll: only follow the narration if the user isn't scrolling
-        // themselves (4s grace after their last wheel/touch/key input)
-        if (Date.now() >= userScrollUntilRef.current) {
-          const rect = mark.getBoundingClientRect();
-          const viewportHeight = window.innerHeight;
-          const topThreshold = 100; // Header offset
-          const bottomThreshold = viewportHeight - 100;
-
-          if (rect.top < topThreshold || rect.bottom > bottomThreshold) {
-             mark.scrollIntoView({ behavior: "smooth", block: "center" });
-          }
-        }
-      } catch {
-        // Range can fail if a word spans nested elements — highlighting is
-        // cosmetic, playback continues fine without it.
-      }
-    }
-  }, [contentRef, removeHighlight]);
-
-  const updateProgressUI = useCallback((absoluteIndex) => {
-    currentIndexRef.current = absoluteIndex;
-    if (totalLengthRef.current > 0) {
-      setProgress(Math.min(100, (absoluteIndex / totalLengthRef.current) * 100));
-    }
-  }, []);
-
-  const speak = useCallback((startIndex = 0, overrideGender = null, overrideRate = null) => {
-    const synth = synthRef.current;
-    if (!synth || !contentRef.current) return;
-
-    synth.cancel();
-    stopTimers();
-    removeHighlight();
-
-    const fullText = contentRef.current.textContent;
-    totalLengthRef.current = fullText.length;
-
-    const safeStart = Math.max(0, Math.min(startIndex, fullText.length - 1));
-    const textToSpeak = fullText.substring(safeStart);
-    if (!textToSpeak.trim()) return;
-
-    currentIndexRef.current = safeStart;
-    boundaryFiredRef.current = false;
-
-    const utterance = new SpeechSynthesisUtterance(textToSpeak);
-    const activeGender = overrideGender || voiceGender;
-    const selectedVoice = availableVoices[activeGender];
-    if (selectedVoice) {
-      utterance.voice = selectedVoice;
-    }
-    const rate = overrideRate || playbackRate;
-    utterance.rate = rate;
-
-    utterance.onboundary = (e) => {
-      if (utteranceRef.current !== utterance) return; // superseded by a newer utterance
-      if (e.name === 'word') {
-        boundaryFiredRef.current = true;
-        const absoluteIndex = safeStart + e.charIndex;
-        highlightWord(absoluteIndex);
-        updateProgressUI(absoluteIndex);
-      }
-    };
-
-    utterance.onend = () => {
-      if (utteranceRef.current !== utterance) return;
-      stopTimers();
-      setIsPlaying(false);
-      setProgress(100);
-      currentIndexRef.current = 0; // next play restarts from the top
-      removeHighlight();
-    };
-
-    utterance.onerror = (e) => {
-      if (utteranceRef.current !== utterance) return;
-      // 'interrupted'/'canceled' fire on our own cancel() calls — not real errors
-      if (e.error === 'interrupted' || e.error === 'canceled') return;
-      stopTimers();
-      setIsPlaying(false);
-      removeHighlight();
-    };
-
-    utteranceRef.current = utterance;
-
-    // Chrome quirk: speak() immediately after cancel() is sometimes silently
-    // dropped — a micro-delay makes it reliable everywhere.
-    setTimeout(() => {
-      if (utteranceRef.current !== utterance) return;
-      synth.speak(utterance);
-    }, 50);
-    setIsPlaying(true);
-
-    // Watchdog 1 — Chrome desktop silently pauses long utterances (~15s in).
-    // A periodic resume() while speaking un-sticks it; harmless no-op elsewhere.
-    keepAliveRef.current = setInterval(() => {
-      if (synth.speaking && !synth.paused) synth.resume();
-    }, 10000);
-
-    // Watchdog 2 — time-based progress estimator for browsers that never fire
-    // onboundary (Chrome Android, some voices). Word events take precedence.
-    const startedAt = Date.now();
-    estimatorRef.current = setInterval(() => {
-      if (boundaryFiredRef.current) return; // real word events are driving the UI
-      if (!synth.speaking) return;
-      const elapsed = (Date.now() - startedAt) / 1000;
-      const estimated = safeStart + Math.floor(elapsed * CHARS_PER_SECOND * rate);
-      updateProgressUI(Math.min(estimated, totalLengthRef.current));
-    }, 500);
-  }, [availableVoices, contentRef, highlightWord, playbackRate, removeHighlight, stopTimers, updateProgressUI, voiceGender]);
-
-  // Pause is implemented as cancel + remembered position. Native pause()/resume()
-  // is broken on Android Chrome and unreliable on iOS Safari; restarting the
-  // utterance from the saved char index behaves identically on every platform
-  // (it's the same mechanism seeking already uses).
-  const togglePlay = () => {
-    const synth = synthRef.current;
-    if (!synth) return;
-    if (isPlaying) {
-      synth.cancel();
-      stopTimers();
-      setIsPlaying(false);
-    } else {
-      speak(currentIndexRef.current || 0);
-    }
-  };
-
-  const seekToClientX = (clientX, target) => {
-    if (!contentRef.current) return;
-    const rect = target.getBoundingClientRect();
-    if (rect.width <= 0) return;
-    const clickX = clientX - rect.left;
-    const percentage = Math.max(0, Math.min(1, clickX / rect.width));
-
-    setProgress(percentage * 100);
-
-    const fullText = contentRef.current.textContent;
-    totalLengthRef.current = fullText.length;
-    let targetIndex = Math.floor(percentage * totalLengthRef.current);
-
-    // Backup to nearest word boundary
-    while (targetIndex > 0 && !/\s/.test(fullText[targetIndex - 1])) {
-       targetIndex--;
-    }
-
-    currentIndexRef.current = targetIndex;
-    if (isPlaying) {
-      speak(targetIndex);
-    }
-  };
-
-  const handleSeek = (e) => seekToClientX(e.clientX, e.currentTarget);
-
-  const handleGenderToggle = () => {
-    const newGender = voiceGender === 'female' ? 'male' : 'female';
-    setVoiceGender(newGender);
-    if (isPlaying) {
-      speak(currentIndexRef.current, newGender, null);
-    }
-  };
-
-  const cycleSpeed = () => {
-    const speeds = [1, 1.25, 1.5, 2];
-    const nextIdx = (speeds.indexOf(playbackRate) + 1) % speeds.length;
-    const newSpeed = speeds[nextIdx];
-    setPlaybackRate(newSpeed);
-
-    if (isPlaying) {
-      speak(currentIndexRef.current, null, newSpeed);
-    }
-  };
-
-  if (!isSupported) return null;
-
-  return (
-    <div className="bg-surface border border-line rounded-2xl p-5 space-y-5">
-      {/* Header */}
-      <div className="flex items-center justify-between gap-3 flex-wrap">
-        <div className="flex items-center gap-2 font-mono text-xs text-accent">
-          <Headphones size={14} strokeWidth={2.5} />
-          <span>🎧 Advanced Neural Narrator</span>
-        </div>
-        <div className="flex items-center gap-3">
-          {/* Speed Control */}
-          <button
-            onClick={cycleSpeed}
-            aria-label={`Playback speed ${playbackRate}x — click to change`}
-            className="text-xs font-mono px-2 py-1 rounded bg-elevated border border-line text-muted hover:text-fg hover:border-accent transition-colors"
-          >
-            {playbackRate}x
-          </button>
-
-          {/* Voice Gender Toggle */}
-          <button
-            onClick={handleGenderToggle}
-            aria-label={`Voice: ${voiceGender} — click to switch`}
-            className="flex items-center bg-elevated border border-line rounded-full p-1 relative w-16 h-8 cursor-pointer transition-colors"
-          >
-            <div className={`absolute top-1 w-6 h-6 rounded-full shadow-sm bg-accent flex items-center justify-center transition-transform duration-300 ${voiceGender === 'male' ? 'translate-x-8' : 'translate-x-0'}`}>
-              <span className="text-xs">{voiceGender === 'female' ? '👩' : '👨'}</span>
-            </div>
-            <div className="w-full flex justify-between px-2 text-xs opacity-50 select-none">
-               <span>👩</span>
-               <span>👨</span>
-            </div>
-          </button>
-        </div>
-      </div>
-
-      {/* Controls & Timeline */}
-      <div className="flex items-center gap-4">
-        {/* Play / Pause */}
-        <motion.button
-          whileTap={{ scale: 0.9 }}
-          onClick={togglePlay}
-          aria-label={isPlaying ? 'Pause narration' : 'Play narration'}
-          className="flex-shrink-0 w-12 h-12 rounded-full bg-accent flex items-center justify-center
-                     text-on-accent shadow-lg shadow-accent/20 hover:shadow-accent/40 transition-[transform,box-shadow] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)]"
-        >
-          <AnimatePresence mode="wait" initial={false}>
-            {isPlaying ? (
-              <motion.span key="pause" initial={{ scale: 0.86, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.86, opacity: 0 }}>
-                <Pause size={20} fill="currentColor" />
-              </motion.span>
-            ) : (
-              <motion.span key="play" initial={{ scale: 0.86, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.86, opacity: 0 }}>
-                <Play size={20} fill="currentColor" className="ml-1" />
-              </motion.span>
-            )}
-          </AnimatePresence>
-        </motion.button>
-
-        {/* Timeline Bar */}
-        <div
-          className="flex-1 h-3 bg-elevated border border-line rounded-full cursor-pointer relative overflow-hidden group"
-          onClick={handleSeek}
-          role="slider"
-          aria-label="Narration progress"
-          aria-valuenow={Math.round(progress)}
-          aria-valuemin={0}
-          aria-valuemax={100}
-        >
-          <motion.div
-            className="absolute top-0 left-0 h-full bg-accent"
-            style={{ width: `${progress}%` }}
-            layout
-          />
-          <div className="absolute inset-0 bg-fg/0 group-hover:bg-fg/5 transition-colors" />
-        </div>
-      </div>
-
-      {/* Floating pause — always reachable while narrating, no matter where
-          the karaoke highlight has scrolled the page */}
-      <AnimatePresence>
-        {isPlaying && (
-          <motion.button
-            initial={{ opacity: 0, scale: 0.6, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.6, y: 20 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 22 }}
-            onClick={togglePlay}
-            aria-label="Pause narration"
-            className="fixed bottom-6 right-6 z-[90] w-14 h-14 rounded-full bg-accent text-on-accent
-                       flex items-center justify-center shadow-xl shadow-accent/30
-                       hover:scale-105 press-effect transition-transform"
-          >
-            <Pause size={22} fill="currentColor" />
-          </motion.button>
-        )}
-      </AnimatePresence>
-    </div>
-  );
+    speakPart(initial.index, initial.char);
+  }
+  function pause() { cancel(); setStatus('paused'); }
+  function seek(percent) {
+    const active = prepare(), playing = active.playing, next = locateNarration(active.queue, active.total * percent / 100), part = active.queue[next.index];
+    const position = percent >= 100 ? active.total : (part?.offset || 0) + next.char;
+    cancel(); active.position = position; setProgress(percent); setEstimated(false);
+    if (playing && percent < 100) playFrom(position); else setStatus(percent >= 100 ? 'ended' : 'paused');
+  }
+  function section(direction) {
+    const active = prepare();
+    const headings = active.queue.filter(part => /^H[1-4]$/.test(part.element.tagName) && part.start === 0);
+    const target = direction > 0 ? headings.find(part => part.offset > active.position + 1) : [...headings].reverse().find(part => part.offset < active.position - 2);
+    seek(active.total ? ((target?.offset ?? (direction > 0 ? active.total : 0)) / active.total * 100) : 0);
+  }
+  function changeRate(value) { setRate(value); if (session.current.playing) playFrom(session.current.position, value); }
+  function changeVoice(value) { setVoiceURI(value); if (session.current.playing) playFrom(session.current.position, rate, value); }
+  return <section className="narrator" aria-label="Article narrator">
+    <div className="narrator-heading"><div><Headphones size={17}/><h2>Listen to this note</h2></div><span>{status === 'playing' ? 'Reading' : status === 'paused' ? 'Paused' : status === 'ended' ? 'Finished' : 'Article narrator'}</span></div>
+    {!supported ? <p role="status">This browser does not provide speech playback. The full article is available below.</p> : <>
+      <div className="narrator-settings"><label>Voice<select aria-label="Narration voice" value={voiceURI} onChange={event => changeVoice(event.target.value)}>{!voices.length && <option value="">Browser default</option>}{voices.map(voice => <option value={voice.voiceURI} key={voice.voiceURI}>{voice.name} · {voice.lang}{voice.localService ? ' · device' : ''}</option>)}</select></label><label>Speed<select aria-label="Narration speed" value={rate} onChange={event => changeRate(Number(event.target.value))}>{[.75,1,1.25,1.5,2].map(speed => <option value={speed} key={speed}>{speed}×</option>)}</select></label></div>
+      <div className="narrator-transport"><button type="button" className="narrator-play" onClick={() => status === 'playing' ? pause() : playFrom(session.current.position)} aria-label={status === 'playing' ? 'Pause narration' : 'Play narration'}>{status === 'playing' ? <Pause size={19}/> : <Play size={19}/>}</button><div className="narrator-timeline"><label htmlFor="narration-progress">{Math.round(progress)}% <span>{estimated ? 'Estimated progress' : 'Reading progress'}</span></label><input id="narration-progress" type="range" min="0" max="100" step="1" value={progress} onChange={event => seek(Number(event.target.value))} aria-label="Narration progress" aria-valuetext={`${Math.round(progress)} percent${estimated ? ', estimated' : ''}`}/></div><button type="button" onClick={() => section(-1)} aria-label="Previous narration section"><SkipBack size={17}/></button><button type="button" onClick={() => section(1)} aria-label="Next narration section"><SkipForward size={17}/></button><button type="button" onClick={() => { const playing = session.current.playing; cancel(); session.current.position = 0; setProgress(0); setEstimated(false); if (playing) playFrom(0); else setStatus('idle'); }} aria-label="Restart narration"><RotateCcw size={16}/></button></div>
+      <div className="narrator-foot"><label><input type="checkbox" checked={following} onChange={event => { follow.current = event.target.checked; setFollowing(event.target.checked); }}/>Follow text</label><span>Browser voices. Article text only; code and widgets stay quiet.</span></div>
+      {message && <p className="narrator-error" role="alert">{message}</p>}
+      {status === 'playing' && <button type="button" className="narrator-floating" onClick={pause} aria-label="Pause article narration"><Pause size={17}/><span>Pause reading</span></button>}
+    </>}
+  </section>;
 }

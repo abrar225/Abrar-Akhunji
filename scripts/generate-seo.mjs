@@ -13,6 +13,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import katex from 'katex';
+import { renderWork, renderProject, renderBuildHome } from './project-pages.mjs';
 import {
   parseFrontmatter,
   parseContentBlocks,
@@ -42,6 +43,7 @@ const distDir = path.join(root, 'dist');
 const blogDir = path.join(root, 'src/content/blogs');
 const indexPath = path.join(distDir, 'index.html');
 const portfolio = JSON.parse(fs.readFileSync(path.join(root, 'src/data/portfolio.json'), 'utf8'));
+const githubContributions = JSON.parse(fs.readFileSync(path.join(root, 'src/data/github-contributions.json'), 'utf8'));
 const services = JSON.parse(fs.readFileSync(path.join(root, 'src/data/services.json'), 'utf8'));
 const today = new Date().toISOString().slice(0, 10);
 
@@ -505,84 +507,6 @@ function buildHireSchemas() {
   }];
 }
 
-function renderHome(posts) {
-  const featured = portfolio.projects.slice(0, 6);
-  return `
-    <main class="pre-rendered-portfolio" style="max-width:1050px;margin:0 auto;padding:3rem 1.5rem;font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.7;color:#E8EEF6;background:#070B12;">
-      <header style="margin-bottom:3rem;border-bottom:1px solid #283446;padding-bottom:2.5rem;">
-        <h1 style="font-size:2.75rem;line-height:1.2;margin:0 0 0.5rem;color:#F9FAFB;letter-spacing:-0.02em;">Abrar Akhunji</h1>
-        <p style="font-size:1.35rem;color:#79D0E0;margin:0 0 0.75rem;font-weight:600;">AI/ML &amp; Full-Stack Engineer in Ahmedabad</p>
-        <p style="font-size:1.05rem;color:#B8C4D4;max-width:850px;margin:0 0 0.75rem;">${escapeHtml(DEFAULT_DESCRIPTION)}</p>
-        <p style="color:#9AA7B8;margin:0 0 1.5rem;">Available in ${LOCATIONS.slice(0, 3).join(', ')} and remotely.</p>
-        <nav aria-label="Quick links" style="display:flex;gap:1.25rem;flex-wrap:wrap;font-size:0.95rem;">
-          <a href="#services" style="color:#79D0E0;">Services ↓</a>
-          <a href="#work" style="color:#79D0E0;">Selected work ↓</a>
-          <a href="#experience" style="color:#79D0E0;">Experience ↓</a>
-          <a href="/blog/" style="color:#79D0E0;">${escapeHtml(BLOG_NAME)} →</a>
-          <a href="/hire/" style="color:#79D0E0;">Hire →</a>
-          <a href="mailto:${escapeHtml(services.email)}" style="color:#79D0E0;">${escapeHtml(services.email)}</a>
-        </nav>
-      </header>
-
-      <section id="services" style="margin-bottom:3.5rem;">
-        <h2 style="font-size:1.85rem;color:#F9FAFB;border-bottom:1px solid #283446;padding-bottom:0.75rem;">Services</h2>
-        ${services.services.map((service) => `
-          <article style="margin-bottom:1.5rem;">
-            <h3 style="font-size:1.25rem;margin:0 0 0.35rem;">${escapeHtml(service.title)}</h3>
-            <p style="color:#B8C4D4;margin:0;">${escapeHtml(service.summary)}</p>
-          </article>`).join('')}
-        <p><a href="/hire/" style="color:#79D0E0;">Full service list, process and availability →</a></p>
-      </section>
-
-      <section id="work" style="margin-bottom:3.5rem;">
-        <h2 style="font-size:1.85rem;color:#F9FAFB;border-bottom:1px solid #283446;padding-bottom:0.75rem;">Selected work</h2>
-        ${featured.map((project) => `
-          <article style="margin-bottom:2rem;">
-            <h3 style="font-size:1.4rem;margin:0 0 0.35rem;">${escapeHtml(project.title)} <span style="font-weight:400;color:#79D0E0;font-size:0.9rem;">${escapeHtml(project.category)} · ${escapeHtml(project.year)}</span></h3>
-            <p style="color:#B8C4D4;">${escapeHtml(project.description)}</p>
-            <p style="font-size:0.9rem;color:#9AA7B8;">Stack: ${escapeHtml(project.tech.join(', '))}</p>
-            <p style="font-size:0.9rem;"><a href="${escapeHtml(project.github)}" style="color:#79D0E0;">GitHub</a>${project.demo ? ` &bull; <a href="${escapeHtml(project.demo)}" style="color:#79D0E0;">Live demo</a>` : ''}</p>
-          </article>`).join('')}
-      </section>
-
-      <section id="experience" style="margin-bottom:3.5rem;">
-        <h2 style="font-size:1.85rem;color:#F9FAFB;border-bottom:1px solid #283446;padding-bottom:0.75rem;">Experience &amp; education</h2>
-        <ul>
-          ${portfolio.experience.map((job) => `<li style="margin-bottom:1rem;"><strong>${escapeHtml(job.role)}</strong> — ${escapeHtml(job.date)}. ${escapeHtml(job.desc)}</li>`).join('')}
-        </ul>
-        <ul>
-          ${portfolio.education.map((edu) => `<li style="margin-bottom:0.75rem;"><strong>${escapeHtml(edu.degree)}</strong> — ${escapeHtml(edu.school)} (${escapeHtml(edu.date)})</li>`).join('')}
-        </ul>
-      </section>
-
-      <section style="margin-bottom:3.5rem;">
-        <h2 style="font-size:1.85rem;color:#F9FAFB;border-bottom:1px solid #283446;padding-bottom:0.75rem;">Skills</h2>
-        <ul>${portfolio.skills.map((skill) => `<li><strong>${escapeHtml(skill.t)}:</strong> ${escapeHtml(skill.d)}</li>`).join('')}</ul>
-      </section>
-
-      <section style="margin-bottom:3.5rem;">
-        <h2 style="font-size:1.85rem;color:#F9FAFB;border-bottom:1px solid #283446;padding-bottom:0.75rem;">Recognition</h2>
-        <ul>${portfolio.certifications.map((item) => `<li><strong>${escapeHtml(item.title)}</strong> — ${escapeHtml(item.desc)}</li>`).join('')}</ul>
-      </section>
-
-      <section style="margin-bottom:3.5rem;">
-        <h2 style="font-size:1.85rem;color:#F9FAFB;border-bottom:1px solid #283446;padding-bottom:0.75rem;">Latest from ${escapeHtml(BLOG_NAME)}</h2>
-        <ul>${posts.slice(0, 6).map((post) => `<li style="margin-bottom:0.75rem;"><a href="${postPath(post.slug)}" style="color:#79D0E0;">${escapeHtml(post.title)}</a> <span style="color:#6E7C90;">(${post.date})</span></li>`).join('')}</ul>
-        <p><a href="/blog/" style="color:#79D0E0;">All engineering notes →</a></p>
-      </section>
-
-      <footer id="contact" style="border-top:1px solid #283446;padding-top:2.5rem;color:#9AA7B8;">
-        <h2 style="font-size:1.5rem;color:#F9FAFB;margin:0 0 1rem;">Contact</h2>
-        <p>Email: <a href="mailto:${escapeHtml(services.email)}" style="color:#79D0E0;">${escapeHtml(services.email)}</a> &bull;
-          GitHub: <a href="https://github.com/abrar225" style="color:#79D0E0;">github.com/abrar225</a> &bull;
-          LinkedIn: <a href="https://www.linkedin.com/in/abrar-akhunji/" style="color:#79D0E0;">linkedin.com/in/abrar-akhunji</a> &bull;
-          X: <a href="https://x.com/Abrarakhunji" style="color:#79D0E0;">@Abrarakhunji</a>
-        </p>
-        <p style="font-size:0.875rem;">Machine-readable: <a href="/llms.txt" style="color:#79D0E0;">/llms.txt</a> &bull; <a href="/llms-full.txt" style="color:#79D0E0;">/llms-full.txt</a> &bull; <a href="/feed.xml" style="color:#79D0E0;">RSS</a> &bull; <a href="/sitemap.xml" style="color:#79D0E0;">Sitemap</a></p>
-        <p style="font-size:0.8rem;color:#6E7C90;">&copy; ${new Date().getFullYear()} Abrar Akhunji. All rights reserved.</p>
-      </footer>
-    </main>`;
-}
 
 function renderFeed(posts) {
   const items = posts.slice(0, 25);
@@ -622,6 +546,8 @@ function renderSitemap(posts) {
     { loc: `${SITE_URL}/`, lastmod: latest, changefreq: 'weekly', priority: '1.0' },
     { loc: absoluteUrl(blogPath()), lastmod: latest, changefreq: 'daily', priority: '0.9' },
     { loc: absoluteUrl(hirePath()), lastmod: latest, changefreq: 'monthly', priority: '0.9' },
+    { loc: `${SITE_URL}/work/`, lastmod: today, changefreq: 'monthly', priority: '0.9' },
+    ...portfolio.projects.map(project => ({loc: `${SITE_URL}/work/${project.slug}/`, lastmod: today, changefreq: 'monthly', priority: '0.8'})),
     ...posts.map((post) => ({
       loc: postUrl(post.slug),
       lastmod: post.updated,
@@ -668,7 +594,7 @@ ${services.services.map((service) => `- **${service.title}:** ${service.summary}
 ${LOCATIONS.map((city) => `- ${city}`).join('\n')}
 
 ## Selected projects
-${portfolio.projects.slice(0, 6).map((project) => `- **${project.title}** (${project.category}, ${project.year}): ${project.description} Tech: ${project.tech.join(', ')}. ${project.github}`).join('\n')}
+${portfolio.projects.map((project) => `- **${project.title}** (${project.category}, ${project.year}): ${project.description} Tech: ${project.tech.join(', ')}. ${project.github}`).join('\n')}
 
 ## Engineering notes (${posts.length} posts)
 ${posts.map((post) => `- [${post.title}](${postUrl(post.slug)}): ${post.description} (${post.date})`).join('\n')}
@@ -829,12 +755,20 @@ function main() {
     .replace('<div id="root"></div>', `<div id="root">${renderHire()}</div>`);
   writePage('hire', hireHtml);
 
+  const projectSchemas = project => [{ '@context':'https://schema.org', '@type':'CreativeWork', name:project.title, description:project.summary, url:`${SITE_URL}/work/${project.slug}/`, creator:{'@id':PERSON_ID} }, { '@context':'https://schema.org', '@type':'BreadcrumbList', itemListElement:[{'@type':'ListItem',position:1,name:'Home',item:SITE_URL+'/'},{'@type':'ListItem',position:2,name:'Work',item:SITE_URL+'/work/'},{'@type':'ListItem',position:3,name:project.title,item:`${SITE_URL}/work/${project.slug}/`}]}];
+  const workHtml = cleanBaseHtml(baseHtml).replace('</head>', `${headTags({title:'Engineering projects | Abrar Akhunji',description:'Local AI, developer tools, native software and full-stack projects by Abrar Akhunji.',pagePath:'/work/',image:'/assets/build-room/og-home.jpg'})}</head>`).replace('<div id="root"></div>',`<div id="root">${renderWork(portfolio.projects)}</div>`);
+  writePage('work',workHtml);
+  for (const project of portfolio.projects) {
+    const html = cleanBaseHtml(baseHtml).replace('</head>',`${headTags({title:`${project.title} — The build | Abrar Akhunji`,description:project.summary,pagePath:`/work/${project.slug}/`,image:`/assets/build-room/og-${project.slug}.jpg`,schema:projectSchemas(project)})}</head>`).replace('<div id="root"></div>',`<div id="root">${renderProject(project)}</div>`);
+    writePage(`work/${project.slug}`,html);
+  }
+
   // Homepage fallback (head is already the homepage head)
   let homeHtml = baseHtml.replace(
     /<div id="root">[\s\S]*<\/div>\s*<script type="module"/,
     `<div id="root"></div>\n    <script type="module"`
   );
-  homeHtml = homeHtml.replace('<div id="root"></div>', `<div id="root">${renderHome(posts)}</div>`);
+  homeHtml = homeHtml.replace('<div id="root"></div>', `<div id="root">${renderBuildHome(portfolio, posts, githubContributions)}</div>`);
   fs.writeFileSync(indexPath, homeHtml, 'utf8');
   console.log('✓ / (home fallback)');
 
@@ -842,7 +776,7 @@ function main() {
   console.log('✓ /feed.xml');
 
   writeFile('sitemap.xml', renderSitemap(posts));
-  console.log(`✓ /sitemap.xml (${posts.length + 3} URLs)`);
+  console.log(`✓ /sitemap.xml (${posts.length + 4 + portfolio.projects.length} URLs)`);
 
   writeFile('llms.txt', renderLlmsTxt(posts));
   writeFile('llms-full.txt', renderLlmsFull(posts));

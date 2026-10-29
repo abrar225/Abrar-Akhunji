@@ -1,32 +1,50 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { lazy, Suspense, useEffect } from 'react';
+import { lazy, Suspense, useEffect, useRef } from 'react';
 import ErrorBoundary from './components/ErrorBoundary';
 import Home from './pages/Home';
+import SiteHeader from './components/site/SiteHeader';
+import SiteFooter from './components/site/SiteFooter';
+import SiteMotion from './components/site/SiteMotion';
+import Soundscape from './components/site/Soundscape';
+import WorkshopCreatures from './components/site/WorkshopCreatures';
+import { useTheme } from './lib/useTheme';
 import NotFound from './pages/NotFound';
 
 const BlogList = lazy(() => import('./pages/BlogList'));
 const BlogPost = lazy(() => import('./pages/BlogPost'));
 const Hire = lazy(() => import('./pages/Hire'));
+const Work = lazy(() => import('./pages/Work'));
+const CaseStudy = lazy(() => import('./pages/CaseStudy'));
 
 function RouteScroll() {
-  const { pathname, hash } = useLocation();
+  const { pathname, hash, search } = useLocation();
+  const previous = useRef(null);
 
   useEffect(() => {
+    const from = previous.current;
+    previous.current = { pathname, hash, search };
+    if (from?.pathname === pathname && from.search !== search && (from.hash === hash || !hash)) return;
+    let disposed = false;
     const scroll = () => {
+      if (disposed) return;
       if (hash) {
-        const target = document.querySelector(hash);
+        let id;
+        try { id = decodeURIComponent(hash.slice(1)); } catch { id = ''; }
+        const target = document.getElementById(id);
         if (target) {
-          if (window.__lenis?.scrollTo) window.__lenis.scrollTo(target, { offset: -72 });
-          else target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          target.scrollIntoView({ behavior: !from || from.pathname !== pathname || window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'start' });
           return;
         }
       }
       window.scrollTo(0, 0);
     };
 
-    const timer = setTimeout(scroll, 160);
-    return () => clearTimeout(timer);
-  }, [pathname, hash]);
+    const timer = setTimeout(() => {
+      if (hash) document.fonts.ready.then(scroll);
+      else scroll();
+    }, 160);
+    return () => { disposed = true; clearTimeout(timer); };
+  }, [pathname, hash, search]);
 
   return null;
 }
@@ -48,18 +66,30 @@ function RouteFallback() {
 }
 
 export default function App() {
+  const { theme } = useTheme();
+  useEffect(() => { document.documentElement.classList.remove('light','dark'); document.documentElement.classList.add(theme); document.documentElement.style.colorScheme = theme; }, [theme]);
   return (
     <RouteBoundary>
       <RouteScroll />
+      <a className="skip-link" href="#route-content">Skip to content</a>
+      <SiteHeader/>
+      <SiteMotion/>
+      <Soundscape/>
+      <WorkshopCreatures/>
+      <div id="route-content" tabIndex={-1}>
       <Suspense fallback={<RouteFallback />}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/blog" element={<BlogList />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/hire" element={<Hire />} />
+          <Route path="/work" element={<Work />} />
+          <Route path="/work/:slug" element={<CaseStudy />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
+      </div>
+      <SiteFooter/>
     </RouteBoundary>
   );
 }

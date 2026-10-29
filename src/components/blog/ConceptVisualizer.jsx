@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import * as LucideIcons from 'lucide-react';
+import { useId, useState } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { visualizerIcons } from '../../lib/content/visualizerIcons';
 
 export default function ConceptVisualizer({ config }) {
   const [activeStep, setActiveStep] = useState(0);
+  const id = useId(), reduced = useReducedMotion();
 
   if (!config || !config.steps || config.steps.length === 0) {
     return null;
   }
 
   const { title, steps } = config;
-  const currentStepData = steps[activeStep];
+  const currentStepData = steps[Math.min(activeStep, steps.length - 1)];
 
   const renderIcon = (iconName) => {
     if (!iconName) return null;
@@ -21,7 +22,7 @@ export default function ConceptVisualizer({ config }) {
     }
 
     // Try to render Lucide icon
-    const IconComponent = LucideIcons[iconName];
+    const IconComponent = visualizerIcons[iconName];
     if (IconComponent) {
       return <IconComponent size={20} />;
     }
@@ -30,17 +31,23 @@ export default function ConceptVisualizer({ config }) {
   };
 
   return (
-    <div className="my-10">
+    <div className="concept-diagram my-10">
       {title && <h3 className="text-2xl font-display text-fg mb-6">{title}</h3>}
       
       <div className="flex flex-col md:grid md:grid-cols-3 gap-6">
         {/* Left Column - Navigation */}
-        <div className="flex flex-col gap-2 col-span-1">
+        <div className="flex flex-col gap-2 col-span-1" role="tablist" aria-label={title || 'Concept steps'} aria-orientation="vertical" onKeyDown={event => { const buttons = [...event.currentTarget.querySelectorAll('[role=tab]')]; const current = buttons.indexOf(document.activeElement); const next = event.key === 'ArrowDown' || event.key === 'ArrowRight' ? (current + 1) % steps.length : event.key === 'ArrowUp' || event.key === 'ArrowLeft' ? (current + steps.length - 1) % steps.length : event.key === 'Home' ? 0 : event.key === 'End' ? steps.length - 1 : -1; if (next >= 0) { event.preventDefault(); setActiveStep(next); buttons[next].focus(); } }}>
           {steps.map((step, idx) => {
             const isActive = idx === activeStep;
             return (
               <button
                 key={idx}
+                type="button"
+                role="tab"
+                id={`${id}-tab-${idx}`}
+                aria-controls={`${id}-panel`}
+                aria-selected={isActive}
+                tabIndex={isActive ? 0 : -1}
                 onClick={() => setActiveStep(idx)}
                 className={`flex items-center gap-3 p-3 rounded-xl text-left transition-all duration-200 border-l-2 ${
                   isActive 
@@ -58,7 +65,7 @@ export default function ConceptVisualizer({ config }) {
         </div>
 
         {/* Right Column - Content Display */}
-        <div className="col-span-2 bg-surface border border-line rounded-2xl p-8 relative overflow-hidden min-h-[300px] flex flex-col justify-center">
+        <div role="tabpanel" id={`${id}-panel`} aria-labelledby={`${id}-tab-${activeStep}`} tabIndex={0} className="col-span-2 bg-surface border border-line rounded-2xl p-8 relative overflow-hidden min-h-[300px] flex flex-col justify-center">
           {/* Subtle Grid Pattern Background */}
           <div 
             className="absolute inset-0 opacity-[0.03] pointer-events-none"
@@ -68,13 +75,13 @@ export default function ConceptVisualizer({ config }) {
             }}
           />
 
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={activeStep}
-              initial={{ opacity: 0, y: 10, filter: 'blur(4px)' }}
+              initial={reduced ? false : { opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              exit={{ opacity: 0, y: -10, filter: 'blur(4px)' }}
-              transition={{ duration: 0.3, ease: 'easeOut' }}
+              exit={{ opacity: 0, y: reduced ? 0 : -8 }}
+              transition={{ duration: reduced ? 0 : .22, ease: 'easeOut' }}
               className="relative z-10"
             >
               <h4 className="text-2xl font-display text-fg mb-4">

@@ -1,6 +1,225 @@
 {
   "projects": [
     {
+      "id": "fixo-flow",
+      "title": "Fixo Flow",
+      "category": "LOCAL AI",
+      "summary": "Your voice, in the apps you already use.",
+      "description": "An open-source desktop dictation tool with local English speech recognition, a personal dictionary, writing styles and recoverable history.",
+      "problem": "Typing interrupts the flow of an idea. Fixo Flow brings English dictation to everyday applications while keeping recognition on the computer.",
+      "contribution": "Built the local speech workflow and desktop product: microphone capture, recognition, formatting, history, OS insertion and distribution paths.",
+      "status": "preview",
+      "tech": [
+        "Python",
+        "Whisper",
+        "MLX",
+        "SQLite",
+        "CTranslate2"
+      ],
+      "image": "/assets/build-room/products/fixo-flow.webp",
+      "imageAlt": "Actual Fixo Flow macOS writing styles interface",
+      "github": "https://github.com/abrar225/FixoFlow",
+      "demo": "https://fixoflow.tech",
+      "release": "https://github.com/abrar225/FixoFlow/releases",
+      "architecture": "Microphone capture -> Local Whisper recognition -> Dictionary and formatting -> History and clipboard -> Attempted application insertion",
+      "layers": [
+        {
+          "title": "Capture",
+          "detail": "Bounded microphone chunks enter the local recognition pipeline."
+        },
+        {
+          "title": "Local inference",
+          "detail": "Whisper recognition uses MLX on Mac and a CPU engine in other platform previews."
+        },
+        {
+          "title": "Application integration",
+          "detail": "Dictionary and offline formatting feed history, clipboard and attempted paste."
+        }
+      ],
+      "decisions": [
+        {
+          "title": "Recognition stays local",
+          "detail": "Local inference avoids a cloud transcription dependency. Optional update checks are separate from recognition."
+        },
+        {
+          "title": "Recover the words",
+          "detail": "History and clipboard provide a recovery path when insertion into another application fails."
+        }
+      ],
+      "limitations": [
+        "Experimental English dictation preview; multilingual and Hinglish recognition are not delivered in the reviewed release.",
+        "Accuracy depends on speech, microphone and hardware. OS support and publisher signing have platform-specific limitations."
+      ],
+      "evidence": [
+        {
+          "label": "Source and current scope",
+          "url": "https://github.com/abrar225/FixoFlow/blob/main/README.md",
+          "detail": "Recognition pipeline, privacy model and preview limitations."
+        },
+        {
+          "label": "Packaging workflow",
+          "url": "https://github.com/abrar225/FixoFlow/blob/main/.github/workflows/desktop-preview.yml",
+          "detail": "Configured installer builds and checks, not a claim that a current CI run passed."
+        },
+        {
+          "label": "Release packages",
+          "url": "https://github.com/abrar225/FixoFlow/releases",
+          "detail": "Published packages and platform requirements."
+        }
+      ],
+      "slug": "fixo-flow",
+      "year": "2026",
+      "featured": true,
+      "features": [
+        "Recognition stays local",
+        "Recover the words"
+      ],
+      "media": {
+        "mp4": "/assets/build-room/products/fixo-flow-tour.mp4",
+        "webm": "/assets/build-room/products/fixo-flow-tour.webm",
+        "captions": "/assets/build-room/products/fixo-flow-tour.vtt"
+      }
+    },
+    {
+      "id": "packetlark",
+      "title": "PacketLark",
+      "category": "DEVELOPER TOOLS",
+      "summary": "A local workbench for requests, tests and API discovery.",
+      "description": "An open-source TypeScript and Node.js API workbench with collections, isolated scripts, repeatable tests, traffic inspection and inferred OpenAPI exports.",
+      "problem": "API development needs more than a Send button: repeatable requests, inspectable traffic and tests that travel with the workspace.",
+      "contribution": "Built the local API product across its browser interface, HTTP engine, workspace persistence, isolated scripting, CLI integrations and packaging.",
+      "status": "released",
+      "tech": [
+        "TypeScript",
+        "Node.js",
+        "QuickJS",
+        "MCP",
+        "Vitest"
+      ],
+      "image": "/assets/build-room/products/packetlark.webp",
+      "imageAlt": "Actual PacketLark API workbench preview from its repository",
+      "github": "https://github.com/abrar225/packetlark",
+      "demo": "https://abrar225.github.io/packetlark/",
+      "architecture": "Browser interface -> Local Node server -> HTTP and script engines -> Workspace files",
+      "layers": [
+        {
+          "title": "Interface",
+          "detail": "Compose requests, inspect responses and organize collections and environments."
+        },
+        {
+          "title": "HTTP engine",
+          "detail": "Local forwarding, cookie sessions and isolated QuickJS test scripts."
+        },
+        {
+          "title": "Workspace files",
+          "detail": "Readable resource files with ownership and conflict reconciliation."
+        }
+      ],
+      "decisions": [
+        {
+          "title": "A local workspace",
+          "detail": "Collections and environments remain inspectable files. The server binds locally rather than acting as a public multi-user service."
+        },
+        {
+          "title": "Separate script execution",
+          "detail": "QuickJS isolates imported scripts from Node object references with resource limits and a narrow bridge."
+        }
+      ],
+      "limitations": [
+        "The published GitHub Pages website is a product site/sample preview; it does not run the Node workbench.",
+        "Not a complete Postman replacement. Protocol clients, cloud collaboration and some recovery workflows remain outside current scope."
+      ],
+      "evidence": [
+        {
+          "label": "Source and current scope",
+          "url": "https://github.com/abrar225/packetlark/blob/main/README.md",
+          "detail": "Supported HTTP workflows, setup and limitations."
+        },
+        {
+          "label": "Verification workflow",
+          "url": "https://github.com/abrar225/packetlark/blob/main/.github/workflows/ci.yml",
+          "detail": "Configured Node 22/24 build, tests and package checks."
+        },
+        {
+          "label": "Product website",
+          "url": "https://abrar225.github.io/packetlark/",
+          "detail": "Installation guide and labelled sample preview."
+        }
+      ],
+      "slug": "packetlark",
+      "year": "2026",
+      "featured": true,
+      "features": [
+        "A local workspace",
+        "Separate script execution"
+      ],
+      "media": null
+    },
+    {
+      "id": "framecast-studio",
+      "title": "Framecast Studio",
+      "category": "NATIVE SOFTWARE",
+      "summary": "One studio. Two formats. Your screen, composed.",
+      "description": "A native macOS studio for composing screen and camera scenes, recording horizontal and vertical outputs, and developing a private broadcast workflow.",
+      "problem": "Screen recordings need different framing for landscape and portrait. A composition tool should make those outputs explicit and editable.",
+      "contribution": "Built native scene composition and media workflows using SwiftUI, AppKit, ScreenCaptureKit and AVFoundation, with separate recording outputs and local control.",
+      "status": "in development",
+      "tech": [
+        "Swift",
+        "SwiftUI",
+        "AVFoundation",
+        "ScreenCaptureKit",
+        "FFmpeg"
+      ],
+      "image": "/assets/build-room/products/framecast-studio.webp",
+      "imageAlt": "Actual local Framecast Studio scene editor during development",
+      "github": null,
+      "demo": null,
+      "architecture": "Scene composition -> Native capture and audio mix -> Encoded outputs -> Local recording or streaming transport",
+      "layers": [
+        {
+          "title": "Scene composition",
+          "detail": "Separate horizontal and vertical layouts share source inputs with independent framing."
+        },
+        {
+          "title": "Native media",
+          "detail": "Screen/camera capture and a timestamped audio mix feed the composition."
+        },
+        {
+          "title": "Encoded outputs",
+          "detail": "AVFoundation recording and FFmpeg streaming transport have separate responsibilities."
+        }
+      ],
+      "decisions": [
+        {
+          "title": "Two deliberate outputs",
+          "detail": "Horizontal and vertical compositions keep their own geometry and recording settings."
+        },
+        {
+          "title": "Own resource lifetimes",
+          "detail": "Capture permits, cancellation paths and finalization are explicit parts of the media pipeline."
+        }
+      ],
+      "limitations": [
+        "In development and not publicly released in the reviewed source. No public repository or download is advertised.",
+        "Broad device compatibility, sustained high-resolution performance and complete broadcast recovery are not established."
+      ],
+      "evidence": [
+        {
+          "label": "Development scope",
+          "detail": "Local implementation reviewed: native composition, separate output canvases, recording and local control. Public source will be linked after publication."
+        }
+      ],
+      "slug": "framecast-studio",
+      "year": "2026",
+      "featured": true,
+      "features": [
+        "Two deliberate outputs",
+        "Own resource lifetimes"
+      ],
+      "media": null
+    },
+    {
       "title": "FixO CLI",
       "category": "AI DEVTOOL",
       "year": "2026",
@@ -12,11 +231,66 @@
         "Atomic shadow staging, LSP pre-save syntax checks, and a credential vault that scrubs secrets before the LLM",
         "Tree-Sitter AST workspace indexing for JS, TS, Python & Go"
       ],
-      "tech": ["Node.js", "SQLite", "Tree-Sitter", "LSP", "MCP", "Ollama"],
+      "tech": [
+        "Node.js",
+        "SQLite",
+        "Tree-Sitter",
+        "LSP",
+        "MCP",
+        "Ollama"
+      ],
       "image": "/images/fixo.svg",
       "github": "https://github.com/abrar225/FixO",
       "demo": "https://fixo.firehox.com/",
-      "embeddable": true
+      "embeddable": true,
+      "id": "fixo-cli",
+      "slug": "fixo-cli",
+      "summary": "An autonomous, open-source AI coding platform that lives in your terminal.",
+      "problem": "Make codebase-aware coding assistance accessible from the terminal.",
+      "contribution": "Designed and implemented the application described in this project, including its core workflow and supporting interface.",
+      "status": "archived",
+      "featured": false,
+      "imageAlt": "FixO CLI project preview",
+      "layers": [
+        {
+          "title": "Terminal CLI Engine (Node.js)",
+          "detail": "Part of the project architecture."
+        },
+        {
+          "title": "Tree-Sitter AST Workspace Indexer",
+          "detail": "Part of the project architecture."
+        },
+        {
+          "title": "Multi-Provider LLM Router (FreeLLMAPI)",
+          "detail": "Part of the project architecture."
+        },
+        {
+          "title": "Shadow Staging & LSP Syntax Verifier",
+          "detail": "Part of the project architecture."
+        }
+      ],
+      "decisions": [
+        {
+          "title": "Connect the parts",
+          "detail": "Terminal CLI Engine (Node.js) -> Tree-Sitter AST Workspace Indexer -> Multi-Provider LLM Router (FreeLLMAPI) -> Shadow Staging & LSP Syntax Verifier -> Autonomous Test Loop."
+        },
+        {
+          "title": "Keep the workflow focused",
+          "detail": "Multi-AI router across 20+ free providers with automatic failover (FreeLLMAPI)"
+        }
+      ],
+      "limitations": [
+        "This is a portfolio study. No independently verified performance or accuracy benchmark is claimed.",
+        "Repository availability and external demonstrations can change; consult the source for current setup and limitations."
+      ],
+      "evidence": [
+        {
+          "label": "Project source",
+          "url": "https://github.com/abrar225/FixO",
+          "detail": "Implementation and setup instructions."
+        }
+      ],
+      "media": null
     },
     {
       "title": "GourmetGo",
@@ -30,11 +304,68 @@
         "Auto-location detection (browser Geolocation) and 15km radius restaurant discovery",
         "Dynamic admin panel for restaurant approvals, payouts, and system health checks"
       ],
-      "tech": ["Next.js 14", "React", "Django 5.0", "Django Channels", "Redis", "Razorpay", "Tailwind CSS", "Cloudinary"],
+      "tech": [
+        "Next.js 14",
+        "React",
+        "Django 5.0",
+        "Django Channels",
+        "Redis",
+        "Razorpay",
+        "Tailwind CSS",
+        "Cloudinary"
+      ],
       "image": "/images/gourmetgo.webp",
       "github": "https://github.com/abrar225/GourmetGo",
       "demo": "https://gourmet-go.vercel.app/",
-      "embeddable": false
+      "embeddable": false,
+      "id": "gourmetgo",
+      "slug": "gourmetgo",
+      "summary": "A complete, online multi-portal food ordering and delivery ecosystem with four dedicated modules: Customer, Vendor, Rider, and Admin..",
+      "problem": "Connect customers, vendors, riders and administrators in one ordering workflow.",
+      "contribution": "Designed and implemented the application described in this project, including its core workflow and supporting interface.",
+      "status": "archived",
+      "featured": false,
+      "imageAlt": "GourmetGo project preview",
+      "layers": [
+        {
+          "title": "Next.js 14 Client App",
+          "detail": "Part of the project architecture."
+        },
+        {
+          "title": "Django 5.0 REST API Backend",
+          "detail": "Part of the project architecture."
+        },
+        {
+          "title": "Redis / WebSockets (Django Channels)",
+          "detail": "Part of the project architecture."
+        },
+        {
+          "title": "Razorpay Gateway",
+          "detail": "Part of the project architecture."
+        }
+      ],
+      "decisions": [
+        {
+          "title": "Connect the parts",
+          "detail": "Next.js 14 Client App -> Django 5.0 REST API Backend -> Redis / WebSockets (Django Channels) -> Razorpay Gateway -> Cloudinary Asset Management."
+        },
+        {
+          "title": "Keep the workflow focused",
+          "detail": "Real-time order tracking and notifications via WebSockets (Django Channels)"
+        }
+      ],
+      "limitations": [
+        "This is a portfolio study. No independently verified performance or accuracy benchmark is claimed.",
+        "Repository availability and external demonstrations can change; consult the source for current setup and limitations."
+      ],
+      "evidence": [
+        {
+          "label": "Project source",
+          "url": "https://github.com/abrar225/GourmetGo",
+          "detail": "Implementation and setup instructions."
+        }
+      ],
+      "media": null
     },
     {
       "title": "Library Management System",
@@ -42,11 +373,71 @@
       "year": "2025",
       "description": "A high-performance ecosystem designed to bridge the gap between physical pages and digital convenience. Manage inventory, process secure payments, and build a community of readers.",
       "architecture": "Django ORM -> MySQL Relational Database Schema -> Session-based Auth -> Fine Calculation Engine -> Inventory & Loan Logs.",
-      "features": ["Inventory management system", "Secure payment processing", "Reader community platform", "Digital catalog integration"],
-      "tech": ["Python", "Django", "MySQL", "HTML", "CSS", "JavaScript"],
+      "features": [
+        "Inventory management system",
+        "Secure payment processing",
+        "Reader community platform",
+        "Digital catalog integration"
+      ],
+      "tech": [
+        "Python",
+        "Django",
+        "MySQL",
+        "HTML",
+        "CSS",
+        "JavaScript"
+      ],
       "image": "/images/library_management.webp",
       "github": "https://github.com/abrar225/Library-Management-System",
-      "demo": null
+      "demo": null,
+      "id": "library-management",
+      "slug": "library-management",
+      "summary": "A high-performance ecosystem designed to bridge the gap between physical pages and digital convenience.",
+      "problem": "Keep library inventory, borrowing and reader workflows in one application.",
+      "contribution": "Designed and implemented the application described in this project, including its core workflow and supporting interface.",
+      "status": "archived",
+      "featured": false,
+      "imageAlt": "Library Management System project preview",
+      "layers": [
+        {
+          "title": "Django ORM",
+          "detail": "Part of the project architecture."
+        },
+        {
+          "title": "MySQL Relational Database Schema",
+          "detail": "Part of the project architecture."
+        },
+        {
+          "title": "Session-based Auth",
+          "detail": "Part of the project architecture."
+        },
+        {
+          "title": "Fine Calculation Engine",
+          "detail": "Part of the project architecture."
+        }
+      ],
+      "decisions": [
+        {
+          "title": "Connect the parts",
+          "detail": "Django ORM -> MySQL Relational Database Schema -> Session-based Auth -> Fine Calculation Engine -> Inventory & Loan Logs."
+        },
+        {
+          "title": "Keep the workflow focused",
+          "detail": "Inventory management system"
+        }
+      ],
+      "limitations": [
+        "This is a portfolio study. No independently verified performance or accuracy benchmark is claimed.",
+        "Repository availability and external demonstrations can change; consult the source for current setup and limitations."
+      ],
+      "evidence": [
+        {
+          "label": "Project source",
+          "url": "https://github.com/abrar225/Library-Management-System",
+          "detail": "Implementation and setup instructions."
+        }
+      ],
+      "media": null
     },
     {
       "title": "Real vs AI Image Detector",
@@ -54,11 +445,69 @@
       "year": "2025",
       "description": "A deep-learning powered system that identifies whether an image is AI-generated or real using advanced image forensics and transformer-based feature extraction.",
       "architecture": "Input Image -> OpenCV Noise Residual Preprocessing -> Vision Transformer (ViT) Feature Embeddings -> Binary Classification Head (Real vs Generated).",
-      "features": ["AI-vs-Real image classification", "Vision Transformer-based feature embedding", "Noise & artifact pattern detection"],
-      "tech": ["Python", "OpenCV", "NumPy", "Pandas", "TensorFlow/PyTorch"],
+      "features": [
+        "AI-vs-Real image classification",
+        "Vision Transformer-based feature embedding",
+        "Noise & artifact pattern detection"
+      ],
+      "tech": [
+        "Python",
+        "OpenCV",
+        "NumPy",
+        "Pandas",
+        "TensorFlow/PyTorch"
+      ],
       "image": "/images/real-vs-ai.webp",
       "github": "https://github.com/abrar225/Real-vs-AI-Image-Detector",
-      "demo": null
+      "demo": null,
+      "id": "real-vs-ai",
+      "slug": "real-vs-ai",
+      "summary": "A deep-learning powered system that identifies whether an image is AI-generated or real using advanced image forensics and transformer-based feature extraction..",
+      "problem": "Explore whether visual artifacts help distinguish generated and real images.",
+      "contribution": "Designed and implemented the application described in this project, including its core workflow and supporting interface.",
+      "status": "archived",
+      "featured": false,
+      "imageAlt": "Real vs AI Image Detector project preview",
+      "layers": [
+        {
+          "title": "Input Image",
+          "detail": "Part of the project architecture."
+        },
+        {
+          "title": "OpenCV Noise Residual Preprocessing",
+          "detail": "Part of the project architecture."
+        },
+        {
+          "title": "Vision Transformer (ViT) Feature Embeddings",
+          "detail": "Part of the project architecture."
+        },
+        {
+          "title": "Binary Classification Head (Real vs Generated).",
+          "detail": "Part of the project architecture."
+        }
+      ],
+      "decisions": [
+        {
+          "title": "Connect the parts",
+          "detail": "Input Image -> OpenCV Noise Residual Preprocessing -> Vision Transformer (ViT) Feature Embeddings -> Binary Classification Head (Real vs Generated)."
+        },
+        {
+          "title": "Keep the workflow focused",
+          "detail": "AI-vs-Real image classification"
+        }
+      ],
+      "limitations": [
+        "This is a portfolio study. No independently verified performance or accuracy benchmark is claimed.",
+        "Repository availability and external demonstrations can change; consult the source for current setup and limitations."
+      ],
+      "evidence": [
+        {
+          "label": "Project source",
+          "url": "https://github.com/abrar225/Real-vs-AI-Image-Detector",
+          "detail": "Implementation and setup instructions."
+        }
+      ],
+      "media": null
     },
     {
       "title": "Cattle Breed Identification System",
@@ -66,12 +515,68 @@
       "year": "2025",
       "description": "An ensemble-based AI tool capable of classifying 41 Indian cattle breeds using Vision Transformers and image preprocessing techniques.",
       "architecture": "HuggingFace Gradio Space -> Vision Transformer (ViT) Backbone -> Softmax 41-Class Classification Head -> Confidence Score Analytics.",
-      "features": ["Recognition of 41 unique cattle breeds", "Vision Transformer (ViT) embeddings", "Clean dataset preprocessing pipeline"],
-      "tech": ["Python", "OpenCV", "Vision Transformer"],
+      "features": [
+        "Recognition of 41 unique cattle breeds",
+        "Vision Transformer (ViT) embeddings",
+        "Clean dataset preprocessing pipeline"
+      ],
+      "tech": [
+        "Python",
+        "OpenCV",
+        "Vision Transformer"
+      ],
       "image": "/images/cattle-breed.webp",
       "github": "https://github.com/abrar225/AI_cattle_vison",
       "demo": "https://huggingface.co/spaces/abrar225/BreedAI",
-      "embeddable": true
+      "embeddable": true,
+      "id": "cattle-breed",
+      "slug": "cattle-breed",
+      "summary": "An ensemble-based AI tool capable of classifying 41 Indian cattle breeds using Vision Transformers and image preprocessing techniques..",
+      "problem": "Explore image classification across 41 Indian cattle breeds.",
+      "contribution": "Designed and implemented the application described in this project, including its core workflow and supporting interface.",
+      "status": "archived",
+      "featured": false,
+      "imageAlt": "Cattle Breed Identification System project preview",
+      "layers": [
+        {
+          "title": "HuggingFace Gradio Space",
+          "detail": "Part of the project architecture."
+        },
+        {
+          "title": "Vision Transformer (ViT) Backbone",
+          "detail": "Part of the project architecture."
+        },
+        {
+          "title": "Softmax 41-Class Classification Head",
+          "detail": "Part of the project architecture."
+        },
+        {
+          "title": "Confidence Score Analytics.",
+          "detail": "Part of the project architecture."
+        }
+      ],
+      "decisions": [
+        {
+          "title": "Connect the parts",
+          "detail": "HuggingFace Gradio Space -> Vision Transformer (ViT) Backbone -> Softmax 41-Class Classification Head -> Confidence Score Analytics."
+        },
+        {
+          "title": "Keep the workflow focused",
+          "detail": "Recognition of 41 unique cattle breeds"
+        }
+      ],
+      "limitations": [
+        "This is a portfolio study. No independently verified performance or accuracy benchmark is claimed.",
+        "Repository availability and external demonstrations can change; consult the source for current setup and limitations."
+      ],
+      "evidence": [
+        {
+          "label": "Project source",
+          "url": "https://github.com/abrar225/AI_cattle_vison",
+          "detail": "Implementation and setup instructions."
+        }
+      ],
+      "media": null
     },
     {
       "title": "Brain Tumor Detection (MRI)",
@@ -79,11 +584,68 @@
       "year": "2024",
       "description": "A Computer Vision model trained on MRI scan data to detect tumor presence using classical image processing and ML techniques.",
       "architecture": "MRI Scan DICOM/PNG -> Grayscale Masking & Thresholding -> Contour Extraction -> Feature Vector -> Classifier (Tumor / Healthy).",
-      "features": ["Automated MRI-based tumor detection", "Binary classification (tumor / no tumor)", "Mask processing + thresholding + contour analysis"],
-      "tech": ["Python", "OpenCV", "NumPy", "Pandas"],
+      "features": [
+        "Automated MRI-based tumor detection",
+        "Binary classification (tumor / no tumor)",
+        "Mask processing + thresholding + contour analysis"
+      ],
+      "tech": [
+        "Python",
+        "OpenCV",
+        "NumPy",
+        "Pandas"
+      ],
       "image": "/images/brain-tumor-detection.webp",
       "github": "https://github.com/abrar225/Brain-Tumer-Detection-System",
-      "demo": null
+      "demo": null,
+      "id": "brain-tumor",
+      "slug": "brain-tumor",
+      "summary": "A Computer Vision model trained on MRI scan data to detect tumor presence using classical image processing and ML techniques..",
+      "problem": "Study image-processing approaches to MRI tumor classification.",
+      "contribution": "Designed and implemented the application described in this project, including its core workflow and supporting interface.",
+      "status": "archived",
+      "featured": false,
+      "imageAlt": "Brain Tumor Detection (MRI) project preview",
+      "layers": [
+        {
+          "title": "MRI Scan DICOM/PNG",
+          "detail": "Part of the project architecture."
+        },
+        {
+          "title": "Grayscale Masking & Thresholding",
+          "detail": "Part of the project architecture."
+        },
+        {
+          "title": "Contour Extraction",
+          "detail": "Part of the project architecture."
+        },
+        {
+          "title": "Feature Vector",
+          "detail": "Part of the project architecture."
+        }
+      ],
+      "decisions": [
+        {
+          "title": "Connect the parts",
+          "detail": "MRI Scan DICOM/PNG -> Grayscale Masking & Thresholding -> Contour Extraction -> Feature Vector -> Classifier (Tumor / Healthy)."
+        },
+        {
+          "title": "Keep the workflow focused",
+          "detail": "Automated MRI-based tumor detection"
+        }
+      ],
+      "limitations": [
+        "This is a portfolio study. No independently verified performance or accuracy benchmark is claimed.",
+        "Repository availability and external demonstrations can change; consult the source for current setup and limitations."
+      ],
+      "evidence": [
+        {
+          "label": "Project source",
+          "url": "https://github.com/abrar225/Brain-Tumer-Detection-System",
+          "detail": "Implementation and setup instructions."
+        }
+      ],
+      "media": null
     },
     {
       "title": "Kid's Space (Android App)",
@@ -91,11 +653,67 @@
       "year": "2023",
       "description": "An interactive educational Android app designed for kids, focused on simple UI/UX and modular Java development.",
       "architecture": "Android Activity Lifecycle -> XML ConstraintLayouts -> Java Event Handlers -> Local Asset Storage.",
-      "features": ["Clean, kid-friendly UI", "Built using XML layouts", "Focused on kid's study"],
-      "tech": ["Android Studio", "XML", "Java"],
+      "features": [
+        "Clean, kid-friendly UI",
+        "Built using XML layouts",
+        "Focused on kid's study"
+      ],
+      "tech": [
+        "Android Studio",
+        "XML",
+        "Java"
+      ],
       "image": "/images/kids_space.webp",
       "github": "https://github.com/abrar225/Kids-Space-Android",
-      "demo": null
+      "demo": null,
+      "id": "kids-space",
+      "slug": "kids-space",
+      "summary": "An interactive educational Android app designed for kids, focused on simple UI/UX and modular Java development..",
+      "problem": "Create a straightforward educational experience for Android.",
+      "contribution": "Designed and implemented the application described in this project, including its core workflow and supporting interface.",
+      "status": "archived",
+      "featured": false,
+      "imageAlt": "Kid's Space (Android App) project preview",
+      "layers": [
+        {
+          "title": "Android Activity Lifecycle",
+          "detail": "Part of the project architecture."
+        },
+        {
+          "title": "XML ConstraintLayouts",
+          "detail": "Part of the project architecture."
+        },
+        {
+          "title": "Java Event Handlers",
+          "detail": "Part of the project architecture."
+        },
+        {
+          "title": "Local Asset Storage.",
+          "detail": "Part of the project architecture."
+        }
+      ],
+      "decisions": [
+        {
+          "title": "Connect the parts",
+          "detail": "Android Activity Lifecycle -> XML ConstraintLayouts -> Java Event Handlers -> Local Asset Storage."
+        },
+        {
+          "title": "Keep the workflow focused",
+          "detail": "Clean, kid-friendly UI"
+        }
+      ],
+      "limitations": [
+        "This is a portfolio study. No independently verified performance or accuracy benchmark is claimed.",
+        "Repository availability and external demonstrations can change; consult the source for current setup and limitations."
+      ],
+      "evidence": [
+        {
+          "label": "Project source",
+          "url": "https://github.com/abrar225/Kids-Space-Android",
+          "detail": "Implementation and setup instructions."
+        }
+      ],
+      "media": null
     }
   ],
   "experience": [
@@ -111,7 +729,7 @@
     },
     {
       "role": "Web Developer & Designer Intern",
-      "date": "JUN 2024 — AUG 2024",
+      "date": "2024",
       "desc": "Designed responsive interfaces and implemented frontend logic."
     }
   ],
@@ -132,12 +750,36 @@
     }
   ],
   "skills": [
-    { "t": "AI & Data Science", "d": "NumPy, Pandas, OpenCV, model training and evaluation", "icon": "cpu" },
-    { "t": "Languages", "d": "Python, Java, PHP, JavaScript", "icon": "code2" },
-    { "t": "Web Frameworks", "d": "Django, Flask, React", "icon": "layers" },
-    { "t": "Tools", "d": "Git, GitHub, Linux", "icon": "terminal" },
-    { "t": "Databases", "d": "MySQL, SQLite, Redis", "icon": "database" },
-    { "t": "Others", "d": "VS Code, Android Studio, Docker", "icon": "monitor" }
+    {
+      "t": "AI & Data Science",
+      "d": "NumPy, Pandas, OpenCV, model training and evaluation",
+      "icon": "cpu"
+    },
+    {
+      "t": "Languages",
+      "d": "Python, Java, PHP, JavaScript",
+      "icon": "code2"
+    },
+    {
+      "t": "Web Frameworks",
+      "d": "Django, Flask, React",
+      "icon": "layers"
+    },
+    {
+      "t": "Tools",
+      "d": "Git, GitHub, Linux",
+      "icon": "terminal"
+    },
+    {
+      "t": "Databases",
+      "d": "MySQL, SQLite, Redis",
+      "icon": "database"
+    },
+    {
+      "t": "Others",
+      "d": "VS Code, Android Studio, Docker",
+      "icon": "monitor"
+    }
   ],
   "certifications": [
     {
@@ -156,7 +798,7 @@
     },
     {
       "title": "Web Developer & Designer Intern",
-      "desc": "3-Month Internship Completion • Oct-Dec 2024",
+      "desc": "Internship completion • 2024",
       "icon": "code2",
       "color": "text-cyan-500",
       "driveLink": "https://drive.google.com/drive/folders/1aSFRrcX6aAdSxNrsQAu1_yJ9sggheJtq?usp=sharing"

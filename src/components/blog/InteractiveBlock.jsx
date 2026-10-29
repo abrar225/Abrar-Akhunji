@@ -1,22 +1,15 @@
-import { lazy, Suspense, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { lazy, Suspense, useState, useId } from 'react';
+import { motion, AnimatePresence, MotionConfig } from 'framer-motion';
 import { Play, RotateCcw, CheckCircle, XCircle, Terminal, HelpCircle, Clock } from 'lucide-react';
 
 /* ── Prompt Playground Widget ── */
 function PromptPlayground({ config }) {
   const [input, setInput] = useState('');
   const [response, setResponse] = useState(null);
-  const [isThinking, setIsThinking] = useState(false);
 
   const handleSubmit = () => {
     if (!input.trim()) return;
-    setIsThinking(true);
-    setResponse(null);
-    // Simulate AI thinking
-    setTimeout(() => {
-      setIsThinking(false);
-      setResponse(config.simulatedResponse || `Great prompt! In a real implementation, this would call the ${config.model || 'AI'} API with your input. The key takeaway is that prompt engineering is about being specific and providing context.`);
-    }, 1500);
+    setResponse(config.simulatedResponse || 'This is an example prompt preview. No model is connected to this lesson. Use the examples to compare how clearly each prompt describes its task.');
   };
 
   return (
@@ -28,11 +21,13 @@ function PromptPlayground({ config }) {
         </span>
       </div>
       <div className="p-5 space-y-4">
+        <p className="text-xs text-muted">A prompt-writing exercise with a prewritten example response. No AI request is sent.</p>
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder={config.placeholder || 'Type your prompt here...'}
           className="w-full bg-elevated border border-line rounded-xl p-4 text-sm text-fg placeholder:text-faint font-mono resize-none focus:outline-none focus:border-accent/50 transition-colors"
+          aria-label="Practice prompt"
           rows={3}
         />
         {config.examples && (
@@ -53,10 +48,9 @@ function PromptPlayground({ config }) {
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={handleSubmit}
-            disabled={isThinking}
             className="flex items-center gap-2 px-5 py-2.5 bg-accent text-on-accent rounded-full text-sm font-medium hover:bg-accent-soft transition-colors disabled:opacity-50"
           >
-            <Play size={14} /> Run
+            <Play size={14} /> Show example
           </motion.button>
           <button
             onClick={() => { setInput(''); setResponse(null); }}
@@ -67,26 +61,14 @@ function PromptPlayground({ config }) {
         </div>
 
         <AnimatePresence>
-          {(isThinking || response) && (
+          {response && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               className="mt-2 p-4 rounded-xl bg-elevated border border-line"
             >
-              {isThinking ? (
-                <div className="flex items-center gap-3 text-muted text-sm">
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
-                  >
-                    <RotateCcw size={14} />
-                  </motion.div>
-                  Thinking...
-                </div>
-              ) : (
-                <p className="text-sm text-fg leading-relaxed font-mono">{response}</p>
-              )}
+              <p className="text-sm text-fg leading-relaxed font-mono">{response}</p>
             </motion.div>
           )}
         </AnimatePresence>
@@ -115,11 +97,11 @@ function QuizBlock({ config }) {
             let borderColor = 'var(--color-line)';
             let bgColor = 'transparent';
             if (submitted && i === config.correct) {
-              borderColor = '#1F6F5C';
-              bgColor = 'rgba(31, 111, 92, 0.1)';
+              borderColor = 'var(--color-accent)';
+              bgColor = 'color-mix(in srgb,var(--color-accent) 10%,transparent)';
             } else if (submitted && i === selected && !isCorrect) {
-              borderColor = '#A0325A';
-              bgColor = 'rgba(160, 50, 90, 0.1)';
+              borderColor = 'var(--color-muted)';
+              bgColor = 'var(--color-elevated)';
             } else if (!submitted && i === selected) {
               borderColor = 'var(--color-accent)';
               bgColor = 'color-mix(in srgb, var(--color-accent) 8%, transparent)';
@@ -131,6 +113,7 @@ function QuizBlock({ config }) {
                 whileTap={{ scale: 0.98 }}
                 onClick={() => !submitted && setSelected(i)}
                 disabled={submitted}
+                aria-pressed={selected === i}
                 className="w-full text-left p-4 rounded-xl border text-sm transition-all duration-200 flex items-center gap-3"
                 style={{ borderColor, backgroundColor: bgColor }}
               >
@@ -138,8 +121,8 @@ function QuizBlock({ config }) {
                   {String.fromCharCode(65 + i)}
                 </span>
                 <span className="text-fg">{option}</span>
-                {submitted && i === config.correct && <CheckCircle size={16} className="ml-auto text-[#1F6F5C]" />}
-                {submitted && i === selected && !isCorrect && i !== config.correct && <XCircle size={16} className="ml-auto text-[#A0325A]" />}
+                {submitted && i === config.correct && <CheckCircle size={16} className="ml-auto text-accent" />}
+                {submitted && i === selected && !isCorrect && i !== config.correct && <XCircle size={16} className="ml-auto text-fg" />}
               </motion.button>
             );
           })}
@@ -154,8 +137,9 @@ function QuizBlock({ config }) {
             Check Answer
           </motion.button>
         ) : (
-          <div className={`p-3 rounded-xl text-sm ${isCorrect ? 'bg-[rgba(31,111,92,0.1)] text-[#1F6F5C]' : 'bg-[rgba(160,50,90,0.1)] text-[#A0325A]'}`}>
-            {isCorrect ? '✅ Correct!' : '❌ Not quite.'} {config.explanation || ''}
+          <div className="p-3 rounded-xl text-sm bg-elevated text-fg" role="status">
+            {isCorrect ? 'Correct.' : 'Not quite.'} {config.explanation || ''}
+            <button type="button" className="quiz-retry" onClick={() => { setSelected(null); setSubmitted(false); }}>Try again</button>
           </div>
         )}
       </div>
@@ -166,6 +150,7 @@ function QuizBlock({ config }) {
 /* ── Timeline Widget ── */
 function TimelineBlock({ config }) {
   const [activeStep, setActiveStep] = useState(0);
+  const id = useId();
 
   return (
     <div className="rounded-2xl border border-line bg-surface overflow-hidden">
@@ -181,6 +166,8 @@ function TimelineBlock({ config }) {
             <motion.button
               key={i}
               onClick={() => setActiveStep(i)}
+              aria-expanded={i === activeStep}
+              aria-controls={`${id}-step-${i}`}
               className="relative pl-6 text-left w-full group"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -203,6 +190,7 @@ function TimelineBlock({ config }) {
               <AnimatePresence>
                 {i === activeStep && step.detail && (
                   <motion.p
+                    id={`${id}-step-${i}`}
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
@@ -258,8 +246,8 @@ function Widget({ widgetType, config }) {
 
 export default function InteractiveBlock(props) {
   return (
-    <Suspense fallback={<WidgetFallback />}>
+    <MotionConfig reducedMotion="user"><Suspense fallback={<WidgetFallback />}>
       <Widget {...props} />
-    </Suspense>
+    </Suspense></MotionConfig>
   );
 }

@@ -1,0 +1,22 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import crypto from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+const [music,kit]=process.argv.slice(2);
+if(!music||!kit)throw new Error('Usage: node scripts/prepare-flow-audio.mjs <Flow music WAV> <Flow kit ZIP>');
+const out=path.resolve('public/assets/audio');fs.mkdirSync(out,{recursive:true});
+const hash=p=>crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+const keys=['hover','click','select','section','chapter','building','replay','city-complete','scatter','reform','creature','ripple','breach','splash'];
+const peaks={hover:.12,click:.22,select:.2,section:.18,chapter:.2,building:.18,replay:.2,'city-complete':.18,scatter:.16,reform:.18,creature:.14,ripple:.18,breach:.18,splash:.18};
+function matchLevel(wav,target){if(wav.toString('ascii',0,4)!=='RIFF'||wav.readUInt16LE(34)!==16)throw new Error('Expected the Flow 16-bit PCM export.');let at=12;while(at+8<wav.length){const length=wav.readUInt32LE(at+4);if(wav.toString('ascii',at,at+4)==='data'){let peak=0;for(let i=at+8;i<at+8+length;i+=2)peak=Math.max(peak,Math.abs(wav.readInt16LE(i)));if(!peak)throw new Error('Flow exported a silent effect.');const gain=target*32767/peak;for(let i=at+8;i<at+8+length;i+=2)wav.writeInt16LE(Math.round(wav.readInt16LE(i)*gain),i);return wav;}at+=8+length+(length%2);}throw new Error('Missing WAV audio data.');}
+const entries=execFileSync('unzip',['-Z1',kit],{encoding:'utf8'}).trim().split('\n');
+for(const key of keys){const matches=entries.filter(name=>path.posix.basename(name)===key+'.wav');if(matches.length!==1)throw new Error(`Expected one ${key}.wav in the Flow export.`);fs.writeFileSync(path.join(out,key+'.wav'),matchLevel(execFileSync('unzip',['-p',kit,matches[0]],{maxBuffer:10*1024*1024}),peaks[key]));}
+// A circular overlap joins the chosen 60-second phrase to itself. Endpoint fades
+// remove codec/filter transients. Only the downloaded Flow track is used.
+const filter='[0:a:0]highpass=f=40,lowpass=f=11000,alimiter=limit=0.85:level=false:latency=true,atrim=start=12:end=74,asetpts=PTS-STARTPTS,asplit=3[h][t][r];[h]atrim=start=0:end=2,afade=t=in:st=0:d=2:curve=qsin[head];[t]atrim=start=60:end=62,asetpts=PTS-STARTPTS,afade=t=out:st=0:d=2:curve=qsin[tail];[head][tail]amix=inputs=2:normalize=0[overlap];[r]atrim=start=2:end=60,asetpts=PTS-STARTPTS[rest];[overlap][rest]concat=n=2:v=0:a=1,afade=t=in:st=0:d=0.005,afade=t=out:st=59.995:d=0.005[out]';
+execFileSync('ffmpeg',['-hide_banner','-y','-i',music,'-filter_complex',filter,'-map','[out]','-ar','48000','-c:a','libmp3lame','-b:a','128k','-map_metadata','-1',path.join(out,'little-useful-things.mp3')],{stdio:'ignore'});
+const source={platform:'Flow Music',music:'https://www.flowmusic.app/song/a935ec22-3ca3-43fb-85cd-face5432a73c',musicSession:'https://www.flowmusic.app/session/f870e704-9742-4a47-9f78-919a7cba71f2',effectsSession:'https://www.flowmusic.app/session/bcd051bd-d3a5-4aa5-9a52-574cba482973',effectsMethod:'Flow Music Spaces authored the original instrument source; its code-view export was rendered locally without changing its DSP, then peak-matched for a quiet web mix',effectsVersion:6,effectsExportNote:'The embedded Flow ZIP download did not complete; scripts/render-flow-space.mjs rendered the exported Flow source with native OfflineAudioContext and the Flow WAV/ZIP encoders.',musicMethod:'Flow Music Producer track, edited into a circular 60-second loop'};
+const assets={};for(const key of ['music',...keys]){const file=key==='music'?'little-useful-things.mp3':key+'.wav',full=path.join(out,file),probe=JSON.parse(execFileSync('ffprobe',['-v','error','-show_entries','format=duration,size','-of','json',full],{encoding:'utf8'}));assets[key]={url:'/assets/audio/'+file,duration:Number(probe.format.duration),bytes:Number(probe.format.size),sha256:hash(full)};}
+fs.writeFileSync(path.join(out,'flow-manifest.json'),JSON.stringify({source,assets},null,2)+'\n');
+fs.writeFileSync('docs/sound-and-creatures/provenance.json',JSON.stringify({source,createdAt:new Date().toISOString(),musicSourceSHA256:hash(music),effectsRenderedBundleSHA256:hash(kit),flowSourceHashes:Object.fromEntries(['soundDefs.ts','soundSynth.ts','wavEncoder.ts','zipWriter.ts'].map(file=>[file,hash(path.join('docs/sound-and-creatures/flow-space-source',file))])),renderingScript:'scripts/render-flow-space.mjs',processingScript:'scripts/prepare-flow-audio.mjs',assets},null,2)+'\n');
+console.log(`Prepared ${keys.length} Flow Space effects and a 60-second Flow music loop.`);

@@ -1,28 +1,23 @@
-import { useEffect, useState } from 'react';
-
+import { useSyncExternalStore } from 'react';
+const subscribe = (callback) => {
+  window.addEventListener('themechange', callback);
+  window.addEventListener('storage', callback);
+  return () => { window.removeEventListener('themechange', callback); window.removeEventListener('storage', callback); };
+};
+let volatileTheme = 'light';
 function readTheme() {
-  try { return localStorage.getItem('theme') || 'dark'; } catch { return 'dark'; }
+  try { return localStorage.getItem('theme') === 'dark' ? 'dark' : 'light'; } catch { return volatileTheme; }
 }
-
-function applyTheme(theme) {
-  const root = document.documentElement;
-  root.classList.remove('dark', 'light');
-  root.classList.add(theme);
-}
-
-/** Dark/light preference shared by the portfolio and the blog. */
 export function useTheme() {
-  const [theme, setTheme] = useState(() => {
-    const next = readTheme();
-    if (typeof document !== 'undefined') applyTheme(next);
-    return next;
-  });
-
-  useEffect(() => {
-    applyTheme(theme);
-    try { localStorage.setItem('theme', theme); } catch { /* storage unavailable */ }
-  }, [theme]);
-
-  const toggleTheme = () => setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  const theme = useSyncExternalStore(subscribe, readTheme, () => 'light');
+  const toggleTheme = () => {
+    const next = readTheme() === 'light' ? 'dark' : 'light';
+    volatileTheme = next;
+    try { localStorage.setItem('theme', next); } catch { /* unavailable */ }
+    document.documentElement.classList.remove('light', 'dark');
+    document.documentElement.classList.add(next);
+    document.documentElement.style.colorScheme = next;
+    window.dispatchEvent(new Event('themechange'));
+  };
   return { theme, toggleTheme };
 }

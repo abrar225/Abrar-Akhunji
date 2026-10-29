@@ -1,65 +1,22 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from 'react';
 
-/**
- * Thin fixed scroll progress bar pinned to the top of the viewport.
- * Uses requestAnimationFrame for butter-smooth updates.
- */
-export default function ReadingProgress() {
-  const [progress, setProgress] = useState(0);
-  const rafRef = useRef(null);
-  const ticking = useRef(false);
-
-  const updateProgress = useCallback(() => {
-    const docHeight = document.documentElement.scrollHeight;
-    const viewportHeight = window.innerHeight;
-    const scrollable = docHeight - viewportHeight;
-
-    if (scrollable <= 0) {
-      setProgress(0);
-    } else {
-      const pct = (window.scrollY / scrollable) * 100;
-      setProgress(Math.min(100, Math.max(0, pct)));
-    }
-
-    ticking.current = false;
-  }, []);
-
-  const onScroll = useCallback(() => {
-    if (!ticking.current) {
-      ticking.current = true;
-      rafRef.current = requestAnimationFrame(updateProgress);
-    }
-  }, [updateProgress]);
-
+/** Progress through the article, excluding related notes and the global footer. */
+export default function ReadingProgress({ contentRef, refreshKey }) {
+  const [progress, setProgress] = useState(0), rafRef = useRef(0);
+  const update = useCallback(() => {
+    rafRef.current = 0;
+    const root = contentRef.current;
+    if (!root) { setProgress(0); return; }
+    const rect = root.getBoundingClientRect(), start = rect.top + scrollY - 130, end = rect.bottom + scrollY - innerHeight + 100;
+    const fraction = end > start ? (scrollY - start) / (end - start) : rect.bottom <= innerHeight && rect.top < innerHeight ? 1 : 0;
+    setProgress(Math.round(Math.min(1, Math.max(0, fraction)) * 100));
+  }, [contentRef]);
+  const schedule = useCallback(() => { if (!rafRef.current) rafRef.current = requestAnimationFrame(update); }, [update]);
   useEffect(() => {
-    window.addEventListener("scroll", onScroll, { passive: true });
-    // Initial calculation — via rAF so it doesn't setState synchronously in the effect
-    onScroll();
-
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
-  }, [onScroll, updateProgress]);
-
-  return (
-    <div
-      className="fixed top-0 left-0 w-full z-[100] h-[3px] pointer-events-none"
-      style={{ opacity: progress > 0 ? 1 : 0, transition: "opacity 0.3s ease" }}
-      role="progressbar"
-      aria-valuenow={Math.round(progress)}
-      aria-valuemin={0}
-      aria-valuemax={100}
-      aria-label="Reading progress"
-    >
-      <div
-        className="h-full bg-accent origin-left"
-        style={{
-          transform: `scaleX(${progress / 100})`,
-          boxShadow: "0 0 10px color-mix(in srgb, var(--color-accent) 55%, transparent)",
-          transition: "transform 0.1s linear",
-        }}
-      />
-    </div>
-  );
+    const observer = new ResizeObserver(schedule);
+    if (contentRef.current) observer.observe(contentRef.current);
+    window.addEventListener('scroll', schedule, { passive: true }); window.addEventListener('resize', schedule); schedule();
+    return () => { observer.disconnect(); cancelAnimationFrame(rafRef.current); rafRef.current = 0; window.removeEventListener('scroll', schedule); window.removeEventListener('resize', schedule); };
+  }, [contentRef, refreshKey, schedule]);
+  return <div className="article-progress" role="progressbar" aria-label="Reading progress" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100} style={{ opacity: progress > 0 ? 1 : 0 }}><span style={{ transform: `scaleX(${progress / 100})` }}/></div>;
 }

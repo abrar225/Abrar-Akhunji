@@ -1,0 +1,57 @@
+{
+  "mode": "controller fixture; no Flow audio claim",
+  "checks": [
+    "Audio makes no requests or context before opt-in; restored hero remains intact",
+    "Pip and Spool are distinct reactive characters, flee the pointer and never intercept input",
+    "Explicit opt-in loads the collection, starts the music loop and exposes separate music/effects controls",
+    "Every occupied building gets one synchronized cue; replay resets the cycle and invisibility stops it",
+    "The stronger signature scatters, restores home and has keyboard-accessible sensitivity",
+    "Cursor stays centered on the pointer at the viewport edge, flips its label and clears for keyboard focus",
+    "Visibility suspension silences the shared context and stops decorative motion",
+    "Music survives client navigation with one context and ducks during article narration",
+    "Sound settings and signature fit eight theme/viewport combinations; reduced motion is static",
+    "WebKit mobile can enable and fully mute the shared sound system",
+    "No uncaught browser errors"
+  ],
+  "views": [
+    {
+      "width": 360,
+      "theme": "light"
+    },
+    {
+      "width": 360,
+      "theme": "dark"
+    },
+    {
+      "width": 390,
+      "theme": "light"
+    },
+    {
+      "width": 390,
+      "theme": "dark"
+    },
+    {
+      "width": 768,
+      "theme": "light"
+    },
+    {
+      "width": 768,
+      "theme": "dark"
+    },
+    {
+      "width": 1440,
+      "theme": "light"
+    },
+    {
+      "width": 1440,
+      "theme": "dark"
+    }
+  ],
+  "errors": [],
+  "ducking": {
+    "before": 0.15385320782661438,
+    "during": 0.02608581818640232,
+    "after": 0.1974426507949829
+  },
+  "verdict": "PASS"
+}

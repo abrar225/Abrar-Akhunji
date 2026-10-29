@@ -4,15 +4,16 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#070B12" media="(prefers-color-scheme: dark)" />
-    <meta name="theme-color" content="#F3F6F8" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#20251f" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#e8ebe2" media="(prefers-color-scheme: light)" />
 
-    <!-- Font preconnect (fonts imported in index.css) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <script>try{var t=localStorage.getItem('theme')==='dark'?'dark':'light';document.documentElement.className=t;document.documentElement.style.colorScheme=t}catch(e){document.documentElement.className='light'}</script>
+    <script>if(location.pathname==='/'){var poster=document.createElement('link');poster.rel='preload';poster.as='image';poster.fetchPriority='high';poster.href='/assets/build-room/posters/hero-'+(document.documentElement.classList.contains('dark')?'dark':'light')+'-'+(matchMedia('(max-width:1023px)').matches?'mobile':'desktop')+'.webp';document.head.appendChild(poster)}</script>
+    <link rel="preload" href="/assets/build-room/fonts/display-bold.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/assets/build-room/fonts/body-regular.woff2" as="font" type="font/woff2" crossorigin />
 
     <!-- Primary Meta Tags -->
-    <title>Abrar Akhunji — AI/ML &amp; Full-Stack Engineer in Ahmedabad</title>
+    <title>Abrar Akhunji — AI &amp; Full-Stack Engineer in Ahmedabad</title>
     <meta name="description" content="Abrar Akhunji is an AI/ML and full-stack engineer in Ahmedabad, building computer vision, LLM and production web systems for teams in Ahmedabad, Gandhinagar, Bangalore and remotely." />
     <meta name="keywords" content="Abrar Akhunji, AI/ML engineer Ahmedabad, full-stack developer Ahmedabad, computer vision engineer, LLM engineer India, Python developer Gandhinagar, React developer Bangalore, hire AI engineer" />
     <meta name="author" content="Abrar Akhunji" />
@@ -40,9 +41,9 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://abrarakhunji.com/" />
-    <meta property="og:title" content="Abrar Akhunji — AI/ML &amp; Full-Stack Engineer in Ahmedabad" />
+    <meta property="og:title" content="Abrar Akhunji — AI &amp; Full-Stack Engineer in Ahmedabad" />
     <meta property="og:description" content="AI/ML and full-stack engineering from Ahmedabad: computer vision, LLM systems and production web products. Available in Ahmedabad, Gandhinagar, Bangalore and remotely." />
-    <meta property="og:image" content="https://abrarakhunji.com/images/og-default.jpg" />
+    <meta property="og:image" content="https://abrarakhunji.com/assets/build-room/og-home.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Abrar Akhunji — AI/ML and full-stack engineer in Ahmedabad" />
@@ -54,9 +55,9 @@
     <meta name="twitter:site" content="@Abrarakhunji" />
     <meta name="twitter:creator" content="@Abrarakhunji" />
     <meta name="twitter:url" content="https://abrarakhunji.com/" />
-    <meta name="twitter:title" content="Abrar Akhunji — AI/ML &amp; Full-Stack Engineer in Ahmedabad" />
+    <meta name="twitter:title" content="Abrar Akhunji — AI &amp; Full-Stack Engineer in Ahmedabad" />
     <meta name="twitter:description" content="AI/ML and full-stack engineering from Ahmedabad: computer vision, LLM systems and production web products." />
-    <meta name="twitter:image" content="https://abrarakhunji.com/images/og-default.jpg" />
+    <meta name="twitter:image" content="https://abrarakhunji.com/assets/build-room/og-home.jpg" />
     <meta name="twitter:image:alt" content="Abrar Akhunji — AI/ML and full-stack engineer in Ahmedabad" />
 
     <!-- JSON-LD: Person (shared entity, kept on every page) -->
@@ -70,7 +71,7 @@
       "familyName": "Akhunji",
       "url": "https://abrarakhunji.com/",
       "image": "https://abrarakhunji.com/images/myimg.webp",
-      "jobTitle": ["AI/ML Engineer", "Full-Stack Engineer"],
+      "jobTitle": ["AI Engineer", "AI/ML Engineer", "Full-Stack Engineer"],
       "description": "AI/ML and full-stack engineer in Ahmedabad building computer vision, LLM and production web systems for teams in Ahmedabad, Gandhinagar, Bangalore and remotely.",
       "email": "abrar@abrarakhunji.com",
       "address": {

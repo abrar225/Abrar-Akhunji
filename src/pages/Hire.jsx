@@ -65,7 +65,7 @@ export default function Hire() {
 
   return (
     <main className="min-h-dvh bg-canvas text-fg">
-      <div className="fixed top-0 left-0 w-full px-6 md:px-12 py-4 flex justify-between items-center z-50 bg-canvas/80 backdrop-blur-xl border-b border-line/50">
+      <div className="subpage-topbar">
         <Link to="/" className="flex items-center gap-2 text-sm font-mono text-muted hover:text-accent transition-colors">
           <ArrowLeft size={16} /> Portfolio
         </Link>

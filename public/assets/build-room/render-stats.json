@@ -1,0 +1,114 @@
+[
+  {
+    "theme": "light",
+    "mobile": false,
+    "kind": "hero",
+    "triangles": 25638,
+    "drawCalls": 92
+  },
+  {
+    "theme": "light",
+    "mobile": false,
+    "kind": "room",
+    "triangles": 25638,
+    "drawCalls": 92
+  },
+  {
+    "theme": "light",
+    "mobile": false,
+    "kind": "contact",
+    "triangles": 6550,
+    "drawCalls": 22
+  },
+  {
+    "theme": "light",
+    "mobile": true,
+    "kind": "hero",
+    "triangles": 25638,
+    "drawCalls": 92
+  },
+  {
+    "theme": "light",
+    "mobile": true,
+    "kind": "room",
+    "triangles": 10390,
+    "drawCalls": 41
+  },
+  {
+    "theme": "light",
+    "mobile": true,
+    "kind": "contact",
+    "triangles": 4382,
+    "drawCalls": 15
+  },
+  {
+    "theme": "dark",
+    "mobile": false,
+    "kind": "hero",
+    "triangles": 25638,
+    "drawCalls": 92
+  },
+  {
+    "theme": "dark",
+    "mobile": false,
+    "kind": "room",
+    "triangles": 25638,
+    "drawCalls": 92
+  },
+  {
+    "theme": "dark",
+    "mobile": false,
+    "kind": "contact",
+    "triangles": 6550,
+    "drawCalls": 22
+  },
+  {
+    "theme": "dark",
+    "mobile": true,
+    "kind": "hero",
+    "triangles": 25638,
+    "drawCalls": 92
+  },
+  {
+    "theme": "dark",
+    "mobile": true,
+    "kind": "room",
+    "triangles": 10390,
+    "drawCalls": 41
+  },
+  {
+    "theme": "dark",
+    "mobile": true,
+    "kind": "contact",
+    "triangles": 4382,
+    "drawCalls": 15
+  },
+  {
+    "theme": "light",
+    "mobile": true,
+    "kind": "packetlark",
+    "triangles": 8858,
+    "drawCalls": 37
+  },
+  {
+    "theme": "light",
+    "mobile": true,
+    "kind": "framecast-studio",
+    "triangles": 8762,
+    "drawCalls": 33
+  },
+  {
+    "theme": "dark",
+    "mobile": true,
+    "kind": "packetlark",
+    "triangles": 8858,
+    "drawCalls": 37
+  },
+  {
+    "theme": "dark",
+    "mobile": true,
+    "kind": "framecast-studio",
+    "triangles": 8762,
+    "drawCalls": 33
+  }
+]

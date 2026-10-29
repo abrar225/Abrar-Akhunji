@@ -1,0 +1,786 @@
+{
+  "version": 1,
+  "generated": "2026-10-28",
+  "assets": [
+    {
+      "path": "/assets/build-room/build-room.glb",
+      "bytes": 2112496,
+      "sha256": "ed979054384b620d6f5308ac73f3915d6982500ed72c79ce7165e57f2ac3a930",
+      "source": "Original procedural geometry in src/lib/build-room/sceneFactory.js",
+      "purpose": "Reusable model or render measurements",
+      "theme": "shared"
+    },
+    {
+      "path": "/assets/build-room/fonts/LICENSE-schoolbell.txt",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "source": "Google Fonts; OFL license files included",
+      "purpose": "Self-hosted font subset",
+      "theme": "shared"
+    },
+    {
+      "path": "/assets/build-room/fonts/OFL-bricolage.txt",
+      "bytes": 4403,
+      "sha256": "4b5a7d8f37f5602621c8a8d7358a6a2e71317e6c231c661e15aef0275d3e07ba",
+      "source": "Google Fonts; OFL license files included",
+      "purpose": "Self-hosted font subset",
+      "theme": "shared"
+    },
+    {
+      "path": "/assets/build-room/fonts/OFL-dm-mono.txt",
+      "bytes": 4484,
+      "sha256": "2bada5ea45c3c63b7f1ea1f88ce9672c9e4f0c42b2c3b7378949084fe55a3066",
+      "source": "Google Fonts; OFL license files included",
+      "purpose": "Self-hosted font subset",
+      "theme": "shared"
+    },
+    {
+      "path": "/assets/build-room/fonts/OFL-instrument.txt",
+      "bytes": 4403,
+      "sha256": "9e27a72ed30eb49a08678f6a5d6ed98ec7ba5368f541637ee0683ec9134ef966",
+      "source": "Google Fonts; OFL license files included",
+      "purpose": "Self-hosted font subset",
+      "theme": "shared"
+    },
+    {
+      "path": "/assets/build-room/fonts/body-regular.woff2",
+      "bytes": 16820,
+      "sha256": "dffe9d58e475dcac6fec5e88cb173d630afbc857152503e4c5207cb0bc439d64",
+      "source": "Google Fonts; OFL license files included",
+      "purpose": "Self-hosted font subset",
+      "theme": "shared"
+    },
+    {
+      "path": "/assets/build-room/fonts/body-semibold.woff2",
+      "bytes": 17340,
+      "sha256": "948284a2b0e1ec4bb8516ed1bd1190267a96c1725c5e51f84d2c8134f27cd722",
+      "source": "Google Fonts; OFL license files included",
+      "purpose": "Self-hosted font subset",
+      "theme": "shared"
+    },
+    {
+      "path": "/assets/build-room/fonts/display-bold.woff2",
+      "bytes": 23004,
+      "sha256": "a1dd2d3f09aea7797b602b398af280902b2aee81cf4aa91435435acb01cde9ef",
+      "source": "Google Fonts; OFL license files included",
+      "purpose": "Self-hosted font subset",
+      "theme": "shared"
+    },
+    {
+      "path": "/assets/build-room/fonts/display-regular.woff2",
+      "bytes": 23436,
+      "sha256": "57c4ccd65ad768b3132797601161bbe34931f568bc429711d7c0bdebb9562c25",
+      "source": "Google Fonts; OFL license files included",
+      "purpose": "Self-hosted font subset",
+      "theme": "shared"
+    },
+    {
+      "path": "/assets/build-room/fonts/handwriting.woff2",
+      "bytes": 22256,
+      "sha256": "886f82b2066393d2b0d43e932bfd439f11fdf28fae356db37778c6710e92b997",
+      "source": "Google Fonts; OFL license files included",
+      "purpose": "Self-hosted font subset",
+      "theme": "shared"
+    },
+    {
+      "path": "/assets/build-room/fonts/mono.woff2",
+      "bytes": 15300,
+      "sha256": "be44a84cf586decd831aa1c77bf74dd998ed4d0f1adab9e660d1509c7a3f65dd",
+      "source": "Google Fonts; OFL license files included",
+      "purpose": "Self-hosted font subset",
+      "theme": "shared"
+    },
+    {
+      "path": "/assets/build-room/materials/paper-source.png",
+      "bytes": 3038908,
+      "sha256": "8736f9f2e52b8168a70b8fa456c8a9aebf73f959122a7e29dad25049b9a29b4b",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "source": "Built-in image generation; prompt saved in docs/implementation/material-prompt.md",
+      "purpose": "Original mineral paper surface",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/materials/paper.webp",
+      "bytes": 8424,
+      "sha256": "61ce25a0a9563f70d30cf10cc92f0f8edd0ef4275b6cbccaa344d49353a82b3c",
+      "dimensions": [
+        512,
+        512
+      ],
+      "source": "Built-in image generation; prompt saved in docs/implementation/material-prompt.md",
+      "purpose": "Original mineral paper surface",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/og-brain-tumor.jpg",
+      "bytes": 73966,
+      "sha256": "ddfb4ef86c31e7bdb684e5f9be0ca0a7202be284e6bd1d192493282f70753ced",
+      "dimensions": [
+        1200,
+        630
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Social image",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/og-cattle-breed.jpg",
+      "bytes": 62967,
+      "sha256": "df22f29e07576718cc03b6867bc8f90e11a848de1006b349333cc2040313afea",
+      "dimensions": [
+        1200,
+        630
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Social image",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/og-fixo-cli.jpg",
+      "bytes": 37222,
+      "sha256": "0f6251b702affb36041a0c66a5191f4115227129d8b9c3ea358fa53f916e952c",
+      "dimensions": [
+        1200,
+        630
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Social image",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/og-fixo-flow.jpg",
+      "bytes": 56960,
+      "sha256": "0f6a4f25816abf343dd1bb4ba1caf364db50f777fdb9ec081e088c9d28f184a8",
+      "dimensions": [
+        1200,
+        630
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Social image",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/og-framecast-studio.jpg",
+      "bytes": 56075,
+      "sha256": "1ab2acc0fcb90aba0597c15819a4e3dbf5cd373da2b49bc27986c17df80b59ed",
+      "dimensions": [
+        1200,
+        630
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Social image",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/og-gourmetgo.jpg",
+      "bytes": 75813,
+      "sha256": "511e4e1bf23eda5e640a35df9f1740b8b3576112e757bfe64be87e09675ac412",
+      "dimensions": [
+        1200,
+        630
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Social image",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/og-home.jpg",
+      "bytes": 40052,
+      "sha256": "bfd7c60caffc85a1fa721ff43da97e2701b5c932f28d3f62b770d330ba80a544",
+      "dimensions": [
+        1200,
+        630
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Social image",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/og-kids-space.jpg",
+      "bytes": 65196,
+      "sha256": "4209504ed948eaf267ad4b6dc5399cbafe90a0d14ad7348fa4c4194cc0c055aa",
+      "dimensions": [
+        1200,
+        630
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Social image",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/og-library-management.jpg",
+      "bytes": 68210,
+      "sha256": "95f7eda6f8b8bf709e782e53f61e8b545050293243e0120ff96a64391b5ca2ff",
+      "dimensions": [
+        1200,
+        630
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Social image",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/og-packetlark.jpg",
+      "bytes": 43422,
+      "sha256": "388021b4b21e766732d9360489830d279b2b6a10da5e57d435c483650f67688b",
+      "dimensions": [
+        1200,
+        630
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Social image",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/og-real-vs-ai.jpg",
+      "bytes": 75258,
+      "sha256": "2dcf5598c5559e2d584bc5df448bc4013a14156bdadee7b8ba7d604cbce0de0f",
+      "dimensions": [
+        1200,
+        630
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Social image",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/portrait.webp",
+      "bytes": 68472,
+      "sha256": "5735dd97ce75082c9bfc6ff05aa5ceaf9dc97eddc7ecd17bc4e18c6381f2566b",
+      "dimensions": [
+        720,
+        960
+      ],
+      "source": "Existing public/images/myimg.webp",
+      "purpose": "Authentic portrait derivative",
+      "theme": "shared"
+    },
+    {
+      "path": "/assets/build-room/posters/contact-dark-desktop.png",
+      "bytes": 429167,
+      "sha256": "bdc0bb16438871864163add4839f12fcf99353924d4346057484b853e8e6959f",
+      "dimensions": [
+        1600,
+        1000
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "dark"
+    },
+    {
+      "path": "/assets/build-room/posters/contact-dark-desktop.webp",
+      "bytes": 52762,
+      "sha256": "fe545b6a97d114b90bc872a4c6c6c2ff419c2f476c045005964909ca78ead547",
+      "dimensions": [
+        1600,
+        1000
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "dark"
+    },
+    {
+      "path": "/assets/build-room/posters/contact-dark-mobile.png",
+      "bytes": 136859,
+      "sha256": "48d114c65e1cf8df6285af798a7408e4e045d294ac4a9936b6245815f389ba3c",
+      "dimensions": [
+        800,
+        1000
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "dark"
+    },
+    {
+      "path": "/assets/build-room/posters/contact-dark-mobile.webp",
+      "bytes": 22998,
+      "sha256": "c2c3be6310014107cc8405df2765fc6a997b6f11c213cabd9cc10fe6584cfae2",
+      "dimensions": [
+        800,
+        1000
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "dark"
+    },
+    {
+      "path": "/assets/build-room/posters/contact-light-desktop.png",
+      "bytes": 508123,
+      "sha256": "241d80c04366b82f4a26e4858bdb5c0a3206d3fed6afb6fe82a7f3c731a18423",
+      "dimensions": [
+        1600,
+        1000
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/posters/contact-light-desktop.webp",
+      "bytes": 79250,
+      "sha256": "6e2dfab1085a246118d58a7cfac0ed4a528c258f555341fb5fcbde534f745b16",
+      "dimensions": [
+        1600,
+        1000
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/posters/contact-light-mobile.png",
+      "bytes": 189651,
+      "sha256": "9b34e0e263054827c7709a0f8387504b47f3dd621695b8b83176ee02af932673",
+      "dimensions": [
+        800,
+        1000
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/posters/contact-light-mobile.webp",
+      "bytes": 40954,
+      "sha256": "a647e80c9e44bd7d9e454e2e4b350e2091ad2d9df2404aabc259799d7780f93b",
+      "dimensions": [
+        800,
+        1000
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/posters/cutaway-light.png",
+      "bytes": 767989,
+      "sha256": "70679dfc3234a137b5e740cd6d02c782766951958dc517613837a25f54248545",
+      "dimensions": [
+        1600,
+        1000
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/posters/cutaway-light.webp",
+      "bytes": 94228,
+      "sha256": "c1c9de2f70e7873382a603da2fda91d947abfbe8ce3e81d2db9868af83c3ab31",
+      "dimensions": [
+        1600,
+        1000
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/posters/hero-dark-desktop.png",
+      "bytes": 512079,
+      "sha256": "8078bf93401b4e19ef2c137f3ba7c0d8db7b0d157266c481354010ecc769331c",
+      "dimensions": [
+        1600,
+        1000
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "dark"
+    },
+    {
+      "path": "/assets/build-room/posters/hero-dark-desktop.webp",
+      "bytes": 61764,
+      "sha256": "895c9c0b07e658a182227ca1f56b58eda87c9f11d663d3d4c69e416a304613a1",
+      "dimensions": [
+        1600,
+        1000
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "dark"
+    },
+    {
+      "path": "/assets/build-room/posters/hero-dark-mobile.png",
+      "bytes": 222374,
+      "sha256": "e64356d5e0d8fd612d835e71f271626a8677b392ca57c7dadf9f3962cd6dc20b",
+      "dimensions": [
+        1200,
+        800
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "dark"
+    },
+    {
+      "path": "/assets/build-room/posters/hero-dark-mobile.webp",
+      "bytes": 30102,
+      "sha256": "83607b282571a60744a8ed8b057351538cc54da4244c512f75e993092df34e05",
+      "dimensions": [
+        1200,
+        800
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "dark"
+    },
+    {
+      "path": "/assets/build-room/posters/hero-light-desktop.png",
+      "bytes": 560079,
+      "sha256": "23ecfad162b5f2d460f8f6875cb6c02052a828da0d11d41437f975a3afb77d02",
+      "dimensions": [
+        1600,
+        1000
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/posters/hero-light-desktop.webp",
+      "bytes": 74402,
+      "sha256": "7730b41e5392bfbdd7352a073e237c54f28a260ed368cb4d5f5e9848ec0545bb",
+      "dimensions": [
+        1600,
+        1000
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/posters/hero-light-mobile.png",
+      "bytes": 241182,
+      "sha256": "ead06d381beaa0dcf88534aa7dd8accf19aa2fd710840d7175a8535266560277",
+      "dimensions": [
+        1200,
+        800
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/posters/hero-light-mobile.webp",
+      "bytes": 38818,
+      "sha256": "f7b4f265853bf8f74986394b9c566c81445dddabcb424b51d06c9dec5614760d",
+      "dimensions": [
+        1200,
+        800
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/posters/room-dark-desktop.png",
+      "bytes": 321494,
+      "sha256": "75270cbdd5d0f05e8c4ace5f9ff7e9103db9e5222f05f875d63669ef2728d4c3",
+      "dimensions": [
+        1600,
+        1000
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "dark"
+    },
+    {
+      "path": "/assets/build-room/posters/room-dark-desktop.webp",
+      "bytes": 40792,
+      "sha256": "64b2d24fcb7769e6708adf76afb6ad5ddeb03b0640ee86506c34e7e1dc648798",
+      "dimensions": [
+        1600,
+        1000
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "dark"
+    },
+    {
+      "path": "/assets/build-room/posters/room-dark-mobile.png",
+      "bytes": 232218,
+      "sha256": "2beb9d73b5e2174ed740530bf6eee72ce21571b3f3fb9098505173bada2cfa5b",
+      "dimensions": [
+        800,
+        1000
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "dark"
+    },
+    {
+      "path": "/assets/build-room/posters/room-dark-mobile.webp",
+      "bytes": 37738,
+      "sha256": "189357b1b990616f9f54ed51703ce2b32e0efdfd9da8c5c184cc802226799273",
+      "dimensions": [
+        800,
+        1000
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "dark"
+    },
+    {
+      "path": "/assets/build-room/posters/room-framecast-studio-dark-mobile.png",
+      "bytes": 218910,
+      "sha256": "3b22c837ede33397e8574a010c445a9bbdb42827c2a4b83dff91c422ed95121e",
+      "dimensions": [
+        800,
+        1000
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "dark"
+    },
+    {
+      "path": "/assets/build-room/posters/room-framecast-studio-dark-mobile.webp",
+      "bytes": 33632,
+      "sha256": "0af37bd3879a0cfbb40901bd897d0ad45a193ddda0d98c75cfe3939d5a0ad3ac",
+      "dimensions": [
+        800,
+        1000
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "dark"
+    },
+    {
+      "path": "/assets/build-room/posters/room-framecast-studio-light-mobile.png",
+      "bytes": 267492,
+      "sha256": "8664c70817c90bbad636173a62ace56f06146e8415e6ecb9a63a6820447b929f",
+      "dimensions": [
+        800,
+        1000
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/posters/room-framecast-studio-light-mobile.webp",
+      "bytes": 47698,
+      "sha256": "66f06b6045d354ebb954398bb533ca3223c5383418831cc3f6b8075fdb345306",
+      "dimensions": [
+        800,
+        1000
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/posters/room-light-desktop.png",
+      "bytes": 352382,
+      "sha256": "bae42ce299165b98e4872cd487a46199378d356ac2c1de3475895d6d47c2b8e4",
+      "dimensions": [
+        1600,
+        1000
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/posters/room-light-desktop.webp",
+      "bytes": 53650,
+      "sha256": "58cc086765bf1995570408fad853d1f3011a15c3d6be0cd46567f5eb0b01e4cb",
+      "dimensions": [
+        1600,
+        1000
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/posters/room-light-mobile.png",
+      "bytes": 280225,
+      "sha256": "994aff3aec04acd0c56591b2d7a5b2bde565b9933a0e4a8831bc4a12c01f2624",
+      "dimensions": [
+        800,
+        1000
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/posters/room-light-mobile.webp",
+      "bytes": 51734,
+      "sha256": "a3a84621f9536c7e4f8296f37244a8ef3dde5e256e85aca1b1fa10b11395e1b0",
+      "dimensions": [
+        800,
+        1000
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/posters/room-packetlark-dark-mobile.png",
+      "bytes": 222912,
+      "sha256": "d775a02d0bacdcc8ec456571364ef45fe1598e9f1f48f6040a298daa03a31ae3",
+      "dimensions": [
+        800,
+        1000
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "dark"
+    },
+    {
+      "path": "/assets/build-room/posters/room-packetlark-dark-mobile.webp",
+      "bytes": 34068,
+      "sha256": "f74cf81653fa2b36d81d5419d6f6be94f746b34220dd8a38cc480f968f5aa0ca",
+      "dimensions": [
+        800,
+        1000
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "dark"
+    },
+    {
+      "path": "/assets/build-room/posters/room-packetlark-light-mobile.png",
+      "bytes": 271382,
+      "sha256": "079f749ae276a5191e93f44b088a124806cb9a1ef1eeb3be10aac39aaba88277",
+      "dimensions": [
+        800,
+        1000
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/posters/room-packetlark-light-mobile.webp",
+      "bytes": 48114,
+      "sha256": "84f8e8bac9503b188d6ac6095d0ab67b0f1b614f9088c04a269dd0fc3af06b3b",
+      "dimensions": [
+        800,
+        1000
+      ],
+      "source": "Original shared Three.js Build Room model and actual project captures",
+      "purpose": "Responsive scene fallback",
+      "theme": "light"
+    },
+    {
+      "path": "/assets/build-room/products/fixo-flow-settings.jpg",
+      "bytes": 118261,
+      "sha256": "a38836c4b8fec4fd82d30aa84698ae7d29c6fefc7f799d0db18d16d381609302",
+      "dimensions": [
+        1040,
+        768
+      ],
+      "source": "https://github.com/abrar225/FixoFlow/tree/main/docs/images",
+      "purpose": "Actual product capture or explicitly labelled screenshot interface tour",
+      "theme": "product"
+    },
+    {
+      "path": "/assets/build-room/products/fixo-flow-tour.mp4",
+      "bytes": 98066,
+      "sha256": "6214927f38f276e24993c80613c201abae402514ffeda5f8d392c05169f0ad5b",
+      "source": "https://github.com/abrar225/FixoFlow/tree/main/docs/images",
+      "purpose": "Actual product capture or explicitly labelled screenshot interface tour",
+      "theme": "product"
+    },
+    {
+      "path": "/assets/build-room/products/fixo-flow-tour.vtt",
+      "bytes": 245,
+      "sha256": "576bda8cd432d625944b313e1aa73adcb18510590025ec95d5639256a4c7c974",
+      "source": "https://github.com/abrar225/FixoFlow/tree/main/docs/images",
+      "purpose": "Actual product capture or explicitly labelled screenshot interface tour",
+      "theme": "product"
+    },
+    {
+      "path": "/assets/build-room/products/fixo-flow-tour.webm",
+      "bytes": 145047,
+      "sha256": "84d1a1ebb50445a60e3432d05f8ca9544f6cfdd47008c6d96a1b6f1a453d4a2a",
+      "source": "https://github.com/abrar225/FixoFlow/tree/main/docs/images",
+      "purpose": "Actual product capture or explicitly labelled screenshot interface tour",
+      "theme": "product"
+    },
+    {
+      "path": "/assets/build-room/products/fixo-flow.jpg",
+      "bytes": 116404,
+      "sha256": "7857614585e6fc949ecea1303f8648d9df2dc365cb65d65e6628d3beb0f280b9",
+      "dimensions": [
+        1040,
+        768
+      ],
+      "source": "https://github.com/abrar225/FixoFlow/tree/main/docs/images",
+      "purpose": "Actual product capture or explicitly labelled screenshot interface tour",
+      "theme": "product"
+    },
+    {
+      "path": "/assets/build-room/products/fixo-flow.webp",
+      "bytes": 40482,
+      "sha256": "6757609e9d330d21e7f8004e5884a2a29627fc31277a8c6b52e2343180b8233d",
+      "dimensions": [
+        1040,
+        768
+      ],
+      "source": "https://github.com/abrar225/FixoFlow/tree/main/docs/images",
+      "purpose": "Actual product capture or explicitly labelled screenshot interface tour",
+      "theme": "product"
+    },
+    {
+      "path": "/assets/build-room/products/framecast-studio.png",
+      "bytes": 170992,
+      "sha256": "6236158e7b21873b40865fb2c7b6073581595db4da31fe917d8cc663faaa8b2c",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "source": "Local Framecast development capture: research/completion-pass/editor-wide.png",
+      "purpose": "Actual development interface, not a public release",
+      "theme": "product"
+    },
+    {
+      "path": "/assets/build-room/products/framecast-studio.webp",
+      "bytes": 31694,
+      "sha256": "78392c90a133d0d79f39348a5bef370f3462327b0b380d21ba45ddac711829cd",
+      "dimensions": [
+        1200,
+        750
+      ],
+      "source": "Local Framecast development capture: research/completion-pass/editor-wide.png",
+      "purpose": "Actual development interface, not a public release",
+      "theme": "product"
+    },
+    {
+      "path": "/assets/build-room/products/packetlark.png",
+      "bytes": 95726,
+      "sha256": "1cf365351b1e297222313529ccfc0593ac10b4850f4c833325858b58f1c9eea1",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "source": "https://github.com/abrar225/packetlark/blob/main/assets/preview.png",
+      "purpose": "Actual repository product preview",
+      "theme": "product"
+    },
+    {
+      "path": "/assets/build-room/products/packetlark.webp",
+      "bytes": 25334,
+      "sha256": "014ce9c7049e71e582767ed739e0848d0a85d3e650b8ab5a2d8eba495c35f277",
+      "dimensions": [
+        1200,
+        833
+      ],
+      "source": "https://github.com/abrar225/packetlark/blob/main/assets/preview.png",
+      "purpose": "Actual repository product preview",
+      "theme": "product"
+    },
+    {
+      "path": "/assets/build-room/render-stats.json",
+      "bytes": 1880,
+      "sha256": "9ecfc9b0dd07bd51d2852723d2817a303a48eea83f24d08a6c25987aa8dee2d9",
+      "source": "Original procedural geometry in src/lib/build-room/sceneFactory.js",
+      "purpose": "Reusable model or render measurements",
+      "theme": "shared"
+    }
+  ]
+}

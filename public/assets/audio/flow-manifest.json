@@ -1,0 +1,104 @@
+{
+  "source": {
+    "platform": "Flow Music",
+    "music": "https://www.flowmusic.app/song/a935ec22-3ca3-43fb-85cd-face5432a73c",
+    "musicSession": "https://www.flowmusic.app/session/f870e704-9742-4a47-9f78-919a7cba71f2",
+    "effectsSession": "https://www.flowmusic.app/session/bcd051bd-d3a5-4aa5-9a52-574cba482973",
+    "effectsMethod": "Flow Music Spaces authored the original instrument source; its code-view export was rendered locally without changing its DSP, then peak-matched for a quiet web mix",
+    "effectsVersion": 6,
+    "effectsExportNote": "The embedded Flow ZIP download did not complete; scripts/render-flow-space.mjs rendered the exported Flow source with native OfflineAudioContext and the Flow WAV/ZIP encoders.",
+    "musicMethod": "Flow Music Producer track, edited into a circular 60-second loop"
+  },
+  "assets": {
+    "music": {
+      "url": "/assets/audio/little-useful-things.mp3",
+      "duration": 60,
+      "bytes": 960813,
+      "sha256": "22943c417cf4784b6de33de7a371f67c5aff9221304ffb2b06aef290ad9cb0ea"
+    },
+    "hover": {
+      "url": "/assets/audio/hover.wav",
+      "duration": 0.035,
+      "bytes": 6764,
+      "sha256": "2caa887340aec3fb6e3f4535768a5de9530fbc81153fe364a2cb813548cb6ea2"
+    },
+    "click": {
+      "url": "/assets/audio/click.wav",
+      "duration": 0.07,
+      "bytes": 13484,
+      "sha256": "16550d79063736b68907abe38b55a87d2478018c1efb450a69bf406f6e4063c9"
+    },
+    "select": {
+      "url": "/assets/audio/select.wav",
+      "duration": 0.11,
+      "bytes": 21164,
+      "sha256": "4e622973a98c88bec24b0fb004bdea8f6b1bbfd7e4f045fd9ab2f563e8c91e00"
+    },
+    "section": {
+      "url": "/assets/audio/section.wav",
+      "duration": 0.22,
+      "bytes": 42284,
+      "sha256": "6191ff956f9dcefae43c2d6b9ecccb8a05127b535ef25d87325cc540d0679710"
+    },
+    "chapter": {
+      "url": "/assets/audio/chapter.wav",
+      "duration": 0.45,
+      "bytes": 86444,
+      "sha256": "03a92fe901a43e22943d2acbb5470a5778b1cfefeac43ce3903ba74dc8f34326"
+    },
+    "building": {
+      "url": "/assets/audio/building.wav",
+      "duration": 0.06,
+      "bytes": 11564,
+      "sha256": "432de95a1005478071cf895539272e8772bb7601949e0027481d66c572af3328"
+    },
+    "replay": {
+      "url": "/assets/audio/replay.wav",
+      "duration": 0.32,
+      "bytes": 61484,
+      "sha256": "e447499e41871ec9c997b379bda1365162a0129bc092b50a9e177c01b2856839"
+    },
+    "city-complete": {
+      "url": "/assets/audio/city-complete.wav",
+      "duration": 0.65,
+      "bytes": 124844,
+      "sha256": "32b55827db682d9f99435d98663563299173faf99349d5ba3cec8b5517b85f0e"
+    },
+    "scatter": {
+      "url": "/assets/audio/scatter.wav",
+      "duration": 0.25,
+      "bytes": 48044,
+      "sha256": "2935dca9eb87a4c97c1aacf84639fae5d5e41b07b1e7534e845793555b09674d"
+    },
+    "reform": {
+      "url": "/assets/audio/reform.wav",
+      "duration": 0.4,
+      "bytes": 76844,
+      "sha256": "afd719de4d36feeb1f3efcaeb4ee921a5594133a8c60996e526d8a9400fc77a9"
+    },
+    "creature": {
+      "url": "/assets/audio/creature.wav",
+      "duration": 0.09,
+      "bytes": 17324,
+      "sha256": "60331b556b7176652fb0925f49524b485dc906d804cd4dd69a87a208b975aef8"
+    },
+    "ripple": {
+      "url": "/assets/audio/ripple.wav",
+      "duration": 0.28,
+      "bytes": 53804,
+      "sha256": "08f425d5aba2d04009eea27beaed6cf7d305cafb1fdc298f010773bc591549c7"
+    },
+    "breach": {
+      "url": "/assets/audio/breach.wav",
+      "duration": 0.35,
+      "bytes": 67244,
+      "sha256": "01f0836c8b967d88297d082ee1cc79fdd25441ae4ee5263b3e9d6ac3533e6f2e"
+    },
+    "splash": {
+      "url": "/assets/audio/splash.wav",
+      "duration": 0.5,
+      "bytes": 96044,
+      "sha256": "c39fc46120aec56825fc6cc7aed04835acff74b88045ea6a41eed65151812ef3"
+    }
+  }
+}

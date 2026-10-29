@@ -6,6 +6,7 @@ const PORT = 4173;
 const BASE = `http://127.0.0.1:${PORT}`;
 const results = [];
 let server;
+let testBrowser;
 
 function check(name, condition, detail = '') {
   const ok = Boolean(condition);
@@ -40,6 +41,7 @@ async function main() {
   }
 
   const browser = await chromium.launch({ headless: true });
+  testBrowser = browser;
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   await context.addInitScript(() => {
     try { sessionStorage.setItem('abrar_intro_seen', '1'); } catch { /* ignore */ }
@@ -68,7 +70,7 @@ async function main() {
     imagesWithoutAlt: document.querySelectorAll('img:not([alt])').length,
   }));
 
-  check('home renders the hero', home.h1.includes('Engineer') && home.h1.includes('Systems'), home.h1);
+  check('home renders the hero', /Zero to\s*built/.test(home.h1), home.h1);
   check('home title targets Ahmedabad', /Ahmedabad/.test(home.title), home.title);
   check('home canonical is the root URL', home.canonical === 'https://abrarakhunji.com/', home.canonical);
   check('home description mentions Ahmedabad', /Ahmedabad/.test(home.metaDescription), home.metaDescription);
@@ -209,7 +211,7 @@ async function main() {
   if (await navButton.count()) {
     await navButton.click();
     await mobile.waitForTimeout(500);
-    const hireItem = mobile.locator('button[aria-label="Hire"]');
+    const hireItem = mobile.locator('a[aria-label="Hire"]');
     if (await hireItem.count()) {
       await hireItem.first().click();
       await mobile.waitForURL('**/hire/', { timeout: 10_000 });
@@ -218,6 +220,55 @@ async function main() {
       check('mobile hire navigation works', false, 'Hire item not found');
     }
   }
+  // New project archive and direct-load case studies.
+  await page.goto(`${BASE}/work/`);
+  await page.waitForSelector('.work-grid');
+  check('archive exposes all ten case studies', await page.locator('.work-card').count() === 10);
+  for (const slug of ['fixo-flow','packetlark','framecast-studio','cattle-breed']) {
+    const response = await page.goto(`${BASE}/work/${slug}/`);
+    await page.waitForSelector('.case-body');
+    check(`${slug} case study loads directly`, response.status() === 200 && await page.locator('.case-body h2').count() >= 6);
+    check(`${slug} has the canonical URL`, await page.locator('link[rel=canonical]').getAttribute('href') === `https://abrarakhunji.com/work/${slug}/`);
+  }
+  await page.goto(`${BASE}/work/not-a-project/`);
+  await page.waitForSelector('meta[name=robots][content*=noindex]', {state:'attached'});
+  check('unknown project is noindex', /noindex/.test(await page.locator('meta[name=robots]').getAttribute('content')));
+  await page.goto(`${BASE}/?project=packetlark#work`);
+  await page.waitForSelector('#selected-product');
+  check('project query selects PacketLark', (await page.locator('#selected-product h3').innerText()) === 'PacketLark');
+  const selector = page.locator('.project-selector');
+  await selector.getByRole('button', {name:'Fixo Flow'}).click();
+  await selector.getByRole('button', {name:'Framecast Studio'}).click();
+  await selector.getByRole('button', {name:'PacketLark'}).click();
+  await page.waitForFunction(()=>document.querySelector('#selected-product h3')?.textContent === 'PacketLark');
+  check('rapid selection settles on the last project', await page.locator('#selected-product h3').innerText() === 'PacketLark');
+  await selector.getByRole('button', {name:'PacketLark'}).press('Home');
+  await page.waitForFunction(()=>document.querySelector('#selected-product h3')?.textContent === 'Fixo Flow');
+  check('Home key selects first product', await page.locator('#selected-product h3').innerText() === 'Fixo Flow');
+  await selector.getByRole('button', {name:'Fixo Flow'}).press('End');
+  await page.waitForFunction(()=>document.querySelector('#selected-product h3')?.textContent === 'Framecast Studio');
+  check('End key selects last product', await page.locator('#selected-product h3').innerText() === 'Framecast Studio');
+  await page.getByRole('button',{name:'Explore in 3D'}).click();
+  check('Explore mode exposes reset and exit', await page.getByRole('button',{name:'Reset view'}).count() === 1);
+  await page.keyboard.press('Escape');
+  check('Escape exits Explore', await page.getByRole('button',{name:'Explore in 3D'}).count() === 1);
+  await page.goto(`${BASE}/?project=unknown#work`);
+  check('unknown project query uses the default', await page.locator('#selected-product h3').innerText() === 'Fixo Flow');
+  await page.getByRole('button',{name:'Inside the build',exact:true}).click();
+  check('inspection reveals architecture', await page.locator('#engineering-layers').isVisible());
+
+  const fallbackContext = await browser.newContext({reducedMotion:'reduce',viewport:{width:390,height:844}});
+  await fallbackContext.addInitScript(() => {
+    HTMLCanvasElement.prototype.getContext = function(type) { if (type === 'webgl' || type === 'webgl2') return null; return null; };
+  });
+  const fallback = await fallbackContext.newPage();
+  await fallback.goto(`${BASE}/#work`);
+  await fallback.waitForSelector('#selected-product');
+  await fallback.locator('.project-selector').getByRole('button',{name:'PacketLark'}).click();
+  await fallback.waitForFunction(()=>document.querySelector('#selected-product h3')?.textContent === 'PacketLark');
+  check('failed WebGL retains usable project selection', await fallback.locator('#selected-product h3').innerText() === 'PacketLark');
+  await fallbackContext.close();
+
   await mobileContext.close();
 
   check('no uncaught page errors', pageErrors.length === 0, pageErrors.join(' | '));
@@ -241,6 +292,7 @@ main()
     console.error(error);
     process.exitCode = 1;
   })
-  .finally(() => {
+  .finally(async () => {
+    if (testBrowser) await testBrowser.close().catch(() => {});
     if (server) server.kill('SIGTERM');
   });

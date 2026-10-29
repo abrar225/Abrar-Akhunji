@@ -56,53 +56,61 @@ export default function SEO({
     };
   }, [noindex]);
 
+  // Static route documents provide no-JS metadata. Helmet owns those fields
+  // after mount; remove the unmanaged copies rather than publishing duplicates.
+  useEffect(() => {
+    const selectors = ['link[rel="canonical"]', 'meta[name="title"]', 'meta[name="description"]', 'meta[name="keywords"]', 'meta[name="robots"]', 'meta[name="googlebot"]', 'meta[name="bingbot"]', 'meta[property^="og:"]', 'meta[name^="twitter:"]', 'meta[property^="article:"]'];
+    document.head.querySelectorAll(selectors.map(selector => `${selector}:not([data-rh])`).join(',')).forEach(node => node.remove());
+    if (path !== '/') document.head.querySelectorAll('link[hreflang]').forEach(node => node.remove());
+  }, [path]);
+
   return (
     <Helmet>
       <title>{title}</title>
-      <meta name="title" content={title} />
-      <meta name="description" content={description} />
-      <meta name="author" content="Abrar Akhunji" />
-      {allKeywords.length > 0 && <meta name="keywords" content={allKeywords.join(', ')} />}
+      <meta data-rh="true" name="title" content={title} />
+      <meta data-rh="true" name="description" content={description} />
+      <meta data-rh="true" name="author" content="Abrar Akhunji" />
+      {allKeywords.length > 0 && <meta data-rh="true" name="keywords" content={allKeywords.join(', ')} />}
 
-      <meta
+      <meta data-rh="true"
         name="robots"
         content={noindex
           ? 'noindex, follow'
           : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'}
       />
-      {!noindex && <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large" />}
-      {!noindex && <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large" />}
-      {!noindex && <link rel="canonical" href={canonical} />}
+      {!noindex && <meta data-rh="true" name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large" />}
+      {!noindex && <meta data-rh="true" name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large" />}
+      {!noindex && <link data-rh="true" rel="canonical" href={canonical} />}
 
-      <meta property="og:type" content={type} />
-      <meta property="og:url" content={canonical} />
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image" content={imageUrl} />
-      <meta property="og:image:alt" content={imageAlt || title} />
-      <meta property="og:site_name" content={SITE_NAME} />
-      <meta property="og:locale" content="en_IN" />
+      <meta data-rh="true" property="og:type" content={type} />
+      <meta data-rh="true" property="og:url" content={canonical} />
+      <meta data-rh="true" property="og:title" content={title} />
+      <meta data-rh="true" property="og:description" content={description} />
+      <meta data-rh="true" property="og:image" content={imageUrl} />
+      <meta data-rh="true" property="og:image:alt" content={imageAlt || title} />
+      <meta data-rh="true" property="og:site_name" content={SITE_NAME} />
+      <meta data-rh="true" property="og:locale" content="en_IN" />
 
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:site" content="@Abrarakhunji" />
-      <meta name="twitter:creator" content="@Abrarakhunji" />
-      <meta name="twitter:url" content={canonical} />
-      <meta name="twitter:title" content={title} />
-      <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={imageUrl} />
-      <meta name="twitter:image:alt" content={imageAlt || title} />
+      <meta data-rh="true" name="twitter:card" content="summary_large_image" />
+      <meta data-rh="true" name="twitter:site" content="@Abrarakhunji" />
+      <meta data-rh="true" name="twitter:creator" content="@Abrarakhunji" />
+      <meta data-rh="true" name="twitter:url" content={canonical} />
+      <meta data-rh="true" name="twitter:title" content={title} />
+      <meta data-rh="true" name="twitter:description" content={description} />
+      <meta data-rh="true" name="twitter:image" content={imageUrl} />
+      <meta data-rh="true" name="twitter:image:alt" content={imageAlt || title} />
 
       {type === 'article' && publishedTime && (
-        <meta property="article:published_time" content={publishedTime} />
+        <meta data-rh="true" property="article:published_time" content={publishedTime} />
       )}
       {type === 'article' && modifiedTime && (
-        <meta property="article:modified_time" content={modifiedTime} />
+        <meta data-rh="true" property="article:modified_time" content={modifiedTime} />
       )}
       {type === 'article' && articleSection && (
-        <meta property="article:section" content={articleSection} />
+        <meta data-rh="true" property="article:section" content={articleSection} />
       )}
       {type === 'article' && keywords.map((tag) => (
-        <meta key={tag} property="article:tag" content={tag} />
+        <meta data-rh="true" key={tag} property="article:tag" content={tag} />
       ))}
 
       {schemas.map((item, index) => (

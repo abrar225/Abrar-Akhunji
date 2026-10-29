@@ -67,6 +67,12 @@
       "skillPath": "skills/gravitas/SKILL.md",
       "computedHash": "e0675fce101522d4c080017bf40921b4d3bb30d8283d44240a1d4717f033cb47"
     },
+    "karpathy-guidelines": {
+      "source": "szkocot/andrej-karpathy-skills",
+      "sourceType": "github",
+      "skillPath": "skills/karpathy-guidelines/SKILL.md",
+      "computedHash": "41e8ca055bbde13d240776a14a076a59614057200340c243130a76ba4e64cac8"
+    },
     "keyword-research": {
       "source": "aaron-he-zhu/aaron-marketing-skills",
       "sourceType": "github",
