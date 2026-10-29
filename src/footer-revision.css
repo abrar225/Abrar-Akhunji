@@ -53,15 +53,6 @@
 .archive-browser-foot button { width:44px; height:44px; display:grid; place-items:center; border:1px solid var(--color-line); border-radius:50%; background:transparent; }
 @keyframes artifact-arrive { from{opacity:.4;transform:translateY(5px)}to{opacity:1;transform:translateY(0)} }
 
-/* An additive directional reticle carries the interaction verb across the site. */
-.intent-cursor { width:28px; height:28px; padding:0; border-radius:0; background:transparent; color:var(--color-accent); }
-.intent-cursor::before { content:''; position:absolute; inset:1px; border:1px solid var(--color-accent); border-radius:4px; transform:rotate(calc(var(--cursor-angle,0deg) * .07)); opacity:.65; transition:border-radius .2s; }
-.intent-cursor::after { position:absolute; left:38px; top:3px; padding:6px 9px; border-radius:4px; color:var(--color-fg); background:var(--color-surface); border:1px solid var(--color-line); font:10px/1.2 'DM Mono',monospace; }
-.cursor-center { position:absolute; left:12px; top:12px; width:4px; height:4px; background:var(--color-accent); border-radius:50%; }
-.cursor-orbit { position:absolute; inset:-5px; border:1px dashed var(--color-accent); border-radius:50%; opacity:calc(.18 + var(--cursor-speed,0) * .35); transform:rotate(var(--cursor-angle,0deg)); transition:transform .12s linear,scale .18s; }
-.intent-cursor[data-kind=control]::before { border-radius:50%; }
-.intent-cursor.is-pressed .cursor-orbit { scale:.65; }
-.intent-cursor.is-pressed::before { background:color-mix(in srgb,var(--color-accent) 12%,transparent); }
 @media(max-width:1023px){
  .footer-river canvas { height:380px; }
 }

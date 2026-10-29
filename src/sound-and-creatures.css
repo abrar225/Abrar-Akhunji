@@ -18,7 +18,5 @@
 .workshop-creatures { position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:65; }
 .name-sensitivity { display:inline-flex; align-items:center; gap:10px; margin-right:10px; color:var(--color-muted); font:10px 'DM Mono',monospace; }
 .name-sensitivity input { width:80px; accent-color:var(--color-accent); min-height:36px; }
-.intent-cursor { transform-origin:center; }
-.intent-cursor::after { left:var(--label-x,38px); top:var(--label-y,3px); white-space:nowrap; }
 @media(max-width:767px){.header-actions { gap:4px; }.sound-panel { position:fixed; top:82px; right:12px; width:min(310px,calc(100vw - 24px)); }.header-resume { padding-left:8px; }.name-sensitivity { margin:0; flex-basis:100%; justify-content:flex-end; }.workshop-creatures { display:none; }}
 @media(prefers-reduced-motion:reduce){.workshop-creatures { display:none; }}

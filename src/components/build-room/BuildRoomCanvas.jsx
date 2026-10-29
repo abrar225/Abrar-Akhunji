@@ -110,5 +110,5 @@ export default function BuildRoomCanvas({ theme, project, phase, inspection, exp
     tween(r.room.spot.target.position, { x: 0 }, .45);
     r.invalidate(reduced ? 0 : 1000);
   }, [theme, project, phase, inspection, explore, resetKey, reduced]);
-  return <div ref={container} className="build-canvas" data-testid="build-canvas" />;
+  return <div ref={container} className="build-canvas" data-testid="build-canvas" data-cursor={explore ? 'Drag to explore' : undefined} data-cursor-mode={explore ? 'hand' : undefined}/>;
 }

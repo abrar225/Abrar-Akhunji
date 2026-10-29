@@ -1,10 +1,11 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { lazy, Suspense, useEffect, useRef } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import ErrorBoundary from './components/ErrorBoundary';
 import Home from './pages/Home';
 import SiteHeader from './components/site/SiteHeader';
 import SiteFooter from './components/site/SiteFooter';
 import SiteMotion from './components/site/SiteMotion';
+import IntroLoader from './components/site/IntroLoader';
 import Soundscape from './components/site/Soundscape';
 import WorkshopCreatures from './components/site/WorkshopCreatures';
 import { useTheme } from './lib/useTheme';
@@ -67,13 +68,18 @@ function RouteFallback() {
 
 export default function App() {
   const { theme } = useTheme();
+  const [intro, setIntro] = useState(() => window.location.pathname === '/' && !window.location.hash && !matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const completeIntro = useCallback(() => setIntro(false), []);
   useEffect(() => { document.documentElement.classList.remove('light','dark'); document.documentElement.classList.add(theme); document.documentElement.style.colorScheme = theme; }, [theme]);
   return (
-    <RouteBoundary>
+    <>
+      {intro && <IntroLoader onComplete={completeIntro}/>}
+      <SiteMotion/>
+      <div className="site-experience" inert={intro || undefined}>
+      <RouteBoundary>
       <RouteScroll />
       <a className="skip-link" href="#route-content">Skip to content</a>
       <SiteHeader/>
-      <SiteMotion/>
       <Soundscape/>
       <WorkshopCreatures/>
       <div id="route-content" tabIndex={-1}>
@@ -90,6 +96,8 @@ export default function App() {
       </Suspense>
       </div>
       <SiteFooter/>
-    </RouteBoundary>
+      </RouteBoundary>
+      </div>
+    </>
   );
 }

@@ -8,6 +8,7 @@ import './editorial-motion.css'
 import './final-polish.css'
 import './footer-revision.css'
 import './sound-and-creatures.css'
+import './intro-cursor.css'
 import App from './App.jsx'
 
 import { BrowserRouter } from 'react-router-dom';
