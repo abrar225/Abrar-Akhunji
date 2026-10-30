@@ -1,0 +1,7 @@
+{
+  "environment": "One local Chromium cold-load lab sample; 390×844, 4× CPU slowdown, 150ms latency, 1.6Mbps down / 0.75Mbps up; not field data or a Lighthouse score.",
+  "lcp": 2464,
+  "cls": 0,
+  "initialWebGLCanvases": 0,
+  "hero": "Zero tobuilt."
+}

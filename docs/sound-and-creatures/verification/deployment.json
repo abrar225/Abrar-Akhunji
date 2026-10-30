@@ -1,0 +1,25 @@
+{
+  "checkedAt": "2026-10-29T06:49:38.268Z",
+  "checks": [
+    {
+      "route": "/",
+      "status": 200
+    },
+    {
+      "route": "/work/",
+      "status": 200
+    },
+    {
+      "route": "/work/packetlark/",
+      "status": 200
+    },
+    {
+      "route": "/blog/flashmap-flow-map-speculative-decoding/",
+      "status": 200
+    }
+  ],
+  "script": "/assets/index-uY4ZSWNx.js",
+  "audioFiles": 15,
+  "commit": "5d22ce812d3d4135c1a981e7dc3aa0f0950fe06c",
+  "verdict": "PASS"
+}

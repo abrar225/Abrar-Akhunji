@@ -1,0 +1,256 @@
+
+
+==== PAGE 1 ====
+How I Built a Portfolio That Hit 3 Lakh Views in 
+2 days
+Hey, if you're here that means you commented or DMed asking how this thing was built. 
+So here's the real story, no fluff, and actually a lot more detail than what fit in the reel.
+Quick disclaimer first
+I'm not a coder or developer. I had my portfolio sitting as a PDF for a while and just 
+wanted to try vibe coding, wasn't even sure it'd turn out decent. It did, and here we are.
+How it actually started
+Before touching any AI tool, I sat with the PDF and figured out how many sections I 
+wanted, what story I wanted the portfolio to tell, and what vibe I was going for. Fonts, 
+colors, overall tone, all decided manually first in Canva and Figma. AI mostly replicates 
+what's already in your head, at least that's how it felt to me, it doesn't really invent taste 
+on its own.
+The full workflow
+GPT: used this mostly for structuring, taking a raw idea and turning it into a rough 
+section by section plan before any visual work started
+Gemini: this is where most of the actual building happened, I'd feed it the structure 
+plus visual references from Canva and Figma, and it would build the section out, got 
+it right maybe 60 to 70 percent of the time on the first try
+Antigravity and Claude: used after Gemini's first attempt, mainly for fixing bugs 
+and cleaning up small things like spacing, little stuff I had to manually catch and fix 
+along the way
+Canva and Figma: this was the first step I took for pretty much every section, at 
+least for me. the thing that made the biggest difference was taking the exact 
+dimensions of the website section I was about to build, then designing that entire 
+section in Canva or Figma to those exact dimensions, typography, shadows, boxes, 
+spacing, even the images, basically a full mockup instead of just a rough 
+moodboard. exported it as SVG or PNG and fed that directly to GPT and Gemini as 
+reference. it just made things easier since AI had something exact to copy instead 
+of guessing from a text description. this is just what worked for me though, not 
+saying it's the only way to do it
+Coder friend: brought in for a few things I genuinely got stuck on and couldn't 
+figure out myself
+Section by section, the full story
+Hero section
+No deep reasoning here honestly, mainly didn't want to show my face clearly, so went 
+
+
+==== PAGE 2 ====
+with a silhouette style, matched it to the blue theme, used generative AI to create the 
+base image, then added smoke and subtle motion so it felt like an actual video instead 
+of a static image.
+One detail most people miss, the ribbon running through it has different quotes/phrases 
+worked into it, purely an easter egg for anyone spending 5-10 minutes actually exploring 
+the portfolio closely.
+Bonus idea for anyone building their own hero section, add a hidden timer, if a viewer 
+crosses a minute or two on the page, trigger a small popup saying something like 
+you've already spent more time here than most recruiters do on portfolios, guess you 
+like this, let's collaborate. never built this one myself, but it's a fun interactive idea 
+worth trying.
+Diary section
+The core idea was control, you control what the viewer's eye lands on next, like a story 
+unfolding rather than a static page. inspired by a diary and notes style post I'd made 
+earlier on Instagram and LinkedIn, wanted to carry that visual language into the portfolio 
+itself.
+Stickers and sticky notes were added purely for personality, picked things that were 
+actually me, favorite drinks, things off my own Pinterest board, so it felt personal instead 
+of generic. that's the detail worth using if you try something similar, don't just add 
+random decorative elements, tie them to things that are genuinely you.
+Metro station section
+Started as a much wider concept, a horizon line with the metro running across it on 
+the metro highway or whatever we call it, caricatures below, Gurgaon style buildings 
+on one end, older Delhi lanes on the other, hauz khas cafe. looked great as a concept 
+but got way too cluttered and heavy once actually built, so it got trimmed down to the 
+simpler version live now, just the metro and billboards.
+If you're thinking of trying something similar, I'd just say maybe don't copy the metro 
+idea exactly, that one was specific to me. the bigger idea was picking something the 
+people you're sending it to would probably relate to, recruiters and clients have likely 
+experienced something like a metro ride or metro food at some point, so it tends to land. 
+this is just what I think worked, not a rule or anything.
+Projects section
+Kept this one intentionally simple compared to the rest, cards that expand on click, 
+wanted the actual work to stand out without extra visual noise competing for attention.
+Visuals section
+This one connects back to my origin story, graphic design is where I actually started, 
+back in 11th standard. It's not something I focus on primarily anymore, but I wanted to 
+
+
+==== PAGE 3 ====
+include it for anyone who's genuinely curious about where this began. Kept it on the 
+visitor's discretion though, nothing forced into anyone's eyeline, if a recruiter wants to 
+hover around and look through it, they can, if not, that's fine too, it's not something I'm 
+pushing on anyone.
+Contact section
+Kept this one simple, no concept here like the other sections. After the diary, the metro 
+station, and everything else, I wanted the ending to feel calm
+One idea that got scrapped
+Somewhere along the way I also played with a pin board idea, a board with sticky 
+notes or chits floating on it, each one holding a case study or bit of info. you click on 
+one, a notice board wala pin will hit the board and if it lands right, a pin sticks it there 
+permanently, like a physical notice board coming to life.
+Scrapped it because it leaned too notebook and study oriented for the overall vibe, 
+started feeling academic instead of creative. would work really well though if someone's 
+going for a scrapbook or journal style portfolio.
+This is one of 5 ideas I scrapped along the way. the other 4 are in the paid doc below, 
+along with a set of honest tips I'm not holding back on either.
+The honest flip side
+This portfolio isn't mobile friendly. used heavy GSAP animations without knowing much 
+about media queries or web accessibility at the time, learnt that one the hard way. 
+actively working on fixing it. If anyone is planning to make their portfolio from scratch, 
+make sure to get familiar with media queries, web accessibility etc (prefer talking to 
+someone who knows the tech stuff)
+If you want the rest
+Everything above is the real process, no gatekeeping on how it was built. if this helped 
+even a little, the paid doc goes a fair bit deeper, all 8 to 9 ideas I scrapped along the way 
+with screenshots, designs and a quick brief on each, plus a full list of honest tips for 
+anyone building their own, all for just ₹49.
+also genuinely, I'm always up for a conversation or exchanging ideas, I've put basically 
+everything I had in my head into this doc already, and knowing me I'll have 10 more by 
+next week anyway, so there was no reason to hold any of it back. reach out anytime :)
+
+
+==== PAGE 4 ====
+A Few More Scrapped Ideas and Some 
+Honest Tips
+This is everything left out of the free version, a few more ideas I scrapped along the 
+way, and some honest tips, not rules, just things I noticed while building mine.
+Quick note before this part, a few of these ideas might resemble things that already exist 
+somewhere in the design world, that happens sometimes, similar thoughts show up 
+independently in different people's heads. Everything here came from my own thinking 
+while building this, not copied or referenced from anywhere specific, just wanted to be 
+upfront about that. Some of the ideas may look unplished and uncompleted in 
+screenshots, thats becuase i moved on to new ideas and abandoned the former ones 
+(idk wasted a lot of time in these but useful for u guys)
+The rest of the scrapped ideas
+(already shared the pin board idea in the free doc, here are the other four)
+The vending machine
+A vending machine sitting top center of the screen, a small display inside showing 
+rotating fun text, a coin slot next to it. you drag a coin into the slot and a card, basically a 
+case study card, gets dispensed out like an actual vending machine. this can work with 
+any type of portfolio considering that the main catch is the visual design of the whole 
+concept (you can make it comic type, tech style or wtvr you want to). You all may 
+wonder but this inspiration came from doraemon episodes, haha
+Scrapped mainly because the animation got too complex to pull off cleanly with AI, kept 
+breaking on mobile or looking janky. also started feeling more tech product than creative 
+direction, which didn't match the direction I wanted. If you can make it work in a better 
+way, then its definitely gonna be something unique, maybe nostalgic as well.
+The folder
+A closed folder sitting on screen, hover over it and it opens, cards flying out in a blurred 
+motion, each one a project you can click into for more detail.
+Scrapped mostly as I thought it will not go with the diary section idea. It is something 
+that is not going to give you a lot of problems with accessibility across screens, so 
+definitely worth a try if you don’t want to go with heavy animations. However, it may not 
+seem to very out of the box idea if you keep it simple.
+The radio
+You set different frequencies for different cards, dial into a specific frequency and a card 
+pops up on screen along with a voiceover effect like an actual radio.
+
+
+==== PAGE 5 ====
+Scrapped because it needed a genuinely good voiceover to land right, which wasn't 
+something I wanted to do honestly, and even though it wasn't heavy technically, it 
+needed a lot of visual creative execution to feel right. if someone can nail the frequency 
+matching interaction and get a decent voiceover, this one has real potential and 
+relatability as well. Maybe relate it with old times/ nostalgic moments and visuals.
+The illustrated room
+Mainly for illustrators or people who draw manually. build out an entire room, your 
+illsutrated character sitting at a table, laptop, a coffee or soft drink can, a clock on the 
+wall, your tagline somewhere in the room, plus personal touches like a cat under the 
+table if you're into cats, or books where each book represents a different case study, or 
+frames on the wall each holding a different project.
+Scrapped because it demands actual illustration skill and heavy animation work, not 
+something AI handles well on its own. if someone has the drawing chops though, i 
+personally believe this has a ton of creative freedom.
+Here are some screenshots as well, will help you for visual references hopefully:)
+
+
+==== PAGE 6 ====
+made this game section where you have to click at the right time when that red line is in 
+the radar of the rectangular zone, if you get it right, the text gets revealed in a coding 
+form. Genuinely don’t remeber why did i scrap this, maybe due to blue theme if i had to 
+guess
+
+
+==== PAGE 7 ====
+Wallet type card reveal, maybe use if you do something related to moneyyyy, left this 
+midway coz seemed very techy and reddish
+idk, looked a bit too techy so didn’t go with this, you may revamp this visually, you may 
+need to go in detail as i had to change the cards position, the way they get dispensed 
+and all that a lottt in this
+
+
+==== PAGE 8 ====
+this looked cute to me, good for informal comic type portfolios, scrapped this coz i didn’t 
+get the kick at the time when i made this but yea it looks beautiful to me now:)
+
+
+==== PAGE 9 ====
+made this when i had the coin concept in mind (vending machine call back), you can 
+make a coin as your creative element and use it for as a means of input from the user 
+(like to scratch a particular word, phrase etc)
+first draft of the metro section🤣🤣
+
+
+==== PAGE 10 ====
+will add more if i recover my screenshots and old codes, will update the doc link
+A few honest tips, zero gatekeeping
+Putting these out fully instead of holding anything back, mainly because I don't see a 
+real reason to gatekeep any of it. also want to be clear these are just things that worked 
+for me, not hard rules, and I got plenty of this wrong along the way too.
+1.  From what I've noticed, recruiters have very little time, maybe 15 to 20 seconds 
+before they decide whether to keep looking. that's part of why I put heavier 
+animation in the about section, since that's where the actual information starts.
+2.  Something I did, and would suggest, is giving people a shortcut if they're short on 
+time. in my projects section I left a note saying these are the projects that built my 
+foundation, but if you want to see the work I'm actually proud of, skip ahead to the 
+best work section. just a way to let people jump to your strongest section instead of 
+scrolling through everything.
+3.  I tried to keep my origin story simple and honest instead of dressing it up. mine was 
+literally just wanting to afford sneakers, nothing dramatic, and I feel like that 
+honesty is part of what made it relatable. 
+4.  I've got a lot of projects listed too, so this one's a bit ironic coming from me, but I 
+try to point people toward the ones I'm proudest of in case they don't have time to 
+go through everything. just about giving people a choice instead of forcing a full 
+scroll.
+5.  This one's genuinely a mistake on my end. I didn't know much about media queries 
+or web accessibility until a coder friend pointed it out, and by then I'd already built 
+too much to fix easily. if you're hoping for this to be client ready and not just a 
+personal experiment, it might help to loop in someone who knows development and 
+getting familiar with the some tech stuff
+6.  One thing I'd keep in mind is not making people click too many times just to get 
+what they want. this was actually the flaw in my vending machine idea, you had to 
+keep clicking just to see each case study. ideally someone should be able to jump 
+to your fifth project without going through a repetitive loop.
+7.  If there's something you think is valuable but don't want to shove in someone's 
+face, maybe just let it be discoverable, something people find while hovering or 
+exploring on their own, instead of forcing it into their eyeline. (for example, my 
+insomniac work section)
+8.  In my experience, AI mostly helped with building things out, not really coming up 
+with the ideas themselves. I had to have the actual idea in my head first and make it 
+on canva and figma, AI just helped structure and execute it. so having some sense 
+of design yourself probably matters more than knowing any particular tool.
+9.  There's a trade off between adding creativity to every little element and keeping the 
+site light, I learned that one by doing a bit too much of the former. I got detail heavy 
+on almost every button just because that's how I like working, and it's also what 
+made the site heavy. maybe find your own balance, this is just where mine ended 
+up.
+
+
+==== PAGE 11 ====
+One last thing
+I'll be sharing more from my actual work going forward, detailed case studies, client 
+projects with startups and bigger brands, internships, post production work, artist 
+management stuff, the real stuff behind the scenes. won't be posting often since I 
+genuinely don't have the bandwidth for it, realistically two to three quality posts a week. 
+if you're in the creative field, sticking around is probably worth it, but that's entirely on 
+you.
+Closing note
+If you're building your own portfolio, have whatever's useful from this, adapt it, put your 
+creativity, make it yours. the goal is just to spread creativity around the place
+KEEP MAKING BEAUTIFUL THINGS Y’ALL🤍
+ThankYou so much for all the love, am always open to DMs for idea exchanges, creative 
+stuff etc:)

@@ -1,0 +1,29 @@
+{
+  "checks": [
+    {
+      "name": "Closing tray replaced by authentic attributed contribution city",
+      "result": "pass"
+    },
+    {
+      "name": "City keyboard inspection retains exact dates and weekly navigation",
+      "result": "pass"
+    },
+    {
+      "name": "Ordinary grid alternative exposes every reported day",
+      "result": "pass"
+    },
+    {
+      "name": "Reduced-motion replay settles without recurring rendering",
+      "result": "pass"
+    },
+    {
+      "name": "Visitors make no GitHub API requests",
+      "result": "pass"
+    }
+  ],
+  "views": [],
+  "errors": [],
+  "engines": [],
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n60 !== 58\n\n    at file:///Users/abrarakhunji/Desktop/Abrar-Portfolio/abrar-portfolio-web/tests/e2e/editorial.mjs:32:86",
+  "verdict": "FAIL"
+}

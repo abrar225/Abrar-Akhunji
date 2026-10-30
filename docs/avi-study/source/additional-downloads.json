@@ -1,0 +1,110 @@
+[
+  {
+    "url": "https://www.avivashishta.com/lab/commits",
+    "status": 200,
+    "bytes": 24719,
+    "file": "lab__commits.html"
+  },
+  {
+    "url": "https://www.avivashishta.com/lab/explained",
+    "status": 200,
+    "bytes": 39603,
+    "file": "lab__explained.html"
+  },
+  {
+    "url": "https://www.avivashishta.com/lab/phones",
+    "status": 200,
+    "bytes": 33519,
+    "file": "lab__phones.html"
+  },
+  {
+    "url": "https://www.avivashishta.com/lab/blueprint",
+    "status": 200,
+    "bytes": 26245,
+    "file": "lab__blueprint.html"
+  },
+  {
+    "url": "https://www.avivashishta.com/lab/made-of-dots",
+    "status": 200,
+    "bytes": 22761,
+    "file": "lab__made-of-dots.html"
+  },
+  {
+    "url": "https://www.avivashishta.com/blog/animate-github-contribution-graph-portfolio",
+    "status": 200,
+    "bytes": 50917,
+    "file": "blog__animate-github-contribution-graph-portfolio.html"
+  },
+  {
+    "url": "https://www.avivashishta.com/blog/prompt-vox-style-explainer-page-codex-paper-assets",
+    "status": 200,
+    "bytes": 62123,
+    "file": "blog__prompt-vox-style-explainer-page-codex-paper-assets.html"
+  },
+  {
+    "url": "https://www.avivashishta.com/?mode=agent",
+    "status": 200,
+    "bytes": 2712,
+    "file": "_mode=agent.html"
+  },
+  {
+    "url": "https://www.avivashishta.com/_next/static/immutable/chunks/070buy_cw0wo4.css",
+    "bytes": 6833,
+    "file": "070buy_cw0wo4.css"
+  },
+  {
+    "url": "https://www.avivashishta.com/_next/static/immutable/chunks/0rf8lca2peywg.js",
+    "bytes": 550160,
+    "file": "0rf8lca2peywg.js"
+  },
+  {
+    "url": "https://www.avivashishta.com/_next/static/immutable/chunks/0udaa3vqdws2m.js",
+    "bytes": 94393,
+    "file": "0udaa3vqdws2m.js"
+  },
+  {
+    "url": "https://www.avivashishta.com/_next/static/immutable/chunks/16r9z3qml-_hc.js",
+    "bytes": 11050,
+    "file": "16r9z3qml-_hc.js"
+  },
+  {
+    "url": "https://www.avivashishta.com/_next/static/immutable/chunks/1dp-yt0qko6oc.js",
+    "bytes": 4756,
+    "file": "1dp-yt0qko6oc.js"
+  },
+  {
+    "url": "https://www.avivashishta.com/_next/static/immutable/chunks/2dx2-nr5j_txh.js",
+    "bytes": 15875,
+    "file": "2dx2-nr5j_txh.js"
+  },
+  {
+    "url": "https://www.avivashishta.com/_next/static/immutable/chunks/3_imoiv1bb21z.css",
+    "bytes": 3596,
+    "file": "3_imoiv1bb21z.css"
+  },
+  {
+    "url": "https://www.avivashishta.com/_next/static/immutable/chunks/3mz7p1yo3zc-9.css",
+    "bytes": 20033,
+    "file": "3mz7p1yo3zc-9.css"
+  },
+  {
+    "url": "https://www.avivashishta.com/_next/static/immutable/chunks/3p3kvmk54uids.js",
+    "bytes": 22806,
+    "file": "3p3kvmk54uids.js"
+  },
+  {
+    "url": "https://www.avivashishta.com/_next/static/immutable/chunks/3po1iai_cx0fq.js",
+    "bytes": 14647,
+    "file": "3po1iai_cx0fq.js"
+  },
+  {
+    "url": "https://www.avivashishta.com/_next/static/immutable/chunks/3rxjedzf-4t_q.css",
+    "bytes": 4428,
+    "file": "3rxjedzf-4t_q.css"
+  },
+  {
+    "url": "https://www.avivashishta.com/_next/static/immutable/chunks/3sa_nolpj702p.css",
+    "bytes": 14528,
+    "file": "3sa_nolpj702p.css"
+  }
+]

@@ -1,0 +1,200 @@
+{
+  "checks": [
+    "Original hero scene and ASCII background restored; added footer workshop removed",
+    "All seven earlier projects have complete media, matching case links, filters and keyboard navigation",
+    "Recovered river responds to input and completes its breach/splash cycle with sound off by default",
+    "River audio is explicitly enabled, adjustable and muted; animation/audio stop when paused or offscreen",
+    "Native OfflineAudioContext renders three finite, bounded water cues that end in silence",
+    "ASCII signature scatters by button and pointer, springs home and remains usable while paused",
+    "Cursor has contextual link/press feedback; reduced motion is static and navigation disposes river audio",
+    "WebKit mobile renders the river and interactive static signature",
+    "No uncaught browser errors"
+  ],
+  "views": [
+    {
+      "width": 360,
+      "theme": "light",
+      "view": "hero"
+    },
+    {
+      "width": 360,
+      "theme": "light",
+      "view": "archive"
+    },
+    {
+      "width": 360,
+      "theme": "light",
+      "view": "river"
+    },
+    {
+      "width": 360,
+      "theme": "light",
+      "view": "signature"
+    },
+    {
+      "width": 360,
+      "theme": "dark",
+      "view": "hero"
+    },
+    {
+      "width": 360,
+      "theme": "dark",
+      "view": "archive"
+    },
+    {
+      "width": 360,
+      "theme": "dark",
+      "view": "river"
+    },
+    {
+      "width": 360,
+      "theme": "dark",
+      "view": "signature"
+    },
+    {
+      "width": 390,
+      "theme": "light",
+      "view": "hero"
+    },
+    {
+      "width": 390,
+      "theme": "light",
+      "view": "archive"
+    },
+    {
+      "width": 390,
+      "theme": "light",
+      "view": "river"
+    },
+    {
+      "width": 390,
+      "theme": "light",
+      "view": "signature"
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "view": "hero"
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "view": "archive"
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "view": "river"
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "view": "signature"
+    },
+    {
+      "width": 768,
+      "theme": "light",
+      "view": "hero"
+    },
+    {
+      "width": 768,
+      "theme": "light",
+      "view": "archive"
+    },
+    {
+      "width": 768,
+      "theme": "light",
+      "view": "river"
+    },
+    {
+      "width": 768,
+      "theme": "light",
+      "view": "signature"
+    },
+    {
+      "width": 768,
+      "theme": "dark",
+      "view": "hero"
+    },
+    {
+      "width": 768,
+      "theme": "dark",
+      "view": "archive"
+    },
+    {
+      "width": 768,
+      "theme": "dark",
+      "view": "river"
+    },
+    {
+      "width": 768,
+      "theme": "dark",
+      "view": "signature"
+    },
+    {
+      "width": 1440,
+      "theme": "light",
+      "view": "hero"
+    },
+    {
+      "width": 1440,
+      "theme": "light",
+      "view": "archive"
+    },
+    {
+      "width": 1440,
+      "theme": "light",
+      "view": "river"
+    },
+    {
+      "width": 1440,
+      "theme": "light",
+      "view": "signature"
+    },
+    {
+      "width": 1440,
+      "theme": "dark",
+      "view": "hero"
+    },
+    {
+      "width": 1440,
+      "theme": "dark",
+      "view": "archive"
+    },
+    {
+      "width": 1440,
+      "theme": "dark",
+      "view": "river"
+    },
+    {
+      "width": 1440,
+      "theme": "dark",
+      "view": "signature"
+    }
+  ],
+  "errors": [],
+  "waveforms": [
+    {
+      "kind": "ripple",
+      "finite": true,
+      "peak": 0.021326372399926186,
+      "rms": 0.002293039719178963,
+      "tailPeak": 0
+    },
+    {
+      "kind": "breach",
+      "finite": true,
+      "peak": 0.02248678170144558,
+      "rms": 0.0025383160444885943,
+      "tailPeak": 0
+    },
+    {
+      "kind": "splash",
+      "finite": true,
+      "peak": 0.03445345163345337,
+      "rms": 0.004720385619972407,
+      "tailPeak": 0
+    }
+  ],
+  "verdict": "PASS"
+}

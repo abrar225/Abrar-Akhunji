@@ -1,0 +1,9 @@
+{
+  "environment": "One cold local Chromium sample after deferring offscreen ASCII paint, 390×844, 4× CPU slowdown, 150ms network latency, 1.6Mbps down / 0.75Mbps up. Not a field measurement or Lighthouse score.",
+  "lcp": 2528,
+  "cls": 0,
+  "initialWebGLCanvases": 0,
+  "asciiPlaying": "true",
+  "offscreenIdeaPaints": "0",
+  "offscreenNamePaints": "0"
+}

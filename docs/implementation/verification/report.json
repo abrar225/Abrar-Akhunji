@@ -1,0 +1,325 @@
+{
+  "date": "2026-10-28",
+  "browsers": [
+    {
+      "name": "chromium",
+      "result": "pass"
+    },
+    {
+      "name": "firefox",
+      "result": "environment-blocked",
+      "detail": "browserType.launch: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - <launching> /Users/abrarakhunji/Library/Caches/ms-playwright/firefox-1538/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/8r/lz20zrxj4vn_xmtqz17s419h0000gn/T/playwright_firefoxdev_profile-USfVd6 -juggler-pipe -silent\u001b[22m\n\u001b[2m  - <launched> pid=10353\u001b[22m\n\u001b[2m  - [pid=10353][err] *** You are running in headless mode.\u001b[22m\n\u001b[2m  - [pid=10353][err] sandbox_extension_issue_file_to_process failed for /Users/abrarakhunji/Library/Caches/ms-playwright/firefox-1538/firefox/Nightly.app/Contents/MacOS/plugin-container.app: 1 (Operation not permitted)\u001b[22m\n\u001b[2m  - [pid=10353][out] Crash Annotation GraphicsCriticalError: |[0][GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt (t=0.45913) [GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt\u001b[22m\n"
+    },
+    {
+      "name": "webkit",
+      "result": "pass"
+    }
+  ],
+  "views": [
+    {
+      "width": 390,
+      "theme": "light",
+      "scene": "arrival",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "theme": "light",
+      "scene": "brief",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "theme": "light",
+      "scene": "work",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "theme": "light",
+      "scene": "engineering",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "theme": "light",
+      "scene": "builder",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "theme": "light",
+      "scene": "contact",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "scene": "arrival",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "scene": "brief",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "scene": "work",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "scene": "engineering",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "scene": "builder",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "scene": "contact",
+      "result": "pass"
+    },
+    {
+      "width": 768,
+      "theme": "light",
+      "scene": "arrival",
+      "result": "pass"
+    },
+    {
+      "width": 768,
+      "theme": "light",
+      "scene": "brief",
+      "result": "pass"
+    },
+    {
+      "width": 768,
+      "theme": "light",
+      "scene": "work",
+      "result": "pass"
+    },
+    {
+      "width": 768,
+      "theme": "light",
+      "scene": "engineering",
+      "result": "pass"
+    },
+    {
+      "width": 768,
+      "theme": "light",
+      "scene": "builder",
+      "result": "pass"
+    },
+    {
+      "width": 768,
+      "theme": "light",
+      "scene": "contact",
+      "result": "pass"
+    },
+    {
+      "width": 768,
+      "theme": "dark",
+      "scene": "arrival",
+      "result": "pass"
+    },
+    {
+      "width": 768,
+      "theme": "dark",
+      "scene": "brief",
+      "result": "pass"
+    },
+    {
+      "width": 768,
+      "theme": "dark",
+      "scene": "work",
+      "result": "pass"
+    },
+    {
+      "width": 768,
+      "theme": "dark",
+      "scene": "engineering",
+      "result": "pass"
+    },
+    {
+      "width": 768,
+      "theme": "dark",
+      "scene": "builder",
+      "result": "pass"
+    },
+    {
+      "width": 768,
+      "theme": "dark",
+      "scene": "contact",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "theme": "light",
+      "scene": "arrival",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "theme": "light",
+      "scene": "brief",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "theme": "light",
+      "scene": "work",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "theme": "light",
+      "scene": "engineering",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "theme": "light",
+      "scene": "builder",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "theme": "light",
+      "scene": "contact",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "theme": "dark",
+      "scene": "arrival",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "theme": "dark",
+      "scene": "brief",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "theme": "dark",
+      "scene": "work",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "theme": "dark",
+      "scene": "engineering",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "theme": "dark",
+      "scene": "builder",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "theme": "dark",
+      "scene": "contact",
+      "result": "pass"
+    },
+    {
+      "width": 1920,
+      "theme": "light",
+      "scene": "arrival",
+      "result": "pass"
+    },
+    {
+      "width": 1920,
+      "theme": "light",
+      "scene": "brief",
+      "result": "pass"
+    },
+    {
+      "width": 1920,
+      "theme": "light",
+      "scene": "work",
+      "result": "pass"
+    },
+    {
+      "width": 1920,
+      "theme": "light",
+      "scene": "engineering",
+      "result": "pass"
+    },
+    {
+      "width": 1920,
+      "theme": "light",
+      "scene": "builder",
+      "result": "pass"
+    },
+    {
+      "width": 1920,
+      "theme": "light",
+      "scene": "contact",
+      "result": "pass"
+    },
+    {
+      "width": 1920,
+      "theme": "dark",
+      "scene": "arrival",
+      "result": "pass"
+    },
+    {
+      "width": 1920,
+      "theme": "dark",
+      "scene": "brief",
+      "result": "pass"
+    },
+    {
+      "width": 1920,
+      "theme": "dark",
+      "scene": "work",
+      "result": "pass"
+    },
+    {
+      "width": 1920,
+      "theme": "dark",
+      "scene": "engineering",
+      "result": "pass"
+    },
+    {
+      "width": 1920,
+      "theme": "dark",
+      "scene": "builder",
+      "result": "pass"
+    },
+    {
+      "width": 1920,
+      "theme": "dark",
+      "scene": "contact",
+      "result": "pass"
+    }
+  ],
+  "performance": [
+    {
+      "profile": "Chromium 390x844, 4x CPU, 1.6Mbps down / 150ms RTT, cold browser context",
+      "lcp": 2244,
+      "cls": 0,
+      "transfer": 395361
+    }
+  ],
+  "limitations": [
+    "Physical phone testing is not available in this environment. WebKit is an automated engine check, not an actual Safari/iOS device test."
+  ],
+  "idle": {
+    "result": "pass",
+    "before": "18",
+    "after": "18"
+  },
+  "sceneIsolation": "pass"
+}

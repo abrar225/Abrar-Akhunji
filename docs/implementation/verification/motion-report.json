@@ -1,0 +1,12 @@
+[
+  {
+    "test": "continuous camera, reversal, selection URL/viewport, Explore reset, inspection and settled rendering",
+    "result": "pass",
+    "arrivalCamera": "7.50,5.70,12.50",
+    "workCamera": "0.01,4.30,12.20"
+  },
+  {
+    "test": "mobile headline visibility and deferred scene initialization",
+    "result": "pass"
+  }
+]

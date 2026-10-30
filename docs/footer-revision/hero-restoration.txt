@@ -1,0 +1,1 @@
+PASS: Home story-stage source matches the pre-relocation version exactly, including hero, brief, featured builds and inspection. FooterWorkshop component and all relocation CSS removed.

@@ -1,0 +1,323 @@
+.blueprint-module__U3NQjW__page {
+  --slide-for:11s;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+.blueprint-module__U3NQjW__page:after {
+  content: "";
+  z-index: 3;
+  pointer-events: none;
+  background: var(--grain);
+  opacity: .035;
+  position: absolute;
+  inset: 0;
+}
+.blueprint-module__U3NQjW__home {
+  z-index: 4;
+  font-family: var(--font-serif);
+  letter-spacing: -.03em;
+  color: inherit;
+  font-size: 34px;
+  line-height: 1;
+  text-decoration: none;
+  position: absolute;
+  top: 22px;
+  left: clamp(16px, 3vw, 40px);
+}
+.blueprint-module__U3NQjW__home:hover,
+.blueprint-module__U3NQjW__home:focus-visible {
+  text-underline-offset: 4px;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+}
+.blueprint-module__U3NQjW__kicker {
+  z-index: 4;
+  font-family: var(--font-mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--color-ink-soft);
+  margin: 0;
+  font-size: 11px;
+  position: absolute;
+  top: 30px;
+  right: clamp(16px, 3vw, 40px);
+}
+.blueprint-module__U3NQjW__kicker span {
+  color: var(--color-ink-muted);
+  margin-left: 2em;
+}
+.blueprint-module__U3NQjW__sheet {
+  width: min(calc(100vw - 48px), calc((100svh - 190px) * var(--ar)));
+  aspect-ratio: var(--ar);
+  cursor: none;
+  position: absolute;
+  top: calc(50% - 22px);
+  left: 50%;
+  translate: -50% -50%;
+}
+.blueprint-module__U3NQjW__slide {
+  position: absolute;
+  inset: 0;
+}
+.blueprint-module__U3NQjW__slide > canvas,
+.blueprint-module__U3NQjW__slide > svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: absolute;
+  inset: 0;
+}
+.blueprint-module__U3NQjW__guides {
+  pointer-events: none;
+  overflow: visible;
+}
+.blueprint-module__U3NQjW__guides line {
+  stroke: color-mix(in srgb, var(--color-ink) 20%, transparent);
+  stroke-width: 1px;
+  stroke-dasharray: 1 4 12 4;
+  vector-effect: non-scaling-stroke;
+  transform-box: fill-box;
+  transform-origin: 0;
+  animation: blueprint-module__U3NQjW__guide 1s cubic-bezier(.65, 0, .35, 1) var(--d) both;
+}
+.blueprint-module__U3NQjW__guides line[data-v] {
+  transform-origin: top;
+  animation-name: blueprint-module__U3NQjW__guide-v;
+}
+.blueprint-module__U3NQjW__lines {
+  pointer-events: none;
+  animation: 1.4s 4.6s forwards blueprint-module__U3NQjW__step-back;
+  overflow: visible;
+}
+.blueprint-module__U3NQjW__lines line {
+  stroke: var(--color-ink);
+  stroke-width: 1.2px;
+  stroke-linecap: square;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1px;
+  animation: blueprint-module__U3NQjW__draw var(--t) cubic-bezier(.6, 0, .2, 1) var(--d) forwards;
+}
+.blueprint-module__U3NQjW__scan {
+  opacity: 0;
+  pointer-events: none;
+  background: var(--color-studio);
+  height: 1px;
+  box-shadow: 0 0 14px color-mix(in srgb, var(--color-studio) 55%, transparent);
+  transition: opacity .25s;
+  position: absolute;
+  top: 0;
+  left: -100vw;
+  right: -100vw;
+}
+.blueprint-module__U3NQjW__slide[data-leaving] .blueprint-module__U3NQjW__guides,
+.blueprint-module__U3NQjW__slide[data-leaving] .blueprint-module__U3NQjW__lines {
+  opacity: 0;
+  transition: opacity .45s;
+}
+.blueprint-module__U3NQjW__cross {
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .25s;
+  position: absolute;
+  inset: 0;
+}
+.blueprint-module__U3NQjW__sheet:hover .blueprint-module__U3NQjW__cross {
+  opacity: 1;
+}
+.blueprint-module__U3NQjW__cross:before,
+.blueprint-module__U3NQjW__cross:after {
+  content: "";
+  background: color-mix(in srgb, var(--color-ink) 26%, transparent);
+  position: absolute;
+}
+.blueprint-module__U3NQjW__cross:before {
+  left: -100vw;
+  right: -100vw;
+  top: var(--cy);
+  height: 1px;
+}
+.blueprint-module__U3NQjW__cross:after {
+  top: -100vh;
+  bottom: -100vh;
+  left: var(--cx);
+  width: 1px;
+}
+.blueprint-module__U3NQjW__cross span {
+  left: var(--cx);
+  top: var(--cy);
+  white-space: pre;
+  font-family: var(--font-mono);
+  letter-spacing: .06em;
+  color: var(--color-ink-soft);
+  background: linear-gradient(var(--color-studio), var(--color-studio)) -6px -1px / 13px 2px no-repeat, linear-gradient(var(--color-studio), var(--color-studio)) -1px -6px / 2px 13px no-repeat;
+  padding: 10px 0 0 10px;
+  font-size: 10px;
+  line-height: 1.5;
+  position: absolute;
+}
+.blueprint-module__U3NQjW__foot {
+  z-index: 4;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  display: flex;
+  position: absolute;
+  bottom: 24px;
+  left: clamp(16px, 3vw, 40px);
+  right: clamp(16px, 3vw, 40px);
+}
+.blueprint-module__U3NQjW__label {
+  gap: 8px;
+  display: grid;
+}
+.blueprint-module__U3NQjW__title {
+  font-family: var(--font-serif);
+  letter-spacing: -.02em;
+  margin: 0;
+  font-size: clamp(34px, 4vw, 54px);
+  font-weight: 400;
+  line-height: 1;
+  animation: .8s cubic-bezier(.22, 1, .36, 1) 3.2s both blueprint-module__U3NQjW__rise;
+}
+.blueprint-module__U3NQjW__caption {
+  max-width: 40ch;
+  color: var(--color-ink-soft);
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.45;
+  animation: .8s cubic-bezier(.22, 1, .36, 1) 3.35s both blueprint-module__U3NQjW__rise;
+}
+.blueprint-module__U3NQjW__tabs {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+  display: flex;
+}
+.blueprint-module__U3NQjW__tabs button {
+  border: 1px solid var(--color-line);
+  background: color-mix(in srgb, var(--color-paper) 80%, transparent);
+  font-family: var(--font-mono);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+  cursor: pointer;
+  border-radius: 6px;
+  gap: .8em;
+  padding: 8px 12px 10px;
+  font-size: 11px;
+  transition: color .3s, border-color .3s;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+}
+.blueprint-module__U3NQjW__tabs em {
+  font-style: normal;
+}
+.blueprint-module__U3NQjW__tabs button:hover,
+.blueprint-module__U3NQjW__tabs button[aria-current] {
+  color: var(--color-ink);
+  border-color: color-mix(in srgb, var(--color-ink) 22%, transparent);
+}
+.blueprint-module__U3NQjW__tabs button[aria-current] span {
+  color: var(--color-studio);
+}
+.blueprint-module__U3NQjW__tabs i {
+  background: var(--color-ink);
+  transform-origin: 0;
+  width: 100%;
+  height: 2px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transform: scaleX(0);
+}
+.blueprint-module__U3NQjW__tabs button[aria-current] i {
+  animation: blueprint-module__U3NQjW__fill var(--slide-for) linear forwards;
+}
+.blueprint-module__U3NQjW__page[data-hold] .blueprint-module__U3NQjW__tabs i {
+  animation-play-state: paused;
+}
+@keyframes blueprint-module__U3NQjW__fill {
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes blueprint-module__U3NQjW__guide {
+  0% {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes blueprint-module__U3NQjW__guide-v {
+  0% {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+@keyframes blueprint-module__U3NQjW__draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes blueprint-module__U3NQjW__step-back {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes blueprint-module__U3NQjW__rise {
+  0% {
+    opacity: 0;
+    translate: 0 14px;
+  }
+}
+@media (max-width: 1100px) {
+  .blueprint-module__U3NQjW__tabs em {
+    display: none;
+  }
+}
+@media (max-width: 700px) {
+  .blueprint-module__U3NQjW__home {
+    font-size: 28px;
+    top: 18px;
+  }
+  .blueprint-module__U3NQjW__kicker {
+    top: 26px;
+  }
+  .blueprint-module__U3NQjW__kicker span {
+    display: none;
+  }
+  .blueprint-module__U3NQjW__sheet {
+    cursor: auto;
+    width: calc(100vw - 24px);
+    top: 46%;
+  }
+  .blueprint-module__U3NQjW__foot {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .blueprint-module__U3NQjW__tabs {
+    justify-content: flex-start;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .blueprint-module__U3NQjW__lines,
+  .blueprint-module__U3NQjW__lines line,
+  .blueprint-module__U3NQjW__guides line,
+  .blueprint-module__U3NQjW__title,
+  .blueprint-module__U3NQjW__caption,
+  .blueprint-module__U3NQjW__tabs i {
+    animation: none !important;
+  }
+  .blueprint-module__U3NQjW__lines {
+    opacity: 0;
+  }
+}

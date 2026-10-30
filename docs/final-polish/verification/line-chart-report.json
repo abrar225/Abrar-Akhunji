@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Reasoning Benchmark Accuracy (%) vs Test-Time Compute Rollouts",
+    "type": "line",
+    "rows": 5,
+    "result": "pass"
+  },
+  {
+    "title": "Time-To-First-Token (TTFT in ms) vs Context Length on Multi-Turn Agent Workloads",
+    "type": "line",
+    "rows": 5,
+    "result": "pass"
+  },
+  {
+    "title": "Local 24GB VRAM Inference: Generation Throughput vs. Context Scalability",
+    "type": "line",
+    "rows": 5,
+    "result": "pass"
+  }
+]

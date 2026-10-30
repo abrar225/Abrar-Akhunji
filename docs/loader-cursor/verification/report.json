@@ -1,0 +1,232 @@
+{
+  "checks": [
+    "Reference colors, font, complete word reveal, responsive non-overlapping controls and automatic release at five viewports",
+    "Skip dismisses; dot is visible over ordinary content and its hotspot equals mouse coordinates",
+    "Links and press feedback work; cursor remains available across routes without replaying intro",
+    "Deep links bypass intro; river uses a hand, signature and contribution city use the pixel pointer",
+    "Scrolling with a stationary pointer preserves its position and visibility",
+    "Native range controls, selected text and keyboard navigation release the custom cursor",
+    "Pointer animation settles and stops writing to the DOM while idle",
+    "Reduced motion bypasses opening and uses native pointer; Escape releases the normal intro",
+    "Tab dismisses immediately without trapping keyboard users",
+    "Forced colors restores native cursor",
+    "Touch input retains the native touch experience"
+  ],
+  "views": [
+    {
+      "width": 1440,
+      "height": 900,
+      "layout": {
+        "statement": {
+          "x": 115.1875,
+          "y": 208.578125,
+          "width": 1123.1875,
+          "height": 482.84375,
+          "top": 208.578125,
+          "right": 1238.375,
+          "bottom": 691.421875,
+          "left": 115.1875
+        },
+        "skip": {
+          "x": 1240.625,
+          "y": 810,
+          "width": 143.375,
+          "height": 48,
+          "top": 810,
+          "right": 1384,
+          "bottom": 858,
+          "left": 1240.625
+        },
+        "counter": {
+          "x": 56,
+          "y": 832,
+          "width": 252.390625,
+          "height": 14,
+          "top": 832,
+          "right": 308.390625,
+          "bottom": 846,
+          "left": 56
+        },
+        "w": 1440,
+        "h": 900,
+        "color": "rgb(232, 235, 226)",
+        "font": "Bricolage, sans-serif",
+        "fullText": true,
+        "overflow": false
+      }
+    },
+    {
+      "width": 768,
+      "height": 1000,
+      "layout": {
+        "statement": {
+          "x": 61.4375,
+          "y": 350.828125,
+          "width": 599.03125,
+          "height": 298.34375,
+          "top": 350.828125,
+          "right": 660.46875,
+          "bottom": 649.171875,
+          "left": 61.4375
+        },
+        "skip": {
+          "x": 568.625,
+          "y": 910,
+          "width": 143.375,
+          "height": 48,
+          "top": 910,
+          "right": 712,
+          "bottom": 958,
+          "left": 568.625
+        },
+        "counter": {
+          "x": 56,
+          "y": 932,
+          "width": 252.390625,
+          "height": 14,
+          "top": 932,
+          "right": 308.390625,
+          "bottom": 946,
+          "left": 56
+        },
+        "w": 768,
+        "h": 1000,
+        "color": "rgb(232, 235, 226)",
+        "font": "Bricolage, sans-serif",
+        "fullText": true,
+        "overflow": false
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "layout": {
+        "statement": {
+          "x": 35.09375,
+          "y": 287.90625,
+          "width": 327.59375,
+          "height": 251.28125,
+          "top": 287.90625,
+          "right": 362.6875,
+          "bottom": 539.1875,
+          "left": 35.09375
+        },
+        "skip": {
+          "x": 218.625,
+          "y": 770,
+          "width": 143.375,
+          "height": 48,
+          "top": 770,
+          "right": 362,
+          "bottom": 818,
+          "left": 218.625
+        },
+        "counter": {
+          "x": 28,
+          "y": 792,
+          "width": 104.390625,
+          "height": 14,
+          "top": 792,
+          "right": 132.390625,
+          "bottom": 806,
+          "left": 28
+        },
+        "w": 390,
+        "h": 844,
+        "color": "rgb(232, 235, 226)",
+        "font": "Bricolage, sans-serif",
+        "fullText": true,
+        "overflow": false
+      }
+    },
+    {
+      "width": 360,
+      "height": 800,
+      "layout": {
+        "statement": {
+          "x": 32.390625,
+          "y": 266.359375,
+          "width": 302.390625,
+          "height": 251.28125,
+          "top": 266.359375,
+          "right": 334.78125,
+          "bottom": 517.640625,
+          "left": 32.390625
+        },
+        "skip": {
+          "x": 188.625,
+          "y": 726,
+          "width": 143.375,
+          "height": 48,
+          "top": 726,
+          "right": 332,
+          "bottom": 774,
+          "left": 188.625
+        },
+        "counter": {
+          "x": 28,
+          "y": 748,
+          "width": 104.390625,
+          "height": 14,
+          "top": 748,
+          "right": 132.390625,
+          "bottom": 762,
+          "left": 28
+        },
+        "w": 360,
+        "h": 800,
+        "color": "rgb(232, 235, 226)",
+        "font": "Bricolage, sans-serif",
+        "fullText": true,
+        "overflow": false
+      }
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "layout": {
+        "statement": {
+          "x": 185.671875,
+          "y": 115.6328125,
+          "width": 658.3125,
+          "height": 174.328125,
+          "top": 115.6328125,
+          "right": 843.984375,
+          "bottom": 289.9609375,
+          "left": 185.671875
+        },
+        "skip": {
+          "x": 668.625,
+          "y": 322,
+          "width": 143.375,
+          "height": 48,
+          "top": 322,
+          "right": 812,
+          "bottom": 370,
+          "left": 668.625
+        },
+        "counter": {
+          "x": 32,
+          "y": 346,
+          "width": 252.390625,
+          "height": 14,
+          "top": 346,
+          "right": 284.390625,
+          "bottom": 360,
+          "left": 32
+        },
+        "w": 844,
+        "h": 390,
+        "color": "rgb(232, 235, 226)",
+        "font": "Bricolage, sans-serif",
+        "fullText": true,
+        "overflow": false
+      }
+    }
+  ],
+  "errors": [],
+  "resizeNotifications": [
+    "ResizeObserver loop completed with undelivered notifications."
+  ],
+  "verdict": "PASS"
+}

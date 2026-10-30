@@ -1,0 +1,76 @@
+{
+  "planning": "compact",
+  "context_depth": "dependency",
+  "verification_depth": "impact",
+  "delegation": "none",
+  "reason_codes": [
+    "reference-animation",
+    "shared-cursor",
+    "first-visit-accessibility"
+  ],
+  "allowed_write_scope": [
+    "src/App.jsx",
+    "src/main.jsx",
+    "src/components/site/",
+    "src/components/github/GitHubCity.jsx",
+    "src/components/build-room/BuildRoomCanvas.jsx",
+    "src/intro-cursor.css",
+    "src/editorial-motion.css",
+    "src/footer-revision.css",
+    "src/sound-and-creatures.css",
+    "public/assets/intro/",
+    "docs/loader-cursor/",
+    "tests/e2e/loader-cursor.mjs",
+    "tests/e2e/editorial.mjs"
+  ],
+  "decisions": [
+    {
+      "action": "Recreate the reference intro as an isolated overlay",
+      "reason": "The reference uses Schoolbell, #012CEB, #F4EFE6, three split lines, a black reveal bar and a 4.9-second counter; add the portfolio creator credit without changing the page design",
+      "risk": "low"
+    },
+    {
+      "action": "Replace hover-only cursor with a shared continuous pointer",
+      "reason": "SiteMotion currently hides on noninteractive targets and scroll; layered orbit CSS and labels obscure the hotspot",
+      "risk": "medium"
+    }
+  ],
+  "acceptance": [
+    "Reference composition and letter-by-letter reveal, personalized creator credit",
+    "Automatic completion, immediate Skip, Escape and Tab, unblocked scrolling after exit",
+    "Deep links and reduced motion bypass intro",
+    "Persistent exact hotspot, contextual hand/pixel, stationary-scroll retargeting",
+    "Native editing, selection, keyboard, touch, reduced motion and forced-color fallback",
+    "Responsive views, lint, build, unit tests and browser checks"
+  ],
+  "evidence": {
+    "project": {
+      "validator": "python3 .agents/skills/gravitas/scripts/verify.py",
+      "commands": [
+        "npm run lint",
+        "npm test",
+        "npm run build"
+      ],
+      "verdict": "PASS",
+      "unitTests": 47,
+      "unitFailures": 0
+    },
+    "browser": {
+      "script": "tests/e2e/loader-cursor.mjs",
+      "report": "docs/loader-cursor/verification/report.json",
+      "verdict": "PASS",
+      "behaviorChecks": 11,
+      "viewports": 5
+    },
+    "production": {
+      "url": "http://127.0.0.1:4188/",
+      "verdict": "PASS",
+      "checks": [
+        "compiled loader, color, local font and inert release",
+        "cursor at 410px, 190px matches input and replaces native pointer",
+        "active hand and real camera movement during 3D drag",
+        "static HTML fallback remains readable without a loader"
+      ]
+    }
+  }
+}

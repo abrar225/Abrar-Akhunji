@@ -1,0 +1,474 @@
+{
+  "checks": [
+    {
+      "name": "Desktop Work navigation opens the complete ten-project archive",
+      "result": "pass"
+    },
+    {
+      "name": "Mobile Work navigation opens the archive and closes the menu",
+      "result": "pass"
+    },
+    {
+      "name": "light blue CTA contrast",
+      "result": "pass",
+      "ratios": [
+        6.340695346313385,
+        6.340695346313385
+      ]
+    },
+    {
+      "name": "dark blue CTA contrast",
+      "result": "pass",
+      "ratios": [
+        8.490605495744017,
+        8.490605495744017
+      ]
+    },
+    {
+      "name": "Blue hero and hiring CTAs meet 4.5:1 text contrast in both themes",
+      "result": "pass"
+    },
+    {
+      "name": "Inspection actions and category/status badges have distinct spacing",
+      "result": "pass"
+    },
+    {
+      "name": "Contact ASCII, pulse control and large name footer render with semantic fallback text",
+      "result": "pass"
+    },
+    {
+      "name": "Chronological experience records expand by pointer and keyboard without changing facts",
+      "result": "pass"
+    },
+    {
+      "name": "Time-skip chapter wipe retargets to the latest click and the dock marker follows",
+      "result": "pass"
+    },
+    {
+      "name": "Browser Back restores the previous chapter and viewport",
+      "result": "pass"
+    },
+    {
+      "name": "Manual scrolling interrupts a pending chapter jump",
+      "result": "pass"
+    },
+    {
+      "name": "ASCII pauses on request and stops rendering when offscreen",
+      "result": "pass"
+    },
+    {
+      "name": "Reduced motion settles the ASCII and jumps directly to a chapter",
+      "result": "pass"
+    },
+    {
+      "name": "Mobile motion controls stay separate from the hero chapter hint",
+      "result": "pass"
+    },
+    {
+      "name": "Narrator reads short article-only segments with the selected real voice and non-mutating highlight",
+      "result": "pass"
+    },
+    {
+      "name": "Voice/rate changes resume safely and late canceled callbacks cannot restart playback",
+      "result": "pass"
+    },
+    {
+      "name": "Narration supports keyboard seeking, section navigation, restart and labeled estimated progress",
+      "result": "pass"
+    },
+    {
+      "name": "Speech errors are actionable and changing reading mode cancels narration",
+      "result": "pass"
+    },
+    {
+      "name": "Narration completes the full queue, settles at 100 percent and replays from the beginning",
+      "result": "pass"
+    },
+    {
+      "name": "Article reading progress finishes before related notes and the ASCII footer",
+      "result": "pass"
+    },
+    {
+      "name": "Chart toggles work by keyboard and its full table preserves every source value",
+      "result": "pass"
+    },
+    {
+      "name": "Chart keyboard inspection announces the matching source row and values",
+      "result": "pass"
+    },
+    {
+      "name": "Marker assets follow the shared blue palette in both themes",
+      "result": "pass"
+    },
+    {
+      "name": "Concept diagrams expose keyboard tabs and their matching panel",
+      "result": "pass"
+    },
+    {
+      "name": "Study cards reveal and navigate by touch/pointer and keyboard without offscreen controls",
+      "result": "pass"
+    },
+    {
+      "name": "Unavailable speech has a readable fallback",
+      "result": "pass"
+    },
+    {
+      "name": "WebKit mobile contact ASCII and reader smoke checks",
+      "result": "pass"
+    },
+    {
+      "name": "No uncaught page errors",
+      "result": "pass"
+    }
+  ],
+  "views": [
+    {
+      "width": 360,
+      "theme": "light",
+      "page": "hero",
+      "result": "pass"
+    },
+    {
+      "width": 360,
+      "theme": "light",
+      "page": "contact",
+      "result": "pass"
+    },
+    {
+      "width": 360,
+      "theme": "light",
+      "page": "footer",
+      "result": "pass"
+    },
+    {
+      "width": 360,
+      "theme": "light",
+      "page": "experience",
+      "result": "pass"
+    },
+    {
+      "width": 360,
+      "theme": "light",
+      "page": "narrator",
+      "result": "pass"
+    },
+    {
+      "width": 360,
+      "theme": "light",
+      "page": "chart",
+      "result": "pass"
+    },
+    {
+      "width": 360,
+      "theme": "light",
+      "page": "work",
+      "result": "pass"
+    },
+    {
+      "width": 360,
+      "theme": "dark",
+      "page": "hero",
+      "result": "pass"
+    },
+    {
+      "width": 360,
+      "theme": "dark",
+      "page": "contact",
+      "result": "pass"
+    },
+    {
+      "width": 360,
+      "theme": "dark",
+      "page": "footer",
+      "result": "pass"
+    },
+    {
+      "width": 360,
+      "theme": "dark",
+      "page": "experience",
+      "result": "pass"
+    },
+    {
+      "width": 360,
+      "theme": "dark",
+      "page": "narrator",
+      "result": "pass"
+    },
+    {
+      "width": 360,
+      "theme": "dark",
+      "page": "chart",
+      "result": "pass"
+    },
+    {
+      "width": 360,
+      "theme": "dark",
+      "page": "work",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "theme": "light",
+      "page": "hero",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "theme": "light",
+      "page": "contact",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "theme": "light",
+      "page": "footer",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "theme": "light",
+      "page": "experience",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "theme": "light",
+      "page": "narrator",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "theme": "light",
+      "page": "chart",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "theme": "light",
+      "page": "work",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "page": "hero",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "page": "contact",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "page": "footer",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "page": "experience",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "page": "narrator",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "page": "chart",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "page": "work",
+      "result": "pass"
+    },
+    {
+      "width": 768,
+      "theme": "light",
+      "page": "hero",
+      "result": "pass"
+    },
+    {
+      "width": 768,
+      "theme": "light",
+      "page": "contact",
+      "result": "pass"
+    },
+    {
+      "width": 768,
+      "theme": "light",
+      "page": "footer",
+      "result": "pass"
+    },
+    {
+      "width": 768,
+      "theme": "light",
+      "page": "experience",
+      "result": "pass"
+    },
+    {
+      "width": 768,
+      "theme": "light",
+      "page": "narrator",
+      "result": "pass"
+    },
+    {
+      "width": 768,
+      "theme": "light",
+      "page": "chart",
+      "result": "pass"
+    },
+    {
+      "width": 768,
+      "theme": "light",
+      "page": "work",
+      "result": "pass"
+    },
+    {
+      "width": 768,
+      "theme": "dark",
+      "page": "hero",
+      "result": "pass"
+    },
+    {
+      "width": 768,
+      "theme": "dark",
+      "page": "contact",
+      "result": "pass"
+    },
+    {
+      "width": 768,
+      "theme": "dark",
+      "page": "footer",
+      "result": "pass"
+    },
+    {
+      "width": 768,
+      "theme": "dark",
+      "page": "experience",
+      "result": "pass"
+    },
+    {
+      "width": 768,
+      "theme": "dark",
+      "page": "narrator",
+      "result": "pass"
+    },
+    {
+      "width": 768,
+      "theme": "dark",
+      "page": "chart",
+      "result": "pass"
+    },
+    {
+      "width": 768,
+      "theme": "dark",
+      "page": "work",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "theme": "light",
+      "page": "hero",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "theme": "light",
+      "page": "contact",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "theme": "light",
+      "page": "footer",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "theme": "light",
+      "page": "experience",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "theme": "light",
+      "page": "narrator",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "theme": "light",
+      "page": "chart",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "theme": "light",
+      "page": "work",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "theme": "dark",
+      "page": "hero",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "theme": "dark",
+      "page": "contact",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "theme": "dark",
+      "page": "footer",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "theme": "dark",
+      "page": "experience",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "theme": "dark",
+      "page": "narrator",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "theme": "dark",
+      "page": "chart",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "theme": "dark",
+      "page": "work",
+      "result": "pass"
+    }
+  ],
+  "errors": [],
+  "engines": [
+    {
+      "name": "chromium",
+      "result": "pass"
+    },
+    {
+      "name": "webkit",
+      "result": "pass"
+    }
+  ],
+  "verdict": "PASS"
+}

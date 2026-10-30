@@ -1,0 +1,23 @@
+{
+  "checks": [
+    {
+      "name": "Native SVG chart keyboard tooltip",
+      "result": "pass",
+      "tooltip": "Token 2\n\nDFlash (Factorized Diffusion) : 67\nEAGLE-3 (Autoregressive Drafter) : 78\nFlashMap (Continuous Flow Map) : 89",
+      "next": "Token 3\n\nDFlash (Factorized Diffusion) : 48\nEAGLE-3 (Autoregressive Drafter) : 71\nFlashMap (Continuous Flow Map) : 85"
+    },
+    {
+      "name": "Active reader marker uses blue with contrasting white type",
+      "result": "pass",
+      "marker": {
+        "background": "rgb(37, 72, 244)",
+        "color": "rgb(255, 255, 255)"
+      }
+    },
+    {
+      "name": "Unsupported speech has a readable fallback",
+      "result": "pass"
+    }
+  ],
+  "verdict": "PASS"
+}
