@@ -132,7 +132,59 @@
         }
       ],
       "knowsLanguage": ["English", "Hindi", "Gujarati"],
+      "worksFor": { "@id": "https://abrarakhunji.com/#organization" },
       "mainEntityOfPage": { "@type": "ProfilePage", "@id": "https://abrarakhunji.com/#profilepage" }
+    }
+    </script>
+
+    <!-- JSON-LD: Organization & LocalBusiness (shared business entity) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": ["Organization", "LocalBusiness", "ProfessionalService"],
+      "@id": "https://abrarakhunji.com/#organization",
+      "name": "Abrar Akhunji",
+      "legalName": "Abrar Akhunji",
+      "alternateName": "Abrar Akhunji AI Engineering Consultancy",
+      "url": "https://abrarakhunji.com/",
+      "logo": "https://abrarakhunji.com/images/myimg.webp",
+      "image": "https://abrarakhunji.com/assets/build-room/og-home.jpg",
+      "description": "AI/ML and full-stack software engineering consultancy and development services specializing in computer vision, LLM inference, autonomous agents, and production systems.",
+      "email": "abrar@abrarakhunji.com",
+      "founder": {
+        "@id": "https://abrarakhunji.com/#person"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Ahmedabad",
+        "addressRegion": "Gujarat",
+        "postalCode": "380001",
+        "addressCountry": "IN"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 23.0225,
+        "longitude": 72.5714
+      },
+      "areaServed": [
+        { "@type": "City", "name": "Ahmedabad" },
+        { "@type": "City", "name": "Gandhinagar" },
+        { "@type": "City", "name": "Bangalore" },
+        { "@type": "Place", "name": "Remote" }
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "email": "abrar@abrarakhunji.com",
+        "availableLanguage": ["English", "Hindi", "Gujarati"]
+      },
+      "priceRange": "$$",
+      "sameAs": [
+        "https://github.com/abrar225",
+        "https://www.linkedin.com/in/abrar-akhunji/",
+        "https://x.com/Abrarakhunji",
+        "https://huggingface.co/abrar225"
+      ]
     }
     </script>
 
@@ -147,7 +199,7 @@
       "description": "Portfolio and engineering notes of Abrar Akhunji, an AI/ML and full-stack engineer in Ahmedabad.",
       "inLanguage": "en-IN",
       "author": { "@id": "https://abrarakhunji.com/#person" },
-      "publisher": { "@id": "https://abrarakhunji.com/#person" },
+      "publisher": { "@id": "https://abrarakhunji.com/#organization" },
       "copyrightHolder": { "@id": "https://abrarakhunji.com/#person" },
       "copyrightYear": 2026
     }
@@ -175,8 +227,11 @@
       "@type": "BreadcrumbList",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://abrarakhunji.com/" },
-        { "@type": "ListItem", "position": 2, "name": "The Neural Log", "item": "https://abrarakhunji.com/blog/" },
-        { "@type": "ListItem", "position": 3, "name": "Work with me", "item": "https://abrarakhunji.com/hire/" }
+        { "@type": "ListItem", "position": 2, "name": "About", "item": "https://abrarakhunji.com/about/" },
+        { "@type": "ListItem", "position": 3, "name": "Work", "item": "https://abrarakhunji.com/work/" },
+        { "@type": "ListItem", "position": 4, "name": "The Neural Log", "item": "https://abrarakhunji.com/blog/" },
+        { "@type": "ListItem", "position": 5, "name": "Work with me", "item": "https://abrarakhunji.com/hire/" },
+        { "@type": "ListItem", "position": 6, "name": "Contact", "item": "https://abrarakhunji.com/contact/" }
       ]
     }
     </script>
@@ -235,8 +290,79 @@
       ]
     }
     </script>
+    <!-- WebMCP: In-Browser Agent Model Context Protocol Registration -->
+    <script>
+      (function registerWebMCP() {
+        function initMCP() {
+          if (typeof navigator !== 'undefined' && navigator.modelContext && typeof navigator.modelContext.registerTool === 'function') {
+            try {
+              navigator.modelContext.registerTool({
+                name: 'search_content',
+                description: 'Search engineering deep dives, model architecture analyses, and projects on abrarakhunji.com',
+                inputSchema: {
+                  type: 'object',
+                  properties: {
+                    query: { type: 'string', description: 'Search term or technical topic' }
+                  },
+                  required: ['query']
+                },
+                execute: async function (params) {
+                  var q = (params && params.query) || '';
+                  return {
+                    results: [
+                      {
+                        title: 'Search results for ' + q,
+                        url: 'https://abrarakhunji.com/blog/?q=' + encodeURIComponent(q)
+                      }
+                    ]
+                  };
+                }
+              });
+
+              navigator.modelContext.registerTool({
+                name: 'get_contact_info',
+                description: 'Retrieve contact details, engineering services, and collaboration channels for Abrar Akhunji',
+                inputSchema: {
+                  type: 'object',
+                  properties: {}
+                },
+                execute: async function () {
+                  return {
+                    name: 'Abrar Akhunji',
+                    role: 'AI & Full-Stack Engineer',
+                    email: 'abrar@abrarakhunji.com',
+                    website: 'https://abrarakhunji.com/',
+                    hire: 'https://abrarakhunji.com/hire/',
+                    contact: 'https://abrarakhunji.com/contact/',
+                    about: 'https://abrarakhunji.com/about/',
+                    locations: ['Ahmedabad', 'Gandhinagar', 'Bangalore', 'Remote']
+                  };
+                }
+              });
+            } catch (err) {
+              console.warn('[WebMCP] Notice:', err);
+            }
+          }
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', initMCP);
+        } else {
+          initMCP();
+        }
+      })();
+    </script>
   </head>
   <body>
+    <!-- WebMCP Form Tool Annotations for In-Browser Agents -->
+    <div id="webmcp-tools" style="display:none;" aria-hidden="true">
+      <form action="/blog/" method="GET" toolname="search_content" tooldescription="Search engineering deep dives, model architecture analyses, and projects on abrarakhunji.com">
+        <input type="text" name="q" placeholder="Search topics" required />
+        <button type="submit">Search</button>
+      </form>
+      <form action="/contact/" method="GET" toolname="get_contact_info" tooldescription="Retrieve contact details, engineering services, and collaboration channels for Abrar Akhunji">
+        <button type="submit">Contact</button>
+      </form>
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

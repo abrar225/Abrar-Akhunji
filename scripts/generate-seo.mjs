@@ -29,6 +29,7 @@ import {
   DEFAULT_DESCRIPTION,
   DEFAULT_OG_IMAGE,
   PERSON_ID,
+  ORGANIZATION_ID,
   WEBSITE_ID,
   LOCATIONS,
   postPath,
@@ -36,6 +37,10 @@ import {
   absoluteUrl,
   blogPath,
   hirePath,
+  aboutPath,
+  contactPath,
+  termsPath,
+  privacyPath,
 } from '../src/lib/content/urls.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -507,6 +512,202 @@ function buildHireSchemas() {
   }];
 }
 
+function renderAbout() {
+  return `
+    <main class="pre-rendered-blog" style="max-width:900px;margin:0 auto;padding:3rem 1.5rem;font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#E8EEF6;line-height:1.7;">
+      <nav aria-label="Breadcrumb" style="font-size:0.875rem;margin-bottom:1.5rem;">
+        <a href="/" style="color:#79D0E0;">Home</a> &gt; <span>About</span>
+      </nav>
+      <header style="margin-bottom:2.5rem;">
+        <p style="font-size:0.75rem;color:#79D0E0;text-transform:uppercase;letter-spacing:0.1em;font-family:monospace;margin-bottom:0.5rem;">About the Engineer</p>
+        <h1 style="font-size:2.5rem;margin:0 0 1rem;line-height:1.2;">Abrar Akhunji</h1>
+        <p style="font-size:1.125rem;color:#B8C4D4;">AI/ML and full-stack software engineer based in Ahmedabad, Gujarat, India. Building computer vision, local model inference systems, autonomous coding agents, and high-performance web products.</p>
+      </header>
+      <section style="margin-bottom:2.5rem;">
+        <h2 style="font-size:1.5rem;margin-bottom:1rem;">Specialization &amp; Hub</h2>
+        <p style="color:#9AA7B8;">Operating out of Ahmedabad, collaborating on-site in Gandhinagar and Bangalore, and working with international engineering teams remotely.</p>
+        <p style="color:#9AA7B8;">Focus areas include Vision Transformers, local inference engines (Whisper, MLX, vLLM), speculative decoding, multi-agent evaluation frameworks, and high-throughput Python and TypeScript systems.</p>
+      </section>
+      <section style="margin-bottom:2.5rem;">
+        <h2 style="font-size:1.5rem;margin-bottom:1rem;">Experience</h2>
+        <ul style="list-style:none;padding:0;">
+          ${portfolio.experience.map((e) => `<li style="margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid #283446;"><h3 style="font-size:1.125rem;margin:0 0 0.25rem;">${escapeHtml(e.role)}</h3><p style="font-size:0.875rem;color:#79D0E0;margin:0 0 0.5rem;">${escapeHtml(e.date)}</p><p style="color:#9AA7B8;margin:0;">${escapeHtml(e.desc)}</p></li>`).join('')}
+        </ul>
+      </section>
+      <section style="margin-bottom:2.5rem;">
+        <h2 style="font-size:1.5rem;margin-bottom:1rem;">Education</h2>
+        <p><strong>Bachelor of Engineering in Information Technology</strong><br><span style="color:#9AA7B8;">Kalol Institute of Technology &amp; Research Center</span></p>
+        <p><strong>Diploma in Information Technology</strong><br><span style="color:#9AA7B8;">Government Polytechnic, Himmatnagar</span></p>
+      </section>
+      <footer style="margin-top:3rem;padding-top:2rem;border-top:1px solid #283446;">
+        <p><a href="/contact/" style="color:#79D0E0;">Get in touch</a> &bull; <a href="/hire/" style="color:#79D0E0;">Work with me</a> &bull; <a href="/terms/" style="color:#79D0E0;">Terms</a> &bull; <a href="/privacy/" style="color:#79D0E0;">Privacy</a></p>
+      </footer>
+    </main>`;
+}
+
+function buildAboutSchemas() {
+  const canonical = absoluteUrl(aboutPath());
+  return [{
+    '@context': 'https://schema.org',
+    '@type': 'AboutPage',
+    '@id': `${canonical}#about`,
+    name: 'About Abrar Akhunji — AI/ML & Full-Stack Engineer',
+    url: canonical,
+    description: 'Background, education, engineering philosophy and technical journey of Abrar Akhunji, an AI and full-stack software engineer in Ahmedabad.',
+    mainEntity: { '@id': PERSON_ID },
+  }, {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: 'About', item: canonical },
+    ],
+  }];
+}
+
+function renderContact() {
+  return `
+    <main class="pre-rendered-blog" style="max-width:900px;margin:0 auto;padding:3rem 1.5rem;font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#E8EEF6;line-height:1.7;">
+      <nav aria-label="Breadcrumb" style="font-size:0.875rem;margin-bottom:1.5rem;">
+        <a href="/" style="color:#79D0E0;">Home</a> &gt; <span>Contact</span>
+      </nav>
+      <header style="margin-bottom:2.5rem;">
+        <p style="font-size:0.75rem;color:#79D0E0;text-transform:uppercase;letter-spacing:0.1em;font-family:monospace;margin-bottom:0.5rem;">Get in touch</p>
+        <h1 style="font-size:2.5rem;margin:0 0 1rem;line-height:1.2;">Contact &amp; Collaboration</h1>
+        <p style="font-size:1.125rem;color:#B8C4D4;">Direct channels for project proposals, AI systems consulting, contract engineering, and technical advisory.</p>
+      </header>
+      <section style="margin-bottom:2.5rem;">
+        <h2 style="font-size:1.5rem;margin-bottom:1rem;">Primary Channel</h2>
+        <p>Email: <a href="mailto:${escapeHtml(services.email)}" style="color:#79D0E0;font-family:monospace;font-size:1.125rem;">${escapeHtml(services.email)}</a></p>
+        <p style="color:#9AA7B8;">Response turnaround: typically within 24 business hours. Timezone: IST (UTC+5:30) with active EU / US-East overlap.</p>
+      </section>
+      <section style="margin-bottom:2.5rem;">
+        <h2 style="font-size:1.5rem;margin-bottom:1rem;">Public Channels &amp; Code</h2>
+        <ul>
+          <li>GitHub: <a href="https://github.com/abrar225" style="color:#79D0E0;">github.com/abrar225</a></li>
+          <li>LinkedIn: <a href="https://www.linkedin.com/in/abrar-akhunji/" style="color:#79D0E0;">linkedin.com/in/abrar-akhunji</a></li>
+          <li>X: <a href="https://x.com/Abrarakhunji" style="color:#79D0E0;">x.com/Abrarakhunji</a></li>
+          <li>Hugging Face: <a href="https://huggingface.co/abrar225" style="color:#79D0E0;">huggingface.co/abrar225</a></li>
+        </ul>
+      </section>
+      <footer style="margin-top:3rem;padding-top:2rem;border-top:1px solid #283446;">
+        <p><a href="/about/" style="color:#79D0E0;">About</a> &bull; <a href="/hire/" style="color:#79D0E0;">Services &amp; Pricing</a> &bull; <a href="/terms/" style="color:#79D0E0;">Terms of Service</a> &bull; <a href="/privacy/" style="color:#79D0E0;">Privacy Policy</a></p>
+      </footer>
+    </main>`;
+}
+
+function buildContactSchemas() {
+  const canonical = absoluteUrl(contactPath());
+  return [{
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    '@id': `${canonical}#contact`,
+    name: 'Contact Abrar Akhunji — Engineering & Inquiries',
+    url: canonical,
+    description: 'Get in touch with Abrar Akhunji for AI/ML engineering, consulting, full-stack systems and technical partnerships.',
+    mainEntity: { '@id': PERSON_ID },
+  }, {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: 'Contact', item: canonical },
+    ],
+  }];
+}
+
+function renderTerms() {
+  return `
+    <main class="pre-rendered-blog" style="max-width:900px;margin:0 auto;padding:3rem 1.5rem;font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#E8EEF6;line-height:1.7;">
+      <nav aria-label="Breadcrumb" style="font-size:0.875rem;margin-bottom:1.5rem;">
+        <a href="/" style="color:#79D0E0;">Home</a> &gt; <span>Terms of Service</span>
+      </nav>
+      <header style="margin-bottom:2.5rem;">
+        <p style="font-size:0.75rem;color:#79D0E0;text-transform:uppercase;letter-spacing:0.1em;font-family:monospace;margin-bottom:0.5rem;">Legal</p>
+        <h1 style="font-size:2.5rem;margin:0 0 1rem;line-height:1.2;">Terms of Service</h1>
+        <p style="font-size:0.875rem;color:#9AA7B8;">Last updated: November 2026</p>
+      </header>
+      <section style="margin-bottom:2rem;">
+        <h2>1. Automated Agent Access &amp; Content Signals</h2>
+        <p>Automated AI agents, web crawlers, and search indexing bots are welcome to retrieve, index, summarize, and display citations to abrarakhunji.com content with canonical attribution (search=yes). Pre-training without express written permission is not permitted (ai-train=no).</p>
+      </section>
+      <section style="margin-bottom:2rem;">
+        <h2>2. Intellectual Property</h2>
+        <p>Original architecture guides, engineering analyses, and site design are copyright Abrar Akhunji. Open-source software repositories are licensed under their declared open-source licenses.</p>
+      </section>
+      <section style="margin-bottom:2rem;">
+        <h2>3. Governing Law</h2>
+        <p>These terms are governed by the laws of India, jurisdiction of Ahmedabad, Gujarat.</p>
+      </section>
+      <footer style="margin-top:3rem;padding-top:2rem;border-top:1px solid #283446;">
+        <p><a href="/about/" style="color:#79D0E0;">About</a> &bull; <a href="/contact/" style="color:#79D0E0;">Contact</a> &bull; <a href="/privacy/" style="color:#79D0E0;">Privacy Policy</a></p>
+      </footer>
+    </main>`;
+}
+
+function buildTermsSchemas() {
+  const canonical = absoluteUrl(termsPath());
+  return [{
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': `${canonical}#terms`,
+    name: 'Terms of Service — Abrar Akhunji',
+    url: canonical,
+    description: 'Terms of service, agent access policies, content licensing, and legal disclosures for abrarakhunji.com.',
+  }, {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: 'Terms of Service', item: canonical },
+    ],
+  }];
+}
+
+function renderPrivacy() {
+  return `
+    <main class="pre-rendered-blog" style="max-width:900px;margin:0 auto;padding:3rem 1.5rem;font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#E8EEF6;line-height:1.7;">
+      <nav aria-label="Breadcrumb" style="font-size:0.875rem;margin-bottom:1.5rem;">
+        <a href="/" style="color:#79D0E0;">Home</a> &gt; <span>Privacy Policy</span>
+      </nav>
+      <header style="margin-bottom:2.5rem;">
+        <p style="font-size:0.75rem;color:#79D0E0;text-transform:uppercase;letter-spacing:0.1em;font-family:monospace;margin-bottom:0.5rem;">Data Protection</p>
+        <h1 style="font-size:2.5rem;margin:0 0 1rem;line-height:1.2;">Privacy Policy</h1>
+        <p style="font-size:0.875rem;color:#9AA7B8;">Last updated: November 2026</p>
+      </header>
+      <section style="margin-bottom:2rem;">
+        <h2>Commitment</h2>
+        <p>This website respects visitor privacy. No third-party ad tracking, no cross-site pixels, and no selling of user data.</p>
+      </section>
+      <section style="margin-bottom:2rem;">
+        <h2>Data Collected</h2>
+        <p>Email correspondence is kept solely to respond to inquiries. Standard web server logs are retained transiently for security and abuse prevention.</p>
+      </section>
+      <footer style="margin-top:3rem;padding-top:2rem;border-top:1px solid #283446;">
+        <p><a href="/about/" style="color:#79D0E0;">About</a> &bull; <a href="/contact/" style="color:#79D0E0;">Contact</a> &bull; <a href="/terms/" style="color:#79D0E0;">Terms of Service</a></p>
+      </footer>
+    </main>`;
+}
+
+function buildPrivacySchemas() {
+  const canonical = absoluteUrl(privacyPath());
+  return [{
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': `${canonical}#privacy`,
+    name: 'Privacy Policy — Abrar Akhunji',
+    url: canonical,
+    description: 'Privacy policy and data protection practices for abrarakhunji.com.',
+  }, {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: 'Privacy Policy', item: canonical },
+    ],
+  }];
+}
+
 
 function renderFeed(posts) {
   const items = posts.slice(0, 25);
@@ -544,9 +745,13 @@ function renderSitemap(posts) {
   const latest = posts[0]?.updated || today;
   const urls = [
     { loc: `${SITE_URL}/`, lastmod: latest, changefreq: 'weekly', priority: '1.0' },
+    { loc: absoluteUrl(aboutPath()), lastmod: today, changefreq: 'monthly', priority: '0.8' },
+    { loc: absoluteUrl(contactPath()), lastmod: today, changefreq: 'monthly', priority: '0.8' },
     { loc: absoluteUrl(blogPath()), lastmod: latest, changefreq: 'daily', priority: '0.9' },
     { loc: absoluteUrl(hirePath()), lastmod: latest, changefreq: 'monthly', priority: '0.9' },
     { loc: `${SITE_URL}/work/`, lastmod: today, changefreq: 'monthly', priority: '0.9' },
+    { loc: absoluteUrl(termsPath()), lastmod: today, changefreq: 'yearly', priority: '0.5' },
+    { loc: absoluteUrl(privacyPath()), lastmod: today, changefreq: 'yearly', priority: '0.5' },
     ...portfolio.projects.map(project => ({loc: `${SITE_URL}/work/${project.slug}/`, lastmod: today, changefreq: 'monthly', priority: '0.8'})),
     ...posts.map((post) => ({
       loc: postUrl(post.slug),
@@ -646,6 +851,9 @@ function renderRobots() {
   return `# ${SITE_URL}/
 # Maintained by ${SITE_NAME}
 
+# Content-Signal directive (permitted use for search and AI crawlers)
+Content-Signal: search=yes, ai-train=no
+
 User-agent: *
 Allow: /
 
@@ -704,6 +912,41 @@ Allow: /
 # ${SITE_URL}/llms.txt
 # ${SITE_URL}/llms-full.txt
 # ${SITE_URL}/feed.xml
+# ${SITE_URL}/.well-known/mcp/server-card.json
+`;
+}
+
+function renderIndexMarkdown(portfolio, posts, services) {
+  return `# ${SITE_NAME} — AI & Full-Stack Engineer in Ahmedabad
+
+> ${DEFAULT_DESCRIPTION}
+
+- **Website:** ${SITE_URL}/
+- **Writing & Architecture Deep Dives:** ${absoluteUrl(blogPath())}
+- **Selected Projects:** ${SITE_URL}/work/
+- **Hire & Services:** ${absoluteUrl(hirePath())}
+- **About:** ${absoluteUrl(aboutPath())}
+- **Contact:** ${absoluteUrl(contactPath())}
+- **Terms:** ${absoluteUrl(termsPath())}
+- **Privacy:** ${absoluteUrl(privacyPath())}
+- **Email:** ${services.email}
+- **Locations:** ${LOCATIONS.join(', ')}
+
+## Engineering Services
+${services.services.map((service) => `### ${service.title}\n${service.summary}\n- Deliverables: ${service.outcomes.join('; ')}\n- Tech: ${service.tech.join(', ')}`).join('\n\n')}
+
+## Featured Builds & Software
+${portfolio.projects.map((project) => `- **[${project.title}](${SITE_URL}/work/${project.slug}/):** ${project.summary} (${project.category}, ${project.status})`).join('\n')}
+
+## Recent Engineering Notes & Teardowns (${posts.length} articles)
+${posts.slice(0, 15).map((post) => `- [${post.title}](${postUrl(post.slug)}) (${post.date}): ${post.description}`).join('\n')}
+
+## Machine-Readable Endpoints
+- **LLMs.txt:** ${SITE_URL}/llms.txt
+- **Full Knowledge Archive:** ${SITE_URL}/llms-full.txt
+- **MCP Server Card:** ${SITE_URL}/.well-known/mcp/server-card.json
+- **RSS Feed:** ${SITE_URL}/feed.xml
+- **Sitemap:** ${SITE_URL}/sitemap.xml
 `;
 }
 
@@ -755,6 +998,54 @@ function main() {
     .replace('<div id="root"></div>', `<div id="root">${renderHire()}</div>`);
   writePage('hire', hireHtml);
 
+  // About page
+  const aboutHtml = cleanBaseHtml(baseHtml)
+    .replace('</head>', `${headTags({
+      title: 'About Abrar Akhunji | AI & Full-Stack Engineer',
+      description: 'Background, education, engineering philosophy and technical journey of Abrar Akhunji, an AI and full-stack software engineer in Ahmedabad.',
+      pagePath: aboutPath(),
+      keywords: ['About Abrar Akhunji', 'AI engineer biography', 'software engineer Ahmedabad'],
+      schema: buildAboutSchemas(),
+    })}</head>`)
+    .replace('<div id="root"></div>', `<div id="root">${renderAbout()}</div>`);
+  writePage('about', aboutHtml);
+
+  // Contact page
+  const contactHtml = cleanBaseHtml(baseHtml)
+    .replace('</head>', `${headTags({
+      title: 'Contact Abrar Akhunji | AI & Full-Stack Engineer',
+      description: 'Contact Abrar Akhunji for AI/ML engineering engagements, full-stack builds, architecture teardowns and technical roles.',
+      pagePath: contactPath(),
+      keywords: ['Contact Abrar Akhunji', 'hire AI engineer Ahmedabad', 'contact ML developer'],
+      schema: buildContactSchemas(),
+    })}</head>`)
+    .replace('<div id="root"></div>', `<div id="root">${renderContact()}</div>`);
+  writePage('contact', contactHtml);
+
+  // Terms page
+  const termsHtml = cleanBaseHtml(baseHtml)
+    .replace('</head>', `${headTags({
+      title: 'Terms of Service | Abrar Akhunji',
+      description: 'Terms of service, automated agent access policy, and legal disclosures for abrarakhunji.com.',
+      pagePath: termsPath(),
+      keywords: ['Terms of Service', 'legal terms', 'agent policy', 'Abrar Akhunji'],
+      schema: buildTermsSchemas(),
+    })}</head>`)
+    .replace('<div id="root"></div>', `<div id="root">${renderTerms()}</div>`);
+  writePage('terms', termsHtml);
+
+  // Privacy page
+  const privacyHtml = cleanBaseHtml(baseHtml)
+    .replace('</head>', `${headTags({
+      title: 'Privacy Policy | Abrar Akhunji',
+      description: 'Privacy policy and data protection practices for abrarakhunji.com.',
+      pagePath: privacyPath(),
+      keywords: ['Privacy Policy', 'data protection', 'Abrar Akhunji'],
+      schema: buildPrivacySchemas(),
+    })}</head>`)
+    .replace('<div id="root"></div>', `<div id="root">${renderPrivacy()}</div>`);
+  writePage('privacy', privacyHtml);
+
   const projectSchemas = project => [{ '@context':'https://schema.org', '@type':'CreativeWork', name:project.title, description:project.summary, url:`${SITE_URL}/work/${project.slug}/`, creator:{'@id':PERSON_ID} }, { '@context':'https://schema.org', '@type':'BreadcrumbList', itemListElement:[{'@type':'ListItem',position:1,name:'Home',item:SITE_URL+'/'},{'@type':'ListItem',position:2,name:'Work',item:SITE_URL+'/work/'},{'@type':'ListItem',position:3,name:project.title,item:`${SITE_URL}/work/${project.slug}/`}]}];
   const workHtml = cleanBaseHtml(baseHtml).replace('</head>', `${headTags({title:'Engineering projects | Abrar Akhunji',description:'Local AI, developer tools, native software and full-stack projects by Abrar Akhunji.',pagePath:'/work/',image:'/assets/build-room/og-home.jpg'})}</head>`).replace('<div id="root"></div>',`<div id="root">${renderWork(portfolio.projects)}</div>`);
   writePage('work',workHtml);
@@ -776,14 +1067,25 @@ function main() {
   console.log('✓ /feed.xml');
 
   writeFile('sitemap.xml', renderSitemap(posts));
-  console.log(`✓ /sitemap.xml (${posts.length + 4 + portfolio.projects.length} URLs)`);
+  console.log(`✓ /sitemap.xml (${posts.length + 8 + portfolio.projects.length} URLs)`);
 
   writeFile('llms.txt', renderLlmsTxt(posts));
   writeFile('llms-full.txt', renderLlmsFull(posts));
   console.log('✓ /llms.txt and /llms-full.txt');
 
+  writeFile('index.md', renderIndexMarkdown(portfolio, posts, services));
+  console.log('✓ /index.md (Markdown representation for agents)');
+
   writeFile('robots.txt', renderRobots());
   console.log('✓ /robots.txt');
+
+  const serverCardSource = path.join(root, 'public/.well-known/mcp/server-card.json');
+  if (fs.existsSync(serverCardSource)) {
+    const serverCardContent = fs.readFileSync(serverCardSource, 'utf8');
+    writeFile('.well-known/mcp/server-card.json', serverCardContent);
+    writeFile('.well-known/mcp.json', serverCardContent);
+    console.log('✓ /.well-known/mcp/server-card.json and /.well-known/mcp.json');
+  }
 
   console.log(`\nStatic SEO layer complete: ${posts.length} posts, trailing-slash canonicals, shared Person/WebSite entities.`);
 }

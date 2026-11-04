@@ -3,6 +3,7 @@ export const SITE_NAME = 'Abrar Akhunji';
 export const AUTHOR_NAME = 'Abrar Akhunji';
 export const AUTHOR_ROLE = 'AI & Full-Stack Engineer';
 export const PERSON_ID = `${SITE_URL}/#person`;
+export const ORGANIZATION_ID = `${SITE_URL}/#organization`;
 export const WEBSITE_ID = `${SITE_URL}/#website`;
 export const BLOG_NAME = 'The Neural Log';
 
@@ -35,6 +36,22 @@ export function blogPath() {
 
 export function hirePath() {
   return '/hire/';
+}
+
+export function aboutPath() {
+  return '/about/';
+}
+
+export function contactPath() {
+  return '/contact/';
+}
+
+export function termsPath() {
+  return '/terms/';
+}
+
+export function privacyPath() {
+  return '/privacy/';
 }
 
 export const SOCIAL_LINKS = [

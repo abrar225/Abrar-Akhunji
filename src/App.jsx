@@ -16,6 +16,10 @@ const BlogPost = lazy(() => import('./pages/BlogPost'));
 const Hire = lazy(() => import('./pages/Hire'));
 const Work = lazy(() => import('./pages/Work'));
 const CaseStudy = lazy(() => import('./pages/CaseStudy'));
+const About = lazy(() => import('./pages/About'));
+const Contact = lazy(() => import('./pages/Contact'));
+const Terms = lazy(() => import('./pages/Terms'));
+const Privacy = lazy(() => import('./pages/Privacy'));
 
 function RouteScroll() {
   const { pathname, hash, search } = useLocation();
@@ -86,6 +90,10 @@ export default function App() {
       <Suspense fallback={<RouteFallback />}>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/privacy" element={<Privacy />} />
           <Route path="/blog" element={<BlogList />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/hire" element={<Hire />} />

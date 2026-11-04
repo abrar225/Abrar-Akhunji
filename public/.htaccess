@@ -5,8 +5,23 @@ Options -Indexes
 DirectoryIndex index.html
 AddDefaultCharset UTF-8
 
+<IfModule mod_mime.c>
+  AddType text/markdown;charset=UTF-8 .md
+  AddType application/json;charset=UTF-8 .json
+</IfModule>
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
+
+  # Ensure .well-known directory is accessible (MCP Server Card, security.txt)
+  RewriteRule ^\.well-known/ - [L]
+
+  # Serve Markdown representation when requested via Accept: text/markdown
+  RewriteCond %{HTTP_ACCEPT} text/markdown [NC]
+  RewriteRule ^$ index.md [L]
+
+  RewriteCond %{HTTP_ACCEPT} text/markdown [NC]
+  RewriteRule ^index\.html$ index.md [L]
 
   # Old date-prefixed post URLs (2026-09-20-slug) -> clean canonical URL.
   # These were previously emitted as hundreds of redirect HTML pages, which
@@ -23,7 +38,29 @@ ErrorDocument 404 /404.html
   Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
   Header always set X-Frame-Options "SAMEORIGIN"
   Header always set Cross-Origin-Opener-Policy "same-origin"
+
+  # RFC 8288 Link header advertising llms.txt and markdown alternates
+  Header always set Link '</llms.txt>; rel="alternate"; type="text/markdown", </llms-full.txt>; rel="alternate"; type="text/markdown", </index.md>; rel="alternate"; type="text/markdown"'
+
+  # Signal caching proxies that representations vary on Accept
+  Header append Vary "Accept"
 </IfModule>
+
+# Ensure .md files are served as text/markdown
+<FilesMatch "\.md$">
+  Header set Content-Type "text/markdown; charset=utf-8"
+</FilesMatch>
+
+# Explicitly grant access and CORS for MCP Server Card and security.txt
+<FilesMatch "^(server-card\.json|mcp\.json|security\.txt)$">
+  Require all granted
+  Header always set Access-Control-Allow-Origin "*"
+</FilesMatch>
+
+<FilesMatch "^(server-card\.json|mcp\.json)$">
+  Header set Content-Type "application/json; charset=utf-8"
+  Header always set Access-Control-Allow-Origin "*"
+</FilesMatch>
 
 # Never serve dotfiles (including leftover .DS_Store / .env files).
 <FilesMatch "^\.">
@@ -37,6 +74,8 @@ ErrorDocument 404 /404.html
 <IfModule mod_expires.c>
   ExpiresActive On
   ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType text/markdown "access plus 1 hour"
+  ExpiresByType application/json "access plus 1 hour"
   ExpiresByType text/css "access plus 1 year"
   ExpiresByType application/javascript "access plus 1 year"
   ExpiresByType image/jpeg "access plus 1 year"

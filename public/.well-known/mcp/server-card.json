@@ -1,0 +1,22 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/v1/server-card.schema.json",
+  "name": "com.abrarakhunji/portfolio",
+  "version": "1.0.0",
+  "title": "Abrar Akhunji Portfolio & Knowledge Base MCP Server",
+  "description": "MCP Server exposing AI engineering notes, systems teardowns, projects, and contact channels for Abrar Akhunji.",
+  "endpoint": "https://abrarakhunji.com/mcp",
+  "websiteUrl": "https://abrarakhunji.com",
+  "repository": "https://github.com/abrar225",
+  "capabilities": {
+    "tools": true,
+    "resources": true,
+    "prompts": false
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://abrarakhunji.com/mcp",
+      "supportedProtocolVersions": ["2024-11-05"]
+    }
+  ]
+}

@@ -8,7 +8,7 @@ import { RESUME } from '../../lib/projects';
 
 export default function SiteHeader() {
   const [open, setOpen] = useState(false); const { theme, toggleTheme } = useTheme(); const location = useLocation();
-  const links = [['Work', '/work/'], ['About', '/#about-me'], ['Writing', '/blog/'], ['Hire', '/hire/']];
+  const links = [['Work', '/work/'], ['About', '/about/'], ['Writing', '/blog/'], ['Hire', '/hire/'], ['Contact', '/contact/']];
   return <header className="site-header">
     <Link className="wordmark" to="/" onClick={() => setOpen(false)} aria-label="Abrar Akhunji home">abrar<span className="wordmark-dot">.</span><span className="wordmark-caption">The build room</span></Link>
     <nav className="desktop-nav" aria-label="Main navigation">{links.map(([label, href]) => <Link key={label} data-cursor="Open" data-magnetic to={href} aria-current={location.pathname.replace(/\/$/, '') === href.replace(/\/$/, '') || (label === 'Work' && location.pathname.startsWith('/work/')) ? 'page' : undefined}>{label}</Link>)}</nav>
