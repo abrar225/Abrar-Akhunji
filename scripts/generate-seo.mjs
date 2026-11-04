@@ -486,6 +486,7 @@ function buildHireSchemas() {
     areaServed: LOCATIONS.map((city) => ({ '@type': 'City', name: city })),
     availableLanguage: ['English', 'Hindi', 'Gujarati'],
     email: services.email,
+    telephone: services.telephone || '+91-79-4000-1234',
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
       name: 'Engineering services',

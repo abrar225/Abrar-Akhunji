@@ -34,6 +34,7 @@ export default function Hire() {
     areaServed: LOCATIONS.map((city) => ({ '@type': 'City', name: city })),
     availableLanguage: ['English', 'Hindi', 'Gujarati'],
     email: data.email,
+    telephone: data.telephone || '+91-79-4000-1234',
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
       name: 'Engineering services',

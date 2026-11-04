@@ -28,6 +28,7 @@ test('Goal 2: Organization or LocalBusiness schema is complete on the homepage',
   assert.equal(orgSchema.name, 'Abrar Akhunji');
   assert.equal(orgSchema.url, 'https://abrarakhunji.com/');
   assert.equal(orgSchema.email, 'abrar@abrarakhunji.com');
+  assert.ok(orgSchema.telephone, 'expected telephone property on business node');
   assert.ok(orgSchema.founder);
   assert.ok(orgSchema.address);
   assert.ok(Array.isArray(orgSchema.sameAs) && orgSchema.sameAs.length > 0);
