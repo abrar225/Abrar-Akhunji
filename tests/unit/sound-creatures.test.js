@@ -41,3 +41,56 @@ test('Pip transfers between web stations and Spool escapes without input', () =>
  for (let frame = 1801; frame <= 2010; frame++) advanceCreatures(agents,1/60,frame/60,null,390,2200);
  assert.ok(pip.y > 850);
 });
+
+test('Pip swings between components with pendulum physics and creates dynamic webs', () => {
+ const buttonAnchor = { x: 120, y: 400 };
+ const textAnchor = { x: 500, y: 700 };
+ const agents = createCreatures(1000, 3000, {
+  web: buttonAnchor,
+  webs: [buttonAnchor, textAnchor],
+  flowers: [{ x: 150, y: 420 }, { x: 520, y: 720 }]
+ });
+ const pip = agents[0];
+ pip.patrolAt = 1.0;
+ let sawSwinging = false;
+ let apexSag = 0;
+
+ for (let f = 1; f <= 300; f++) {
+  const t = f / 60;
+  advanceCreatures(agents, 1/60, t, null, 1000, 3000);
+  if (pip.state === 'swinging') {
+   sawSwinging = true;
+   assert.ok(pip.pivot !== null);
+   assert.ok(pip.pivot.y < Math.min(buttonAnchor.y, textAnchor.y));
+   apexSag = Math.max(apexSag, pip.y);
+  }
+ }
+
+ assert.ok(sawSwinging, 'Pip entered swinging state');
+ assert.ok(pip.activeWebs.length >= 1, 'Pip registered active web');
+ assert.ok(apexSag > buttonAnchor.y, 'Swinging path formed a descending pendulum sag');
+});
+
+test('Spool flies freely and perches on component perches across the page', () => {
+ const perches = [
+  { x: 100, y: 300, isFlower: false },
+  { x: 700, y: 1500, isFlower: false },
+  { x: 300, y: 2800, isFlower: false }
+ ];
+ const agents = createCreatures(1200, 4000, {
+  web: { x: 500, y: 200 },
+  webs: [{ x: 500, y: 200 }],
+  flowers: perches
+ });
+ const spool = agents[1];
+ assert.equal(spool.state, 'perched');
+ assert.equal(spool.flowers.length, 3);
+
+ // Advance to trigger flight
+ let visitedDifferentHeights = false;
+ for (let f = 1; f <= 900; f++) {
+  advanceCreatures(agents, 1/60, f / 60, null, 1200, 4000);
+  if (spool.y > 600) visitedDifferentHeights = true;
+ }
+ assert.ok(visitedDifferentHeights, 'Spool flew down to visit lower component perches');
+});
