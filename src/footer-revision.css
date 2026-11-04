@@ -84,3 +84,54 @@
  .archive-browser-foot>span>span { display:block; margin:5px 0 0; }
 }
 @media(prefers-reduced-motion:reduce){ .archive-image { animation:none; } .archive-image>span { transition:none; } .river-controls button[aria-label$="river animation"] { display:none; } }
+
+/* Project cards sit on an arc in real perspective. The selected card faces forward. */
+.archive-room .archive-browser { display:block; }
+.archive-room .archive-ring {
+  --ring-radius: min(52cqw, 580px);
+  position:relative;
+  display:block;
+  height:clamp(235px, 39vw, 510px);
+  container-type:inline-size;
+  overflow:hidden;
+  perspective:900px;
+  touch-action:pan-y;
+  border:1px solid var(--color-line);
+  border-radius:18px;
+  background:radial-gradient(ellipse at 50% 80%,var(--color-surface),var(--color-elevated));
+}
+.archive-room .archive-ring button {
+  position:absolute;
+  top:50%;
+  left:50%;
+  display:block;
+  width:clamp(160px, 37cqw, 430px);
+  min-width:0;
+  padding:0;
+  overflow:hidden;
+  border:1px solid var(--color-line);
+  border-radius:14px;
+  background:var(--color-surface);
+  text-align:left;
+  box-shadow:0 16px 32px #0003;
+  transform:translate(-50%,-50%) translate3d(calc(var(--ring-x) * var(--ring-radius)),0,calc(var(--ring-depth) * var(--ring-radius))) rotateY(var(--ring-angle));
+  transition:transform .62s cubic-bezier(.2,.75,.2,1);
+}
+.archive-room .archive-ring button::before { display:none; }
+.archive-room .archive-ring img { display:block; width:100%; height:auto; aspect-ratio:1.65; object-fit:cover; }
+.archive-room .archive-ring button > span { display:block; padding:12px 14px; }
+.archive-room .archive-ring button strong { font-size:clamp(13px,1.7vw,23px); }
+.archive-room .archive-ring button[aria-selected=true] { border-color:var(--color-accent); }
+.archive-room .archive-artifact { margin-top:18px; }
+@media(max-width:600px) {
+  .archive-room .archive-ring { --ring-radius:78cqw; perspective:540px; }
+  .archive-room .archive-ring button { width:clamp(160px,55cqw,280px); }
+}
+@media(prefers-reduced-motion:reduce) { .archive-room .archive-ring button { transition:none; } }
+
+.archive-room .archive-ring { --ring-radius:min(48cqw, 600px); background:radial-gradient(ellipse at 50% 85%,var(--color-surface),transparent 70%), repeating-linear-gradient(0deg,transparent 0 31px,var(--color-line) 32px),var(--color-elevated); }
+.archive-room .archive-ring button[aria-selected=true] { box-shadow:0 22px 46px #0004; }
+@media(max-width:600px) {
+ .archive-room .archive-ring { --ring-radius:76cqw; }
+ .archive-room .archive-ring button { width:clamp(160px,60cqw,280px); }
+}

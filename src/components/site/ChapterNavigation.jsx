@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
+import { Home, Lightbulb, Boxes, Fingerprint, Github, Mail } from 'lucide-react';
 import { siteAudio } from '../../lib/audio/siteAudio';
 
+const shortLabels = ['Home', 'Idea', 'Builds', 'About', 'Activity', 'Contact'];
+const icons = [Home, Lightbulb, Boxes, Fingerprint, Github, Mail];
 const chapters = [['home', 'Hello'], ['brief', 'The idea'], ['work', 'The builds'], ['about-me', 'The builder'], ['activity', 'GitHub'], ['contact', 'Say hello']];
 
 export default function ChapterNavigation() {
@@ -25,18 +28,23 @@ export default function ChapterNavigation() {
     event.preventDefault(); clear();
     siteAudio.cancel('chapter'); siteAudio.cue('chapter',{group:'chapter',rate:1,throttle:0});
     const links = [...navRef.current.querySelectorAll('a')], from = Math.max(0, links.findIndex(link => link.hasAttribute('aria-current')));
-    const land = () => {
+    const land = (behavior = 'instant') => {
       history.pushState(history.state, '', `#${id}`);
-      target.scrollIntoView({ behavior: 'instant', block: 'start' });
+      target.scrollIntoView({ behavior, block: 'start' });
       target.tabIndex = -1; target.focus({ preventScroll: true });
       setAnnouncement(`Chapter ${index + 1} of ${chapters.length}: ${label}`);
     };
     if (matchMedia('(prefers-reduced-motion: reduce)').matches || Math.abs(target.getBoundingClientRect().top - 100) < 8) { setJump(null); land(); return; }
+    if (matchMedia('(max-width: 767px)').matches) {
+      setJump(null);
+      land('smooth');
+      return;
+    }
     setJump({ from, index, label, key: ++sequence.current });
     timers.current = [setTimeout(land, 180), setTimeout(() => setJump(null), 700)];
   }
   return <>
-    <nav ref={navRef} className="story-dock" aria-label="Build Room chapters"><i className="chapter-current" aria-hidden="true" />{chapters.map(([id, label], index) => <a key={id} href={`#${id}`} onClick={event => follow(event, index)}><span>{String(index + 1).padStart(2, '0')}</span>{label}</a>)}<i className="story-progress" aria-hidden="true" /></nav>
+    <nav ref={navRef} className="story-dock" aria-label="Build Room chapters"><i className="chapter-current" aria-hidden="true" />{chapters.map(([id, label], index) => <a key={id} href={`#${id}`} aria-label={label} onClick={event => follow(event, index)}><span>{String(index + 1).padStart(2, '0')}</span>{(() => { const Icon = icons[index]; return <Icon className="chapter-icon" size={17} aria-hidden="true"/>; })()}<b className="chapter-label">{label}</b><b className="chapter-label-short">{shortLabels[index]}</b></a>)}<i className="story-progress" aria-hidden="true" /></nav>
     <span className="sr-only" role="status">{announcement}</span>
     {jump && <div className={`chapter-jump ${jump.index < jump.from ? 'is-reverse' : ''}`} key={jump.key} aria-hidden="true"><div className="chapter-scan"/><div className="chapter-jump-copy"><span>{String(jump.from + 1).padStart(2, '0')} <b>→</b> {String(jump.index + 1).padStart(2, '0')}</span><p>{jump.label}</p><pre>{'> > > > > > > > > > > > > > > >'}</pre></div></div>}
   </>;

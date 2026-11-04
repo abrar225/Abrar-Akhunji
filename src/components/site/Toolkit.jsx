@@ -1,10 +1,41 @@
-import { useRef, useState } from 'react';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { useState } from 'react';
+import toolIcons from '../../data/tool-icons.json';
 import data from '../../data/portfolio.json';
 import packages from '../../../package.json';
 import { buildToolkit } from '../../lib/toolkit';
 import './toolkit.css';
-const groups=buildToolkit(data,packages),total=groups.reduce((n,g)=>n+g.tools.length,0);
-export default function Toolkit(){const track=useRef(null),[active,setActive]=useState(0);function select(index){const n=(index+groups.length)%groups.length;setActive(n);track.current.scrollTo({left:track.current.children[n].offsetLeft,behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'instant':'smooth'});}
- return <section className="toolkit" aria-label="Tools I reach for"><header><div><p className="section-kicker">Tools I reach for</p><h3>A tool for the job.</h3><p>{total} technologies across my projects, listed skills, and this portfolio.</p></div><div className="toolkit-arrows"><button type="button" aria-label="Previous tool category" onClick={()=>select(active-1)}><ArrowLeft size={18}/></button><button type="button" aria-label="Next tool category" onClick={()=>select(active+1)}><ArrowRight size={18}/></button></div></header><div className="toolkit-tabs" role="group" aria-label="Tool categories">{groups.map((g,i)=><button key={g.title} type="button" aria-pressed={active===i} onClick={()=>select(i)}>{g.title}<span>{g.tools.length}</span></button>)}</div><div ref={track} className="toolkit-track" tabIndex="0" aria-label="Swipe or scroll through tool categories" onScroll={e=>{const el=e.currentTarget;let closest=0,d=Infinity;[...el.children].forEach((child,i)=>{const delta=Math.abs(child.offsetLeft-el.scrollLeft);if(delta<d){d=delta;closest=i;}});setActive(closest);}} onKeyDown={e=>{if(e.target!==e.currentTarget)return;if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();select(e.key==='Home'?0:e.key==='End'?groups.length-1:active+(e.key==='ArrowRight'?1:-1));}}}>{groups.map((g,i)=><article key={g.title} aria-label={g.title}><div className="toolkit-caption"><h4>{g.title}</h4><span>{i+1} / {groups.length}</span></div><div className="toolkit-tools">{g.tools.map(tool=><details key={tool.name}><summary>{tool.name}</summary><p>{tool.sources.join(' · ')}</p></details>)}</div></article>)}</div><p className="toolkit-hint">Pick a tool to see where it appears. Swipe to explore the collection.</p></section>;
+// Brand paths from Simple Icons 16.36.0. Tools without a path use a labeled monogram.
+function ToolMark({ name }) {
+ const path = toolIcons[name];
+ return path ? <svg viewBox="0 0 24 24" aria-hidden="true"><path d={path}/></svg>
+  : <i aria-hidden="true">{name.split(/[^a-z0-9]+/i).slice(0, 2).map(part => part[0]).join('').toUpperCase()}</i>;
+}
+
+const tools = buildToolkit(data, packages).flatMap(group => group.tools);
+
+export default function Toolkit() {
+  const [paused, setPaused] = useState(false);
+
+  return (
+    <section className="toolkit" aria-label="Tools I reach for">
+      <h3>A tool for the job.</h3>
+      <div className="toolkit-conveyor" data-paused={paused}>
+        <div className="toolkit-belt">
+          {[0, 1].map(copy => (
+            <ul className="toolkit-belt-lap" key={copy} aria-hidden={copy === 1 || undefined}>
+              {tools.map(({ name }) => (
+                <li className="toolkit-token" key={name}>
+                  <ToolMark name={name}/>
+                  <span>{name}</span>
+                </li>
+              ))}
+            </ul>
+          ))}
+        </div>
+      </div>
+      <button className="toolkit-belt-toggle" type="button" aria-pressed={paused} onClick={() => setPaused(value => !value)}>
+        Pause tool belt
+      </button>
+    </section>
+  );
 }

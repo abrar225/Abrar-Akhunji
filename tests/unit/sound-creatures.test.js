@@ -22,3 +22,22 @@ test('higher signature sensitivity produces a stronger but bounded response and 
  const points=()=>[{x:230,y:100,homeX:230,homeY:100,vx:0,vy:0}];const calm=points(),strong=points();for(let i=0;i<60;i++){advanceGlyphs(calm,1/60,{x:200,y:100,speed:1},500,250,.25);advanceGlyphs(strong,1/60,{x:200,y:100,speed:1},500,250,1.2);}assert.ok(strong[0].x-calm[0].x>15);
  for(let i=0;i<360;i++)advanceGlyphs(strong,1/60,null,500,250,1.2);assert.ok(Math.abs(strong[0].x-230)<.01);
 });
+
+test('Pip transfers between web stations and Spool escapes without input', () => {
+ const webs = [{x:80,y:300},{x:360,y:300},{x:80,y:1000},{x:360,y:1000}];
+ const agents = createCreatures(390,2200,{web:webs[0],webs,flowers:[{x:110,y:390},{x:270,y:400}]});
+ const [pip, spool] = agents;
+ pip.patrol = [0,1];
+ let crossed = false, caught = false, escaped = false;
+ for (let frame = 1; frame <= 1800; frame++) {
+  advanceCreatures(agents,1/60,frame/60,null,390,2200);
+  crossed ||= pip.x > 250;
+  if (spool.state === 'snared') caught = true;
+  else if (caught) escaped = true;
+ }
+ assert.ok(crossed && caught && escaped);
+ pip.patrol = [2,3];
+ pip.patrolAt = 30;
+ for (let frame = 1801; frame <= 2010; frame++) advanceCreatures(agents,1/60,frame/60,null,390,2200);
+ assert.ok(pip.y > 850);
+});
