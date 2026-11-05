@@ -11,6 +11,7 @@ export default defineConfig({
   ],
   build: {
     rollupOptions: {
+      input: { main: "index.html", agents: "agents-at-work/index.html" },
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {

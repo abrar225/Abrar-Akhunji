@@ -745,6 +745,7 @@ function renderFeed(posts) {
 function renderSitemap(posts) {
   const latest = posts[0]?.updated || today;
   const urls = [
+    { loc: `${SITE_URL}/agents-at-work/`, lastmod: today, changefreq: 'monthly', priority: '0.6' },
     { loc: `${SITE_URL}/`, lastmod: latest, changefreq: 'weekly', priority: '1.0' },
     { loc: absoluteUrl(aboutPath()), lastmod: today, changefreq: 'monthly', priority: '0.8' },
     { loc: absoluteUrl(contactPath()), lastmod: today, changefreq: 'monthly', priority: '0.8' },
@@ -1068,7 +1069,7 @@ function main() {
   console.log('✓ /feed.xml');
 
   writeFile('sitemap.xml', renderSitemap(posts));
-  console.log(`✓ /sitemap.xml (${posts.length + 8 + portfolio.projects.length} URLs)`);
+  console.log(`✓ /sitemap.xml (${posts.length + 9 + portfolio.projects.length} URLs)`);
 
   writeFile('llms.txt', renderLlmsTxt(posts));
   writeFile('llms-full.txt', renderLlmsFull(posts));

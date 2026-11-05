@@ -4,7 +4,7 @@ import { siteAudio } from '../../lib/audio/siteAudio';
 import { createCreatures, advanceCreatures } from '../../lib/creatures/steering';
 import { paintHabitats } from '../../lib/creatures/paint';
 
-// ponytail: site-wide component scanning gives Pip & Spool full freedom across all pages
+// ponytail: atmospheric workshop inhabitants - page-aware margins & idle-triggered choreography
 export default function WorkshopCreatures() {
   const root = useRef(null), { pathname } = useLocation();
 
@@ -13,64 +13,75 @@ export default function WorkshopCreatures() {
     if (!ctx) return;
     const motion = matchMedia('(prefers-reduced-motion:reduce)');
     let width = innerWidth, height = 0, agents = [], flowers = [], pointer = null, touchUntil = 0, raf = 0, last = 0, time = 0, painted = 0, disposed = false, enabled = true;
+    let lastActivity = performance.now();
 
     try { enabled = localStorage.getItem('portfolio_creatures') !== 'false'; } catch { /* storage unavailable */ }
+
+    // Page territory: active in workshop margins on Home & Work; dormant/margin-parked on text-heavy reading pages
+    const isWorkshopPage = pathname === '/' || pathname.startsWith('/work');
 
     function measure() {
       width = innerWidth;
       height = Math.max(document.documentElement.scrollHeight, innerHeight);
 
-      // Query real visible UI components across the current page (buttons, text headings, cards, links)
-      const selector = 'button:not([aria-hidden="true"]), a.button, a.button-secondary, a.text-link, a.contact-email, .button-row a, h1, h2, h3, .project-card, article, .capability-list a, .toolkit-chip, .badge, [data-web-anchor]';
-      const nodes = [...document.querySelectorAll(selector)];
-      const visibleNodes = nodes.filter(n => {
-        const r = n.getBoundingClientRect();
-        return r.width > 8 && r.height > 6 && r.top + scrollY > 0;
-      });
-
       const webs = [];
       const perches = [];
 
-      visibleNodes.forEach(node => {
-        const r = node.getBoundingClientRect();
-        const top = r.top + scrollY;
-        const left = r.left;
-        const right = r.right;
-        const w = r.width;
-
-        // Pip anchor candidates at top corners and edges of components
-        webs.push({ x: Math.round(left + Math.min(20, w * 0.2)), y: Math.round(top) });
-        if (w > 80) {
-          webs.push({ x: Math.round(right - Math.min(20, w * 0.2)), y: Math.round(top) });
-        }
-
-        // Spool perches atop buttons, headings, badges, and cards
-        perches.push({
-          x: Math.round(left + w * 0.5),
-          y: Math.round(top - 2),
-          isFlower: false
+      if (isWorkshopPage) {
+        // Query section containers to anchor strictly in architectural margins and structural rafter corners
+        const containers = [...document.querySelectorAll('.room-container, .builder-top, .inspection-section, .contribution-chapter, .contact-layout')];
+        const visibleContainers = containers.filter(c => {
+          const r = c.getBoundingClientRect();
+          return r.width > 20 && r.height > 20;
         });
-      });
 
-      // Graceful fallback anchors if a page has minimal markup
+        visibleContainers.forEach(container => {
+          const r = container.getBoundingClientRect();
+          const top = r.top + scrollY;
+          const left = r.left;
+          const right = r.right;
+          const h = r.height;
+
+          // Pip rafter corners (strictly outside content column in the gutters or beam tops)
+          webs.push({ x: Math.max(28, Math.round(left - 24)), y: Math.round(top + 16) });
+          if (right + 24 < width) {
+            webs.push({ x: Math.min(width - 28, Math.round(right + 24)), y: Math.round(top + 16) });
+          } else {
+            webs.push({ x: Math.round(right - 20), y: Math.round(top) });
+          }
+
+          // Spool margin botanicals (quiet resting spots along outer gutters)
+          perches.push({
+            x: Math.max(32, Math.round(left - 20)),
+            y: Math.round(top + h * 0.42),
+            isFlower: true
+          });
+          perches.push({
+            x: Math.min(width - 32, Math.round(right + 20)),
+            y: Math.round(top + h * 0.78),
+            isFlower: true
+          });
+        });
+      }
+
+      // Graceful margin fallbacks (e.g. on reading pages or minimal layout)
       if (webs.length < 2) {
         webs.push(
-          { x: Math.round(width - 45), y: 150 },
-          { x: 45, y: Math.round(Math.max(300, height * 0.4)) },
-          { x: Math.round(width - 55), y: Math.round(Math.max(500, height * 0.75)) }
+          { x: Math.round(width - 42), y: 130 },
+          { x: 38, y: Math.round(Math.max(280, height * 0.45)) },
+          { x: Math.round(width - 48), y: Math.round(Math.max(480, height * 0.8)) }
         );
       }
       if (perches.length < 2) {
         perches.push(
-          { x: 50, y: Math.round(Math.max(220, height * 0.35)), isFlower: true },
-          { x: Math.round(width - 60), y: Math.round(Math.max(450, height * 0.7)), isFlower: true }
+          { x: 44, y: Math.round(Math.max(220, height * 0.35)), isFlower: true },
+          { x: Math.round(width - 50), y: Math.round(Math.max(440, height * 0.72)), isFlower: true }
         );
       }
 
       flowers = perches;
 
       if (!agents.length) {
-        // Initialize Pip and Spool with candidate webs and perches across the site
         agents = createCreatures(width, height, { web: webs[0], webs, flowers });
         time = 0;
         return;
@@ -79,7 +90,7 @@ export default function WorkshopCreatures() {
       const [spider, butterfly] = agents;
       spider.webs = webs;
       if (spider.anchor >= webs.length) spider.anchor = 0;
-      if (!spider.home || Math.hypot(spider.home.x - spider.x, spider.home.y - spider.y) > 800) {
+      if (!spider.home || Math.hypot(spider.home.x - spider.x, spider.home.y - spider.y) > 900) {
         spider.home = webs[spider.anchor] || webs[0];
       }
 
@@ -141,12 +152,16 @@ export default function WorkshopCreatures() {
       const dt = last ? Math.min(0.2, (t - last) / 1000) : 0;
       last = t;
       time += dt;
+
+      // Idle detection: 3+ seconds of quiet triggers mature ambient motion
+      const isIdle = isWorkshopPage && (t - lastActivity) > 3000;
+
       const before = agents.map(a => a.state);
-      advanceCreatures(agents, dt, time, t < touchUntil || !touchUntil ? pointer : null, width, height);
+      advanceCreatures(agents, dt, time, t < touchUntil || !touchUntil ? pointer : null, width, height, isIdle);
 
       agents.forEach((a, i) => {
-        if (['fleeing', 'retreating', 'swinging'].includes(a.state) && before[i] !== a.state) {
-          siteAudio.cue('creature', { gain: 0.18, rate: a.kind === 'spider' ? 0.85 : 1.2, throttle: 0.85 });
+        if (['fleeing', 'retreating', 'plumb_line'].includes(a.state) && before[i] !== a.state) {
+          siteAudio.cue('creature', { gain: 0.15, rate: a.kind === 'spider' ? 0.8 : 1.2, throttle: 0.9 });
         }
       });
 
@@ -167,7 +182,12 @@ export default function WorkshopCreatures() {
       if (!raf) raf = requestAnimationFrame(loop);
     }
 
+    const onUserActivity = () => {
+      lastActivity = performance.now();
+    };
+
     const move = e => {
+      onUserActivity();
       if (e.pointerType === 'mouse' || e.type === 'pointerdown') {
         pointer = { x: e.clientX, y: e.clientY + scrollY };
         touchUntil = e.pointerType === 'mouse' ? 0 : performance.now() + 750;
@@ -177,6 +197,7 @@ export default function WorkshopCreatures() {
       if (e.pointerType === 'mouse' && !e.relatedTarget) pointer = null;
     };
     const scroll = () => {
+      onUserActivity();
       pointer = null;
       measure();
       resume();
@@ -204,6 +225,8 @@ export default function WorkshopCreatures() {
     window.addEventListener('scroll', scroll, { passive: true });
     document.addEventListener('pointermove', move, { passive: true });
     document.addEventListener('pointerdown', move, { passive: true });
+    document.addEventListener('keydown', onUserActivity, { passive: true });
+    document.addEventListener('touchstart', onUserActivity, { passive: true });
     document.addEventListener('pointerout', leave);
     document.addEventListener('visibilitychange', resume);
     window.addEventListener('portfolio:creatures', settings);
@@ -217,6 +240,8 @@ export default function WorkshopCreatures() {
       window.removeEventListener('scroll', scroll);
       document.removeEventListener('pointermove', move);
       document.removeEventListener('pointerdown', move);
+      document.removeEventListener('keydown', onUserActivity);
+      document.removeEventListener('touchstart', onUserActivity);
       document.removeEventListener('pointerout', leave);
       document.removeEventListener('visibilitychange', resume);
       window.removeEventListener('portfolio:creatures', settings);

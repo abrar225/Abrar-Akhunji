@@ -74,6 +74,7 @@ export default function Home() {
   return <main ref={pageRef} className="build-home" id="main-content">
     <SEO title="Abrar Akhunji — AI & Full-Stack Engineer in Ahmedabad" description="AI engineer, AI/ML engineer and full-stack engineer in Ahmedabad. Explore local AI tools, developer software, native products and the engineering behind each build." path="/" image={`${A}og-home.jpg`} />
     <ChapterNavigation/>
+    <a className="agents-experiment-link" href="/agents-at-work/">Watch agents build a showcase ↗</a>
     <div className="story-stage">
       {desktop && <div className={`scene-sticky ${phase === 'work' ? 'is-work' : ''} ${phase === 'inspect' ? 'is-inspect' : ''}`}>
         <ScenePoster theme={theme} variant={phase === 'hero' || phase === 'brief' ? 'hero' : 'room'} className="scene-fallback" />

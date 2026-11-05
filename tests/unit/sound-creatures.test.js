@@ -94,3 +94,39 @@ test('Spool flies freely and perches on component perches across the page', () =
  }
  assert.ok(visitedDifferentHeights, 'Spool flew down to visit lower component perches');
 });
+
+test('creatures remain calm during active interaction and initiate mature actions when idle', () => {
+ const anchor = { x: 300, y: 500 };
+ const agents = createCreatures(1200, 3000, {
+  web: anchor,
+  webs: [anchor, { x: 800, y: 500 }],
+  flowers: [{ x: 350, y: 600 }, { x: 750, y: 600 }]
+ });
+ const [pip, spool] = agents;
+
+ // Simulate 120 frames with isIdle = false (user active)
+ for (let f = 1; f <= 120; f++) {
+  advanceCreatures(agents, 1/60, f / 60, null, 1200, 3000, false);
+  assert.equal(pip.state, 'resting');
+  assert.equal(spool.state, 'perched');
+  assert.ok(Math.hypot(pip.x - (anchor.x - 24), pip.y - (anchor.y + 27)) < 5);
+ }
+
+ // Trigger idle mode
+ pip.patrolAt = 2.0;
+ pip.actionCount = 1; // next action will be plumb_line (actionCount % 2 === 0)
+ let sawPlumbLine = false;
+ let maxPlumbY = 0;
+
+ for (let f = 121; f <= 300; f++) {
+  const t = f / 60;
+  advanceCreatures(agents, 1/60, t, null, 1200, 3000, true);
+  if (pip.state === 'plumb_line') {
+   sawPlumbLine = true;
+   maxPlumbY = Math.max(maxPlumbY, pip.y);
+  }
+ }
+
+ assert.ok(sawPlumbLine, 'Pip executed craftsman plumb-line descent during idle');
+ assert.ok(maxPlumbY > anchor.y + 50, 'Pip descended deeply along the plumb line');
+});

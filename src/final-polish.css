@@ -210,3 +210,4 @@
  .story-dock a[aria-current]:hover { background:transparent; }
  .story-dock .story-progress { bottom:2px; height:2px; }
 }
+.agents-experiment-link{display:block;text-align:center;padding:12px 24px;font-size:13px;border-bottom:1px solid var(--color-line);color:var(--color-muted)}
