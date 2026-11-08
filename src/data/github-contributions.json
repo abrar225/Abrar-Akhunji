@@ -1,53 +1,11 @@
 {
   "username": "abrar225",
   "profileUrl": "https://github.com/abrar225",
-  "fetchedAt": "2026-11-07T08:52:32.638Z",
+  "fetchedAt": "2026-11-08T09:05:53.280Z",
   "source": "GitHub GraphQL contributionCalendar",
-  "totalContributions": 3097,
-  "dailyTotalContributions": 3097,
+  "totalContributions": 3100,
+  "dailyTotalContributions": 3063,
   "days": [
-    {
-      "date": "2025-11-02",
-      "weekday": 0,
-      "count": 2,
-      "level": 1
-    },
-    {
-      "date": "2025-11-03",
-      "weekday": 1,
-      "count": 5,
-      "level": 1
-    },
-    {
-      "date": "2025-11-04",
-      "weekday": 2,
-      "count": 12,
-      "level": 2
-    },
-    {
-      "date": "2025-11-05",
-      "weekday": 3,
-      "count": 7,
-      "level": 1
-    },
-    {
-      "date": "2025-11-06",
-      "weekday": 4,
-      "count": 8,
-      "level": 1
-    },
-    {
-      "date": "2025-11-07",
-      "weekday": 5,
-      "count": 3,
-      "level": 1
-    },
-    {
-      "date": "2025-11-08",
-      "weekday": 6,
-      "count": 0,
-      "level": 0
-    },
     {
       "date": "2025-11-09",
       "weekday": 0,
@@ -2229,8 +2187,14 @@
     {
       "date": "2026-11-07",
       "weekday": 6,
-      "count": 1,
+      "count": 4,
       "level": 1
+    },
+    {
+      "date": "2026-11-08",
+      "weekday": 0,
+      "count": 0,
+      "level": 0
     }
   ]
 }
