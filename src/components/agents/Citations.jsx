@@ -6,8 +6,7 @@ import { ExternalLink, Globe2, BookOpenText, ChevronDown } from 'lucide-react';
  * Extracts domain name from a URL safely.
  */
 // Shared by the blog page; not a component, so Fast Refresh doesn't own it.
-// eslint-disable-next-line react-refresh/only-export-components
-export function extractDomain(url) {
+function extractDomain(url) {
   try {
     const parsed = new URL(url);
     return parsed.hostname.replace(/^www\./, '');
@@ -55,7 +54,7 @@ export function extractSourcesFromMarkdown(markdown) {
 /**
  * Favicon renderer with Google's favicon service fallback to Lucide Globe2.
  */
-export function CitationFavicon({ url, className = '' }) {
+function CitationFavicon({ url, className = '' }) {
   const [hasError, setHasError] = useState(false);
   const domain = extractDomain(url);
 
@@ -106,7 +105,7 @@ export function CitationStack({ citations = [], limit = 3, className = '' }) {
 /**
  * Individual Citation Row in the disclosure list.
  */
-export function CitationRow({ citation, index, idPrefix }) {
+function CitationRow({ citation, index, idPrefix }) {
   const targetId = `${idPrefix}-${citation.id}`;
 
   return (

@@ -1,6 +1,5 @@
 export const SITE_URL = 'https://abrarakhunji.com';
 export const SITE_NAME = 'Abrar Akhunji';
-export const AUTHOR_NAME = 'Abrar Akhunji';
 export const AUTHOR_ROLE = 'AI & Full-Stack Engineer';
 export const PERSON_ID = `${SITE_URL}/#person`;
 export const ORGANIZATION_ID = `${SITE_URL}/#organization`;

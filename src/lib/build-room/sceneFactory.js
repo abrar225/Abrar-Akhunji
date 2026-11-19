@@ -3,7 +3,7 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
 const ROOT = '/assets/build-room/';
-export const PRODUCT_IDS = ['fixo-flow', 'packetlark', 'framecast-studio'];
+const PRODUCT_IDS = ['fixo-flow', 'packetlark', 'framecast-studio'];
 export const CAMERA_POSES = {
   hero: { position: [7.6, 5.8, 12.6], target: [-4.0, .95, 0] },
   brief: { position: [6.8, 7.5, 10], target: [-3.2, 1.0, 0] },

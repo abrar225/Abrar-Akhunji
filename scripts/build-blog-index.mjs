@@ -140,10 +140,23 @@ const payload = {
   posts,
 };
 
+const latestFile = path.join(outDir, 'blog-latest.json');
+const latestPayload = {
+  generatedAt: payload.generatedAt,
+  count: Math.min(6, posts.length),
+  posts: posts.slice(0, 6).map((post) => ({
+    slug: post.slug,
+    title: post.title,
+    date: post.date,
+    description: post.description,
+  })),
+};
+
 if (checkOnly) {
   console.log(`[content] ${posts.length} posts validated.`);
 } else {
   fs.mkdirSync(outDir, { recursive: true });
   fs.writeFileSync(outFile, `${JSON.stringify(payload, null, 2)}\n`, 'utf8');
+  fs.writeFileSync(latestFile, `${JSON.stringify(latestPayload, null, 2)}\n`, 'utf8');
   console.log(`[content] ${posts.length} posts validated → ${path.relative(root, outFile)}`);
 }

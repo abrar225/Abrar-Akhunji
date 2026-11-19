@@ -16,7 +16,7 @@ import { useTheme } from '../lib/useTheme';
 import { featuredProjects, selectedProject, projectPath, RESUME, EMAIL } from '../lib/projects';
 import data from '../data/portfolio.json';
 import services from '../data/services.json';
-import { getLatestBlogs } from '../lib/blogUtils';
+import latestBlogsData from '../generated/blog-latest.json';
 import { postPath } from '../lib/content/urls';
 
 const BuildRoomCanvas = lazy(() => import('../components/build-room/BuildRoomCanvas'));
@@ -68,7 +68,7 @@ export default function Home() {
     if (e.key === 'ArrowRight') n = (i + 1) % featuredProjects.length; if (e.key === 'ArrowLeft') n = (i + featuredProjects.length - 1) % featuredProjects.length; if (e.key === 'Home') n = 0; if (e.key === 'End') n = featuredProjects.length - 1;
     if (n !== undefined) { e.preventDefault(); select(featuredProjects[n].slug); e.currentTarget.querySelectorAll('button')[n].focus(); }
   };
-  const latest = getLatestBlogs(3);
+  const latest = latestBlogsData.posts.slice(0, 3);
   const projectIndex = featuredProjects.findIndex(p => p.id === project.id);
   const stepProject = direction => select(featuredProjects[(projectIndex + direction + featuredProjects.length) % featuredProjects.length].slug);
   return <main ref={pageRef} className="build-home" id="main-content">

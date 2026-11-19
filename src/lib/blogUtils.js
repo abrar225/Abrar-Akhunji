@@ -23,7 +23,7 @@ const LOADERS = Object.fromEntries(
   Object.entries(RAW_POSTS).map(([filePath, load]) => [filePath.split('/').pop(), load])
 );
 
-export class BlogLoadError extends Error {
+class BlogLoadError extends Error {
   constructor(message, { cause } = {}) {
     super(message);
     this.name = 'BlogLoadError';
@@ -34,10 +34,6 @@ export class BlogLoadError extends Error {
 
 export function getAllBlogs() {
   return POSTS;
-}
-
-export function getLatestBlogs(count = 4) {
-  return POSTS.slice(0, count);
 }
 
 export function getBlogBySlug(slug) {
