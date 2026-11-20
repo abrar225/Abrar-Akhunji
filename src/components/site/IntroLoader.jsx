@@ -42,7 +42,7 @@ export default function IntroLoader({ onComplete }) {
         if (instant || reduced.matches) { end(); return; }
         node.dataset.phase = 'leaving';
         // Fade through to the real workbench; keep the page at its original scroll position.
-        gsap.to(node, { opacity: 0, duration: .55, ease: 'power2.inOut', onComplete: end });
+        gsap.to(node, { opacity: 0, duration: .28, ease: 'power2.inOut', onComplete: end });
       });
     };
     const keyboard = event => {
@@ -52,7 +52,7 @@ export default function IntroLoader({ onComplete }) {
     window.addEventListener('keydown', keyboard, true);
     reduced.addEventListener('change', preference);
     // Never leave a blocking curtain if an asset or animation clock stalls.
-    const deadline = setTimeout(() => finish.current(true), 8500);
+    const deadline = setTimeout(() => finish.current(true), 3900);
     const start = () => {
       if (disposed || leaving) return;
       context.add(() => {
@@ -62,23 +62,23 @@ export default function IntroLoader({ onComplete }) {
         gsap.set(letters, { opacity: 0, yPercent: 35 });
 
         timeline = gsap.timeline({ onComplete: () => finish.current() });
-        const entrances = [0, .15, .8, 1, 1.65, 1.8];
-        groups.forEach((group, i) => timeline.to(group, { opacity: 1, yPercent: 0, duration: 1, stagger: .025, ease: 'power2.out' }, entrances[i]));
+        const entrances = [0, .1, .35, .45, .7, .8];
+        groups.forEach((group, i) => timeline.to(group, { opacity: 1, yPercent: 0, duration: .55, stagger: .014, ease: 'power2.out' }, entrances[i]));
 
         const counter = { value: 0 };
         const percentage = node.querySelector('.intro-percentage');
         const bar = node.querySelector('.intro-progress-fill');
-        timeline.to(counter, { value: 100, duration: 3.8, ease: 'power1.inOut', onUpdate: () => {
+        timeline.to(counter, { value: 100, duration: 1.85, ease: 'power1.inOut', onUpdate: () => {
           percentage.textContent = `${String(Math.floor(counter.value)).padStart(2, '0')}%`;
           bar.style.transform = `scaleX(${counter.value / 100})`;
         }, onComplete: () => { node.dataset.loaded = 'true'; } }, 0);
-        timeline.to(letters, { opacity: 0, yPercent: -15, duration: .6, stagger: { amount: .5, from: 'end' }, ease: 'power2.inOut' }, 4.1);
+        timeline.to(letters, { opacity: 0, yPercent: -15, duration: .25, stagger: { amount: .2, from: 'end' }, ease: 'power2.inOut' }, 2.05);
 
       });
     };
-    // Wait briefly for the two local typefaces, without letting a missing font trap the visitor.
-    const fontDeadline = setTimeout(start, 650);
-    Promise.allSettled([document.fonts.load('600 48px Schoolbell'), document.fonts.load('700 100px "Intro Counter"')]).then(() => {
+    // Wait briefly for the reveal typeface, with a deadline on slow connections.
+    const fontDeadline = setTimeout(start, 220);
+    Promise.allSettled([document.fonts.load('700 48px Bricolage')]).then(() => {
       clearTimeout(fontDeadline);
       if (node.dataset.phase !== 'playing') start();
     });

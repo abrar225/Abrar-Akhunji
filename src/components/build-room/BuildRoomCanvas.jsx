@@ -39,6 +39,7 @@ export default function BuildRoomCanvas({ theme, project, phase, inspection, exp
       const el = document.querySelector(`[data-scene="${key}"]`);
       return el ? el.getBoundingClientRect().top + window.scrollY - 82 : 0;
     }); };
+    const from = new THREE.Vector3(), to = new THREE.Vector3();
     const updateCamera = () => {
       const state = runtime.current;
       if (!state || state.reduced || mobile || controls.enabled) return;
@@ -47,8 +48,8 @@ export default function BuildRoomCanvas({ theme, project, phase, inspection, exp
       const t = THREE.MathUtils.clamp((y - stops[i]) / Math.max(1, stops[i+1] - stops[i]), 0, 1);
       const eased = t * t * (3 - 2 * t);
       const a = CAMERA_POSES[anchors[i]], b = CAMERA_POSES[anchors[i+1]];
-      camera.position.lerpVectors(new THREE.Vector3(...a.position), new THREE.Vector3(...b.position), eased);
-      target.lerpVectors(new THREE.Vector3(...a.target), new THREE.Vector3(...b.target), eased);
+      camera.position.lerpVectors(from.fromArray(a.position), to.fromArray(b.position), eased);
+      target.lerpVectors(from.fromArray(a.target), to.fromArray(b.target), eased);
       room.lamp.rotation.z = -.12 + .25 * scrollState.progress;
       invalidate();
     };

@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -20,7 +22,10 @@ jobs:
       - run: npm run lint
       - run: npm run validate:content
       - run: npm test
-      - run: npm run build
+      - run: PORTFOLIO_PUBLISH_VERSIONS=1 npm run build:release
+
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:versions
 
       - name: Verify generated SEO artifacts
         run: |
@@ -32,3 +37,4 @@ jobs:
           test -f dist/hire/index.html
           test -f "dist/blog/index.html"
           ! grep -q "/blog/2026-" dist/sitemap.xml
+          ! grep -q "/versions/" dist/sitemap.xml dist/feed.xml dist/llms.txt dist/llms-full.txt

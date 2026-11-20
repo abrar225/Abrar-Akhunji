@@ -1,0 +1,31 @@
+[
+  {
+    "version": 1,
+    "slug": "serif",
+    "name": "Serif Studio",
+    "commit": "b6a6217e2aa1b52a6900ecddac41568cbd3fc8cc",
+    "date": "2026-04-29"
+  },
+  {
+    "version": 2,
+    "slug": "cyberterminal",
+    "name": "Terminal Pulse",
+    "commit": "2c3376d68aacfdbf0a266ed370afa02083570d30",
+    "date": "2026-07-22"
+  },
+  {
+    "version": 3,
+    "slug": "halide",
+    "name": "Halide Signal",
+    "commit": "8bffe4b75356cbc34c836bebeffdb057a3e4a062",
+    "date": "2026-10-25"
+  },
+  {
+    "version": 4,
+    "slug": "zero-to-built",
+    "name": "Build Room",
+    "commit": "23e12ff71db5923f7303aea154a6c47f097c4030",
+    "date": "2026-11-19",
+    "current": true
+  }
+]

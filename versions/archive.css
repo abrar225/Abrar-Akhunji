@@ -1,0 +1,43 @@
+#portfolio-archive {
+  position: fixed;
+  inset: auto auto max(1rem, env(safe-area-inset-bottom)) 1rem;
+  z-index: 2147483647;
+  color-scheme: dark;
+  font: 500 .875rem/1.4 system-ui, sans-serif;
+  color: #f7f6f1;
+}
+#portfolio-archive details {
+  position: relative;
+}
+#portfolio-archive summary, #portfolio-archive ul {
+  border: 1px solid #54565d;
+  border-radius: .75rem;
+  background: #17191f;
+  box-shadow: 0 .5rem 1.5rem #0004;
+}
+#portfolio-archive summary {
+  cursor: pointer;
+  padding: .75rem;
+}
+#portfolio-archive ul {
+  position: absolute;
+  bottom: 100%;
+  width: min(16rem, calc(100vw - 2rem));
+  max-height: 58vh;
+  overflow: auto;
+  list-style: none;
+  margin: 0 0 .4rem;
+  padding: .35rem;
+}
+#portfolio-archive a, #portfolio-archive small {
+  display: block;
+}
+#portfolio-archive a {
+  padding: .55rem .65rem;
+  border-radius: .4rem;
+  color: inherit;
+  text-decoration: none;
+}
+#portfolio-archive a:hover, #portfolio-archive a[aria-current] { background: #30323a; }
+#portfolio-archive small { color: #c1c4ce; }
+#portfolio-archive :focus-visible { outline: 2px solid #aebcff; outline-offset: -2px; }

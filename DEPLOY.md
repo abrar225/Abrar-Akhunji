@@ -40,7 +40,7 @@ Requires the credentials created by the Hostinger MCP flow at `~/.config/hosting
 npm run deploy:hostinger
 ```
 
-The script builds `dist.zip` fresh, uploads it with TUS and triggers the Hostinger deploy. It does not reuse a stale archive.
+The deployment command builds the current site and the pinned portfolio archives, then uploads a fresh `dist.zip` with TUS. Follow the two-step [version archive rollout](versions/README.md#publishing-on-hostinger) to verify the archived routes before enabling the navigation switcher.
 
 ### Option B — Upload manually
 

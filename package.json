@@ -19,14 +19,17 @@
     "test": "node --test tests/unit/*.test.js",
     "test:e2e": "npm run build && node tests/e2e/run.mjs",
     "validate:content": "node scripts/build-blog-index.mjs --check",
-    "deploy:hostinger": "npm run build && node scripts/deploy-hostinger.mjs",
+    "deploy:hostinger": "npm run build:release && node scripts/deploy-hostinger.mjs",
     "test:design": "node tests/e2e/design.mjs",
     "test:editorial": "npm run build && node tests/e2e/editorial.mjs",
     "test:polish": "npm run build && node tests/e2e/polish.mjs",
     "test:workshop": "node tests/e2e/workshop.mjs",
     "github:refresh": "node scripts/fetch-github.mjs",
     "assets:render": "ego-browser nodejs < tools/export-build-room-assets.mjs",
-    "assets:optimize": "uv run --with pillow --with fonttools --with brotli python scripts/prepare-room-assets.py && uv run --with pillow python scripts/asset-manifest.py"
+    "assets:optimize": "uv run --with pillow --with fonttools --with brotli python scripts/prepare-room-assets.py && uv run --with pillow python scripts/asset-manifest.py",
+    "build:versions": "node scripts/build-versions.mjs",
+    "build:release": "node scripts/build-release.mjs",
+    "test:versions": "node tests/e2e/versions.mjs"
   },
   "dependencies": {
     "framer-motion": "^12.23.24",
