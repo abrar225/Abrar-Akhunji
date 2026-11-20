@@ -1,10 +1,9 @@
-import { execFileSync, spawn } from 'node:child_process';
+import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { cp, mkdir, mkdtemp, readFile, readdir, rename, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { pipeline } from 'node:stream/promises';
 
 const root = resolve(import.meta.dirname, '..');
 const versions = JSON.parse(await readFile(join(root, 'versions/manifest.json'), 'utf8'));
@@ -24,13 +23,13 @@ function run(command, args, cwd, env) {
 }
 
 async function checkout(commit, directory) {
-  const git = spawn('git', ['archive', commit], { cwd: root, stdio: ['ignore', 'pipe', 'inherit'] });
-  const tar = spawn('tar', ['-xf', '-', '-C', directory], { stdio: ['pipe', 'inherit', 'inherit'] });
-  const done = child => new Promise((resolve, reject) => {
-    child.once('error', reject);
-    child.once('close', code => code === 0 ? resolve() : reject(new Error(`Archive extraction exited with ${code}`)));
-  });
-  await Promise.all([pipeline(git.stdout, tar.stdin), done(git), done(tar)]);
+  const archive = join(directory, '.snapshot.tar');
+  try {
+    run('git', ['archive', '--output', archive, commit], root, process.env);
+    run('tar', ['-xf', archive, '-C', directory], directory, process.env);
+  } finally {
+    await rm(archive, { force: true });
+  }
 }
 
 async function edit(directory, path, transform) {
