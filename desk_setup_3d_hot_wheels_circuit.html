@@ -1,0 +1,4157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Desk Setup 3D — Hot Wheels Micro Circuit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <style>
+    :root {
+      --glass-bg: rgba(15, 18, 25, 0.72);
+      --glass-border: rgba(255, 255, 255, 0.14);
+      --accent: #ff6210;
+      --accent-2: #00d2ff;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #0d1117;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-main);
+    }
+
+    #canvas-container {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Glassmorphic HUD Panels */
+    .hud-panel {
+      background: var(--glass-bg);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    /* Top Bar */
+    #top-hud {
+      position: fixed;
+      top: 14px;
+      left: 14px;
+      right: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      pointer-events: none;
+      z-index: 20;
+    }
+
+    .brand-card {
+      pointer-events: auto;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, #ff6a18, #ff3d00);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 16px;
+      box-shadow: 0 4px 14px rgba(255, 98, 16, 0.45);
+      flex-shrink: 0;
+    }
+
+    .brand-title {
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
+      display: inline-block;
+      animation: pulseDot 1.6s infinite;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.45; transform: scale(0.8); }
+    }
+
+    /* Telemetry Strip */
+    .telemetry-card {
+      pointer-events: auto;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .stat-box {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .stat-label {
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .stat-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 17px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.15;
+    }
+
+    .stat-val.accent {
+      color: #ff8533;
+    }
+
+    .zone-pill {
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(255, 98, 16, 0.16);
+      border: 1px solid rgba(255, 98, 16, 0.42);
+      color: #ffab70;
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+
+    .nitro-wrap {
+      width: 82px;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      overflow: hidden;
+      margin-top: 4px;
+    }
+
+    #nitro-bar {
+      width: 100%;
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #ff6210, #00e5ff);
+      transition: width 0.08s linear;
+    }
+
+    /* Bottom Dock Controls */
+    #bottom-hud {
+      position: fixed;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      max-width: calc(100vw - 24px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    .dock-row {
+      pointer-events: auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 10px;
+    }
+
+    .dock-sep {
+      width: 1px;
+      height: 24px;
+      background: rgba(255, 255, 255, 0.14);
+      margin: 0 4px;
+    }
+
+    .btn {
+      appearance: none;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.07);
+      color: #e2e8f0;
+      font-family: inherit;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: 11px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.18s ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.16);
+      transform: translateY(-1px);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn.active {
+      background: linear-gradient(135deg, #ff6a18, #e84e00);
+      border-color: rgba(255, 168, 107, 0.65);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(255, 98, 16, 0.42);
+    }
+
+    .btn.active-cyan {
+      background: linear-gradient(135deg, #0284c7, #06b6d4);
+      border-color: rgba(125, 211, 252, 0.65);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(6, 182, 212, 0.35);
+    }
+
+    .hint-bar {
+      font-size: 11px;
+      color: rgba(226, 232, 240, 0.85);
+      background: rgba(12, 15, 22, 0.65);
+      backdrop-filter: blur(10px);
+      padding: 5px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: center;
+    }
+
+    .hint-bar kbd {
+      background: rgba(255, 255, 255, 0.14);
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: #ffab70;
+    }
+
+    /* Hardware Inspector Card (on click) */
+    #inspector-card {
+      position: fixed;
+      top: 84px;
+      left: 14px;
+      width: 286px;
+      max-width: calc(100vw - 28px);
+      padding: 14px 16px;
+      z-index: 25;
+      opacity: 0;
+      transform: translateY(-8px) scale(0.98);
+      pointer-events: none;
+      transition: all 0.22s ease;
+    }
+
+    #inspector-card.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .insp-tag {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #38bdf8;
+      text-transform: uppercase;
+    }
+
+    .insp-title {
+      font-size: 15px;
+      font-weight: 800;
+      margin-top: 3px;
+    }
+
+    .insp-desc {
+      font-size: 12px;
+      line-height: 1.5;
+      color: #cbd5e1;
+      margin-top: 6px;
+    }
+
+    .insp-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      border: none;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    /* Touch Manual Drive Pad */
+    #touch-controls {
+      position: fixed;
+      bottom: 112px;
+      left: 14px;
+      right: 14px;
+      display: none;
+      justify-content: space-between;
+      align-items: flex-end;
+      pointer-events: none;
+      z-index: 22;
+    }
+
+    #touch-controls.show {
+      display: flex;
+    }
+
+    .touch-cluster {
+      display: flex;
+      gap: 8px;
+      pointer-events: auto;
+    }
+
+    .touch-btn {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: rgba(15, 18, 25, 0.78);
+      backdrop-filter: blur(10px);
+      color: #fff;
+      font-size: 18px;
+      font-weight: 800;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+    }
+
+    .touch-btn.nitro {
+      width: 66px;
+      background: linear-gradient(135deg, rgba(255, 98, 16, 0.85), rgba(0, 210, 255, 0.85));
+      font-size: 12px;
+    }
+
+    /* Error Toast */
+    #error-box {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px 24px;
+      max-width: 420px;
+      display: none;
+      z-index: 99;
+      text-align: center;
+    }
+
+    @media (max-width: 780px) {
+      .brand-sub, .zone-pill, .dock-sep, .hint-bar {
+        display: none;
+      }
+      .telemetry-card {
+        gap: 12px;
+        padding: 8px 12px;
+      }
+      .stat-val {
+        font-size: 14px;
+      }
+      .btn {
+        padding: 7px 9px;
+        font-size: 11px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Full-Viewport Interactive WebGL Canvas -->
+  <div id="canvas-container"></div>
+
+  <!-- Top Telemetry & Branding HUD -->
+  <div id="top-hud">
+    <div class="hud-panel brand-card">
+      <div class="brand-badge">HW</div>
+      <div>
+        <div class="brand-title">Desk Setup 3D Circuit</div>
+        <div class="brand-sub"><span class="live-dot"></span>Live Synced Coding &amp; Hot Wheels Slot Sim</div>
+      </div>
+    </div>
+
+    <div class="hud-panel telemetry-card">
+      <div class="zone-pill" id="zone-pill">START / FINISH</div>
+      <div class="stat-box">
+        <span class="stat-label">Scale Speed</span>
+        <span class="stat-val accent" id="speed-val">0 <small style="font-size:10px;opacity:.7">KM/H</small></span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-label">Lap</span>
+        <span class="stat-val" id="lap-val">1</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-label">Nitro</span>
+        <div class="nitro-wrap"><div id="nitro-bar"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Click-to-Inspect Desk Hardware Popup -->
+  <div id="inspector-card" class="hud-panel">
+    <button class="insp-close" id="insp-close" aria-label="Close">✕</button>
+    <div class="insp-tag" id="insp-tag">HARDWARE</div>
+    <div class="insp-title" id="insp-title">Apple Mac mini M4</div>
+    <div class="insp-desc" id="insp-desc">Click any desk component to inspect its real-world setup details.</div>
+  </div>
+
+  <!-- Touch Manual Controls (Shown in Manual Mode) -->
+  <div id="touch-controls">
+    <div class="touch-cluster">
+      <button class="touch-btn" id="t-left" aria-label="Left Lane">◀</button>
+      <button class="touch-btn" id="t-right" aria-label="Right Lane">▶</button>
+    </div>
+    <div class="touch-cluster">
+      <button class="touch-btn" id="t-brake" aria-label="Brake">▼</button>
+      <button class="touch-btn" id="t-gas" aria-label="Accelerate">▲</button>
+      <button class="touch-btn nitro" id="t-nitro" aria-label="Nitro">NITRO</button>
+    </div>
+  </div>
+
+  <!-- Bottom Camera, Theme, Mode & Audio Control Dock -->
+  <div id="bottom-hud">
+    <div class="hud-panel dock-row">
+      <button class="btn active" data-cam="chase">2. Chase</button>
+      <button class="btn" data-cam="pov">1. Driver POV</button>
+      <button class="btn" data-cam="top">3. Top-Down</button>
+      <button class="btn" data-cam="orbit">4. Free Orbit</button>
+      <button class="btn" data-cam="cinematic">5. Cinematic</button>
+      <div class="dock-sep"></div>
+      <button class="btn active-cyan" id="btn-autopilot">🤖 Autopilot</button>
+      <button class="btn" id="btn-livery">🏎️ Livery</button>
+      <button class="btn" id="btn-audio">🔇 Audio</button>
+      <div class="dock-sep"></div>
+      <button class="btn active" data-theme="studio">☀️ Studio</button>
+      <button class="btn" data-theme="terrace">🌅 Terrace</button>
+      <button class="btn" data-theme="cyber">🌃 Cyber</button>
+    </div>
+    <div class="hint-bar">
+      Keys: <kbd>1</kbd>–<kbd>5</kbd> Cameras • <kbd>M</kbd> Auto/Manual • <kbd>W/S</kbd> Gas/Brake • <kbd>A/D</kbd> Lane • <kbd>Space</kbd> Nitro • Click desk gear to inspect
+    </div>
+  </div>
+
+  <!-- Non-blocking Error Box -->
+  <div id="error-box" class="hud-panel">
+    <h3 style="margin-bottom:8px;color:#ff6a18;">WebGL Initialization Notice</h3>
+    <p id="error-msg" style="font-size:13px;color:#cbd5e1;line-height:1.5;"></p>
+  </div>
+
+  <script>
+  (() => {
+    'use strict';
+
+    // ==========================================================================
+    // GLOBAL STATE & CONFIGURATION
+    // ==========================================================================
+    let scene, camera, renderer, clock;
+    const container = document.getElementById('canvas-container');
+
+    const LIVERIES = [
+      { name: 'Portronics White/Orange', body: 0xf4f6f9, stripe: 0xff6210, rims: 0xff7a29 },
+      { name: 'Hot Wheels Classic Blue', body: 0x0066ff, stripe: 0xff6a14, rims: 0xdbeafe },
+      { name: 'Carbon Stealth Crimson',  body: 0x1b1f27, stripe: 0xef233c, rims: 0xe2e8f0 },
+      { name: 'Cyber Emerald Hyper',     body: 0x059669, stripe: 0xfacc15, rims: 0xfef08a }
+    ];
+
+    const carState = {
+      group: null,
+      bodyMat: null,
+      stripeMat: null,
+      rimMat: null,
+      liveryIdx: 0,
+      s: 0,
+      speed: 26,
+      targetSpeed: 28,
+      laneOffset: 0,
+      steerAngle: 0,
+      nitro: 100,
+      boosting: false,
+      boostTimer: 0,
+      autopilot: true,
+      lap: 1,
+      lastLapS: 0,
+      currentZone: 'START / FINISH',
+      worldPos: new THREE.Vector3(),
+      worldForward: new THREE.Vector3(0, 0, 1),
+      worldUp: new THREE.Vector3(0, 1, 0),
+      wheels: [],
+      frontPivots: [],
+      flameMeshes: [],
+      headlightCones: [],
+      headlightSpot: null,
+      particles: null,
+      particleData: [],
+      particleIdx: 0
+    };
+
+    const camState = {
+      mode: 'chase', // 'pov' | 'chase' | 'top' | 'orbit' | 'cinematic'
+      currentPos: new THREE.Vector3(0, 42, 74),
+      currentLook: new THREE.Vector3(0, 4, 0),
+      orbitYaw: 0.32,
+      orbitPitch: 0.56,
+      orbitDist: 92,
+      orbitTarget: new THREE.Vector3(0, 4, 0),
+      dragging: false,
+      rightDrag: false,
+      lastX: 0,
+      lastY: 0,
+      pinchDist: 0,
+      cinemaTimer: 0,
+      cinemaIdx: 0
+    };
+
+    const inputState = {
+      gas: false,
+      brake: false,
+      left: false,
+      right: false,
+      nitro: false
+    };
+
+    const reactive = {
+      screenCanvas: null,
+      screenCtx: null,
+      screenTexture: null,
+      screenMat: null,
+      screenTimer: 0,
+      keys: [],
+      keyMap: {},
+      keyboardLeds: [],
+      coding: {
+        scripts: [
+          'const track = buildHotWheelsSpline({ bank: true, loop360: true });',
+          'syncHardware({ macMini: "M4", monitor: "ZEBRONICS 27", kb: "Bubble 3.0" });',
+          'await calibratePBR({ clearcoat: 1.0, anisotropy: 8, shadows: "PCFSoft" });',
+          'export const portfolioHero = mountDeskCircuit({ autopilot: true });',
+          'git commit -m "polish: photoreal mouse, synced typing & track alignment"'
+        ],
+        scriptIdx: 0,
+        charIdx: 0,
+        typedText: '',
+        logLines: [
+          '✓ Three.js r128 WebGL2 renderer initialized (ACESFilmic)',
+          '✓ Right-handed Frenet track basis verified (det = +1.00)',
+          '✓ ZEBRONICS Pure Pixel 27" live canvas synced to Portronics KB'
+        ],
+        nextKeyTimer: 0.2,
+        diffAdded: 5181,
+        diffRemoved: 5129,
+        scrollPulse: 0
+      },
+      mouseScroll: null,
+      mouseGlowMat: null,
+      macLedMat: null,
+      usbPulseMesh: null,
+      usbCurve: null,
+      usbPulseT: 0,
+      earbudChevrons: [],
+      looseEarbud: null,
+      looseEarbudBase: new THREE.Vector3(-35.5, 0.72, 15.2),
+      watchHands: { hour: null, min: null, sec: null },
+      boosterWheels: [],
+      boosterChevrons: [],
+      startLights: [],
+      inspectables: []
+    };
+
+    const track = {
+      samples: [],
+      totalLength: 1,
+      startS: 0,
+      boosters: []
+    };
+
+    const envObjects = {
+      theme: 'studio',
+      group: null,
+      hemi: null,
+      keyLight: null,
+      fillLight: null,
+      rimLight: null,
+      skyDome: null,
+      floorMat: null
+    };
+
+    const audioSys = {
+      ctx: null,
+      enabled: false,
+      osc: null,
+      subOsc: null,
+      gain: null,
+      filter: null
+    };
+
+    // ==========================================================================
+    // PROCEDURAL TEXTURE & SHAPE HELPERS (ZERO EXTERNAL IMAGE URLs)
+    // ==========================================================================
+
+    function drawRoundRect(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+    }
+
+    function createRoundedRectShape(w, h, r) {
+      const s = new THREE.Shape();
+      const hw = w / 2, hh = h / 2;
+      const rad = Math.min(r, hw, hh);
+      s.moveTo(-hw + rad, -hh);
+      s.lineTo(hw - rad, -hh);
+      s.quadraticCurveTo(hw, -hh, hw, -hh + rad);
+      s.lineTo(hw, hh - rad);
+      s.quadraticCurveTo(hw, hh, hw - rad, hh);
+      s.lineTo(-hw + rad, hh);
+      s.quadraticCurveTo(-hw, hh, -hw, hh - rad);
+      s.lineTo(-hw, -hh + rad);
+      s.quadraticCurveTo(-hw, -hh, -hw + rad, -hh);
+      return s;
+    }
+
+    /** Procedural PMREM studio environment map so aluminum, clearcoat & glass reflect realistically */
+    function createStudioEnvironmentMap(theme) {
+      const pmrem = new THREE.PMREMGenerator(renderer);
+      const envScene = new THREE.Scene();
+
+      const palette = theme === 'cyber'
+        ? { bg: 0x090f24, top: 0x1e3a8a, left: 0x00e5ff, right: 0xff5a1f, floor: 0x0f172a }
+        : theme === 'terrace'
+        ? { bg: 0x3b2a3c, top: 0xffb36b, left: 0xffd7a8, right: 0x8b5cf6, floor: 0x4b3b36 }
+        : { bg: 0xdde5f0, top: 0xffffff, left: 0xfff5e6, right: 0xcbe4ff, floor: 0x9aa4b2 };
+
+      envScene.background = new THREE.Color(palette.bg);
+      const addLightCard = (w, h, color, pos, rot) => {
+        const m = new THREE.Mesh(
+          new THREE.PlaneGeometry(w, h),
+          new THREE.MeshBasicMaterial({ color, side: THREE.DoubleSide })
+        );
+        m.position.set(...pos);
+        m.rotation.set(...rot);
+        envScene.add(m);
+      };
+      addLightCard(40, 24, palette.top,   [0, 22, 0],   [Math.PI / 2, 0, 0]);
+      addLightCard(30, 18, palette.left,  [-28, 10, 6], [0, Math.PI / 2, 0]);
+      addLightCard(30, 18, palette.right, [28, 10, -6], [0, -Math.PI / 2, 0]);
+      addLightCard(50, 50, palette.floor, [0, -18, 0],  [-Math.PI / 2, 0, 0]);
+
+      const rt = pmrem.fromScene(envScene, 0.04);
+      pmrem.dispose();
+      return rt.texture;
+    }
+
+    /** Matte cool-grey laminate tabletop with micro-speckle & soft baked AO contact shadows */
+    function createDeskTopTexture() {
+      const c = document.createElement('canvas');
+      c.width = 1024;
+      c.height = 540;
+      const ctx = c.getContext('2d');
+
+      const baseGrad = ctx.createLinearGradient(0, 0, 0, c.height);
+      baseGrad.addColorStop(0, '#c8ced4');
+      baseGrad.addColorStop(0.5, '#d1d6db');
+      baseGrad.addColorStop(1, '#c5cbd1');
+      ctx.fillStyle = baseGrad;
+      ctx.fillRect(0, 0, c.width, c.height);
+
+      for (let i = 0; i < 28000; i++) {
+        const x = Math.random() * c.width;
+        const y = Math.random() * c.height;
+        const a = Math.random() * 0.025;
+        ctx.fillStyle = Math.random() > 0.5 ? `rgba(255,255,255,${a})` : `rgba(32,40,48,${a})`;
+        ctx.fillRect(x, y, 1.5, 1.5);
+      }
+
+      const toU = (x) => ((x + 60) / 120) * c.width;
+      const toV = (z) => ((z + 31) / 62) * c.height;
+
+      const softShadow = (wx, wz, rx, rz, alpha) => {
+        const cx = toU(wx), cy = toV(wz);
+        const r = Math.max((rx / 120) * c.width, (rz / 62) * c.height);
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.scale(((rx / 120) * c.width) / r, ((rz / 62) * c.height) / r);
+        const g = ctx.createRadialGradient(0, 0, r * 0.15, 0, 0, r);
+        g.addColorStop(0, `rgba(18, 22, 28, ${alpha})`);
+        g.addColorStop(1, 'rgba(18, 22, 28, 0)');
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(0, 0, r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      };
+
+      // Grounding ambient occlusion pools beneath each hardware item
+      softShadow(-2, 17.5, 21.5, 9.0, 0.28);     // Portronics Keyboard
+      softShadow(34, -9.0, 9.2, 9.2, 0.30);      // Mac mini M4
+      softShadow(20.8, -3.5, 5.2, 5.2, 0.18);    // Silver USB Hub
+      softShadow(39.0, 17.5, 13.5, 11.5, 0.20);  // Mousepad
+      softShadow(-43.5, 4.0, 7.6, 4.6, 0.22);    // Watch
+      softShadow(-34.0, 9.2, 4.4, 4.0, 0.26);    // Earbuds Case
+      softShadow(-35.5, 15.2, 2.2, 1.6, 0.20);   // Loose Earbud
+      softShadow(-4.0, -19.5, 10.5, 5.5, 0.24);  // Monitor stand & brick
+      softShadow(-47.5, -26.5, 10.0, 4.2, 0.24); // Power strip
+
+      const tex = new THREE.CanvasTexture(c);
+      tex.encoding = THREE.sRGBEncoding;
+      tex.anisotropy = 8;
+      return tex;
+    }
+
+    /** Subtle procedural roughness map so tabletop & aluminum catch soft realistic light variation */
+    function createMicroRoughnessTexture(baseVal = 155, variance = 24) {
+      const c = document.createElement('canvas');
+      c.width = 256;
+      c.height = 256;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = `rgb(${baseVal},${baseVal},${baseVal})`;
+      ctx.fillRect(0, 0, 256, 256);
+      for (let i = 0; i < 8000; i++) {
+        const v = Math.max(0, Math.min(255, baseVal + (Math.random() - 0.5) * variance));
+        ctx.fillStyle = `rgb(${v},${v},${v})`;
+        ctx.fillRect(Math.random() * 256, Math.random() * 256, 2, 2);
+      }
+      const tex = new THREE.CanvasTexture(c);
+      tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+      tex.repeat.set(4, 2);
+      return tex;
+    }
+
+    /** Soft circular glow sprite texture so nitro/sparks never look like blocky squares */
+    function createGlowSpriteTexture() {
+      const c = document.createElement('canvas');
+      c.width = 64;
+      c.height = 64;
+      const ctx = c.getContext('2d');
+      const g = ctx.createRadialGradient(32, 32, 2, 32, 32, 30);
+      g.addColorStop(0.0, 'rgba(255,255,255,1.0)');
+      g.addColorStop(0.32, 'rgba(255,240,210,0.85)');
+      g.addColorStop(0.7, 'rgba(255,160,60,0.22)');
+      g.addColorStop(1.0, 'rgba(0,0,0,0.0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, 64, 64);
+      const tex = new THREE.CanvasTexture(c);
+      tex.encoding = THREE.sRGBEncoding;
+      return tex;
+    }
+
+    /** Layered birch plywood stripes for the exposed slab leg edges (Photo 7) */
+    function createPlywoodEdgeTexture() {
+      const c = document.createElement('canvas');
+      c.width = 128;
+      c.height = 512;
+      const ctx = c.getContext('2d');
+      const stripes = ['#d6b385', '#a98154', '#e0c094', '#9c7347', '#d8b688', '#b58b5e', '#dfbf93', '#a67b4f'];
+      const sw = c.width / stripes.length;
+      stripes.forEach((col, i) => {
+        ctx.fillStyle = col;
+        ctx.fillRect(i * sw, 0, sw + 1, c.height);
+      });
+      for (let i = 0; i < 600; i++) {
+        ctx.fillStyle = 'rgba(70,40,15,0.08)';
+        ctx.fillRect(Math.random() * c.width, Math.random() * c.height, 2, 18);
+      }
+      const tex = new THREE.CanvasTexture(c);
+      tex.encoding = THREE.sRGBEncoding;
+      return tex;
+    }
+
+    /** Warm honey-oak wood plank floor texture (Photo 7) */
+    function createWoodFloorTexture() {
+      const c = document.createElement('canvas');
+      c.width = 512;
+      c.height = 512;
+      const ctx = c.getContext('2d');
+      const plankH = 64;
+      for (let row = 0; row < 8; row++) {
+        const y = row * plankH;
+        const tone = 118 + (row % 3) * 14 + Math.random() * 10;
+        ctx.fillStyle = `rgb(${tone}, ${tone * 0.68}, ${tone * 0.42})`;
+        ctx.fillRect(0, y, 512, plankH);
+
+        for (let g = 0; g < 35; g++) {
+          ctx.strokeStyle = `rgba(60, 32, 12, ${0.06 + Math.random() * 0.08})`;
+          ctx.lineWidth = 1 + Math.random() * 1.5;
+          ctx.beginPath();
+          const gy = y + Math.random() * plankH;
+          ctx.moveTo(0, gy);
+          ctx.bezierCurveTo(170, gy + (Math.random() - 0.5) * 6, 340, gy + (Math.random() - 0.5) * 6, 512, gy);
+          ctx.stroke();
+        }
+        ctx.fillStyle = 'rgba(28, 16, 8, 0.45)';
+        ctx.fillRect(0, y, 512, 2);
+        const seamX = ((row * 193) % 420) + 45;
+        ctx.fillRect(seamX, y, 2, plankH);
+      }
+      const tex = new THREE.CanvasTexture(c);
+      tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+      tex.repeat.set(9, 9);
+      tex.encoding = THREE.sRGBEncoding;
+      return tex;
+    }
+
+    /** ZEBRONICS White Monitor Chin Graphic Texture ("Pure Pixel" + "ZEBRONICS" Photo 2) */
+    function createMonitorChinTexture() {
+      const c = document.createElement('canvas');
+      c.width = 1024;
+      c.height = 64;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#eceff2';
+      ctx.fillRect(0, 0, c.width, c.height);
+
+      // Left "Pure Pixel" mark
+      ctx.fillStyle = '#2d333b';
+      ctx.beginPath();
+      ctx.arc(38, 32, 5, 0, Math.PI * 2);
+      ctx.arc(47, 25, 3, 0, Math.PI * 2);
+      ctx.arc(47, 39, 3, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.font = '700 22px Inter, sans-serif';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('Pure Pixel', 58, 33);
+
+      // Centered ZEBRONICS logo
+      ctx.textAlign = 'center';
+      ctx.font = '800 26px Inter, sans-serif';
+      ctx.fillStyle = '#1f242b';
+      ctx.fillText('ZEBRONICS', 526, 33);
+
+      // Small circular Z icon
+      ctx.strokeStyle = '#1f242b';
+      ctx.lineWidth = 3.5;
+      ctx.beginPath();
+      ctx.arc(432, 32, 12, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.font = '900 15px Inter, sans-serif';
+      ctx.fillText('Z', 432, 33);
+
+      const tex = new THREE.CanvasTexture(c);
+      tex.encoding = THREE.sRGBEncoding;
+      tex.anisotropy = 8;
+      return tex;
+    }
+
+    /** Glossy Black Apple Logo Decal for Top of Mac mini M4 (Photo 3) */
+    function createAppleLogoTexture() {
+      const c = document.createElement('canvas');
+      c.width = 512;
+      c.height = 512;
+      const ctx = c.getContext('2d');
+      ctx.clearRect(0, 0, 512, 512);
+      ctx.save();
+      ctx.translate(256, 268);
+
+      // Crisp silhouette of Apple body
+      ctx.fillStyle = '#090a0d';
+      ctx.beginPath();
+      ctx.moveTo(0, -76);
+      ctx.bezierCurveTo(-24, -84, -68, -88, -94, -50);
+      ctx.bezierCurveTo(-124, -4, -106, 86, -64, 134);
+      ctx.bezierCurveTo(-44, 156, -24, 152, 0, 140);
+      ctx.bezierCurveTo(24, 152, 44, 156, 66, 134);
+      ctx.bezierCurveTo(88, 110, 102, 74, 108, 46);
+      ctx.bezierCurveTo(64, 30, 58, -28, 98, -50);
+      ctx.bezierCurveTo(78, -84, 34, -86, 0, -76);
+      ctx.closePath();
+      ctx.fill();
+
+      // Leaf tilted right
+      ctx.beginPath();
+      ctx.moveTo(4, -88);
+      ctx.bezierCurveTo(6, -128, 38, -158, 72, -160);
+      ctx.bezierCurveTo(72, -118, 42, -88, 4, -88);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.restore();
+      const tex = new THREE.CanvasTexture(c);
+      tex.encoding = THREE.sRGBEncoding;
+      return tex;
+    }
+
+    /** Round Keycap Legend Canvas Generator for Portronics Bubble 3.0 (Photo 4) */
+    function createKeycapTexture(main, sub, bgHex, fgHex) {
+      const c = document.createElement('canvas');
+      c.width = 128;
+      c.height = 128;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = bgHex;
+      ctx.fillRect(0, 0, 128, 128);
+
+      ctx.fillStyle = fgHex;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      if (sub) {
+        ctx.font = '700 32px Inter, sans-serif';
+        ctx.fillText(main, 64, 52);
+        ctx.fillStyle = '#3b82f6';
+        ctx.font = '600 20px Inter, sans-serif';
+        ctx.fillText(sub, 64, 90);
+      } else {
+        const size = main.length > 5 ? 24 : main.length > 2 ? 30 : 46;
+        ctx.font = `700 ${size}px Inter, sans-serif`;
+        ctx.fillText(main, 64, 66);
+      }
+      const tex = new THREE.CanvasTexture(c);
+      tex.encoding = THREE.sRGBEncoding;
+      return tex;
+    }
+
+    /** Live macOS + Codex / Abrar-Portfolio Screen Canvas with Synced Live Typing (Photo 2) */
+    function initLiveMonitorScreen() {
+      const c = document.createElement('canvas');
+      c.width = 1024;
+      c.height = 576;
+      reactive.screenCanvas = c;
+      reactive.screenCtx = c.getContext('2d');
+      reactive.screenTexture = new THREE.CanvasTexture(c);
+      reactive.screenTexture.encoding = THREE.sRGBEncoding;
+      reactive.screenTexture.anisotropy = 8;
+      updateLiveMonitorScreen(0);
+    }
+
+    function updateLiveMonitorScreen(timeSec) {
+      const ctx = reactive.screenCtx;
+      if (!ctx) return;
+      const W = 1024, H = 576;
+
+      ctx.fillStyle = '#1c1d20';
+      ctx.fillRect(0, 0, W, H);
+
+      // 1. macOS Top Menu Bar
+      const topBarGrad = ctx.createLinearGradient(0, 0, W, 0);
+      topBarGrad.addColorStop(0, '#2b2528');
+      topBarGrad.addColorStop(0.5, '#25262b');
+      topBarGrad.addColorStop(1, '#36272a');
+      ctx.fillStyle = topBarGrad;
+      ctx.fillRect(0, 0, W, 24);
+
+      ctx.fillStyle = '#f3f4f6';
+      ctx.font = '600 11px Inter, sans-serif';
+      ctx.textBaseline = 'middle';
+      ctx.textAlign = 'left';
+      ctx.fillText('   ChatGPT   File   Edit   View   Window   Help', 14, 12);
+
+      const now = new Date();
+      const clockStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      ctx.textAlign = 'right';
+      ctx.fillStyle = '#e5e7eb';
+      ctx.fillText(`26°C   Wi-Fi   🔋   Thu 19 Nov  ${clockStr}`, W - 14, 12);
+
+      // 2. Left Codex Sidebar
+      ctx.fillStyle = '#17181b';
+      ctx.fillRect(0, 24, 185, H - 24);
+      ctx.strokeStyle = 'rgba(255,255,255,0.07)';
+      ctx.beginPath(); ctx.moveTo(185, 24); ctx.lineTo(185, H); ctx.stroke();
+
+      // macOS window dots
+      ['#ff5f56', '#ffbd2e', '#27c93f'].forEach((col, i) => {
+        ctx.fillStyle = col;
+        ctx.beginPath(); ctx.arc(16 + i * 14, 42, 4.5, 0, Math.PI * 2); ctx.fill();
+      });
+
+      ctx.textAlign = 'left';
+      ctx.fillStyle = '#e5e7eb';
+      ctx.font = '700 12px Inter, sans-serif';
+      ctx.fillText('Codex', 18, 68);
+      ctx.fillStyle = '#9ca3af';
+      ctx.font = '500 10.5px Inter, sans-serif';
+      const sidebarItems = [
+        '✎  New chat', '', 'Pinned', '  Create product page Excel...',
+        '', 'Projects', '▸ Skills', '   Create website name', '   Redesign skills & resources',
+        '▸ FixoFlow', '   Analyze entire project',
+        '▾ Abrar-Portfolio', '●  Audit portfolio improvements', '   Redesign Abrar portfolio',
+        '   Build live agent page', '   Recreate loader & custom...',
+        '▸ PolarLad', '▸ Rea-API-Studio', '   Explain the entire project'
+      ];
+      sidebarItems.forEach((item, i) => {
+        const y = 92 + i * 21;
+        if (item.startsWith('●')) {
+          ctx.fillStyle = '#2a2d34';
+          drawRoundRect(ctx, 10, y - 9, 166, 20, 6);
+          ctx.fill();
+          ctx.fillStyle = '#ffffff';
+          ctx.font = '600 10.5px Inter, sans-serif';
+        } else {
+          ctx.fillStyle = item.startsWith('▸') || item.startsWith('▾') ? '#d1d5db' : '#8e96a3';
+          ctx.font = '500 10.5px Inter, sans-serif';
+        }
+        ctx.fillText(item, 16, y);
+      });
+
+      // 3. Center Chat / Portfolio Audit & LIVE AUTONOMOUS CODING Pane
+      ctx.fillStyle = '#202124';
+      ctx.fillRect(185, 24, 655, H - 24);
+      ctx.fillStyle = '#d1d5db';
+      ctx.font = '500 11px Inter, sans-serif';
+      ctx.fillText('Audit portfolio improvements ▾   •   Live Workspace Active', 208, 44);
+
+      ctx.fillStyle = '#f3f4f6';
+      ctx.font = '700 14.5px Inter, sans-serif';
+      ctx.fillText("What I'd change first", 216, 78);
+
+      const lines = [
+        '1. Give your name, role, and work more weight in the opening. Keep the oversized headline',
+        '   and miniature workshop. Enlarge the byline and bring one readable product screen up.',
+        '2. Give each flagship a short motion graphic built around its real workflow. FixoFlow',
+        '   turns a sample waveform into editable text. PacketLark sends a live local request.',
+        '3. Turn the engineering section into an annotated cutaway with crisp 3D hardware polish.'
+      ];
+      ctx.font = '400 11.2px Inter, sans-serif';
+      ctx.fillStyle = '#c2c8d2';
+      lines.forEach((ln, idx) => ctx.fillText(ln, 216, 102 + idx * 18));
+
+      // Live Syntax-Highlighted Code Editor Card inside Codex
+      ctx.fillStyle = '#14161b';
+      ctx.strokeStyle = 'rgba(255,255,255,0.10)';
+      ctx.lineWidth = 1;
+      drawRoundRect(ctx, 216, 198, 596, 148, 10);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#1c1f26';
+      ctx.fillRect(217, 199, 594, 24);
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '600 10px monospace';
+      ctx.fillText('src/scene/DeskCircuit3D.ts   —   LIVE SYNCED TYPING', 230, 211);
+      ctx.fillStyle = '#22c55e';
+      ctx.beginPath(); ctx.arc(796, 211, 3.5, 0, Math.PI * 2); ctx.fill();
+
+      ctx.font = '500 11px monospace';
+      const logs = reactive.coding.logLines;
+      logs.slice(-3).forEach((l, i) => {
+        ctx.fillStyle = l.startsWith('✓') ? '#34d399' : (l.startsWith('>') ? '#38bdf8' : '#cbd5e1');
+        ctx.fillText(l.slice(0, 74), 230, 240 + i * 20);
+      });
+
+      // Live active code line being typed character-by-character from Portronics Keyboard!
+      ctx.fillStyle = '#1e222b';
+      ctx.fillRect(224, 304, 580, 30);
+      ctx.fillStyle = '#f59e0b';
+      ctx.font = '600 11.5px monospace';
+      ctx.fillText('❯', 234, 319);
+
+      const activeStr = reactive.coding.typedText;
+      ctx.fillStyle = '#f8fafc';
+      ctx.fillText(activeStr, 250, 319);
+      const cursorX = 250 + ctx.measureText(activeStr).width + 2;
+      if (Math.floor(timeSec * 3.2) % 2 === 0) {
+        ctx.fillStyle = '#ff6a1a';
+        ctx.fillRect(Math.min(792, cursorX), 311, 7, 15);
+      }
+
+      // Prompt Composer Box matching Photo 2
+      ctx.fillStyle = '#2a2c31';
+      ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+      ctx.lineWidth = 1;
+      drawRoundRect(ctx, 216, 360, 596, 132, 12);
+      ctx.fill();
+      ctx.stroke();
+
+      const promptLines = [
+        'Keep the exact hardware proportions: ZEBRONICS Pure Pixel 27", Mac mini M4, silver',
+        '4-port USB hub with dual wireless dongles, Portronics Bubble 3.0 synced live typing,',
+        'white/orange Portronics mouse on Demon Slayer pad, matte-black watch & open TWS pod.'
+      ];
+      ctx.fillStyle = '#d4d8e0';
+      ctx.font = '400 11.2px Inter, sans-serif';
+      promptLines.forEach((ln, idx) => ctx.fillText(ln, 232, 384 + idx * 19));
+
+      ctx.fillStyle = '#9ca3af';
+      ctx.font = '500 10.5px Inter, sans-serif';
+      ctx.fillText('+   Approve for me    •    Keyboard Sync: LIVE', 232, 470);
+      ctx.textAlign = 'right';
+      ctx.fillText('GPT-5.2 Sci  Medium ▾', 772, 470);
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath(); ctx.arc(792, 470, 9, 0, Math.PI * 2); ctx.fill();
+
+      // 4. Right Diff/Terminal & Live Telemetry Sidebar
+      ctx.fillStyle = '#18191c';
+      ctx.fillRect(840, 24, 184, H - 24);
+      ctx.strokeStyle = 'rgba(255,255,255,0.07)';
+      ctx.beginPath(); ctx.moveTo(840, 24); ctx.lineTo(840, H); ctx.stroke();
+
+      ctx.textAlign = 'left';
+      ctx.fillStyle = '#d1d5db';
+      ctx.font = '600 11px Inter, sans-serif';
+      ctx.fillText('abrar-portfolio-web', 856, 78);
+      ctx.fillStyle = '#9ca3af';
+      ctx.font = '400 11px Inter, sans-serif';
+      ctx.fillText('Changes', 856, 102);
+      ctx.fillStyle = '#34d399';
+      ctx.fillText(`+${reactive.coding.diffAdded.toLocaleString()}`, 924, 102);
+      ctx.fillStyle = '#f87171';
+      ctx.fillText(`-${reactive.coding.diffRemoved.toLocaleString()}`, 974, 102);
+
+      ctx.fillStyle = '#6b7280';
+      ctx.font = '600 10px Inter, sans-serif';
+      ctx.fillText('Background processes', 856, 138);
+      ctx.fillStyle = '#25272d';
+      ctx.fillRect(854, 150, 156, 26);
+      ctx.fillStyle = '#d1d5db';
+      ctx.font = '400 11px Inter, sans-serif';
+      ctx.fillText('>_  Background terminal', 864, 164);
+
+      ctx.fillStyle = '#6b7280';
+      ctx.font = '600 10px Inter, sans-serif';
+      ctx.fillText('HOT WHEELS TELEMETRY', 856, 212);
+      ctx.fillStyle = '#121316';
+      ctx.fillRect(854, 224, 156, 68);
+      ctx.strokeStyle = carState.boosting ? '#00e5ff' : '#ff6210';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      for (let gx = 0; gx < 148; gx += 4) {
+        const py = 258 + Math.sin(gx * 0.12 + timeSec * 5.5) * 14 + (carState.boosting ? -11 : 0);
+        if (gx === 0) ctx.moveTo(858 + gx, py);
+        else ctx.lineTo(858 + gx, py);
+      }
+      ctx.stroke();
+
+      // 5. Floating Frosted macOS Dock
+      const dockW = 520, dockH = 44;
+      const dockX = (W - dockW) / 2, dockY = H - 56;
+      ctx.fillStyle = 'rgba(58, 63, 76, 0.78)';
+      ctx.strokeStyle = 'rgba(255,255,255,0.20)';
+      ctx.lineWidth = 1.2;
+      drawRoundRect(ctx, dockX, dockY, dockW, dockH, 14);
+      ctx.fill();
+      ctx.stroke();
+
+      const dockIcons = [
+        { bg: '#2563eb', glyph: '☺', fg: '#ffffff' },
+        { bg: '#f8fafc', glyph: '19', fg: '#111827', cal: true },
+        { bg: '#334155', glyph: '◎', fg: '#38bdf8' },
+        { bg: '#1e293b', glyph: '⌘', fg: '#e2e8f0' },
+        { bg: '#22c55e', glyph: '✆', fg: '#ffffff' },
+        { bg: '#0f172a', glyph: '⚡', fg: '#f97316' },
+        { bg: '#ea580c', glyph: '🦁', fg: '#ffffff' },
+        { bg: '#3b82f6', glyph: '◉', fg: '#fde047' },
+        { bg: '#1d4ed8', glyph: '</>', fg: '#93c5fd' },
+        { bg: '#111827', glyph: '✦', fg: '#ffffff' },
+        { bg: '#f8fafc', glyph: 'A', fg: '#0f172a' },
+        { bg: '#4f46e5', glyph: '▲', fg: '#e0e7ff' },
+        { bg: '#0284c7', glyph: '◈', fg: '#ffffff' },
+        { bg: '#18181b', glyph: 'III', fg: '#a1a1aa' },
+        { bg: '#475569', glyph: '🗑', fg: '#e2e8f0' }
+      ];
+      const underMonitor = carState.currentZone === 'UNDER-MONITOR TUNNEL';
+      dockIcons.forEach((ic, i) => {
+        const ix = dockX + 18 + i * 33;
+        const bounce = underMonitor ? Math.abs(Math.sin(timeSec * 11 + i * 0.7)) * 6 : 0;
+        const iy = dockY + 8 - bounce;
+        ctx.fillStyle = ic.bg;
+        drawRoundRect(ctx, ix, iy, 26, 26, 7);
+        ctx.fill();
+        if (ic.cal) {
+          ctx.fillStyle = '#ef4444';
+          ctx.fillRect(ix, iy, 26, 7);
+          ctx.fillStyle = ic.fg;
+          ctx.font = '800 11px Inter, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('19', ix + 13, iy + 18);
+        } else {
+          ctx.fillStyle = ic.fg;
+          ctx.font = '700 11px Inter, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(ic.glyph, ix + 13, iy + 14);
+        }
+      });
+
+      reactive.screenTexture.needsUpdate = true;
+    }
+
+    /** High-Res Painterly Demon Slayer Entertainment District Mousepad Artwork (Photo 3) */
+    function createMousepadTexture() {
+      const c = document.createElement('canvas');
+      c.width = 1024;
+      c.height = 900;
+      const ctx = c.getContext('2d');
+
+      const bg = ctx.createRadialGradient(512, 340, 80, 512, 460, 700);
+      bg.addColorStop(0, '#7c183c');
+      bg.addColorStop(0.45, '#3b0b20');
+      bg.addColorStop(0.85, '#190814');
+      bg.addColorStop(1, '#0c060c');
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, 1024, 900);
+
+      for (let gx = 0; gx < 1024; gx += 64) {
+        for (let gy = 0; gy < 420; gy += 56) {
+          const glow = 0.25 + 0.58 * Math.pow(Math.abs(Math.sin(gx * 0.011 + gy * 0.015)), 1.4);
+          const lg = ctx.createLinearGradient(gx, gy, gx, gy + 56);
+          lg.addColorStop(0, `rgba(255, 78, 128, ${glow})`);
+          lg.addColorStop(1, `rgba(180, 26, 76, ${glow * 0.72})`);
+          ctx.fillStyle = lg;
+          ctx.fillRect(gx + 4, gy + 4, 56, 48);
+        }
+      }
+      ctx.strokeStyle = '#18050d';
+      ctx.lineWidth = 7;
+      for (let gx = 0; gx <= 1024; gx += 64) {
+        ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, 430); ctx.stroke();
+      }
+      for (let gy = 0; gy <= 430; gy += 56) {
+        ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(1024, gy); ctx.stroke();
+      }
+
+      const mist = ctx.createRadialGradient(512, 460, 40, 512, 460, 520);
+      mist.addColorStop(0, 'rgba(255, 110, 175, 0.36)');
+      mist.addColorStop(0.6, 'rgba(175, 32, 96, 0.16)');
+      mist.addColorStop(1, 'rgba(10, 5, 12, 0)');
+      ctx.fillStyle = mist;
+      ctx.fillRect(0, 0, 1024, 900);
+
+      const drawAnimeChar = (cx, cy, cfg) => {
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.scale(cfg.scale, cfg.scale);
+
+        ctx.fillStyle = cfg.hairDark;
+        ctx.beginPath();
+        ctx.moveTo(-66, -78);
+        ctx.quadraticCurveTo(-82, 24, -56, 95);
+        ctx.lineTo(56, 95);
+        ctx.quadraticCurveTo(84, 24, 68, -78);
+        ctx.quadraticCurveTo(0, -148, -66, -78);
+        ctx.fill();
+
+        const kGrad = ctx.createLinearGradient(-90, 20, 90, 240);
+        kGrad.addColorStop(0, cfg.kimonoLight);
+        kGrad.addColorStop(0.55, cfg.kimonoMain);
+        kGrad.addColorStop(1, '#1a0a14');
+        ctx.fillStyle = kGrad;
+        ctx.beginPath();
+        ctx.moveTo(-112, 260);
+        ctx.quadraticCurveTo(-96, 52, -40, 18);
+        ctx.lineTo(40, 18);
+        ctx.quadraticCurveTo(96, 52, 112, 260);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.strokeStyle = '#f8e6ea';
+        ctx.lineWidth = 8;
+        ctx.beginPath();
+        ctx.moveTo(-30, 18);
+        ctx.lineTo(0, 74);
+        ctx.lineTo(30, 18);
+        ctx.stroke();
+
+        ctx.fillStyle = cfg.obi;
+        ctx.fillRect(-74, 112, 148, 52);
+        ctx.strokeStyle = '#f5c76b';
+        ctx.lineWidth = 4;
+        ctx.strokeRect(-74, 112, 148, 52);
+
+        ctx.fillStyle = '#e4b39c';
+        ctx.fillRect(-16, -24, 32, 52);
+        ctx.fillStyle = 'rgba(130, 58, 62, 0.35)';
+        ctx.beginPath(); ctx.ellipse(0, -16, 17, 10, 0, 0, Math.PI * 2); ctx.fill();
+
+        const skinGrad = ctx.createLinearGradient(0, -100, 0, -12);
+        skinGrad.addColorStop(0, '#fbdccc');
+        skinGrad.addColorStop(1, '#ecc0aa');
+        ctx.fillStyle = skinGrad;
+        ctx.beginPath();
+        ctx.moveTo(-36, -68);
+        ctx.quadraticCurveTo(-36, -34, -22, -20);
+        ctx.quadraticCurveTo(0, -6, 22, -20);
+        ctx.quadraticCurveTo(36, -34, 36, -68);
+        ctx.quadraticCurveTo(0, -106, -36, -68);
+        ctx.fill();
+
+        [-14, 14].forEach((ex) => {
+          ctx.fillStyle = '#1b1118';
+          ctx.beginPath(); ctx.ellipse(ex, -50, 7.5, 5.2, 0, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = cfg.eyeCol;
+          ctx.beginPath(); ctx.arc(ex, -49.5, 4.2, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = '#ffffff';
+          ctx.beginPath(); ctx.arc(ex - 2.2, -51.5, 1.8, 0, Math.PI * 2); ctx.fill();
+        });
+        ctx.strokeStyle = '#9c5b52';
+        ctx.lineWidth = 2.4;
+        ctx.beginPath(); ctx.arc(0, -28, 7, 0.15 * Math.PI, 0.85 * Math.PI); ctx.stroke();
+
+        ctx.fillStyle = cfg.hairMain;
+        ctx.beginPath();
+        ctx.moveTo(-48, -72);
+        ctx.quadraticCurveTo(-34, -126, 0, -122);
+        ctx.quadraticCurveTo(34, -126, 48, -72);
+        ctx.lineTo(36, -54);
+        ctx.lineTo(20, -76);
+        ctx.lineTo(6, -52);
+        ctx.lineTo(-8, -76);
+        ctx.lineTo(-24, -54);
+        ctx.lineTo(-38, -72);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.strokeStyle = cfg.hairHighlight;
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.arc(0, -86, 36, Math.PI * 1.15, Math.PI * 1.85);
+        ctx.stroke();
+
+        ctx.restore();
+      };
+
+      drawAnimeChar(210, 440, {
+        scale: 1.05, hairMain: '#e8953c', hairDark: '#824414', hairHighlight: '#ffd280',
+        kimonoMain: '#8e1b3c', kimonoLight: '#d93860', obi: '#f2b84b', eyeCol: '#eab308'
+      });
+      drawAnimeChar(585, 390, {
+        scale: 1.18, hairMain: '#1d1624', hairDark: '#0f0b14', hairHighlight: '#6b5a8e',
+        kimonoMain: '#b82538', kimonoLight: '#ef4444', obi: '#f59e0b', eyeCol: '#38bdf8'
+      });
+      drawAnimeChar(845, 455, {
+        scale: 1.04, hairMain: '#281934', hairDark: '#130b1a', hairHighlight: '#a855f7',
+        kimonoMain: '#4c1d4b', kimonoLight: '#9333ea', obi: '#f472b6', eyeCol: '#f472b6'
+      });
+
+      const haori = ctx.createLinearGradient(0, 620, 0, 900);
+      haori.addColorStop(0, '#1e1620');
+      haori.addColorStop(1, '#09070c');
+      ctx.fillStyle = haori;
+      ctx.beginPath();
+      ctx.moveTo(0, 900);
+      ctx.quadraticCurveTo(260, 595, 512, 665);
+      ctx.quadraticCurveTo(780, 595, 1024, 900);
+      ctx.closePath();
+      ctx.fill();
+
+      for (let i = 0; i < 120; i++) {
+        const px = Math.random() * 1024;
+        const py = Math.random() * 760;
+        const r = 3 + Math.random() * 6;
+        ctx.save();
+        ctx.translate(px, py);
+        ctx.rotate(Math.random() * Math.PI);
+        ctx.fillStyle = `rgba(255, 185, 222, ${0.28 + Math.random() * 0.62})`;
+        ctx.beginPath();
+        ctx.ellipse(0, 0, r * 1.4, r * 0.65, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      ctx.fillStyle = 'rgba(255,255,255,0.025)';
+      for (let y = 0; y < 900; y += 4) ctx.fillRect(0, y, 1024, 1);
+
+      ctx.strokeStyle = '#0e0b10';
+      ctx.lineWidth = 18;
+      ctx.strokeRect(9, 9, 1006, 882);
+
+      const tex = new THREE.CanvasTexture(c);
+      tex.encoding = THREE.sRGBEncoding;
+      tex.anisotropy = 8;
+      return tex;
+    }
+
+    /** Analog Watch Dial Texture matching Photo 5 (dark sunburst + diagonal white graphic stripes) */
+    function createWatchDialTexture() {
+      const c = document.createElement('canvas');
+      c.width = 512;
+      c.height = 512;
+      const ctx = c.getContext('2d');
+
+      const g = ctx.createRadialGradient(256, 256, 10, 256, 256, 250);
+      g.addColorStop(0, '#2a2d33');
+      g.addColorStop(1, '#101216');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, 512, 512);
+
+      // Bold angled white graphic stripes matching Photo 5
+      ctx.save();
+      ctx.beginPath(); ctx.arc(256, 256, 218, 0, Math.PI * 2); ctx.clip();
+      ctx.translate(256, 256);
+      ctx.rotate(-0.55);
+      ctx.fillStyle = 'rgba(225, 232, 240, 0.28)';
+      for (let sx = -40; sx <= 160; sx += 38) {
+        ctx.fillRect(sx, -240, 16, 480);
+      }
+      ctx.restore();
+
+      // Hour indices
+      for (let h = 0; h < 12; h++) {
+        const ang = (h / 12) * Math.PI * 2;
+        ctx.save();
+        ctx.translate(256, 256);
+        ctx.rotate(ang);
+        ctx.fillStyle = h % 3 === 0 ? '#e5e7eb' : '#9ca3af';
+        ctx.fillRect(h % 3 === 0 ? -5 : -3, -225, h % 3 === 0 ? 10 : 6, h % 3 === 0 ? 32 : 20);
+        ctx.restore();
+      }
+
+      // Subtle dial signature
+      ctx.fillStyle = '#cbd5e1';
+      ctx.font = '700 22px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('CHRONO', 256, 178);
+
+      const tex = new THREE.CanvasTexture(c);
+      tex.encoding = THREE.sRGBEncoding;
+      return tex;
+    }
+
+    /** Minimal Dark Asphalt Surface with Hot Wheels Dual Slot Grooves */
+    function createAsphaltTrackTexture() {
+      const c = document.createElement('canvas');
+      c.width = 256;
+      c.height = 512;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#1b1e24';
+      ctx.fillRect(0, 0, 256, 512);
+
+      for (let i = 0; i < 6500; i++) {
+        const v = 22 + Math.floor(Math.random() * 24);
+        ctx.fillStyle = `rgb(${v},${v + 2},${v + 5})`;
+        ctx.fillRect(Math.random() * 256, Math.random() * 512, 2, 2);
+      }
+
+      // Dual slot-racing grooves + metallic rails
+      [82, 174].forEach((gx) => {
+        ctx.fillStyle = '#090a0d';
+        ctx.fillRect(gx - 4, 0, 8, 512);
+        ctx.fillStyle = '#8b95a5';
+        ctx.fillRect(gx - 7, 0, 2, 512);
+        ctx.fillRect(gx + 5, 0, 2, 512);
+      });
+
+      // Center dashed lane divider
+      ctx.fillStyle = 'rgba(255, 165, 70, 0.55)';
+      for (let y = 0; y < 512; y += 64) {
+        ctx.fillRect(125, y + 10, 6, 32);
+      }
+
+      const tex = new THREE.CanvasTexture(c);
+      tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+      tex.repeat.set(1, 56);
+      tex.encoding = THREE.sRGBEncoding;
+      tex.anisotropy = 8;
+      return tex;
+    }
+
+    function tagInspectable(group, tag, title, desc) {
+      group.traverse((obj) => {
+        if (obj.isMesh) {
+          obj.userData.inspect = { tag, title, desc };
+          reactive.inspectables.push(obj);
+        }
+      });
+    }
+
+    // ==========================================================================
+    // 1. PRECISION DESK & HARDWARE RECREATION (ALL 7 USER PHOTOS)
+    // ==========================================================================
+
+    function buildDeskAndHardware() {
+      const deskGroup = new THREE.Group();
+      scene.add(deskGroup);
+
+      // 1A. Matte Light-Grey Tabletop (120 x 62) with Charcoal Edge Banding (Photo 1 & 7)
+      const deskW = 120, deskD = 62, deskH = 2.6;
+      const topShape = createRoundedRectShape(deskW, deskD, 3.2);
+      const topBodyGeo = new THREE.ExtrudeGeometry(topShape, {
+        depth: deskH,
+        bevelEnabled: true,
+        bevelThickness: 0.14,
+        bevelSize: 0.14,
+        bevelSegments: 3,
+        curveSegments: 20
+      });
+      topBodyGeo.rotateX(Math.PI / 2);
+
+      const charcoalEdgeMat = new THREE.MeshStandardMaterial({
+        color: 0x3b4048,
+        roughness: 0.58,
+        metalness: 0.08
+      });
+      const tabletopBody = new THREE.Mesh(topBodyGeo, charcoalEdgeMat);
+      tabletopBody.position.y = -0.02;
+      tabletopBody.castShadow = true;
+      tabletopBody.receiveShadow = true;
+      deskGroup.add(tabletopBody);
+
+      const topPlateGeo = new THREE.ShapeGeometry(topShape, 24);
+      topPlateGeo.rotateX(-Math.PI / 2);
+      const posAttr = topPlateGeo.attributes.position;
+      const uvs = new Float32Array(posAttr.count * 2);
+      for (let i = 0; i < posAttr.count; i++) {
+        uvs[i * 2] = (posAttr.getX(i) + deskW / 2) / deskW;
+        uvs[i * 2 + 1] = 1 - (posAttr.getZ(i) + deskD / 2) / deskD;
+      }
+      topPlateGeo.setAttribute('uv', new THREE.BufferAttribute(uvs, 2));
+
+      const topPlate = new THREE.Mesh(
+        topPlateGeo,
+        new THREE.MeshStandardMaterial({
+          map: createDeskTopTexture(),
+          roughnessMap: createMicroRoughnessTexture(152, 26),
+          roughness: 0.64,
+          metalness: 0.03
+        })
+      );
+      topPlate.position.y = 0.0;
+      topPlate.receiveShadow = true;
+      deskGroup.add(topPlate);
+
+      // 1B. Thick Angled Dark-Grey Slab Legs with Exposed Birch Plywood Edges (Photo 7)
+      const legDarkMat = new THREE.MeshStandardMaterial({ color: 0x3a3f47, roughness: 0.65 });
+      const plyEdgeMat = new THREE.MeshStandardMaterial({ map: createPlywoodEdgeTexture(), roughness: 0.72 });
+
+      [-34, 34].forEach((lx) => {
+        const legGroup = new THREE.Group();
+        const leg = new THREE.Mesh(
+          new THREE.BoxGeometry(11.5, 58, 44),
+          [plyEdgeMat, plyEdgeMat, legDarkMat, legDarkMat, legDarkMat, legDarkMat]
+        );
+        leg.position.set(lx, -30.5, 1.5);
+        leg.rotation.z = lx < 0 ? 0.08 : -0.08;
+        leg.castShadow = true;
+        leg.receiveShadow = true;
+        legGroup.add(leg);
+        deskGroup.add(legGroup);
+      });
+
+      // Under-desk support stretcher beam
+      const crossBeam = new THREE.Mesh(new THREE.BoxGeometry(66, 8, 2.2), legDarkMat);
+      crossBeam.position.set(0, -10.5, -15);
+      crossBeam.castShadow = true;
+      deskGroup.add(crossBeam);
+
+      // Build every desktop hardware assembly
+      buildZebronicsMonitor(deskGroup);
+      buildMacMiniAndUsbHub(deskGroup);
+      buildPortronicsKeyboard(deskGroup);
+      buildMouseAndPad(deskGroup);
+      buildWristwatch(deskGroup);
+      buildEarbudsSetup(deskGroup);
+      buildPowerStripAndCharger(deskGroup);
+    }
+
+    /** ZEBRONICS 27" Pure Pixel Monitor + Silver V-Stand + Rear Power Brick (Photo 1, 2, 6, 7) */
+    function buildZebronicsMonitor(parent) {
+      const monGroup = new THREE.Group();
+      monGroup.position.set(-4.0, 0, -18.5);
+      parent.add(monGroup);
+
+      const silverMat = new THREE.MeshStandardMaterial({ color: 0xc9d0d8, metalness: 0.78, roughness: 0.26 });
+      const blackBezelMat = new THREE.MeshStandardMaterial({ color: 0x16181d, roughness: 0.36, metalness: 0.14 });
+      const whiteChinMat = new THREE.MeshStandardMaterial({ color: 0xedf0f3, roughness: 0.32 });
+
+      // Tapered Silver V-Stand Feet (Photo 2 & 6)
+      [-1, 1].forEach((side) => {
+        const foot = new THREE.Mesh(new THREE.BoxGeometry(1.15, 0.55, 18.8), silverMat);
+        foot.position.set(side * 6.8, 0.32, 3.6);
+        foot.rotation.y = side * 0.96;
+        foot.castShadow = true;
+        foot.receiveShadow = true;
+        monGroup.add(foot);
+      });
+
+      // Rear stabilizing nub & vertical silver neck column
+      const backFoot = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.65, 3.2), silverMat);
+      backFoot.position.set(0, 0.34, -1.6);
+      monGroup.add(backFoot);
+
+      const neck = new THREE.Mesh(new THREE.BoxGeometry(1.7, 13.5, 1.15), silverMat);
+      neck.position.set(0, 7.0, -1.5);
+      neck.rotation.x = -0.06;
+      neck.castShadow = true;
+      monGroup.add(neck);
+
+      // Display Panel Assembly (61.5 x 36.2 units -> exact 27" 16:9 ratio!)
+      const panelGroup = new THREE.Group();
+      panelGroup.position.set(0, 26.2, -0.4);
+      panelGroup.rotation.x = -0.04;
+      monGroup.add(panelGroup);
+
+      const panW = 61.5, panH = 36.2;
+      const rearCase = new THREE.Mesh(new THREE.BoxGeometry(panW, panH, 1.25), blackBezelMat);
+      rearCase.castShadow = true;
+      rearCase.receiveShadow = true;
+      panelGroup.add(rearCase);
+
+      // Rear lower VESA electronics housing bump
+      const rearBump = new THREE.Mesh(new THREE.BoxGeometry(panW * 0.72, panH * 0.42, 1.35), blackBezelMat);
+      rearBump.position.set(0, -panH * 0.18, -1.0);
+      rearBump.castShadow = true;
+      panelGroup.add(rearBump);
+
+      // White Bottom Chin with "Pure Pixel" & "ZEBRONICS" logo (Photo 2)
+      const chinH = 2.05;
+      const chin = new THREE.Mesh(
+        new THREE.BoxGeometry(panW, chinH, 1.42),
+        [whiteChinMat, whiteChinMat, whiteChinMat, whiteChinMat, new THREE.MeshStandardMaterial({ map: createMonitorChinTexture(), roughness: 0.3 }), whiteChinMat]
+      );
+      chin.position.set(0, -panH / 2 + chinH / 2, 0.04);
+      chin.castShadow = true;
+      panelGroup.add(chin);
+
+      // Live macOS / Codex Screen Surface
+      initLiveMonitorScreen();
+      const screenMat = new THREE.MeshStandardMaterial({
+        map: reactive.screenTexture,
+        emissiveMap: reactive.screenTexture,
+        emissive: new THREE.Color(0xffffff),
+        emissiveIntensity: 0.62,
+        roughness: 0.22,
+        metalness: 0.04
+      });
+      reactive.screenMat = screenMat;
+      const screenMesh = new THREE.Mesh(new THREE.PlaneGeometry(panW - 1.1, panH - chinH - 0.9), screenMat);
+      screenMesh.position.set(0, chinH / 2 - 0.05, 0.66);
+      panelGroup.add(screenMesh);
+
+      // Black Power Brick tucked behind monitor stand (Photo 1)
+      const brick = new THREE.Mesh(new THREE.BoxGeometry(8.8, 2.5, 4.4), new THREE.MeshStandardMaterial({ color: 0x16181c, roughness: 0.52 }));
+      brick.position.set(-2.5, 1.25, -5.6);
+      brick.castShadow = true;
+      monGroup.add(brick);
+
+      // Black Display & Power Cables sweeping toward back-left power strip & Mac mini
+      const cableMat = new THREE.MeshStandardMaterial({ color: 0x14161a, roughness: 0.55 });
+      const powerCurve = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(-4.0, 2.0, -5.8),
+        new THREE.Vector3(-22.0, 1.1, -9.8),
+        new THREE.Vector3(-42.5, 3.0, -8.5)
+      ]);
+      monGroup.add(new THREE.Mesh(new THREE.TubeGeometry(powerCurve, 28, 0.34, 10, false), cableMat));
+
+      const hdmiCurve = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(4.5, 6.2, -2.5),
+        new THREE.Vector3(18.0, 1.6, -5.2),
+        new THREE.Vector3(35.0, 1.5, 2.5)
+      ]);
+      monGroup.add(new THREE.Mesh(new THREE.TubeGeometry(hdmiCurve, 24, 0.30, 10, false), cableMat));
+
+      tagInspectable(
+        monGroup,
+        'DISPLAY • 27" PURE PIXEL',
+        'ZEBRONICS 27" Monitor + Live Codex',
+        'Ultra-slim bezel display on tapered silver V-stand running live autonomous TypeScript coding synced directly to every keystroke on your Portronics keyboard!'
+      );
+    }
+
+    /** Apple Mac mini M4 + Curved White USB-C Cable + Silver 4-Port Hub & Dual Dongles (Photo 3 & 6) */
+    function buildMacMiniAndUsbHub(parent) {
+      const macGroup = new THREE.Group();
+      macGroup.position.set(34.0, 0, -9.0);
+      parent.add(macGroup);
+
+      const size = 12.7, bodyH = 4.9, baseH = 0.65;
+
+      // Dark recessed underside thermal foot pedestal
+      const footMesh = new THREE.Mesh(
+        new THREE.CylinderGeometry(5.2, 5.0, baseH, 32),
+        new THREE.MeshStandardMaterial({ color: 0x16181c, roughness: 0.65 })
+      );
+      footMesh.position.y = baseH / 2;
+      macGroup.add(footMesh);
+
+      // Bead-blasted anodized silver aluminum unibody (exact 12.7 x 12.7 cm M4 chassis)
+      const bodyShape = createRoundedRectShape(size, size, 2.48);
+      const bodyGeo = new THREE.ExtrudeGeometry(bodyShape, {
+        depth: bodyH - 0.34,
+        bevelEnabled: true,
+        bevelThickness: 0.17,
+        bevelSize: 0.16,
+        bevelSegments: 5,
+        curveSegments: 24
+      });
+      bodyGeo.rotateX(Math.PI / 2);
+      const aluMat = new THREE.MeshPhysicalMaterial({
+        color: 0xe6eaef,
+        metalness: 0.72,
+        roughness: 0.28,
+        roughnessMap: createMicroRoughnessTexture(72, 18),
+        clearcoat: 0.16,
+        clearcoatRoughness: 0.32
+      });
+      const bodyMesh = new THREE.Mesh(bodyGeo, aluMat);
+      bodyMesh.position.y = baseH + bodyH - 0.17;
+      bodyMesh.castShadow = true;
+      bodyMesh.receiveShadow = true;
+      macGroup.add(bodyMesh);
+
+      // Glossy Black Apple Logo centered on top (Photo 3)
+      const appleLogo = new THREE.Mesh(
+        new THREE.PlaneGeometry(4.8, 4.8),
+        new THREE.MeshPhysicalMaterial({
+          map: createAppleLogoTexture(),
+          transparent: true,
+          roughness: 0.08,
+          metalness: 0.25,
+          clearcoat: 1.0
+        })
+      );
+      appleLogo.rotation.x = -Math.PI / 2;
+      appleLogo.position.y = baseH + bodyH + 0.02;
+      macGroup.add(appleLogo);
+
+      // Front I/O Ports: Dual USB-C, 3.5mm Audio Jack, Breathing White Power LED (Photo 3)
+      const portMat = new THREE.MeshStandardMaterial({ color: 0x0b0d10, roughness: 0.4 });
+      [-3.5, -2.1].forEach((px) => {
+        const usbc = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.24, 0.12), portMat);
+        usbc.position.set(px, baseH + 1.05, size / 2 + 0.12);
+        macGroup.add(usbc);
+      });
+      const jack = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 0.15, 14), portMat);
+      jack.rotation.x = Math.PI / 2;
+      jack.position.set(-0.3, baseH + 1.05, size / 2 + 0.12);
+      macGroup.add(jack);
+
+      const ledMat = new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xe0f2fe, emissiveIntensity: 1.8 });
+      reactive.macLedMat = ledMat;
+      const powerLed = new THREE.Mesh(new THREE.CircleGeometry(0.14, 12), ledMat);
+      powerLed.position.set(3.2, baseH + 1.05, size / 2 + 0.16);
+      macGroup.add(powerLed);
+
+      // Two Black Rear Cables (Power + HDMI) exiting back edge (Photo 3)
+      const blackCableMat = new THREE.MeshStandardMaterial({ color: 0x15181d, roughness: 0.55 });
+      [-1.8, 2.2].forEach((cx) => {
+        const plug = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.75, 1.3), blackCableMat);
+        plug.position.set(cx, baseH + 1.3, -size / 2 - 0.6);
+        macGroup.add(plug);
+        const rearCurve = new THREE.CatmullRomCurve3([
+          new THREE.Vector3(cx, baseH + 1.3, -size / 2 - 1.0),
+          new THREE.Vector3(cx - 0.5, 1.2, -size / 2 - 8.5),
+          new THREE.Vector3(cx - 1.5, 0.8, -size / 2 - 16.0)
+        ]);
+        macGroup.add(new THREE.Mesh(new THREE.TubeGeometry(rearCurve, 16, 0.30, 8, false), blackCableMat));
+      });
+
+      // Silver USB-C Connector + Curved White Cable -> Brushed Aluminum 4-Port Hub + Dual Wireless Dongles (Photo 3)
+      const hubGroup = new THREE.Group();
+      hubGroup.position.set(20.8, 0, -3.5);
+      hubGroup.rotation.y = 0.28;
+      parent.add(hubGroup);
+
+      const metalHubMat = new THREE.MeshStandardMaterial({ color: 0xc8cfd8, metalness: 0.85, roughness: 0.24 });
+      const hubBody = new THREE.Mesh(new THREE.BoxGeometry(1.65, 0.85, 8.2), metalHubMat);
+      hubBody.position.y = 0.44;
+      hubBody.castShadow = true;
+      hubBody.receiveShadow = true;
+      hubGroup.add(hubBody);
+
+      const hubCap = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.72, 0.7), new THREE.MeshStandardMaterial({ color: 0xf1f5f9, roughness: 0.35 }));
+      hubCap.position.set(0, 0.44, 4.35);
+      hubGroup.add(hubCap);
+
+      // Two Metallic Wireless USB Receivers plugged into the hub side (exact match to Photo 3 & 4!)
+      [-1.1, 0.9].forEach((dz, idx) => {
+        const dongleMetal = new THREE.Mesh(
+          new THREE.BoxGeometry(1.35, 0.52, 0.88),
+          new THREE.MeshStandardMaterial({ color: idx === 0 ? 0x9aa3ae : 0xe5e9ef, metalness: idx === 0 ? 0.82 : 0.35, roughness: 0.28 })
+        );
+        dongleMetal.position.set(-1.35, 0.44, dz);
+        dongleMetal.castShadow = true;
+        hubGroup.add(dongleMetal);
+      });
+
+      // Curved White USB-C Cable from Mac mini front-left port to silver hub
+      const whitePlug = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.32, 1.5, 12), metalHubMat);
+      whitePlug.rotation.x = Math.PI / 2;
+      whitePlug.position.set(34.0 - 3.5, baseH + 1.05, -9.0 + size / 2 + 0.8);
+      parent.add(whitePlug);
+
+      const usbCurve = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(30.5, 1.70, -1.6),
+        new THREE.Vector3(30.2, 0.45,  2.8),
+        new THREE.Vector3(26.2, 0.35,  4.4),
+        new THREE.Vector3(22.1, 0.44,  0.8)
+      ]);
+      reactive.usbCurve = usbCurve;
+      const whiteCable = new THREE.Mesh(
+        new THREE.TubeGeometry(usbCurve, 32, 0.22, 10, false),
+        new THREE.MeshStandardMaterial({ color: 0xf4f6f8, roughness: 0.40 })
+      );
+      whiteCable.castShadow = true;
+      parent.add(whiteCable);
+
+      // Animated Glowing Cyan Data Pulse traveling along USB-C cable
+      const pulseMesh = new THREE.Mesh(
+        new THREE.SphereGeometry(0.34, 12, 12),
+        new THREE.MeshBasicMaterial({ color: 0x00e5ff })
+      );
+      parent.add(pulseMesh);
+      reactive.usbPulseMesh = pulseMesh;
+
+      tagInspectable(
+        macGroup,
+        'COMPUTE • APPLE SILICON',
+        'Apple Mac mini M4',
+        'Precision anodized silver aluminum unibody (12.7 × 12.7 cm) serving as the dramatic high-elevation Hot Wheels overpass!'
+      );
+      tagInspectable(
+        hubGroup,
+        'I/O • 4-PORT USB-C HUB',
+        'Brushed Aluminum USB Hub + Dual Dongles',
+        'Connected via curved white USB-C cable with dual 2.4GHz wireless receivers for your Portronics keyboard and mouse.'
+      );
+    }
+
+    /** Full-Layout Portronics Bubble 3.0 Wireless Keyboard with Live Synced Keystrokes (Photo 4) */
+    function buildPortronicsKeyboard(parent) {
+      const kbGroup = new THREE.Group();
+      kbGroup.position.set(-2.0, 0, 17.5);
+      parent.add(kbGroup);
+
+      const kbW = 36.8, kbD = 14.2, kbH = 1.15;
+      const whiteBodyMat = new THREE.MeshPhysicalMaterial({ color: 0xf4f6f9, roughness: 0.30, clearcoat: 0.22 });
+      const greySlotMat = new THREE.MeshStandardMaterial({ color: 0x676f79, roughness: 0.50 });
+      const darkKeyMat = new THREE.MeshStandardMaterial({ color: 0x5c636b, roughness: 0.38 });
+
+      // Tilted Deck Assembly
+      const deckGroup = new THREE.Group();
+      deckGroup.position.y = 0.65;
+      deckGroup.rotation.x = 0.045;
+      kbGroup.add(deckGroup);
+
+      // Dark-Grey Top Device/Tablet Cradle Slot (signature Bubble 3.0 detail, Photo 4)
+      const cradleShape = createRoundedRectShape(kbW, kbD + 1.4, 1.45);
+      const cradleGeo = new THREE.ExtrudeGeometry(cradleShape, {
+        depth: kbH,
+        bevelEnabled: true,
+        bevelThickness: 0.14,
+        bevelSize: 0.14,
+        bevelSegments: 3,
+        curveSegments: 16
+      });
+      cradleGeo.rotateX(Math.PI / 2);
+      const cradle = new THREE.Mesh(cradleGeo, greySlotMat);
+      cradle.position.set(0, 0.35, -0.55);
+      cradle.castShadow = true;
+      cradle.receiveShadow = true;
+      deckGroup.add(cradle);
+
+      // Recessed inner channel inside grey tablet cradle
+      const groove = new THREE.Mesh(new THREE.BoxGeometry(kbW - 2.6, 0.45, 1.25), new THREE.MeshStandardMaterial({ color: 0x3b4048, roughness: 0.65 }));
+      groove.position.set(0, 0.36, -6.95);
+      deckGroup.add(groove);
+
+      // White Main Keyboard Deck
+      const deckShape = createRoundedRectShape(kbW - 0.6, kbD - 0.4, 1.25);
+      const deckGeo = new THREE.ExtrudeGeometry(deckShape, {
+        depth: kbH,
+        bevelEnabled: true,
+        bevelThickness: 0.14,
+        bevelSize: 0.14,
+        bevelSegments: 3,
+        curveSegments: 16
+      });
+      deckGeo.rotateX(Math.PI / 2);
+      const deck = new THREE.Mesh(deckGeo, whiteBodyMat);
+      deck.position.set(0, 0.42, 0.42);
+      deck.castShadow = true;
+      deck.receiveShadow = true;
+      deckGroup.add(deck);
+
+      // Status LEDs + Power Slide Switch top-right (Photo 4)
+      for (let i = 0; i < 3; i++) {
+        const ledM = new THREE.MeshStandardMaterial({ color: 0xdbeafe, emissive: 0x38bdf8, emissiveIntensity: 0.3 });
+        const led = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, 0.1, 10), ledM);
+        led.position.set(11.4 + i * 1.4, 0.56, -4.6);
+        deckGroup.add(led);
+        reactive.keyboardLeds.push(ledM);
+      }
+      const pwrSwitch = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.18, 0.42), greySlotMat);
+      pwrSwitch.position.set(16.2, 0.56, -4.6);
+      deckGroup.add(pwrSwitch);
+
+      // Keycap Generators
+      const roundKeyGeo = new THREE.CylinderGeometry(0.76, 0.84, 0.52, 20);
+      const smallRoundGeo = new THREE.CylinderGeometry(0.60, 0.68, 0.48, 18);
+      const keySideWhite = new THREE.MeshStandardMaterial({ color: 0xe6eaf0, roughness: 0.42 });
+      const keySideDark = new THREE.MeshStandardMaterial({ color: 0x4b525a, roughness: 0.45 });
+
+      const addRoundKey = (x, z, label, sub, isDark = false, isSmall = false) => {
+        const topMat = new THREE.MeshStandardMaterial({
+          map: createKeycapTexture(label, sub, isDark ? '#5c636b' : '#f3f5f7', isDark ? '#ffffff' : '#2a2e35'),
+          roughness: 0.35
+        });
+        const mesh = new THREE.Mesh(isSmall ? smallRoundGeo : roundKeyGeo, [isDark ? keySideDark : keySideWhite, topMat, keySideWhite]);
+        mesh.position.set(x, 0.68, z);
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+        mesh.userData.baseY = 0.68;
+        mesh.userData.pressTimer = 0;
+        deckGroup.add(mesh);
+        reactive.keys.push(mesh);
+        const keyCode = String(label).toUpperCase();
+        if (!reactive.keyMap[keyCode]) reactive.keyMap[keyCode] = mesh;
+      };
+
+      const addPillKey = (x, z, w, d, label, isDark = false, customTopTex = null) => {
+        const sh = createRoundedRectShape(w, d, Math.min(w, d) * 0.46);
+        const geo = new THREE.ExtrudeGeometry(sh, { depth: 0.48, bevelEnabled: true, bevelThickness: 0.06, bevelSize: 0.06, bevelSegments: 2, curveSegments: 12 });
+        geo.rotateX(Math.PI / 2);
+        const mesh = new THREE.Mesh(geo, isDark ? darkKeyMat : whiteBodyMat);
+        mesh.position.set(x, 0.94, z);
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+        mesh.userData.baseY = 0.94;
+        mesh.userData.pressTimer = 0;
+
+        const capTex = customTopTex || createKeycapTexture(label, null, isDark ? '#5c636b' : '#f3f5f7', isDark ? '#ffffff' : '#2a2e35');
+        const capPlane = new THREE.Mesh(
+          new THREE.PlaneGeometry(w * 0.78, d * 0.72),
+          new THREE.MeshStandardMaterial({ map: capTex, roughness: 0.34 })
+        );
+        capPlane.rotation.x = -Math.PI / 2;
+        capPlane.position.y = 0.07;
+        mesh.add(capPlane);
+
+        deckGroup.add(mesh);
+        reactive.keys.push(mesh);
+        const keyCode = label === 'PORTRONICS' ? ' ' : String(label).toUpperCase();
+        if (!reactive.keyMap[keyCode]) reactive.keyMap[keyCode] = mesh;
+      };
+
+      // Row 0: Function Row (Dark-Grey Esc + F1..F12 + Del)
+      const fLabels = ['Esc', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12', 'Del'];
+      fLabels.forEach((lbl, i) => addRoundKey(-16.2 + i * 1.92, -4.6, lbl, null, i === 0, true));
+
+      // Row 1: Number Row + Backspace
+      const r1 = ['~', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '='];
+      r1.forEach((lbl, i) => addRoundKey(-16.1 + i * 1.88, -2.55, lbl, i >= 1 && i <= 3 ? `BT${i}` : null));
+      addPillKey(9.1, -2.55, 2.7, 1.5, '⌫');
+
+      // Row 2: Tab + QWERTY + Brackets
+      addPillKey(-15.7, -0.5, 2.4, 1.5, 'Tab');
+      ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '[', ']', '\\'].forEach((lbl, i) => {
+        addRoundKey(-13.4 + i * 1.88, -0.5, lbl);
+      });
+
+      // Row 3: Caps + ASDFGHJKL + Dark-Grey Enter (exact Photo 4 accent!)
+      addPillKey(-15.5, 1.55, 2.8, 1.5, 'Caps');
+      ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ';', "'"].forEach((lbl, i) => {
+        addRoundKey(-12.9 + i * 1.88, 1.55, lbl);
+      });
+      addPillKey(8.6, 1.55, 3.4, 1.5, 'ENTER', true);
+
+      // Row 4: Shift + ZXCVBNM + Shift
+      addPillKey(-15.2, 3.6, 3.4, 1.5, 'SHIFT');
+      ['Z', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.', '/'].forEach((lbl, i) => {
+        addRoundKey(-12.1 + i * 1.88, 3.6, lbl);
+      });
+      addPillKey(8.0, 3.6, 3.3, 1.5, 'Shift');
+
+      // Row 5: Modifiers + "PORTRONICS" Spacebar + Arrows
+      addRoundKey(-16.1, 5.65, 'Ctrl');
+      addRoundKey(-14.2, 5.65, 'Fn');
+      addRoundKey(-12.3, 5.65, 'Win');
+      addRoundKey(-10.4, 5.65, 'Alt');
+      addPillKey(-4.4, 5.65, 9.6, 1.52, 'PORTRONICS');
+      addRoundKey(1.5, 5.65, '✦');
+      addRoundKey(3.4, 5.65, 'Ctrl');
+      addRoundKey(5.5, 5.95, '◀', null, false, true);
+      addRoundKey(7.1, 5.30, '▲', null, false, true);
+      addRoundKey(7.1, 6.20, '▼', null, false, true);
+      addRoundKey(8.7, 5.95, '▶', null, false, true);
+
+      // Full Right Numpad (Photo 4)
+      const numRows = [
+        ['Num', '/', '*', '-'],
+        ['7', '8', '9', '+'],
+        ['4', '5', '6', ''],
+        ['1', '2', '3', 'Ent'],
+        ['0', '', '.', '']
+      ];
+      numRows.forEach((row, r) => {
+        row.forEach((lbl, c) => {
+          if (!lbl) return;
+          const nx = 11.4 + c * 1.78;
+          const nz = -2.55 + r * 2.05;
+          if (lbl === '0') addPillKey(nx + 0.88, nz, 3.3, 1.48, '0');
+          else if (lbl === '+' || lbl === 'Ent') addPillKey(nx, nz + 1.0, 1.45, 3.55, lbl);
+          else addRoundKey(nx, nz, lbl, null, false, true);
+        });
+      });
+
+      tagInspectable(
+        kbGroup,
+        'INPUT • WIRELESS FULL-LAYOUT',
+        'Portronics Bubble 3.0 Keyboard',
+        'Round typewriter-style white keycaps, dark-grey Esc & Enter accents, integrated device slot — live-typing TypeScript directly onto your ZEBRONICS screen!'
+      );
+    }
+
+    /** Demon Slayer Mousepad & Precision-Sculpted White/Orange Portronics Wireless Mouse (Photo 3) */
+    function buildMouseAndPad(parent) {
+      // 1. Demon Slayer Cloth Mousepad
+      const padGroup = new THREE.Group();
+      padGroup.position.set(39.0, 0, 17.5);
+      parent.add(padGroup);
+
+      const padW = 22.8, padD = 19.8, padH = 0.28;
+      const padShape = createRoundedRectShape(padW, padD, 1.5);
+      const padBaseGeo = new THREE.ExtrudeGeometry(padShape, { depth: padH, bevelEnabled: false, curveSegments: 16 });
+      padBaseGeo.rotateX(Math.PI / 2);
+      const padBase = new THREE.Mesh(padBaseGeo, new THREE.MeshStandardMaterial({ color: 0x161217, roughness: 0.85 }));
+      padBase.position.y = padH;
+      padBase.receiveShadow = true;
+      padGroup.add(padBase);
+
+      const artGeo = new THREE.ShapeGeometry(padShape, 18);
+      artGeo.rotateX(-Math.PI / 2);
+      const pa = artGeo.attributes.position;
+      const puv = new Float32Array(pa.count * 2);
+      for (let i = 0; i < pa.count; i++) {
+        puv[i * 2] = (pa.getX(i) + padW / 2) / padW;
+        puv[i * 2 + 1] = 1 - (pa.getZ(i) + padD / 2) / padD;
+      }
+      artGeo.setAttribute('uv', new THREE.BufferAttribute(puv, 2));
+      const padArt = new THREE.Mesh(
+        artGeo,
+        new THREE.MeshStandardMaterial({ map: createMousepadTexture(), roughness: 0.78, metalness: 0.02 })
+      );
+      padArt.position.y = padH + 0.02;
+      padArt.receiveShadow = true;
+      padGroup.add(padArt);
+
+      // 2. Authentic Sculpted Faceted White & Orange Portronics Gaming Mouse (Exact match to Photo 3!)
+      const mouseGroup = new THREE.Group();
+      mouseGroup.position.set(38.4, padH, 16.8);
+      mouseGroup.rotation.y = -0.14;
+      parent.add(mouseGroup);
+
+      const mc = document.createElement('canvas');
+      mc.width = 512; mc.height = 512;
+      const mctx = mc.getContext('2d');
+      mctx.fillStyle = '#f2f4f7';
+      mctx.fillRect(0, 0, 512, 512);
+      mctx.strokeStyle = '#30353d';
+      mctx.lineWidth = 7;
+      mctx.beginPath();
+      mctx.moveTo(64, 248);
+      mctx.lineTo(192, 294);
+      mctx.lineTo(320, 294);
+      mctx.lineTo(448, 248);
+      mctx.stroke();
+
+      mctx.save();
+      mctx.translate(154, 152);
+      mctx.rotate(Math.PI / 2);
+      mctx.fillStyle = '#b4bcc6';
+      mctx.font = '700 20px Inter, sans-serif';
+      mctx.textAlign = 'center';
+      mctx.fillText('PORTRONICS', 0, 0);
+      mctx.restore();
+
+      mctx.fillStyle = '#8d949e';
+      [[154, 240, -0.35], [358, 240, 0.35]].forEach(([dx, dy, rot]) => {
+        mctx.save();
+        mctx.translate(dx, dy);
+        mctx.rotate(rot);
+        mctx.beginPath();
+        mctx.moveTo(-26, 12); mctx.lineTo(0, -14); mctx.lineTo(26, 12); mctx.lineTo(14, 12); mctx.lineTo(0, -2); mctx.lineTo(-14, 12);
+        mctx.closePath();
+        mctx.fill();
+        mctx.restore();
+      });
+
+      mctx.strokeStyle = '#c8cfd8';
+      mctx.lineWidth = 4;
+      mctx.strokeRect(240, 392, 32, 32);
+      mctx.fillStyle = '#c8cfd8';
+      mctx.font = '800 20px Inter, sans-serif';
+      mctx.textAlign = 'center';
+      mctx.fillText('P', 256, 415);
+
+      const mouseTopTex = new THREE.CanvasTexture(mc);
+      mouseTopTex.encoding = THREE.sRGBEncoding;
+
+      const whiteShell = new THREE.MeshPhysicalMaterial({
+        color: 0xf4f6f8,
+        roughness: 0.28,
+        metalness: 0.04,
+        clearcoat: 0.38,
+        clearcoatRoughness: 0.26
+      });
+      const whiteTopMat = new THREE.MeshPhysicalMaterial({
+        map: mouseTopTex,
+        roughness: 0.26,
+        metalness: 0.04,
+        clearcoat: 0.42,
+        clearcoatRoughness: 0.24
+      });
+      const orangeTrim = new THREE.MeshPhysicalMaterial({
+        color: 0xff6210,
+        roughness: 0.26,
+        metalness: 0.08,
+        clearcoat: 0.50
+      });
+      const darkChassis = new THREE.MeshStandardMaterial({ color: 0x20242c, roughness: 0.56, metalness: 0.14 });
+      const glowMat = new THREE.MeshStandardMaterial({
+        color: 0xff6210,
+        emissive: 0xff5a00,
+        emissiveIntensity: 0.35,
+        roughness: 0.28
+      });
+      reactive.mouseGlowMat = glowMat;
+
+      const makeMouseFootprint = (scaleXY = 1.0) => {
+        const s = new THREE.Shape();
+        const k = scaleXY;
+        s.moveTo(-2.35 * k, -4.95 * k);
+        s.lineTo(-0.52 * k, -4.95 * k);
+        s.lineTo(-0.48 * k, -2.55 * k);
+        s.lineTo( 0.48 * k, -2.55 * k);
+        s.lineTo( 0.52 * k, -4.95 * k);
+        s.lineTo( 2.35 * k, -4.95 * k);
+        s.quadraticCurveTo( 3.10 * k, -3.10 * k,  2.95 * k, -0.35 * k);
+        s.quadraticCurveTo( 3.35 * k,  2.30 * k,  2.35 * k,  4.35 * k);
+        s.quadraticCurveTo( 0.00 * k,  5.85 * k, -2.35 * k,  4.35 * k);
+        s.quadraticCurveTo(-3.45 * k,  2.40 * k, -3.55 * k,  0.65 * k);
+        s.quadraticCurveTo(-3.15 * k, -2.30 * k, -2.35 * k, -4.95 * k);
+        return s;
+      };
+
+      const baseGeo = new THREE.ExtrudeGeometry(makeMouseFootprint(0.96), {
+        depth: 0.72,
+        bevelEnabled: true,
+        bevelThickness: 0.14,
+        bevelSize: 0.12,
+        bevelSegments: 2,
+        curveSegments: 24
+      });
+      baseGeo.rotateX(Math.PI / 2);
+      const baseMesh = new THREE.Mesh(baseGeo, darkChassis);
+      baseMesh.position.y = 0.86;
+      baseMesh.castShadow = true;
+      mouseGroup.add(baseMesh);
+
+      const rimGeo = new THREE.ExtrudeGeometry(makeMouseFootprint(0.985), {
+        depth: 0.22,
+        bevelEnabled: false,
+        curveSegments: 24
+      });
+      rimGeo.rotateX(Math.PI / 2);
+      const rimMesh = new THREE.Mesh(rimGeo, glowMat);
+      rimMesh.position.y = 1.05;
+      mouseGroup.add(rimMesh);
+
+      const topGeo = new THREE.ExtrudeGeometry(makeMouseFootprint(1.0), {
+        depth: 2.35,
+        bevelEnabled: true,
+        bevelThickness: 0.45,
+        bevelSize: 0.26,
+        bevelSegments: 5,
+        curveSegments: 28
+      });
+      topGeo.rotateX(Math.PI / 2);
+      const tp = topGeo.attributes.position;
+      const tuv = new Float32Array(tp.count * 2);
+      for (let i = 0; i < tp.count; i++) {
+        const x = tp.getX(i);
+        let y = tp.getY(i);
+        const z = tp.getZ(i);
+        const zn = Math.max(-1, Math.min(1, z / 5.4));
+        const arch = zn < 0.15
+          ? (0.48 + 0.52 * Math.cos(((zn - 0.15) / 1.15) * Math.PI * 0.52))
+          : (0.42 + 0.58 * Math.cos(((zn - 0.15) / 0.85) * Math.PI * 0.55));
+        const edgeRoll = Math.max(0.55, 1.0 - Math.pow(Math.abs(x) / 3.9, 2.2) * 0.36);
+        if (y > -1.4) {
+          y = -1.4 + (y + 1.4) * arch * edgeRoll;
+        }
+        tp.setY(i, y);
+        tuv[i * 2] = (x + 3.8) / 7.6;
+        tuv[i * 2 + 1] = 1.0 - (z + 5.4) / 11.2;
+      }
+      topGeo.setAttribute('uv', new THREE.BufferAttribute(tuv, 2));
+      topGeo.computeVertexNormals();
+
+      const topShell = new THREE.Mesh(topGeo, [whiteTopMat, whiteShell]);
+      topShell.position.y = 2.95;
+      topShell.castShadow = true;
+      topShell.receiveShadow = true;
+      mouseGroup.add(topShell);
+
+      const scrollWell = new THREE.Mesh(new THREE.BoxGeometry(0.96, 0.85, 2.55), darkChassis);
+      scrollWell.position.set(0, 1.68, -3.55);
+      scrollWell.rotation.x = 0.16;
+      mouseGroup.add(scrollWell);
+
+      const scrollGroup = new THREE.Group();
+      scrollGroup.position.set(0, 2.18, -3.72);
+      const wheelCore = new THREE.Mesh(new THREE.CylinderGeometry(0.56, 0.56, 0.54, 24), orangeTrim);
+      wheelCore.rotation.z = Math.PI / 2;
+      scrollGroup.add(wheelCore);
+      const wheelTread = new THREE.Mesh(new THREE.CylinderGeometry(0.59, 0.59, 0.28, 18), whiteShell);
+      wheelTread.rotation.z = Math.PI / 2;
+      scrollGroup.add(wheelTread);
+      mouseGroup.add(scrollGroup);
+      reactive.mouseScroll = scrollGroup;
+
+      const dpiBtn = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.24, 0.88), orangeTrim);
+      dpiBtn.position.set(0, 2.48, -2.05);
+      dpiBtn.rotation.x = 0.14;
+      mouseGroup.add(dpiBtn);
+
+      [-1.55, -0.35].forEach((bz) => {
+        const sBtn = new THREE.Mesh(new THREE.BoxGeometry(0.20, 0.28, 0.96), whiteShell);
+        sBtn.position.set(-2.98, 1.48, bz);
+        sBtn.rotation.y = 0.15;
+        mouseGroup.add(sBtn);
+      });
+
+      tagInspectable(
+        mouseGroup,
+        'PRECISION • DUAL-MODE WIRELESS',
+        'Portronics White/Orange Wireless Mouse',
+        'Faceted ergonomic gaming shell with separated front click paddles, orange-trimmed scroll wheel, flush DPI switch, and thumb wing rest!'
+      );
+      tagInspectable(
+        padGroup,
+        'SURFACE • ANIME DESK PAD',
+        'Demon Slayer Mousepad',
+        'Painterly Entertainment District shoji-lantern anime artwork mousepad framing the inside apex of the banked right-hand Hot Wheels hairpin.'
+      );
+    }
+
+    /** Matte-Black Steel-Link Analog Wristwatch with live real-time ticking hands (Photo 5 & 6) */
+    function buildWristwatch(parent) {
+      const watchGroup = new THREE.Group();
+      watchGroup.position.set(-43.5, 0, 4.0);
+      watchGroup.rotation.y = 0.52;
+      parent.add(watchGroup);
+
+      const blackSteel = new THREE.MeshPhysicalMaterial({ color: 0x1c2026, metalness: 0.78, roughness: 0.30, clearcoat: 0.25 });
+      const bezelMat = new THREE.MeshPhysicalMaterial({ color: 0x15181e, metalness: 0.85, roughness: 0.22 });
+
+      // Watch Case & Bezel
+      const caseMesh = new THREE.Mesh(new THREE.CylinderGeometry(2.7, 2.6, 1.15, 32), blackSteel);
+      caseMesh.position.y = 0.58;
+      caseMesh.castShadow = true;
+      watchGroup.add(caseMesh);
+
+      const bezelRing = new THREE.Mesh(new THREE.TorusGeometry(2.52, 0.22, 12, 32), bezelMat);
+      bezelRing.rotation.x = Math.PI / 2;
+      bezelRing.position.y = 1.12;
+      watchGroup.add(bezelRing);
+
+      // Knurled Side Crown
+      const crown = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.34, 0.55, 14), blackSteel);
+      crown.rotation.z = Math.PI / 2;
+      crown.position.set(2.85, 0.62, 0);
+      watchGroup.add(crown);
+
+      // Sunburst Patterned Dial
+      const dial = new THREE.Mesh(
+        new THREE.CircleGeometry(2.36, 32),
+        new THREE.MeshStandardMaterial({ map: createWatchDialTexture(), roughness: 0.35 })
+      );
+      dial.rotation.x = -Math.PI / 2;
+      dial.position.y = 1.16;
+      watchGroup.add(dial);
+
+      // Real-Time Animated Hands
+      const handWhite = new THREE.MeshStandardMaterial({ color: 0xf1f5f9, metalness: 0.5, roughness: 0.2 });
+      const handOrange = new THREE.MeshStandardMaterial({ color: 0xff6a1a, roughness: 0.3 });
+
+      const makeHand = (len, w, y, mat) => {
+        const pivot = new THREE.Group();
+        pivot.position.set(0, y, 0);
+        const blade = new THREE.Mesh(new THREE.BoxGeometry(w, 0.05, len), mat);
+        blade.position.z = -len * 0.42;
+        pivot.add(blade);
+        watchGroup.add(pivot);
+        return pivot;
+      };
+      reactive.watchHands.hour = makeHand(1.25, 0.16, 1.21, handWhite);
+      reactive.watchHands.min  = makeHand(1.80, 0.11, 1.25, handWhite);
+      reactive.watchHands.sec  = makeHand(2.05, 0.05, 1.29, handOrange);
+
+      const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 0.12, 12), handWhite);
+      cap.position.y = 1.29;
+      watchGroup.add(cap);
+
+      // Mineral Glass Crystal
+      const glass = new THREE.Mesh(
+        new THREE.CircleGeometry(2.42, 32),
+        new THREE.MeshPhysicalMaterial({ color: 0xffffff, transparent: true, opacity: 0.16, roughness: 0.05, clearcoat: 1.0 })
+      );
+      glass.rotation.x = -Math.PI / 2;
+      glass.position.y = 1.34;
+      watchGroup.add(glass);
+
+      // Articulated Matte-Black Metal-Link Bracelet stretching left (Photo 5 & 6)
+      for (let i = 0; i < 8; i++) {
+        const lx = -3.05 - i * 1.05;
+        [-0.85, 0, 0.85].forEach((lz, col) => {
+          const link = new THREE.Mesh(
+            new THREE.BoxGeometry(0.92, 0.38, col === 1 ? 0.72 : 0.62),
+            blackSteel
+          );
+          link.position.set(lx, 0.24 + (i === 0 ? 0.15 : 0), lz);
+          link.castShadow = true;
+          watchGroup.add(link);
+        });
+      }
+      const clasp = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.48, 2.35), bezelMat);
+      clasp.position.set(-12.2, 0.26, 0);
+      clasp.castShadow = true;
+      watchGroup.add(clasp);
+
+      tagInspectable(
+        watchGroup,
+        'ACCESSORY • REAL-TIME CLOCK',
+        'Matte-Black Steel Analog Watch',
+        'Articulated 3-row matte-black metal-link wristwatch with diagonal graphic dial — keeping accurate local real-time clock hands!'
+      );
+    }
+
+    /** Open Matte-Black Angular TWS Earbuds Case (contoured clamshell) + Loose Earbud (Photo 5 & 6) */
+    function buildEarbudsSetup(parent) {
+      const caseGroup = new THREE.Group();
+      caseGroup.position.set(-34.0, 0, 9.2);
+      caseGroup.rotation.y = -0.38;
+      parent.add(caseGroup);
+
+      const caseMat = new THREE.MeshPhysicalMaterial({ color: 0x171a20, roughness: 0.40, metalness: 0.18, clearcoat: 0.20 });
+      const innerMat = new THREE.MeshStandardMaterial({ color: 0x0d0f13, roughness: 0.54 });
+      const goldPinMat = new THREE.MeshStandardMaterial({ color: 0xdca84a, metalness: 0.92, roughness: 0.20 });
+
+      const podShape = createRoundedRectShape(4.8, 4.2, 1.35);
+      const podGeo = new THREE.ExtrudeGeometry(podShape, {
+        depth: 1.42,
+        bevelEnabled: true,
+        bevelThickness: 0.28,
+        bevelSize: 0.24,
+        bevelSegments: 4,
+        curveSegments: 18
+      });
+      podGeo.rotateX(Math.PI / 2);
+      const podMesh = new THREE.Mesh(podGeo, caseMat);
+      podMesh.position.y = 1.70;
+      podMesh.castShadow = true;
+      podMesh.receiveShadow = true;
+      caseGroup.add(podMesh);
+
+      const deck = new THREE.Mesh(new THREE.BoxGeometry(3.9, 0.18, 3.3), innerMat);
+      deck.position.set(0, 1.92, 0);
+      caseGroup.add(deck);
+
+      [-0.95, 0.95].forEach((cz) => {
+        const well = new THREE.Mesh(new THREE.CylinderGeometry(0.58, 0.44, 0.34, 18), innerMat);
+        well.position.set(-0.55, 1.90, cz);
+        caseGroup.add(well);
+        [-0.14, 0.14].forEach((pz) => {
+          const pin = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.22, 8), goldPinMat);
+          pin.position.set(-0.55, 2.02, cz + pz);
+          caseGroup.add(pin);
+        });
+      });
+
+      // Iconic 4 Slim Glowing Chevron Battery Indicators (`>>>>`) inside open case
+      for (let i = 0; i < 4; i++) {
+        const chevMat = new THREE.MeshStandardMaterial({
+          color: 0xe2eaf2,
+          emissive: 0x38bdf8,
+          emissiveIntensity: 0.35,
+          roughness: 0.22
+        });
+        const chevGroup = new THREE.Group();
+        chevGroup.position.set(0.42 + i * 0.36, 2.02, 0);
+        const legA = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.05, 0.62), chevMat);
+        legA.position.z = -0.20;
+        legA.rotation.y = 0.55;
+        const legB = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.05, 0.62), chevMat);
+        legB.position.z = 0.20;
+        legB.rotation.y = -0.55;
+        chevGroup.add(legA, legB);
+        caseGroup.add(chevGroup);
+        reactive.earbudChevrons.push(chevMat);
+      }
+
+      // Slim Contoured Flipped-Open Clamshell Lid angled naturally back at ~108° (Photo 6)
+      const lidPivot = new THREE.Group();
+      lidPivot.position.set(-2.35, 1.88, 0);
+      lidPivot.rotation.z = 1.92;
+      caseGroup.add(lidPivot);
+
+      const lidGeo = new THREE.ExtrudeGeometry(createRoundedRectShape(4.4, 4.0, 1.25), {
+        depth: 0.52,
+        bevelEnabled: true,
+        bevelThickness: 0.22,
+        bevelSize: 0.18,
+        bevelSegments: 4,
+        curveSegments: 16
+      });
+      lidGeo.rotateX(Math.PI / 2);
+      const lidMesh = new THREE.Mesh(lidGeo, caseMat);
+      lidMesh.position.set(2.2, 0.58, 0);
+      lidMesh.castShadow = true;
+      lidPivot.add(lidMesh);
+
+      const lidInner = new THREE.Mesh(new THREE.BoxGeometry(3.4, 0.14, 3.0), innerMat);
+      lidInner.position.set(2.2, 0.06, 0);
+      lidPivot.add(lidInner);
+
+      // Loose Black Stemmed Earbud right below case (Photo 1, 5, 6)
+      const budGroup = new THREE.Group();
+      budGroup.position.copy(reactive.looseEarbudBase);
+      budGroup.rotation.y = 0.45;
+      parent.add(budGroup);
+      reactive.looseEarbud = budGroup;
+
+      const budHead = new THREE.Mesh(new THREE.SphereGeometry(0.68, 16, 16), caseMat);
+      budHead.scale.set(1.15, 0.9, 0.9);
+      budHead.castShadow = true;
+      budGroup.add(budHead);
+
+      const siliconeTip = new THREE.Mesh(new THREE.SphereGeometry(0.50, 14, 14), innerMat);
+      siliconeTip.position.set(-0.58, 0.12, -0.25);
+      budGroup.add(siliconeTip);
+
+      const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.24, 2.25, 12), caseMat);
+      stem.rotation.z = Math.PI / 2;
+      stem.position.set(1.12, -0.24, 0.22);
+      stem.castShadow = true;
+      budGroup.add(stem);
+
+      tagInspectable(
+        caseGroup,
+        'AUDIO • TWS EARBUDS',
+        'Open Matte-Black Earbuds Case & Bud',
+        'Contoured open charging clamshell with pulsing 4-chevron LED meter (>>>>), gold pogo pins, and loose stemmed bud that vibrates when the car tears past!'
+      );
+    }
+
+    /** Back-Left Vintage Cream Power Strip + Infinix 45W White Charger + Monitor Plug (Photo 1, 5, 7) */
+    function buildPowerStripAndCharger(parent) {
+      const stripGroup = new THREE.Group();
+      stripGroup.position.set(-47.5, 0, -26.5);
+      parent.add(stripGroup);
+
+      const creamMat = new THREE.MeshStandardMaterial({ color: 0xe6dec2, roughness: 0.56 });
+      const whiteMat = new THREE.MeshStandardMaterial({ color: 0xf4f6f9, roughness: 0.34 });
+      const darkMat = new THREE.MeshStandardMaterial({ color: 0x1c1f24, roughness: 0.48 });
+
+      const stripBox = new THREE.Mesh(new THREE.BoxGeometry(16.5, 3.6, 5.2), creamMat);
+      stripBox.position.y = 1.8;
+      stripBox.castShadow = true;
+      stripBox.receiveShadow = true;
+      stripGroup.add(stripBox);
+
+      // Socket holes
+      [-4.2, 0.2, 4.6].forEach((sx) => {
+        const recess = new THREE.Mesh(new THREE.BoxGeometry(3.4, 0.2, 3.4), new THREE.MeshStandardMaterial({ color: 0xd4cbb0, roughness: 0.65 }));
+        recess.position.set(sx, 3.62, 0);
+        stripGroup.add(recess);
+      });
+
+      // White Infinix 45W Fast Charger Adapter (Photo 5 & 7)
+      const charger = new THREE.Mesh(new THREE.BoxGeometry(4.4, 3.4, 5.8), whiteMat);
+      charger.position.set(-4.2, 5.2, 1.1);
+      charger.castShadow = true;
+      stripGroup.add(charger);
+
+      // Charger white cable curving off left desk edge
+      const chCurve = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(-4.2, 5.0, 4.0),
+        new THREE.Vector3(-6.2, 3.5, 6.2),
+        new THREE.Vector3(-12.8, 0.5, 7.2)
+      ]);
+      stripGroup.add(new THREE.Mesh(new THREE.TubeGeometry(chCurve, 18, 0.22, 8, false), whiteMat));
+
+      // Black 3-pin Monitor Power Plug
+      const monPlug = new THREE.Mesh(new THREE.BoxGeometry(2.6, 2.2, 2.6), darkMat);
+      monPlug.position.set(0.2, 4.6, 0.1);
+      monPlug.castShadow = true;
+      stripGroup.add(monPlug);
+
+      tagInspectable(
+        stripGroup,
+        'POWER • DESK DISTRIBUTION',
+        'Cream Power Strip + Infinix 45W Brick',
+        'Desk back-left power bank feeding your ZEBRONICS monitor and white Infinix 45W USB fast charger.'
+      );
+    }
+
+    // ==========================================================================
+    // 2. SPLINE-LOFTED HOT WHEELS CIRCUIT & TWIST-FREE 360° VERTICAL LOOP
+    // ==========================================================================
+
+    /** Right-Handed Frenet-like Track Basis Matrix (determinant = +1.00 always!)
+     *  Local +Z = tangent (forward), Local +Y = normal (up), Local +X = normal × tangent (left) */
+    function makeTrackBasis(normal, tangent) {
+      const xAxis = new THREE.Vector3().crossVectors(normal, tangent).normalize();
+      return new THREE.Matrix4().makeBasis(xAxis, normal, tangent);
+    }
+
+    function buildTrackSplineSamples() {
+      const waypoints = [
+        { p: [-44.0, 3.2, -9.6],  bank: 0.00, zone: 'STUNT LOOP EXIT' },
+        { p: [-49.5, 3.0, -9.5],  bank: 0.12, zone: 'WATCH CHICANE' },
+        { p: [-56.0, 2.7, -5.2],  bank: 0.42, zone: 'WATCH CHICANE' },
+        { p: [-56.8, 1.9,  4.8],  bank: 0.38, zone: 'WRISTWATCH SWEEP' },
+        { p: [-53.2, 1.3, 14.8],  bank: 0.32, zone: 'EARBUDS BEND' },
+        { p: [-43.8, 0.9, 21.4],  bank: 0.18, zone: 'EARBUDS BEND' },
+        { p: [-31.0, 0.7, 26.6],  bank: 0.08, zone: 'NITRO LAUNCHER' },
+        { p: [-18.0, 0.7, 28.0],  bank: 0.00, zone: 'KEYBOARD STRAIGHT' },
+        { p: [  0.0, 0.7, 28.0],  bank: 0.00, zone: 'START / FINISH' },
+        { p: [ 20.0, 0.7, 28.0],  bank: 0.00, zone: 'KEYBOARD STRAIGHT' },
+        { p: [ 42.5, 0.9, 28.0],  bank: 0.16, zone: 'MOUSEPAD HAIRPIN' },
+        { p: [ 54.4, 2.4, 23.0],  bank: 0.46, zone: 'MOUSEPAD HAIRPIN' },
+        { p: [ 56.2, 5.2, 11.0],  bank: 0.50, zone: 'PORTRONICS CLIMB' },
+        { p: [ 52.8, 7.6, -2.5],  bank: 0.36, zone: 'MAC MINI OVERPASS' },
+        { p: [ 43.2, 8.6, -9.5],  bank: 0.10, zone: 'MAC MINI OVERPASS' },
+        { p: [ 34.0, 8.6, -9.5],  bank: 0.00, zone: 'MAC MINI OVERPASS' },
+        { p: [ 24.5, 6.4, -10.8], bank: -0.08, zone: 'USB HUB DIVE' },
+        { p: [ 15.0, 3.6, -12.8], bank: 0.00, zone: 'UNDER-MONITOR TUNNEL' },
+        { p: [  2.0, 3.3, -13.6], bank: 0.00, zone: 'UNDER-MONITOR TUNNEL' },
+        { p: [-15.0, 3.2, -14.1], bank: 0.00, zone: 'UNDER-MONITOR TUNNEL' },
+        { p: [-34.0, 3.2, -14.2], bank: 0.00, zone: 'LOOP APPROACH' },
+        { p: [-44.0, 3.2, -14.2], bank: 0.00, zone: '360° VERTICAL LOOP' }
+      ];
+
+      const openCurve = new THREE.CatmullRomCurve3(
+        waypoints.map((w) => new THREE.Vector3(...w.p)),
+        false,
+        'catmullrom',
+        0.48
+      );
+
+      const samples = [];
+      const openCount = 620;
+      const worldUp = new THREE.Vector3(0, 1, 0);
+
+      for (let i = 0; i < openCount; i++) {
+        const u = i / openCount;
+        const pos = openCurve.getPointAt(u);
+        const tangent = openCurve.getTangentAt(u).normalize();
+
+        // Interpolate bank angle & zone name smoothly from waypoints
+        const wf = u * (waypoints.length - 1);
+        const wi = Math.min(waypoints.length - 2, Math.floor(wf));
+        const wt = wf - wi;
+        const bank = THREE.MathUtils.lerp(waypoints[wi].bank, waypoints[wi + 1].bank, wt);
+        const zone = waypoints[Math.round(wf)].zone;
+
+        let binormal = new THREE.Vector3().crossVectors(tangent, worldUp).normalize();
+        let normal = new THREE.Vector3().crossVectors(binormal, tangent).normalize();
+
+        if (Math.abs(bank) > 0.001) {
+          normal.applyAxisAngle(tangent, bank).normalize();
+          binormal.crossVectors(tangent, normal).normalize();
+        }
+        samples.push({ pos, tangent, normal, binormal, zone, isLoop: false, s: 0 });
+      }
+
+      // Analytical Twist-Free 360° Vertical Helical Hot Wheels Stunt Loop
+      const loopCount = 140;
+      const xc = -44.0, yBase = 3.2, R = 7.8, zStart = -14.2, zEnd = -9.6;
+
+      for (let j = 0; j < loopCount; j++) {
+        const t = j / loopCount;
+        const theta = t * Math.PI * 2;
+        const smoothZ = zStart + (zEnd - zStart) * (0.5 - 0.5 * Math.cos(t * Math.PI));
+
+        const pos = new THREE.Vector3(
+          xc - R * Math.sin(theta),
+          yBase + R * (1 - Math.cos(theta)),
+          smoothZ
+        );
+
+        const dzdt = (zEnd - zStart) * (Math.PI / 2) * Math.sin(t * Math.PI);
+        const tangent = new THREE.Vector3(
+          -R * Math.cos(theta) * Math.PI * 2,
+           R * Math.sin(theta) * Math.PI * 2,
+           dzdt
+        ).normalize();
+
+        const radialIn = new THREE.Vector3(Math.sin(theta), Math.cos(theta), 0).normalize();
+        const binormal = new THREE.Vector3().crossVectors(tangent, radialIn).normalize();
+        const normal = new THREE.Vector3().crossVectors(binormal, tangent).normalize();
+
+        samples.push({ pos, tangent, normal, binormal, zone: '360° VERTICAL LOOP', isLoop: true, s: 0 });
+      }
+
+      // Compute cumulative arc length around closed circuit
+      let totalS = 0;
+      for (let i = 0; i < samples.length; i++) {
+        samples[i].s = totalS;
+        const next = samples[(i + 1) % samples.length];
+        totalS += samples[i].pos.distanceTo(next.pos);
+      }
+
+      track.samples = samples;
+      track.totalLength = totalS;
+    }
+
+    /** Smoothly sample position, tangent, normal, binormal & zone at any arc-length s */
+    function sampleTrackAt(s) {
+      const len = track.totalLength;
+      const wrapped = ((s % len) + len) % len;
+      const arr = track.samples;
+
+      let lo = 0, hi = arr.length - 1;
+      while (lo < hi) {
+        const mid = (lo + hi + 1) >> 1;
+        if (arr[mid].s <= wrapped) lo = mid;
+        else hi = mid - 1;
+      }
+
+      const a = arr[lo];
+      const b = arr[(lo + 1) % arr.length];
+      const segLen = (lo === arr.length - 1) ? (len - a.s) : (b.s - a.s);
+      const t = segLen > 0.0001 ? (wrapped - a.s) / segLen : 0;
+
+      const pos = new THREE.Vector3().lerpVectors(a.pos, b.pos, t);
+      const tangent = new THREE.Vector3().lerpVectors(a.tangent, b.tangent, t).normalize();
+      const normal = new THREE.Vector3().lerpVectors(a.normal, b.normal, t).normalize();
+      const binormal = new THREE.Vector3().crossVectors(tangent, normal).normalize();
+      normal.crossVectors(binormal, tangent).normalize();
+
+      return { pos, tangent, normal, binormal, zone: a.zone, isLoop: a.isLoop };
+    }
+
+    function findClosestS(targetVec) {
+      let bestDist = Infinity, bestS = 0;
+      for (let i = 0; i < track.samples.length; i++) {
+        const d = track.samples[i].pos.distanceToSquared(targetVec);
+        if (d < bestDist) {
+          bestDist = d;
+          bestS = track.samples[i].s;
+        }
+      }
+      return bestS;
+    }
+
+    /** Sweep a closed 2D cross-section ribbon along track.samples */
+    function createLoftedRibbonGeometry(profilePts, uvScaleV = 0.12) {
+      const N = track.samples.length;
+      const P = profilePts.length;
+      const positions = [];
+      const uvs = [];
+      const indices = [];
+
+      for (let i = 0; i <= N; i++) {
+        const smp = track.samples[i % N];
+        const vCoord = (i === N ? track.totalLength : smp.s) * uvScaleV;
+
+        for (let j = 0; j < P; j++) {
+          const [px, py] = profilePts[j];
+          const vx = smp.pos.x + smp.binormal.x * px + smp.normal.x * py;
+          const vy = smp.pos.y + smp.binormal.y * px + smp.normal.y * py;
+          const vz = smp.pos.z + smp.binormal.z * px + smp.normal.z * py;
+          positions.push(vx, vy, vz);
+          uvs.push(j / (P - 1), vCoord);
+        }
+      }
+
+      for (let i = 0; i < N; i++) {
+        for (let j = 0; j < P - 1; j++) {
+          const a = i * P + j;
+          const b = (i + 1) * P + j;
+          const c = (i + 1) * P + (j + 1);
+          const d = i * P + (j + 1);
+          indices.push(a, b, d, b, c, d);
+        }
+      }
+
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+      geo.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+      geo.setIndex(indices);
+      geo.computeVertexNormals();
+      return geo;
+    }
+
+    function buildHotWheelsTrack() {
+      buildTrackSplineSamples();
+
+      const trackGroup = new THREE.Group();
+      scene.add(trackGroup);
+
+      // 1. Classic Glossy Bright-Orange Hot Wheels U-Channel Track
+      const orangeProfile = [
+        [-2.02,  0.48],
+        [-2.02, -0.32],
+        [ 2.02, -0.32],
+        [ 2.02,  0.48],
+        [ 1.72,  0.48],
+        [ 1.72, -0.02],
+        [-1.72, -0.02],
+        [-1.72,  0.48],
+        [-2.02,  0.48]
+      ];
+      const orangeGeo = createLoftedRibbonGeometry(orangeProfile, 0.08);
+      const orangeMat = new THREE.MeshPhysicalMaterial({
+        color: 0xff5a08,
+        roughness: 0.20,
+        metalness: 0.05,
+        clearcoat: 0.88,
+        clearcoatRoughness: 0.14,
+        side: THREE.DoubleSide
+      });
+      const orangeMesh = new THREE.Mesh(orangeGeo, orangeMat);
+      orangeMesh.castShadow = true;
+      orangeMesh.receiveShadow = true;
+      trackGroup.add(orangeMesh);
+
+      // 2. Minimal Dark Asphalt Inner Racing Surface + Dual Slot Grooves
+      const asphaltProfile = [
+        [-1.66, 0.015],
+        [-0.80, 0.015],
+        [ 0.00, 0.015],
+        [ 0.80, 0.015],
+        [ 1.66, 0.015]
+      ];
+      const asphaltGeo = createLoftedRibbonGeometry(asphaltProfile, 0.06);
+      const asphaltMat = new THREE.MeshStandardMaterial({
+        map: createAsphaltTrackTexture(),
+        roughness: 0.62,
+        metalness: 0.15,
+        side: THREE.DoubleSide
+      });
+      const asphaltMesh = new THREE.Mesh(asphaltGeo, asphaltMat);
+      asphaltMesh.receiveShadow = true;
+      trackGroup.add(asphaltMesh);
+
+      // 3. Classic Royal-Blue Hot Wheels Snap-On Track Jointers (Right-Handed Basis — Zero Flipping!)
+      const jointerMat = new THREE.MeshPhysicalMaterial({ color: 0x0072ff, roughness: 0.24, metalness: 0.06, clearcoat: 0.65 });
+      for (let s = 6; s < track.totalLength - 4; s += 14.5) {
+        const f = sampleTrackAt(s);
+        const jGroup = new THREE.Group();
+        jGroup.position.copy(f.pos);
+        jGroup.quaternion.setFromRotationMatrix(makeTrackBasis(f.normal, f.tangent));
+
+        const under = new THREE.Mesh(new THREE.BoxGeometry(4.18, 0.22, 1.45), jointerMat);
+        under.position.y = -0.38;
+        jGroup.add(under);
+
+        [-2.02, 2.02].forEach((sideX) => {
+          const clip = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.88, 1.45), jointerMat);
+          clip.position.set(sideX, 0.02, 0);
+          jGroup.add(clip);
+        });
+        trackGroup.add(jGroup);
+      }
+
+      // 4. Translucent Clear Acrylic Support Pillars (Hardware Collision-Aware!)
+      const clearPillarMat = new THREE.MeshPhysicalMaterial({
+        color: 0xdcf4ff,
+        roughness: 0.08,
+        metalness: 0.05,
+        transparent: true,
+        opacity: 0.44,
+        clearcoat: 1.0
+      });
+      const footMat = new THREE.MeshPhysicalMaterial({ color: 0x0284c7, roughness: 0.28, clearcoat: 0.55 });
+
+      const collidesWithGear = (x, z) => {
+        if (x > 26 && x < 42 && z > -17 && z < -1) return true;   // Mac mini
+        if (x > 27 && x < 51 && z > 7 && z < 28) return true;     // Mousepad
+        if (x > -22 && x < 18 && z > 10 && z < 25) return true;   // Keyboard
+        if (x > -17 && x < 9 && z > -24 && z < -11) return true;  // Monitor V-stand
+        return false;
+      };
+
+      for (let s = 4; s < track.totalLength - 4; s += 19.0) {
+        const f = sampleTrackAt(s);
+        if (f.isLoop || f.pos.y < 1.35 || f.normal.y < 0.55) continue;
+        if (collidesWithGear(f.pos.x, f.pos.z)) continue;
+
+        const h = f.pos.y - 0.34;
+        const pillar = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.44, h, 14), clearPillarMat);
+        pillar.position.set(f.pos.x, h / 2, f.pos.z);
+        pillar.castShadow = true;
+        trackGroup.add(pillar);
+
+        const foot = new THREE.Mesh(new THREE.CylinderGeometry(1.15, 1.30, 0.24, 16), footMat);
+        foot.position.set(f.pos.x, 0.12, f.pos.z);
+        trackGroup.add(foot);
+      }
+
+      // Dedicated Twin Acrylic Base & Central Support Strut for the 360° Vertical Loop
+      [-14.2, -9.6].forEach((lz) => {
+        const braceBase = new THREE.Mesh(new THREE.BoxGeometry(9.6, 0.34, 1.5), footMat);
+        braceBase.position.set(-44.0, 0.17, lz);
+        braceBase.castShadow = true;
+        trackGroup.add(braceBase);
+
+        [-3.4, 3.4].forEach((bx) => {
+          const post = new THREE.Mesh(new THREE.CylinderGeometry(0.30, 0.36, 2.9, 12), clearPillarMat);
+          post.position.set(-44.0 + bx, 1.52, lz);
+          trackGroup.add(post);
+        });
+      });
+
+      const loopArchPillar = new THREE.Mesh(new THREE.CylinderGeometry(0.36, 0.52, 18.8, 14), clearPillarMat);
+      loopArchPillar.position.set(-44.0, 9.4, -11.9);
+      trackGroup.add(loopArchPillar);
+      const loopBaseDisc = new THREE.Mesh(new THREE.CylinderGeometry(1.6, 1.8, 0.3, 18), footMat);
+      loopBaseDisc.position.set(-44.0, 0.15, -11.9);
+      trackGroup.add(loopBaseDisc);
+
+      // 5. Start/Finish Gantry Arch
+      track.startS = findClosestS(new THREE.Vector3(0, 0.7, 28.0));
+      buildStartGantry(trackGroup, track.startS);
+      carState.s = track.startS;
+
+      // 6. Dual Motorized Hot Wheels Booster Gates
+      const boost1S = findClosestS(new THREE.Vector3(-4, 3.3, -13.8));
+      const boost2S = findClosestS(new THREE.Vector3(-26, 0.7, 27.3));
+      track.boosters = [boost1S, boost2S];
+      buildBoosterGate(trackGroup, boost1S);
+      buildBoosterGate(trackGroup, boost2S);
+
+      // 7. Glowing Speed Arches over Mac mini & Mousepad Climb
+      buildSpeedArch(trackGroup, findClosestS(new THREE.Vector3(34.0, 8.6, -9.5)), 0x00e5ff);
+      buildSpeedArch(trackGroup, findClosestS(new THREE.Vector3(55.5, 4.8, 12.0)), 0xff6a18);
+    }
+
+    function buildStartGantry(parent, s) {
+      const f = sampleTrackAt(s);
+      const g = new THREE.Group();
+      g.position.copy(f.pos);
+      g.quaternion.setFromRotationMatrix(makeTrackBasis(f.normal, f.tangent));
+      parent.add(g);
+
+      const carbonMat = new THREE.MeshStandardMaterial({ color: 0x1d2128, roughness: 0.38, metalness: 0.38 });
+      const orangeMat = new THREE.MeshPhysicalMaterial({ color: 0xff5a08, roughness: 0.24, clearcoat: 0.65 });
+
+      [-2.35, 2.35].forEach((px) => {
+        const post = new THREE.Mesh(new THREE.BoxGeometry(0.42, 4.6, 0.7), carbonMat);
+        post.position.set(px, 2.0, 0);
+        post.castShadow = true;
+        g.add(post);
+      });
+
+      const header = new THREE.Mesh(new THREE.BoxGeometry(5.5, 1.05, 0.9), carbonMat);
+      header.position.set(0, 4.4, 0);
+      header.castShadow = true;
+      g.add(header);
+
+      const accentTop = new THREE.Mesh(new THREE.BoxGeometry(5.6, 0.16, 0.96), orangeMat);
+      accentTop.position.set(0, 4.98, 0);
+      g.add(accentTop);
+
+      // Checkered banner texture
+      const bc = document.createElement('canvas');
+      bc.width = 512; bc.height = 96;
+      const bctx = bc.getContext('2d');
+      bctx.fillStyle = '#14171d';
+      bctx.fillRect(0, 0, 512, 96);
+      for (let x = 0; x < 512; x += 24) {
+        for (let y = 0; y < 24; y += 12) {
+          bctx.fillStyle = ((x / 24 + y / 12) % 2 === 0) ? '#ffffff' : '#14171d';
+          bctx.fillRect(x, y, 24, 12);
+          bctx.fillRect(x, 72 + y, 24, 12);
+        }
+      }
+      bctx.fillStyle = '#ff6a18';
+      bctx.font = '900 32px Inter, sans-serif';
+      bctx.textAlign = 'center';
+      bctx.textBaseline = 'middle';
+      bctx.fillText('DESK CIRCUIT • START', 256, 49);
+
+      const bannerTex = new THREE.CanvasTexture(bc);
+      bannerTex.encoding = THREE.sRGBEncoding;
+      const bannerMat = new THREE.MeshBasicMaterial({ map: bannerTex });
+
+      const fFace = new THREE.Mesh(new THREE.PlaneGeometry(5.2, 0.92), bannerMat);
+      fFace.position.set(0, 4.4, 0.47);
+      g.add(fFace);
+      const bFace = new THREE.Mesh(new THREE.PlaneGeometry(5.2, 0.92), bannerMat);
+      bFace.rotation.y = Math.PI;
+      bFace.position.set(0, 4.4, -0.47);
+      g.add(bFace);
+
+      // Animated Racing Start Lights
+      for (let i = 0; i < 4; i++) {
+        const lm = new THREE.MeshStandardMaterial({ color: 0x22c55e, emissive: 0x22c55e, emissiveIntensity: 1.5 });
+        const bulb = new THREE.Mesh(new THREE.SphereGeometry(0.16, 10, 10), lm);
+        bulb.position.set(-1.35 + i * 0.9, 3.76, 0.3);
+        g.add(bulb);
+        reactive.startLights.push(lm);
+      }
+    }
+
+    function buildBoosterGate(parent, s) {
+      const f = sampleTrackAt(s);
+      const g = new THREE.Group();
+      g.position.copy(f.pos);
+      g.quaternion.setFromRotationMatrix(makeTrackBasis(f.normal, f.tangent));
+      parent.add(g);
+
+      const blueMat = new THREE.MeshPhysicalMaterial({ color: 0x006eff, roughness: 0.24, clearcoat: 0.65 });
+      const darkMat = new THREE.MeshStandardMaterial({ color: 0x1a1e25, roughness: 0.44 });
+      const foamMat = new THREE.MeshStandardMaterial({ color: 0xff6a18, roughness: 0.72 });
+
+      [-2.35, 2.35].forEach((px, sideIdx) => {
+        const pod = new THREE.Mesh(new THREE.BoxGeometry(1.12, 1.55, 3.6), blueMat);
+        pod.position.set(px, 0.58, 0);
+        pod.castShadow = true;
+        g.add(pod);
+
+        const roller = new THREE.Mesh(new THREE.CylinderGeometry(0.72, 0.72, 0.64, 16), foamMat);
+        roller.position.set(px > 0 ? 1.58 : -1.58, 0.62, 0);
+        roller.userData.spinDir = sideIdx === 0 ? 1 : -1;
+        g.add(roller);
+        reactive.boosterWheels.push(roller);
+      });
+
+      const bridge = new THREE.Mesh(new THREE.BoxGeometry(5.6, 0.52, 2.7), darkMat);
+      bridge.position.set(0, 2.55, 0);
+      bridge.castShadow = true;
+      g.add(bridge);
+
+      for (let i = 0; i < 3; i++) {
+        const cm = new THREE.MeshStandardMaterial({ color: 0xff9a3c, emissive: 0xff5a00, emissiveIntensity: 1.2 });
+        const bar = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.14, 0.34), cm);
+        bar.position.set(0, 2.85, -0.85 + i * 0.85);
+        g.add(bar);
+        reactive.boosterChevrons.push({ mat: cm, idx: i });
+      }
+    }
+
+    function buildSpeedArch(parent, s, glowHex) {
+      const f = sampleTrackAt(s);
+      const g = new THREE.Group();
+      g.position.copy(f.pos);
+      g.quaternion.setFromRotationMatrix(makeTrackBasis(f.normal, f.tangent));
+      parent.add(g);
+
+      const archMat = new THREE.MeshStandardMaterial({ color: 0x1d222b, roughness: 0.34, metalness: 0.5 });
+      const glowMat = new THREE.MeshStandardMaterial({ color: glowHex, emissive: glowHex, emissiveIntensity: 2.0 });
+
+      const outerArch = new THREE.Mesh(new THREE.TorusGeometry(2.55, 0.22, 12, 32, Math.PI), archMat);
+      outerArch.position.y = 0.25;
+      outerArch.castShadow = true;
+      g.add(outerArch);
+
+      const neonTube = new THREE.Mesh(new THREE.TorusGeometry(2.36, 0.08, 10, 32, Math.PI), glowMat);
+      neonTube.position.y = 0.25;
+      g.add(neonTube);
+    }
+
+    // ==========================================================================
+    // 3. PRECISION DIE-CAST MICRO-SCALE HOT WHEELS HYPERCAR + GLOW PARTICLES
+    // ==========================================================================
+
+    function buildHotWheelsCar() {
+      const car = new THREE.Group();
+      scene.add(car);
+      carState.group = car;
+
+      const liv = LIVERIES[carState.liveryIdx];
+      const bodyMat = new THREE.MeshPhysicalMaterial({
+        color: liv.body,
+        roughness: 0.12,
+        metalness: 0.45,
+        clearcoat: 1.0,
+        clearcoatRoughness: 0.05
+      });
+      const stripeMat = new THREE.MeshPhysicalMaterial({
+        color: liv.stripe,
+        roughness: 0.18,
+        metalness: 0.25,
+        clearcoat: 0.90
+      });
+      const carbonMat = new THREE.MeshStandardMaterial({ color: 0x14171d, roughness: 0.38, metalness: 0.38 });
+      const chromeMat = new THREE.MeshStandardMaterial({ color: 0xdce4ee, roughness: 0.14, metalness: 0.95 });
+      const glassMat = new THREE.MeshPhysicalMaterial({
+        color: 0x091322,
+        roughness: 0.04,
+        metalness: 0.35,
+        clearcoat: 1.0,
+        transparent: true,
+        opacity: 0.84
+      });
+      carState.bodyMat = bodyMat;
+      carState.stripeMat = stripeMat;
+
+      // Sculpted Low-Slung Le Mans / Hypercar Side Profile (+Z forward!)
+      const sideProfile = new THREE.Shape();
+      sideProfile.moveTo(-2.22, 0.24);
+      sideProfile.lineTo(2.26, 0.22);
+      sideProfile.quadraticCurveTo(2.34, 0.38, 2.02, 0.52);
+      sideProfile.quadraticCurveTo(1.32, 0.68, 0.72, 0.80);
+      sideProfile.quadraticCurveTo(0.05, 1.12, -0.82, 1.02);
+      sideProfile.lineTo(-1.98, 0.80);
+      sideProfile.lineTo(-2.22, 0.52);
+      sideProfile.closePath();
+
+      const bodyGeo = new THREE.ExtrudeGeometry(sideProfile, {
+        depth: 1.56,
+        bevelEnabled: true,
+        bevelThickness: 0.16,
+        bevelSize: 0.08,
+        bevelSegments: 4
+      });
+      bodyGeo.translate(0, 0, -0.78);
+      bodyGeo.rotateY(-Math.PI / 2);
+      const bodyMesh = new THREE.Mesh(bodyGeo, bodyMat);
+      bodyMesh.castShadow = true;
+      car.add(bodyMesh);
+
+      // Carbon Fiber Front Splitter, Side Skirts & Finned Rear Diffuser
+      const underTray = new THREE.Mesh(new THREE.BoxGeometry(2.04, 0.12, 4.54), carbonMat);
+      underTray.position.set(0, 0.22, 0.02);
+      underTray.castShadow = true;
+      car.add(underTray);
+
+      [-0.52, -0.18, 0.18, 0.52].forEach((dx) => {
+        const fin = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.22, 0.55), carbonMat);
+        fin.position.set(dx, 0.26, -2.08);
+        car.add(fin);
+      });
+
+      // Center Racing Stripe
+      const stripeGeo = new THREE.ExtrudeGeometry(sideProfile, { depth: 0.38, bevelEnabled: false });
+      stripeGeo.translate(0, 0, -0.19);
+      stripeGeo.rotateY(-Math.PI / 2);
+      const stripeMesh = new THREE.Mesh(stripeGeo, stripeMat);
+      stripeMesh.scale.set(1.0, 1.016, 1.005);
+      car.add(stripeMesh);
+
+      // Sculpted Widebody Fenders, Side Intakes & Mirrors
+      [-0.86, 0.86].forEach((fx) => {
+        const fArch = new THREE.Mesh(new THREE.SphereGeometry(0.56, 18, 12), bodyMat);
+        fArch.scale.set(0.54, 0.58, 1.38);
+        fArch.position.set(fx, 0.54, 1.28);
+        car.add(fArch);
+
+        const rArch = new THREE.Mesh(new THREE.SphereGeometry(0.62, 18, 12), bodyMat);
+        rArch.scale.set(0.58, 0.62, 1.48);
+        rArch.position.set(fx, 0.60, -1.24);
+        car.add(rArch);
+
+        const scoop = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.34, 1.12), carbonMat);
+        scoop.position.set(fx * 1.05, 0.52, -0.25);
+        car.add(scoop);
+
+        const blade = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.16, 2.25), stripeMat);
+        blade.position.set(fx * 1.18, 0.36, 0.0);
+        car.add(blade);
+
+        const mirror = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.11, 0.18), bodyMat);
+        mirror.position.set(fx * 1.06, 0.82, 0.42);
+        car.add(mirror);
+      });
+
+      // Recessed Hood NACA Vent & Slatted Rear Glass Engine Bay
+      const hoodVent = new THREE.Mesh(new THREE.BoxGeometry(0.58, 0.08, 0.62), carbonMat);
+      hoodVent.position.set(0, 0.65, 1.32);
+      hoodVent.rotation.x = 0.22;
+      car.add(hoodVent);
+
+      const engineBlock = new THREE.Mesh(new THREE.BoxGeometry(0.76, 0.24, 0.96), chromeMat);
+      engineBlock.position.set(0, 0.72, -1.28);
+      car.add(engineBlock);
+      for (let sl = 0; sl < 4; sl++) {
+        const louver = new THREE.Mesh(new THREE.BoxGeometry(0.92, 0.04, 0.12), carbonMat);
+        louver.position.set(0, 0.90 - sl * 0.04, -0.95 - sl * 0.24);
+        louver.rotation.x = -0.20;
+        car.add(louver);
+      }
+
+      // Teardrop Smoked Glass Cockpit Canopy + Interior Bucket Seats
+      const seatMat = new THREE.MeshStandardMaterial({ color: 0x22262e, roughness: 0.7 });
+      [-0.26, 0.26].forEach((sx) => {
+        const seat = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.42, 0.36), seatMat);
+        seat.position.set(sx, 0.68, -0.26);
+        seat.rotation.x = -0.28;
+        car.add(seat);
+      });
+
+      const canopy = new THREE.Mesh(new THREE.SphereGeometry(0.84, 24, 16), glassMat);
+      canopy.scale.set(0.80, 0.52, 1.54);
+      canopy.position.set(0, 0.84, -0.14);
+      car.add(canopy);
+
+      // Twin-Strut Carbon GT Rear Wing with Side Endplates
+      [-0.64, 0.64].forEach((sx) => {
+        const strut = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.44, 0.32), carbonMat);
+        strut.position.set(sx, 0.96, -1.88);
+        car.add(strut);
+      });
+      const wingBlade = new THREE.Mesh(new THREE.BoxGeometry(2.14, 0.08, 0.50), carbonMat);
+      wingBlade.position.set(0, 1.18, -1.96);
+      wingBlade.rotation.x = 0.14;
+      wingBlade.castShadow = true;
+      car.add(wingBlade);
+      [-1.08, 1.08].forEach((ex) => {
+        const endplate = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.30, 0.60), stripeMat);
+        endplate.position.set(ex, 1.16, -1.96);
+        car.add(endplate);
+      });
+
+      // Sculpted LED Headlight DRL Blades + Subtle Soft Gradient Night Beam
+      const hlMat = new THREE.MeshBasicMaterial({ color: 0xe6f7ff });
+      const beamCanvas = document.createElement('canvas');
+      beamCanvas.width = 128; beamCanvas.height = 128;
+      const bctx = beamCanvas.getContext('2d');
+      const bg = bctx.createLinearGradient(0, 0, 0, 128);
+      bg.addColorStop(0.0, 'rgba(210, 240, 255, 0.45)');
+      bg.addColorStop(0.4, 'rgba(180, 225, 255, 0.12)');
+      bg.addColorStop(1.0, 'rgba(180, 225, 255, 0.0)');
+      bctx.fillStyle = bg;
+      bctx.fillRect(0, 0, 128, 128);
+      const beamTex = new THREE.CanvasTexture(beamCanvas);
+
+      const coneMat = new THREE.MeshBasicMaterial({
+        map: beamTex,
+        transparent: true,
+        opacity: 0.0,
+        depthWrite: false,
+        side: THREE.DoubleSide,
+        blending: THREE.AdditiveBlending
+      });
+      [-0.64, 0.64].forEach((hx) => {
+        const housing = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.14, 0.24), carbonMat);
+        housing.position.set(hx, 0.50, 2.08);
+        car.add(housing);
+
+        const hl = new THREE.Mesh(new THREE.BoxGeometry(0.40, 0.07, 0.08), hlMat);
+        hl.position.set(hx, 0.51, 2.18);
+        car.add(hl);
+
+        const beam = new THREE.Mesh(new THREE.PlaneGeometry(1.4, 7.5), coneMat);
+        beam.rotation.x = -Math.PI / 2;
+        beam.position.set(hx, 0.28, 6.0);
+        car.add(beam);
+        carState.headlightCones.push(coneMat);
+      });
+
+      const spot = new THREE.SpotLight(0xd8f0ff, 0.0, 44, 0.52, 0.72, 1.5);
+      spot.position.set(0, 0.85, 2.1);
+      const spotTarget = new THREE.Object3D();
+      spotTarget.position.set(0, 0.2, 16.0);
+      car.add(spotTarget);
+      spot.target = spotTarget;
+      car.add(spot);
+      carState.headlightSpot = spot;
+
+      // Full-Width Glowing Red Tail-Light Blade + Twin Metallic Exhaust Tips
+      const tailBar = new THREE.Mesh(
+        new THREE.BoxGeometry(1.78, 0.11, 0.10),
+        new THREE.MeshStandardMaterial({ color: 0xff1e1e, emissive: 0xff1500, emissiveIntensity: 2.5 })
+      );
+      tailBar.position.set(0, 0.64, -2.18);
+      car.add(tailBar);
+
+      const flameMat = new THREE.MeshBasicMaterial({
+        color: 0x00e5ff,
+        transparent: true,
+        opacity: 0.85,
+        blending: THREE.AdditiveBlending
+      });
+      [-0.36, 0.36].forEach((ex) => {
+        const tip = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.26, 12), chromeMat);
+        tip.rotation.x = Math.PI / 2;
+        tip.position.set(ex, 0.34, -2.20);
+        car.add(tip);
+
+        const flame = new THREE.Mesh(new THREE.ConeGeometry(0.15, 1.45, 10), flameMat);
+        flame.rotation.x = -Math.PI / 2;
+        flame.position.set(ex, 0.34, -2.92);
+        flame.scale.set(0.01, 0.01, 0.01);
+        car.add(flame);
+        carState.flameMeshes.push(flame);
+      });
+
+      // 4 Realistic Low-Profile Rubber Tires + Concave 5-Spoke Alloy Rims + Red Brake Calipers
+      const tireMat = new THREE.MeshStandardMaterial({ color: 0x16181d, roughness: 0.82 });
+      const rimMat = new THREE.MeshStandardMaterial({ color: liv.rims, metalness: 0.90, roughness: 0.18 });
+      const caliperMat = new THREE.MeshStandardMaterial({ color: 0xef233c, roughness: 0.34, metalness: 0.4 });
+      carState.rimMat = rimMat;
+
+      [
+        [-0.98, 0.38,  1.28, true],
+        [ 0.98, 0.38,  1.28, true],
+        [-1.02, 0.42, -1.24, false],
+        [ 1.02, 0.42, -1.24, false]
+      ].forEach(([wx, wy, wz, isFront]) => {
+        const pivot = new THREE.Group();
+        pivot.position.set(wx, wy, wz);
+        const wGroup = new THREE.Group();
+
+        const r = isFront ? 0.38 : 0.42;
+        const tire = new THREE.Mesh(new THREE.CylinderGeometry(r, r, 0.36, 22), tireMat);
+        tire.rotation.z = Math.PI / 2;
+        tire.castShadow = true;
+        wGroup.add(tire);
+
+        const barrel = new THREE.Mesh(new THREE.CylinderGeometry(r * 0.66, r * 0.66, 0.37, 16), carbonMat);
+        barrel.rotation.z = Math.PI / 2;
+        wGroup.add(barrel);
+
+        for (let sp = 0; sp < 5; sp++) {
+          const spoke = new THREE.Mesh(new THREE.BoxGeometry(0.39, r * 1.16, 0.08), rimMat);
+          spoke.rotation.x = (sp / 5) * Math.PI;
+          wGroup.add(spoke);
+        }
+        const centerCap = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.40, 10), rimMat);
+        centerCap.rotation.z = Math.PI / 2;
+        wGroup.add(centerCap);
+
+        const caliper = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.24, 0.16), caliperMat);
+        caliper.position.set(wx > 0 ? -0.06 : 0.06, 0.06, -0.14);
+        pivot.add(caliper);
+
+        pivot.add(wGroup);
+        car.add(pivot);
+        carState.wheels.push(wGroup);
+        if (isFront) carState.frontPivots.push(pivot);
+      });
+
+      // Soft Circular Glow Ember / Nitro Plasma Particle Trail
+      const pCount = 96;
+      const pGeo = new THREE.BufferGeometry();
+      pGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(pCount * 3), 3));
+      pGeo.setAttribute('color', new THREE.BufferAttribute(new Float32Array(pCount * 3), 3));
+      const particles = new THREE.Points(
+        pGeo,
+        new THREE.PointsMaterial({
+          size: 0.72,
+          map: createGlowSpriteTexture(),
+          vertexColors: true,
+          transparent: true,
+          opacity: 0.88,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false
+        })
+      );
+      scene.add(particles);
+      carState.particles = particles;
+
+      for (let i = 0; i < pCount; i++) {
+        carState.particleData.push({
+          pos: new THREE.Vector3(0, -999, 0),
+          vel: new THREE.Vector3(),
+          life: 0,
+          maxLife: 0.4
+        });
+      }
+    }
+
+    // ==========================================================================
+    // 4. CUSTOMIZABLE 3-THEME OPEN ENVIRONMENT ENGINE (NO BACK WALL!)
+    // ==========================================================================
+
+    function setupLightingAndBaseFloor() {
+      envObjects.hemi = new THREE.HemisphereLight(0xf8fafc, 0x7c8694, 0.85);
+      scene.add(envObjects.hemi);
+
+      const key = new THREE.DirectionalLight(0xfff7ed, 1.35);
+      key.position.set(54, 92, 62);
+      key.castShadow = true;
+      key.shadow.mapSize.width = 2048;
+      key.shadow.mapSize.height = 2048;
+      key.shadow.camera.near = 10;
+      key.shadow.camera.far = 260;
+      key.shadow.camera.left = -82;
+      key.shadow.camera.right = 82;
+      key.shadow.camera.top = 75;
+      key.shadow.camera.bottom = -75;
+      key.shadow.bias = -0.0005;
+      scene.add(key);
+      envObjects.keyLight = key;
+
+      envObjects.fillLight = new THREE.DirectionalLight(0xc8e4ff, 0.48);
+      envObjects.fillLight.position.set(-64, 48, 28);
+      scene.add(envObjects.fillLight);
+
+      envObjects.rimLight = new THREE.DirectionalLight(0xffa064, 0.35);
+      envObjects.rimLight.position.set(0, 42, -78);
+      scene.add(envObjects.rimLight);
+
+      // Honey-oak wood plank floor below desk legs
+      const floorMat = new THREE.MeshStandardMaterial({
+        map: createWoodFloorTexture(),
+        roughness: 0.72,
+        metalness: 0.05
+      });
+      envObjects.floorMat = floorMat;
+      const floor = new THREE.Mesh(new THREE.PlaneGeometry(560, 560), floorMat);
+      floor.rotation.x = -Math.PI / 2;
+      floor.position.y = -59.5;
+      floor.receiveShadow = true;
+      scene.add(floor);
+
+      envObjects.group = new THREE.Group();
+      scene.add(envObjects.group);
+
+      applyTheme('studio');
+    }
+
+    function createSkyGradientTexture(topHex, midHex, botHex) {
+      const c = document.createElement('canvas');
+      c.width = 32; c.height = 512;
+      const ctx = c.getContext('2d');
+      const g = ctx.createLinearGradient(0, 0, 0, 512);
+      g.addColorStop(0.0, topHex);
+      g.addColorStop(0.55, midHex);
+      g.addColorStop(1.0, botHex);
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, 32, 512);
+      const tex = new THREE.CanvasTexture(c);
+      tex.encoding = THREE.sRGBEncoding;
+      return tex;
+    }
+
+    function applyTheme(theme) {
+      envObjects.theme = theme;
+      while (envObjects.group.children.length > 0) {
+        envObjects.group.remove(envObjects.group.children[0]);
+      }
+
+      document.querySelectorAll('[data-theme]').forEach((b) => {
+        b.classList.toggle('active', b.dataset.theme === theme);
+      });
+
+      // Update PMREM environment reflections
+      scene.environment = createStudioEnvironmentMap(theme);
+
+      let skyTex, fogColor;
+      if (theme === 'studio') {
+        skyTex = createSkyGradientTexture('#b9d4f2', '#e4ecf5', '#cfd7e2');
+        fogColor = 0xdbe3ed;
+        envObjects.hemi.color.setHex(0xffffff);
+        envObjects.hemi.groundColor.setHex(0x8894a6);
+        envObjects.hemi.intensity = 0.88;
+        envObjects.keyLight.color.setHex(0xfff9f0);
+        envObjects.keyLight.intensity = 1.32;
+        envObjects.keyLight.position.set(54, 94, 62);
+        envObjects.fillLight.color.setHex(0xcce4ff);
+        envObjects.fillLight.intensity = 0.50;
+        envObjects.rimLight.color.setHex(0xffd7b0);
+        envObjects.rimLight.intensity = 0.30;
+        envObjects.floorMat.color.setHex(0xffffff);
+
+        // Open Scandinavian Loft Pillars & Potted Greenery (No closed back wall!)
+        const pillarMat = new THREE.MeshStandardMaterial({ color: 0xe6ebf0, roughness: 0.65 });
+        [[-120, -110], [120, -110], [-145, 35], [145, 35]].forEach(([px, pz]) => {
+          const col = new THREE.Mesh(new THREE.BoxGeometry(10, 170, 10), pillarMat);
+          col.position.set(px, 25, pz);
+          envObjects.group.add(col);
+        });
+        const potMat = new THREE.MeshStandardMaterial({ color: 0xd4a373, roughness: 0.72 });
+        const leafMat = new THREE.MeshStandardMaterial({ color: 0x3a6b4c, roughness: 0.6 });
+        [[-96, -82], [104, -76]].forEach(([px, pz]) => {
+          const pot = new THREE.Mesh(new THREE.CylinderGeometry(8.5, 6.2, 16, 18), potMat);
+          pot.position.set(px, -51.5, pz);
+          envObjects.group.add(pot);
+          for (let k = 0; k < 5; k++) {
+            const foliage = new THREE.Mesh(new THREE.DodecahedronGeometry(6.8, 1), leafMat);
+            foliage.position.set(px + Math.cos(k * 1.3) * 4, -36 + k * 4.5, pz + Math.sin(k * 1.3) * 4);
+            envObjects.group.add(foliage);
+          }
+        });
+      } else if (theme === 'terrace') {
+        skyTex = createSkyGradientTexture('#2d3a68', '#e57c58', '#ffd296');
+        fogColor = 0xe89a74;
+        envObjects.hemi.color.setHex(0xffd6b0);
+        envObjects.hemi.groundColor.setHex(0x6b4b4c);
+        envObjects.hemi.intensity = 0.78;
+        envObjects.keyLight.color.setHex(0xffa65c);
+        envObjects.keyLight.intensity = 1.62;
+        envObjects.keyLight.position.set(-78, 52, -46);
+        envObjects.fillLight.color.setHex(0x9b8cff);
+        envObjects.fillLight.intensity = 0.45;
+        envObjects.rimLight.color.setHex(0xff6b2b);
+        envObjects.rimLight.intensity = 0.75;
+        envObjects.floorMat.color.setHex(0xf3d4bc);
+
+        // Open Sunset Rooftop Glass Balustrade + Distant Golden Mountains
+        const railMat = new THREE.MeshStandardMaterial({ color: 0x262930, metalness: 0.7, roughness: 0.3 });
+        const glassMat = new THREE.MeshPhysicalMaterial({ color: 0xffd7ba, transparent: true, opacity: 0.24, roughness: 0.08 });
+        const rail = new THREE.Mesh(new THREE.BoxGeometry(280, 2.2, 2.2), railMat);
+        rail.position.set(0, -14, -95);
+        envObjects.group.add(rail);
+        const glassPane = new THREE.Mesh(new THREE.PlaneGeometry(280, 44), glassMat);
+        glassPane.position.set(0, -37, -95);
+        envObjects.group.add(glassPane);
+
+        // Warm Sunset Disc + Mountain Silhouettes
+        const sun = new THREE.Mesh(new THREE.SphereGeometry(20, 24, 24), new THREE.MeshBasicMaterial({ color: 0xffcf7d }));
+        sun.position.set(-140, 46, -240);
+        envObjects.group.add(sun);
+
+        const mtnMat = new THREE.MeshStandardMaterial({ color: 0x4b334e, roughness: 0.95 });
+        [[-160, -210, 68, 72], [-45, -230, 82, 92], [85, -220, 74, 80], [185, -200, 62, 66]].forEach(([mx, mz, mr, mh]) => {
+          const peak = new THREE.Mesh(new THREE.ConeGeometry(mr, mh, 6), mtnMat);
+          peak.position.set(mx, -60 + mh / 2, mz);
+          envObjects.group.add(peak);
+        });
+      } else {
+        // Cyber Midnight Skyline
+        skyTex = createSkyGradientTexture('#050816', '#0c1530', '#131d3d');
+        fogColor = 0x0a1126;
+        envObjects.hemi.color.setHex(0x4f7cff);
+        envObjects.hemi.groundColor.setHex(0x0c0e18);
+        envObjects.hemi.intensity = 0.56;
+        envObjects.keyLight.color.setHex(0x9bc5ff);
+        envObjects.keyLight.intensity = 0.86;
+        envObjects.keyLight.position.set(42, 86, 56);
+        envObjects.fillLight.color.setHex(0x00e5ff);
+        envObjects.fillLight.intensity = 0.62;
+        envObjects.rimLight.color.setHex(0xff4d1f);
+        envObjects.rimLight.intensity = 0.72;
+        envObjects.floorMat.color.setHex(0x52607a);
+
+        // Distant Illuminated Cyber Skyline Towers (Open panoramic ring)
+        const towerMat = new THREE.MeshStandardMaterial({ color: 0x10182b, roughness: 0.45, metalness: 0.5 });
+        const neonCyan = new THREE.MeshBasicMaterial({ color: 0x00e5ff });
+        const neonOrange = new THREE.MeshBasicMaterial({ color: 0xff5e1a });
+        for (let i = 0; i < 18; i++) {
+          const ang = -Math.PI * 0.95 + (i / 17) * Math.PI * 1.9;
+          const dist = 165 + (i % 3) * 32;
+          const h = 75 + ((i * 37) % 115);
+          const w = 16 + (i % 4) * 5;
+          const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, w), towerMat);
+          b.position.set(Math.cos(ang) * dist, -60 + h / 2, Math.sin(ang) * dist - 40);
+          envObjects.group.add(b);
+
+          const strip = new THREE.Mesh(new THREE.BoxGeometry(w + 0.6, 1.4, w + 0.6), i % 2 === 0 ? neonCyan : neonOrange);
+          strip.position.set(b.position.x, b.position.y + h * 0.42, b.position.z);
+          envObjects.group.add(strip);
+        }
+      }
+
+      const skyDome = new THREE.Mesh(
+        new THREE.SphereGeometry(360, 28, 18),
+        new THREE.MeshBasicMaterial({ map: skyTex, side: THREE.BackSide, fog: false })
+      );
+      envObjects.group.add(skyDome);
+      scene.fog = new THREE.FogExp2(fogColor, theme === 'cyber' ? 0.0022 : 0.0014);
+
+      const isNight = theme === 'cyber';
+      if (carState.headlightSpot) carState.headlightSpot.intensity = isNight ? 2.6 : 0.0;
+      carState.headlightCones.forEach((m) => { m.opacity = isNight ? 0.55 : 0.0; });
+    }
+
+    // ==========================================================================
+    // 5. SYNTHESIZED WEB AUDIO ENGINE (NO EXTERNAL AUDIO URLs)
+    // ==========================================================================
+
+    function toggleAudio() {
+      const btn = document.getElementById('btn-audio');
+      try {
+        if (!audioSys.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          audioSys.ctx = new AudioCtx();
+          audioSys.gain = audioSys.ctx.createGain();
+          audioSys.gain.gain.value = 0.0;
+          audioSys.filter = audioSys.ctx.createBiquadFilter();
+          audioSys.filter.type = 'lowpass';
+          audioSys.filter.frequency.value = 520;
+
+          audioSys.osc = audioSys.ctx.createOscillator();
+          audioSys.osc.type = 'sawtooth';
+          audioSys.osc.frequency.value = 88;
+
+          audioSys.subOsc = audioSys.ctx.createOscillator();
+          audioSys.subOsc.type = 'triangle';
+          audioSys.subOsc.frequency.value = 44;
+
+          audioSys.osc.connect(audioSys.filter);
+          audioSys.subOsc.connect(audioSys.filter);
+          audioSys.filter.connect(audioSys.gain);
+          audioSys.gain.connect(audioSys.ctx.destination);
+
+          audioSys.osc.start();
+          audioSys.subOsc.start();
+        }
+        if (audioSys.ctx.state === 'suspended') audioSys.ctx.resume();
+        audioSys.enabled = !audioSys.enabled;
+        audioSys.gain.gain.setTargetAtTime(audioSys.enabled ? 0.055 : 0.0, audioSys.ctx.currentTime, 0.08);
+        btn.textContent = audioSys.enabled ? '🔊 Audio' : '🔇 Audio';
+        btn.classList.toggle('active-cyan', audioSys.enabled);
+      } catch (err) {
+        btn.textContent = '🔇 Audio';
+      }
+    }
+
+    function playBoosterChime() {
+      if (!audioSys.enabled || !audioSys.ctx) return;
+      try {
+        const now = audioSys.ctx.currentTime;
+        const o = audioSys.ctx.createOscillator();
+        const g = audioSys.ctx.createGain();
+        o.type = 'sine';
+        o.frequency.setValueAtTime(320, now);
+        o.frequency.exponentialRampToValueAtTime(980, now + 0.24);
+        g.gain.setValueAtTime(0.08, now);
+        g.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+        o.connect(g);
+        g.connect(audioSys.ctx.destination);
+        o.start(now);
+        o.stop(now + 0.28);
+      } catch (_) {}
+    }
+
+    // ==========================================================================
+    // 6. SIMULATION UPDATE: SLOT PHYSICS, REACTIVE DESK & 5-MODE CAMERA RIG
+    // ==========================================================================
+
+    function updateCarPhysics(dt, elapsed) {
+      const prevS = carState.s;
+
+      if (carState.autopilot) {
+        const curF = sampleTrackAt(carState.s);
+        const aheadF = sampleTrackAt(carState.s + 14);
+        const isLoopAhead = curF.isLoop || aheadF.isLoop;
+        const desiredSpeed = isLoopAhead ? 56 : (carState.boostTimer > 0 ? 58 : 34);
+        carState.speed += (desiredSpeed - carState.speed) * Math.min(1, dt * 3.2);
+        carState.boosting = isLoopAhead || carState.boostTimer > 0;
+        const targetLane = Math.sin(elapsed * 0.85) * 0.55;
+        carState.steerAngle = (targetLane - carState.laneOffset) * 2.2;
+        carState.laneOffset += (targetLane - carState.laneOffset) * Math.min(1, dt * 3.5);
+        carState.nitro = Math.min(100, carState.nitro + dt * 16);
+      } else {
+        const maxSpd = carState.boosting ? 62 : 42;
+        if (inputState.gas) carState.speed += 36 * dt;
+        else if (inputState.brake) carState.speed -= 48 * dt;
+        else carState.speed *= Math.pow(0.45, dt);
+
+        if (inputState.nitro && carState.nitro > 4) {
+          carState.boosting = true;
+          carState.nitro = Math.max(0, carState.nitro - 38 * dt);
+          carState.speed += 44 * dt;
+        } else {
+          carState.boosting = carState.boostTimer > 0;
+          carState.nitro = Math.min(100, carState.nitro + 14 * dt);
+        }
+        carState.speed = THREE.MathUtils.clamp(carState.speed, 0, maxSpd);
+
+        const steerDir = (inputState.right ? 1 : 0) - (inputState.left ? 1 : 0);
+        carState.steerAngle += (steerDir - carState.steerAngle) * Math.min(1, dt * 10);
+        carState.laneOffset = THREE.MathUtils.clamp(carState.laneOffset + carState.steerAngle * 3.6 * dt, -0.82, 0.82);
+      }
+
+      if (carState.boostTimer > 0) {
+        carState.boostTimer = Math.max(0, carState.boostTimer - dt);
+        carState.speed = Math.max(carState.speed, 54);
+      }
+
+      carState.s = (carState.s + carState.speed * dt) % track.totalLength;
+
+      // Detect Booster Gate Pass
+      track.boosters.forEach((bs) => {
+        if (Math.abs(carState.s - bs) < 2.2 && Math.abs(prevS - bs) >= 2.2) {
+          carState.boostTimer = 1.65;
+          carState.nitro = Math.min(100, carState.nitro + 35);
+          playBoosterChime();
+        }
+      });
+
+      // Detect Start/Finish Lap Crossing
+      if (prevS < track.startS && carState.s >= track.startS && (elapsed - carState.lastLapS) > 3.0) {
+        carState.lap += 1;
+        carState.lastLapS = elapsed;
+        document.getElementById('lap-val').textContent = carState.lap;
+      }
+
+      // Position & Orient Car flush on track surface using Right-Handed Basis (100% accurate direction!)
+      const frame = sampleTrackAt(carState.s);
+      carState.currentZone = frame.zone;
+
+      const lateralPos = frame.pos.clone()
+        .addScaledVector(frame.binormal, carState.laneOffset)
+        .addScaledVector(frame.normal, 0.09);
+
+      carState.group.position.copy(lateralPos);
+      carState.group.quaternion.setFromRotationMatrix(
+        makeTrackBasis(frame.normal, frame.tangent)
+      );
+      carState.group.rotateY(-carState.steerAngle * 0.24);
+      carState.group.rotateZ(-carState.steerAngle * 0.10);
+
+      carState.worldPos.copy(lateralPos);
+      carState.worldForward.copy(frame.tangent);
+      carState.worldUp.copy(frame.normal);
+
+      // Spin Wheels & Steer Front Axles
+      const wheelRot = (carState.speed * dt) / 0.4;
+      carState.wheels.forEach((w) => { w.rotation.x += wheelRot; });
+      carState.frontPivots.forEach((p) => { p.rotation.y = -carState.steerAngle * 0.55; });
+
+      // Animate Exhaust Nitro Flames
+      const flameScale = carState.boosting ? (0.85 + Math.random() * 0.45) : 0.01;
+      carState.flameMeshes.forEach((fl) => fl.scale.set(flameScale, flameScale, flameScale));
+
+      // Update Soft Glow Ember / Nitro Particle Trail
+      const pPos = carState.particles.geometry.attributes.position.array;
+      const pCol = carState.particles.geometry.attributes.color.array;
+      const emitCount = carState.boosting ? 3 : (carState.speed > 12 ? 1 : 0);
+      for (let e = 0; e < emitCount; e++) {
+        const pd = carState.particleData[carState.particleIdx];
+        carState.particleIdx = (carState.particleIdx + 1) % carState.particleData.length;
+        pd.pos.copy(lateralPos)
+          .addScaledVector(frame.tangent, -2.1)
+          .addScaledVector(frame.normal, 0.36)
+          .addScaledVector(frame.binormal, (Math.random() - 0.5) * 0.75);
+        pd.vel.copy(frame.tangent).multiplyScalar(-5 - Math.random() * 6)
+          .addScaledVector(frame.normal, 1.4 + Math.random() * 2.2);
+        pd.life = pd.maxLife = carState.boosting ? 0.46 : 0.30;
+      }
+
+      for (let i = 0; i < carState.particleData.length; i++) {
+        const pd = carState.particleData[i];
+        if (pd.life > 0) {
+          pd.life -= dt;
+          pd.pos.addScaledVector(pd.vel, dt);
+          const ratio = Math.max(0, pd.life / pd.maxLife);
+          pPos[i * 3]     = pd.pos.x;
+          pPos[i * 3 + 1] = pd.pos.y;
+          pPos[i * 3 + 2] = pd.pos.z;
+          if (carState.boosting) {
+            pCol[i * 3] = 0.08 * ratio; pCol[i * 3 + 1] = 0.88 * ratio; pCol[i * 3 + 2] = 1.0 * ratio;
+          } else {
+            pCol[i * 3] = 1.0 * ratio;  pCol[i * 3 + 1] = 0.48 * ratio; pCol[i * 3 + 2] = 0.12 * ratio;
+          }
+        } else {
+          pPos[i * 3 + 1] = -999;
+        }
+      }
+      carState.particles.geometry.attributes.position.needsUpdate = true;
+      carState.particles.geometry.attributes.color.needsUpdate = true;
+
+      // Update Engine Audio Pitch
+      if (audioSys.enabled && audioSys.osc) {
+        const pitch = 72 + carState.speed * 3.4 + (carState.boosting ? 45 : 0);
+        audioSys.osc.frequency.setTargetAtTime(pitch, audioSys.ctx.currentTime, 0.05);
+        audioSys.subOsc.frequency.setTargetAtTime(pitch * 0.5, audioSys.ctx.currentTime, 0.05);
+        audioSys.filter.frequency.setTargetAtTime(carState.boosting ? 1400 : 620, audioSys.ctx.currentTime, 0.08);
+      }
+
+      // Update HUD Telemetry
+      const kmh = Math.round(carState.speed * 5.4);
+      document.getElementById('speed-val').innerHTML = `${kmh} <small style="font-size:10px;opacity:.7">KM/H</small>`;
+      document.getElementById('zone-pill').textContent = carState.currentZone;
+      document.getElementById('nitro-bar').style.width = `${Math.round(carState.nitro)}%`;
+    }
+
+    /** Reactive Desk Physics & Autonomous Live Coding Synced with Physical Portronics Keystrokes */
+    function updateReactiveDesk(dt, elapsed) {
+      const cp = carState.worldPos;
+
+      // 0. Live Autonomous Coding -> Syncs every character to the exact physical Portronics Keycap!
+      const cod = reactive.coding;
+      cod.nextKeyTimer -= dt;
+      if (cod.nextKeyTimer <= 0) {
+        const line = cod.scripts[cod.scriptIdx];
+        if (cod.charIdx < line.length) {
+          const ch = line[cod.charIdx++];
+          cod.typedText += ch;
+          const upper = ch.toUpperCase();
+          const keyMesh = reactive.keyMap[upper] || reactive.keyMap[ch];
+          if (keyMesh) keyMesh.userData.pressTimer = 0.14;
+          if (ch >= 'A' && ch <= 'Z' && reactive.keyMap['SHIFT']) {
+            reactive.keyMap['SHIFT'].userData.pressTimer = 0.15;
+          }
+          cod.nextKeyTimer = ch === ' ' ? 0.13 : (0.065 + Math.random() * 0.065);
+        } else {
+          if (reactive.keyMap['ENTER']) reactive.keyMap['ENTER'].userData.pressTimer = 0.24;
+          cod.logLines.push(`> ${cod.typedText}`);
+          cod.logLines.push(`✓ Compiled cleanly (${(11 + Math.random() * 7).toFixed(1)}ms)`);
+          if (cod.logLines.length > 6) cod.logLines.splice(0, 2);
+          cod.diffAdded += 1 + Math.floor(Math.random() * 4);
+          cod.scrollPulse = 0.65;
+          cod.typedText = '';
+          cod.charIdx = 0;
+          cod.scriptIdx = (cod.scriptIdx + 1) % cod.scripts.length;
+          cod.nextKeyTimer = 0.95;
+        }
+      }
+      if (cod.scrollPulse > 0) cod.scrollPulse = Math.max(0, cod.scrollPulse - dt);
+
+      // 1. Real-Time Analog Wristwatch Hands
+      const now = new Date();
+      const secs = now.getSeconds() + now.getMilliseconds() / 1000;
+      const mins = now.getMinutes() + secs / 60;
+      const hrs = (now.getHours() % 12) + mins / 60;
+      if (reactive.watchHands.sec) {
+        reactive.watchHands.sec.rotation.y  = -(secs / 60) * Math.PI * 2;
+        reactive.watchHands.min.rotation.y  = -(mins / 60) * Math.PI * 2;
+        reactive.watchHands.hour.rotation.y = -(hrs / 12)  * Math.PI * 2;
+      }
+
+      // 2. Portronics Keyboard: Synced Live Typing Keystrokes + Car Proximity Wave
+      const nearKb = Math.abs(cp.z - 28.0) < 6.5 && cp.x > -24 && cp.x < 22;
+      let anyTyping = false;
+      for (let i = 0; i < reactive.keys.length; i++) {
+        const k = reactive.keys[i];
+        let dip = 0;
+        if (k.userData.pressTimer > 0) {
+          k.userData.pressTimer = Math.max(0, k.userData.pressTimer - dt);
+          dip = Math.max(dip, Math.sin((k.userData.pressTimer / 0.14) * Math.PI) * 0.28);
+          anyTyping = true;
+        }
+        if (nearKb) {
+          const distX = Math.abs((k.position.x - 2) - cp.x);
+          if (distX < 6.0) dip = Math.max(dip, Math.cos((distX / 6.0) * Math.PI * 0.5) * 0.20);
+        }
+        k.position.y += ((k.userData.baseY - dip) - k.position.y) * Math.min(1, dt * 24);
+      }
+      reactive.keyboardLeds.forEach((m, idx) => {
+        const targetLed = nearKb ? (1.4 + Math.sin(elapsed * 18 + idx) * 0.5) : (anyTyping && idx === 0 ? 1.25 : 0.28);
+        m.emissiveIntensity += (targetLed - m.emissiveIntensity) * Math.min(1, dt * 14);
+      });
+
+      // 3. Portronics White/Orange Mouse Scroll Spin
+      const nearMouse = cp.distanceTo(new THREE.Vector3(39, 2, 17)) < 20;
+      const scrollVel = nearMouse ? 14 : (cod.scrollPulse > 0 ? 9 : 0.8);
+      if (reactive.mouseScroll) reactive.mouseScroll.rotation.x += dt * scrollVel;
+      if (reactive.mouseGlowMat) {
+        const targetEm = nearMouse ? 1.55 : (envObjects.theme === 'cyber' ? 0.85 : 0.30);
+        reactive.mouseGlowMat.emissiveIntensity += (targetEm - reactive.mouseGlowMat.emissiveIntensity) * dt * 6;
+      }
+
+      // 4. Mac mini M4 Breathing Power LED & USB-C Data Pulse traveling to Silver Hub
+      const overMac = cp.distanceTo(new THREE.Vector3(34, 8.6, -9)) < 16;
+      if (reactive.macLedMat) {
+        reactive.macLedMat.emissiveIntensity = overMac ? 3.0 : (1.1 + Math.sin(elapsed * 3.2) * 0.5);
+      }
+      if (reactive.usbCurve && reactive.usbPulseMesh) {
+        reactive.usbPulseT = (reactive.usbPulseT + dt * (overMac ? 1.9 : 0.65)) % 1;
+        reactive.usbPulseMesh.position.copy(reactive.usbCurve.getPointAt(reactive.usbPulseT));
+      }
+
+      // 5. TWS Earbuds Chevron Wave + Loose Earbud Vibration
+      const nearBuds = cp.distanceTo(new THREE.Vector3(-35, 1, 13)) < 22;
+      reactive.earbudChevrons.forEach((m, i) => {
+        const wave = Math.sin(elapsed * (nearBuds ? 12 : 4) - i * 0.9);
+        m.emissiveIntensity = 0.25 + Math.max(0, wave) * (nearBuds ? 2.2 : 0.9);
+      });
+      if (reactive.looseEarbud) {
+        const vib = nearBuds ? 0.12 : 0.0;
+        reactive.looseEarbud.position.x = reactive.looseEarbudBase.x + Math.sin(elapsed * 42) * vib;
+        reactive.looseEarbud.position.z = reactive.looseEarbudBase.z + Math.cos(elapsed * 37) * vib;
+      }
+
+      // 6. Spin Booster Foam Rollers & Pulse Gate Chevrons
+      reactive.boosterWheels.forEach((w) => {
+        w.rotation.y += dt * 15 * w.userData.spinDir;
+      });
+      reactive.boosterChevrons.forEach(({ mat, idx }) => {
+        mat.emissiveIntensity = 0.4 + Math.max(0, Math.sin(elapsed * 10 - idx * 1.1)) * 2.2;
+      });
+
+      // 7. Refresh Live Monitor Screen (~14 FPS)
+      reactive.screenTimer += dt;
+      if (reactive.screenTimer > 0.07) {
+        reactive.screenTimer = 0;
+        updateLiveMonitorScreen(elapsed);
+      }
+    }
+
+    /** 5-Mode Interactive Camera Rig with Smooth Damping & Dynamic FOV */
+    function updateCamera(dt, elapsed) {
+      const targetPos = new THREE.Vector3();
+      const targetLook = new THREE.Vector3();
+      let targetFov = 50;
+
+      if (camState.mode === 'pov') {
+        targetFov = carState.boosting ? 76 : 64;
+        targetPos.copy(carState.worldPos)
+          .addScaledVector(carState.worldUp, 1.45)
+          .addScaledVector(carState.worldForward, 0.55);
+        const lookFrame = sampleTrackAt(carState.s + 16);
+        targetLook.copy(lookFrame.pos).addScaledVector(lookFrame.normal, 1.0);
+        camera.up.lerp(carState.worldUp, Math.min(1, dt * 8)).normalize();
+      } else if (camState.mode === 'chase') {
+        targetFov = carState.boosting ? 62 : 52;
+        const backFrame = sampleTrackAt(carState.s - 12);
+        const aheadFrame = sampleTrackAt(carState.s + 10);
+        targetPos.copy(carState.worldPos)
+          .addScaledVector(backFrame.tangent, -13.5)
+          .addScaledVector(carState.worldUp, 6.2);
+        targetPos.y = Math.max(3.2, targetPos.y);
+        targetLook.copy(aheadFrame.pos).addScaledVector(aheadFrame.normal, 1.2);
+        camera.up.lerp(new THREE.Vector3(0, 1, 0), Math.min(1, dt * 6)).normalize();
+      } else if (camState.mode === 'top') {
+        targetFov = 44;
+        targetPos.set(carState.worldPos.x * 0.25, 118, 22 + carState.worldPos.z * 0.20);
+        targetLook.set(carState.worldPos.x * 0.18, 0, carState.worldPos.z * 0.15);
+        camera.up.lerp(new THREE.Vector3(0, 1, 0), Math.min(1, dt * 8)).normalize();
+      } else if (camState.mode === 'orbit') {
+        targetFov = 48;
+        const r = camState.orbitDist;
+        const cp = Math.cos(camState.orbitPitch);
+        targetPos.set(
+          camState.orbitTarget.x + r * cp * Math.sin(camState.orbitYaw),
+          camState.orbitTarget.y + r * Math.sin(camState.orbitPitch),
+          camState.orbitTarget.z + r * cp * Math.cos(camState.orbitYaw)
+        );
+        targetLook.copy(camState.orbitTarget);
+        camera.up.lerp(new THREE.Vector3(0, 1, 0), Math.min(1, dt * 8)).normalize();
+      } else {
+        // 5. Cinematic Auto-Director (6 curated hero angles including live coding macro!)
+        camState.cinemaTimer += dt;
+        if (camState.cinemaTimer > 5.8) {
+          camState.cinemaTimer = 0;
+          camState.cinemaIdx = (camState.cinemaIdx + 1) % 6;
+        }
+        targetFov = 46;
+        const t = elapsed * 0.25;
+        const shots = [
+          () => {
+            targetPos.set(Math.sin(t) * 68, 34, 62);
+            targetLook.copy(carState.worldPos).lerp(new THREE.Vector3(0, 4, 0), 0.55);
+          },
+          () => {
+            targetPos.set(-8 + Math.sin(t * 2) * 8, 16, 40);
+            targetLook.set(-3, 12, 2);
+          },
+          () => {
+            targetPos.set(60, 18, 22);
+            targetLook.copy(carState.worldPos).lerp(new THREE.Vector3(36, 4, 4), 0.55);
+          },
+          () => {
+            targetPos.set(-64, 16, 18);
+            targetLook.copy(carState.worldPos).lerp(new THREE.Vector3(-42, 9, -11), 0.55);
+          },
+          () => {
+            targetPos.set(-4, 10, 26);
+            targetLook.set(-4, 15, -16);
+          },
+          () => {
+            targetPos.set(Math.cos(t * 1.1) * 86, 56, Math.sin(t * 1.1) * 78);
+            targetLook.set(0, 4, 0);
+          }
+        ];
+        shots[camState.cinemaIdx]();
+        camera.up.lerp(new THREE.Vector3(0, 1, 0), Math.min(1, dt * 6)).normalize();
+      }
+
+      const damp = camState.mode === 'pov' ? Math.min(1, dt * 14) : (camState.mode === 'orbit' ? Math.min(1, dt * 12) : Math.min(1, dt * 5.8));
+      camState.currentPos.lerp(targetPos, damp);
+      camState.currentLook.lerp(targetLook, damp);
+
+      camera.position.copy(camState.currentPos);
+      camera.lookAt(camState.currentLook);
+
+      if (Math.abs(camera.fov - targetFov) > 0.05) {
+        camera.fov += (targetFov - camera.fov) * Math.min(1, dt * 6);
+        camera.updateProjectionMatrix();
+      }
+    }
+
+    // ==========================================================================
+    // 7. INPUT, ORBIT MOUSE/TOUCH CONTROLS & CLICK-TO-INSPECT HARDWARE
+    // ==========================================================================
+
+    function setCameraMode(mode) {
+      camState.mode = mode;
+      document.querySelectorAll('[data-cam]').forEach((b) => {
+        b.classList.toggle('active', b.dataset.cam === mode);
+      });
+    }
+
+    function toggleAutopilot() {
+      carState.autopilot = !carState.autopilot;
+      const btn = document.getElementById('btn-autopilot');
+      btn.textContent = carState.autopilot ? '🤖 Autopilot' : '🎮 Manual';
+      btn.classList.toggle('active-cyan', carState.autopilot);
+      btn.classList.toggle('active', !carState.autopilot);
+      document.getElementById('touch-controls').classList.toggle('show', !carState.autopilot);
+    }
+
+    function cycleLivery() {
+      carState.liveryIdx = (carState.liveryIdx + 1) % LIVERIES.length;
+      const liv = LIVERIES[carState.liveryIdx];
+      if (carState.bodyMat) carState.bodyMat.color.setHex(liv.body);
+      if (carState.stripeMat) carState.stripeMat.color.setHex(liv.stripe);
+      if (carState.rimMat) carState.rimMat.color.setHex(liv.rims);
+    }
+
+    function setupInteractions() {
+      // Dock Button Handlers
+      document.querySelectorAll('[data-cam]').forEach((btn) => {
+        btn.addEventListener('click', () => setCameraMode(btn.dataset.cam));
+      });
+      document.querySelectorAll('[data-theme]').forEach((btn) => {
+        btn.addEventListener('click', () => applyTheme(btn.dataset.theme));
+      });
+      document.getElementById('btn-autopilot').addEventListener('click', toggleAutopilot);
+      document.getElementById('btn-livery').addEventListener('click', cycleLivery);
+      document.getElementById('btn-audio').addEventListener('click', toggleAudio);
+      document.getElementById('insp-close').addEventListener('click', () => {
+        document.getElementById('inspector-card').classList.remove('visible');
+      });
+
+      // Keyboard Driving & Shortcuts
+      window.addEventListener('keydown', (e) => {
+        const k = e.key.toLowerCase();
+        if (k === '1') setCameraMode('pov');
+        else if (k === '2') setCameraMode('chase');
+        else if (k === '3') setCameraMode('top');
+        else if (k === '4') setCameraMode('orbit');
+        else if (k === '5') setCameraMode('cinematic');
+        else if (k === 'm') toggleAutopilot();
+        else if (k === 'w' || e.key === 'ArrowUp') inputState.gas = true;
+        else if (k === 's' || e.key === 'ArrowDown') inputState.brake = true;
+        else if (k === 'a' || e.key === 'ArrowLeft') inputState.left = true;
+        else if (k === 'd' || e.key === 'ArrowRight') inputState.right = true;
+        else if (e.code === 'Space') { e.preventDefault(); inputState.nitro = true; }
+      });
+
+      window.addEventListener('keyup', (e) => {
+        const k = e.key.toLowerCase();
+        if (k === 'w' || e.key === 'ArrowUp') inputState.gas = false;
+        else if (k === 's' || e.key === 'ArrowDown') inputState.brake = false;
+        else if (k === 'a' || e.key === 'ArrowLeft') inputState.left = false;
+        else if (k === 'd' || e.key === 'ArrowRight') inputState.right = false;
+        else if (e.code === 'Space') inputState.nitro = false;
+      });
+
+      // Touch Driving Pad Bindings
+      const bindHold = (id, prop) => {
+        const el = document.getElementById(id);
+        const on = (e) => { e.preventDefault(); inputState[prop] = true; };
+        const off = (e) => { e.preventDefault(); inputState[prop] = false; };
+        el.addEventListener('mousedown', on);
+        el.addEventListener('mouseup', off);
+        el.addEventListener('mouseleave', off);
+        el.addEventListener('touchstart', on, { passive: false });
+        el.addEventListener('touchend', off, { passive: false });
+      };
+      bindHold('t-left', 'left');
+      bindHold('t-right', 'right');
+      bindHold('t-gas', 'gas');
+      bindHold('t-brake', 'brake');
+      bindHold('t-nitro', 'nitro');
+
+      // Mouse Orbit & Click-to-Inspect Raycaster
+      const raycaster = new THREE.Raycaster();
+      const pointer = new THREE.Vector2();
+      let downX = 0, downY = 0;
+
+      const dom = renderer.domElement;
+      dom.addEventListener('contextmenu', (e) => e.preventDefault());
+
+      dom.addEventListener('mousedown', (e) => {
+        camState.dragging = true;
+        camState.rightDrag = e.button === 2;
+        camState.lastX = downX = e.clientX;
+        camState.lastY = downY = e.clientY;
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!camState.dragging) return;
+        const dx = e.clientX - camState.lastX;
+        const dy = e.clientY - camState.lastY;
+        camState.lastX = e.clientX;
+        camState.lastY = e.clientY;
+
+        if (Math.hypot(e.clientX - downX, e.clientY - downY) > 6 && camState.mode !== 'orbit') {
+          setCameraMode('orbit');
+        }
+        if (camState.rightDrag) {
+          camState.orbitTarget.x = THREE.MathUtils.clamp(camState.orbitTarget.x - dx * 0.12, -55, 55);
+          camState.orbitTarget.z = THREE.MathUtils.clamp(camState.orbitTarget.z - dy * 0.12, -35, 35);
+        } else {
+          camState.orbitYaw -= dx * 0.0065;
+          camState.orbitPitch = THREE.MathUtils.clamp(camState.orbitPitch + dy * 0.0065, 0.08, 1.48);
+        }
+      });
+
+      window.addEventListener('mouseup', (e) => {
+        if (!camState.dragging) return;
+        camState.dragging = false;
+        if (Math.hypot(e.clientX - downX, e.clientY - downY) < 5) {
+          inspectAt(e.clientX, e.clientY, raycaster, pointer);
+        }
+      });
+
+      dom.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        if (camState.mode !== 'orbit') setCameraMode('orbit');
+        camState.orbitDist = THREE.MathUtils.clamp(camState.orbitDist + e.deltaY * 0.08, 22, 175);
+      }, { passive: false });
+
+      // Touch Orbit & Pinch-to-Zoom
+      dom.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+          camState.dragging = true;
+          camState.lastX = downX = e.touches[0].clientX;
+          camState.lastY = downY = e.touches[0].clientY;
+        } else if (e.touches.length === 2) {
+          camState.dragging = false;
+          camState.pinchDist = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
+        }
+      }, { passive: true });
+
+      dom.addEventListener('touchmove', (e) => {
+        if (e.touches.length === 1 && camState.dragging) {
+          const dx = e.touches[0].clientX - camState.lastX;
+          const dy = e.touches[0].clientY - camState.lastY;
+          camState.lastX = e.touches[0].clientX;
+          camState.lastY = e.touches[0].clientY;
+          if (Math.hypot(e.touches[0].clientX - downX, e.touches[0].clientY - downY) > 10 && camState.mode !== 'orbit') {
+            setCameraMode('orbit');
+          }
+          camState.orbitYaw -= dx * 0.007;
+          camState.orbitPitch = THREE.MathUtils.clamp(camState.orbitPitch + dy * 0.007, 0.1, 1.45);
+        } else if (e.touches.length === 2) {
+          const d = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
+          const delta = camState.pinchDist - d;
+          camState.pinchDist = d;
+          if (camState.mode !== 'orbit') setCameraMode('orbit');
+          camState.orbitDist = THREE.MathUtils.clamp(camState.orbitDist + delta * 0.25, 22, 175);
+        }
+      }, { passive: true });
+
+      dom.addEventListener('touchend', () => { camState.dragging = false; });
+
+      window.addEventListener('resize', handleResize);
+    }
+
+    function inspectAt(clientX, clientY, raycaster, pointer) {
+      const rect = renderer.domElement.getBoundingClientRect();
+      pointer.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+      pointer.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+      raycaster.setFromCamera(pointer, camera);
+      const hits = raycaster.intersectObjects(reactive.inspectables, false);
+      if (hits.length > 0 && hits[0].object.userData.inspect) {
+        const info = hits[0].object.userData.inspect;
+        document.getElementById('insp-tag').textContent = info.tag;
+        document.getElementById('insp-title').textContent = info.title;
+        document.getElementById('insp-desc').textContent = info.desc;
+        document.getElementById('inspector-card').classList.add('visible');
+      }
+    }
+
+    function handleResize() {
+      if (!renderer || !camera) return;
+      const w = container.clientWidth || window.innerWidth;
+      const h = container.clientHeight || window.innerHeight;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    }
+
+    // ==========================================================================
+    // 8. BOOTSTRAP & MAIN ANIMATION LOOP (STARTED ON WINDOW LOAD)
+    // ==========================================================================
+
+    function initApp() {
+      try {
+        if (typeof THREE === 'undefined') {
+          throw new Error('Three.js failed to load. Please check your internet connection.');
+        }
+
+        scene = new THREE.Scene();
+        clock = new THREE.Clock();
+
+        const w = container.clientWidth || window.innerWidth;
+        const h = container.clientHeight || window.innerHeight;
+        camera = new THREE.PerspectiveCamera(50, w / h, 0.2, 700);
+
+        renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+        renderer.setSize(w, h);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.outputEncoding = THREE.sRGBEncoding;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.08;
+        container.appendChild(renderer.domElement);
+
+        setupLightingAndBaseFloor();
+        buildDeskAndHardware();
+        buildHotWheelsTrack();
+        buildHotWheelsCar();
+        setupInteractions();
+
+        animate();
+      } catch (err) {
+        const box = document.getElementById('error-box');
+        document.getElementById('error-msg').textContent = err.message || 'Unable to initialize WebGL2 context.';
+        box.style.display = 'block';
+      }
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      const dt = Math.min(clock.getDelta(), 0.05);
+      const elapsed = clock.elapsedTime;
+
+      updateCarPhysics(dt, elapsed);
+      updateReactiveDesk(dt, elapsed);
+      updateCamera(dt, elapsed);
+
+      renderer.render(scene, camera);
+    }
+
+    window.onload = initApp;
+  })();
+  </script>
+</body>
+</html>

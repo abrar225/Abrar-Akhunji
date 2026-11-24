@@ -12,9 +12,9 @@ const output = join(root, 'dist/versions');
 
 if (versions.length < 2 || new Set(versions.map(entry => entry.slug)).size !== versions.length
   || versions.filter(entry => entry.current).length !== 1 || !versions.at(-1).current
-  || versions.some(({ slug, name, date, commit, version }, index) =>
+  || versions.some(({ slug, name, date, commit, current, version }, index) =>
     !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug) || !name || !/^\d{4}-\d{2}-\d{2}$/.test(date)
-    || !/^[a-f0-9]{40}$/.test(commit) || version !== index + 1)) {
+    || (!current && !/^[a-f0-9]{40}$/.test(commit)) || version !== index + 1)) {
   throw new Error('Invalid portfolio version manifest');
 }
 
@@ -92,6 +92,7 @@ async function writeTerminalBlogIndexes(directory, historicalLibrary) {
 
 async function buildVersion(entry, workspace, site) {
   const { commit, slug } = entry;
+  const buildRoom = slug === 'zero-to-built';
   const directory = join(workspace, slug);
   const prefix = `/versions/${slug}/`;
   await mkdir(directory);
@@ -99,10 +100,17 @@ async function buildVersion(entry, workspace, site) {
   let terminalLibrary;
   const homePath = slug === 'serif' ? 'src/App.jsx' : 'src/pages/Home.jsx';
   // Archives open directly into the historical design without the timed splash.
-  await edit(directory, homePath, source => source.replace(
-    /const \[isLoading, setIsLoading\] = useState\((?:true|\(\) => \{[\s\S]*?\n  \})\);/,
-    'const [isLoading, setIsLoading] = useState(false);'
-  ));
+  if (buildRoom) {
+    await edit(directory, 'src/App.jsx', source => source.replace(
+      /^  const \[intro, setIntro\] = useState\(.*$/m,
+      '  const [intro, setIntro] = useState(false);'
+    ));
+  } else {
+    await edit(directory, homePath, source => source.replace(
+      /const \[isLoading, setIsLoading\] = useState\((?:true|\(\) => \{[\s\S]*?\n  \})\);/,
+      'const [isLoading, setIsLoading] = useState(false);'
+    ));
+  }
   if (slug === 'serif') {
     await edit(directory, homePath, source => source
       .replace('useLayoutEffect, useRef', 'useLayoutEffect, useRef, lazy, Suspense')
@@ -194,16 +202,18 @@ export async function getBlogBySlug(slug) {
         'let renderer; try { renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true }); } catch { return; }'));
   }
 
-  if (slug !== 'serif') {
+  if (slug !== 'serif' && !buildRoom) {
     // Let Rollup follow the route graph instead of pulling shared dependencies into a global chunk.
     await edit(directory, 'vite.config.js', source => source.replace(/  build: \{[\s\S]*?\n  \}\n/, ''));
   }
 
   // Scope legacy hardcoded public URLs. Vite handles imported assets and BASE_URL.
   const env = { PATH: process.env.PATH, HOME: workspace, CI: 'true', npm_config_cache: process.env.npm_config_cache || join(tmpdir(), 'portfolio-npm-cache') };
-  if (slug === 'halide') {
+  if (slug === 'halide' || buildRoom) {
     run('node', ['scripts/build-blog-index.mjs'], directory, env);
     await edit(directory, 'src/components/SEO.jsx', source => source.replace('noindex = false,', 'noindex = true,'));
+  }
+  if (slug === 'halide') {
     await edit(directory, 'src/components/FloatingDock.jsx', source =>
       source.replace('href="/hire/"', 'href={import.meta.env.BASE_URL + "hire/"}'));
   }
@@ -214,7 +224,9 @@ export async function getBlogBySlug(slug) {
     entry.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + (entry.isDirectory() ? '/' : '(?=[?#"\x27`\\s)])')
   );
   const assetUrl = new RegExp(`(["'\`(])/(?:Abrar-Akhunji/)?(?=${publicNames.join('|')})`, 'g');
-  for (const file of [...await files(join(directory, 'src')), join(directory, 'index.html')]) {
+  const sources = [...await files(join(directory, 'src')), join(directory, 'index.html')];
+  if (buildRoom) sources.push(join(directory, 'public/assets/audio/flow-manifest.json'));
+  for (const file of sources) {
     if (!/\.(?:jsx?|tsx?|css|html|md|json)$/.test(file)) continue;
     const source = await readFile(file, 'utf8');
     const scoped = source.replace(assetUrl, `$1${prefix}`);
@@ -240,10 +252,12 @@ export async function getBlogBySlug(slug) {
     return name;
   }));
 
-  const policy = "connect-src 'none'; form-action 'none'; object-src 'none'; base-uri 'none'; frame-src 'none'; script-src 'self'";
+  const connections = buildRoom ? "'self'" : "'none'";
+  const policy = `connect-src ${connections}; form-action 'none'; object-src 'none'; base-uri 'none'; frame-src 'none'; script-src 'self'`;
   const head = `<meta name="robots" content="noindex, nofollow"><meta http-equiv="Content-Security-Policy" content="${policy}"><link rel="stylesheet" href="${prefix}${stylesheet}">`;
   const footer = `${archiveMarkup(entry)}<script defer src="${prefix}${script}"></script>`;
-  const index = await readFile(join(versionSite, 'index.html'), 'utf8');
+  let index = await readFile(join(versionSite, 'index.html'), 'utf8');
+  if (buildRoom) index = index.replace(/<script>([\s\S]*?)<\/script>/gi, '');
   const page = index
     .replace(/<link\b[^>]*rel=["'](?:canonical|alternate)["'][^>]*>/gi, '')
     .replace(/<meta\b[^>]*name=["'](?:robots|googlebot|bingbot)["'][^>]*>/gi, '')
@@ -251,13 +265,18 @@ export async function getBlogBySlug(slug) {
     .replace(/<head>/i, `<head>${head}`)
     .replace(/<\/body>/i, `${footer}</body>`);
   await writeFile(join(versionSite, 'index.html'), page);
-  const routes = slug === 'halide' ? ['blog', 'hire'] : slug === 'cyberterminal' ? ['blog'] : [];
+  const routes = buildRoom ? ['about', 'blog', 'contact', 'hire', 'privacy', 'terms', 'work']
+    : slug === 'halide' ? ['blog', 'hire'] : slug === 'cyberterminal' ? ['blog'] : [];
+  if (buildRoom) {
+    const portfolio = JSON.parse(await readFile(join(directory, 'src/data/portfolio.json'), 'utf8'));
+    routes.push(...portfolio.projects.map(project => `work/${project.slug}`));
+  }
   if (routes.length) {
     for (const path of await readdir(join(directory, 'src/content/blogs'))) {
       if (!/^[a-z0-9-]+\.md$/.test(path)) continue;
       const post = path.slice(0, -3);
       routes.push(`blog/${post}`);
-      if (slug === 'halide') routes.push(`blog/${post.replace(/^\d{4}-\d{2}-\d{2}-/, '')}`);
+      if (slug === 'halide' || buildRoom) routes.push(`blog/${post.replace(/^\d{4}-\d{2}-\d{2}-/, '')}`);
     }
   }
   for (const route of new Set(routes)) {

@@ -101,16 +101,17 @@ try {
       assert.ok(bounds && bounds.x >= 0 && bounds.x + bounds.width <= width + 1);
       assert.equal(await marker.getByRole('link').count(), versions.length);
       assert.equal(await page.locator('meta[name="robots"][content^="noindex"]').count() >= 1, true);
-      if (['cyberterminal', 'halide'].includes(slug)) {
+      if (['cyberterminal', 'halide', 'zero-to-built'].includes(slug)) {
         const posts = (await readdir(join(dist, 'versions', slug, 'blog'), { withFileTypes: true }))
           .filter(entry => entry.isDirectory());
         assert.ok(posts.length > 0);
         const routes = ['blog/', `blog/${posts[0].name}/`];
-        if (slug === 'halide') routes.push('hire/');
+        if (slug === 'halide' || slug === 'zero-to-built') routes.push('hire/');
+        if (slug === 'zero-to-built') routes.push('about/', 'work/', 'work/packetlark/');
         for (const path of routes) {
-          assert.equal((await page.goto(base + path)).status(), 200);
+          assert.equal((await page.goto(base + path)).status(), 200, `Direct archive route: ${slug}/${path}`);
           await page.locator('#root h1').first().waitFor({ state: 'attached' });
-          assert.equal((await page.reload()).status(), 200);
+          assert.equal((await page.reload()).status(), 200, `Reloading archive route: ${page.url()}`);
         }
       }
       assert.equal((await page.goto(base + 'missing-route/')).status(), 404);

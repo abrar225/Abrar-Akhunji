@@ -70,13 +70,19 @@ async function main() {
     imagesWithoutAlt: document.querySelectorAll('img:not([alt])').length,
   }));
 
-  check('home renders the hero', /Zero to\s*built/.test(home.h1), home.h1);
+  check('home renders the V5 identity', /Abrar\s+Akhunji/.test(home.h1), home.h1);
   check('home title targets Ahmedabad', /Ahmedabad/.test(home.title), home.title);
   check('home canonical is the root URL', home.canonical === 'https://abrarakhunji.com/', home.canonical);
   check('home description mentions Ahmedabad', /Ahmedabad/.test(home.metaDescription), home.metaDescription);
   check('home has the services section', home.hasServices);
   check('home links to the hire page', home.hasHireLink);
   check('every home image has an alt attribute', home.imagesWithoutAlt === 0, `${home.imagesWithoutAlt} missing`);
+  const writingEntries = page.locator('.v5-writing-grid li');
+  const focusedArticle = writingEntries.nth(1).getByRole('link');
+  await focusedArticle.focus();
+  await writingEntries.nth(2).getByRole('link').hover();
+  check('writing cover follows keyboard focus while the pointer moves',
+    await page.locator('.v5-writing-cover').getAttribute('href') === await focusedArticle.getAttribute('href'));
 
   const internalLinks = await page.evaluate(() => [...new Set(
     [...document.querySelectorAll('a[href^="/"]')]
@@ -211,7 +217,10 @@ async function main() {
   if (await navButton.count()) {
     await navButton.click();
     await mobile.waitForTimeout(500);
-    const hireItem = mobile.locator('a[aria-label="Hire"]');
+    await mobile.keyboard.press('Escape');
+    check('Escape closes the mobile navigation and restores focus', await navButton.evaluate(button => document.activeElement === button));
+    await navButton.click();
+    const hireItem = mobile.getByRole('navigation', { name: 'Mobile navigation' }).getByRole('link', { name: 'Hire me' });
     if (await hireItem.count()) {
       await hireItem.first().click();
       await mobile.waitForURL('**/hire/', { timeout: 10_000 });
@@ -234,39 +243,59 @@ async function main() {
   await page.waitForSelector('meta[name=robots][content*=noindex]', {state:'attached'});
   check('unknown project is noindex', /noindex/.test(await page.locator('meta[name=robots]').getAttribute('content')));
   await page.goto(`${BASE}/?project=packetlark#work`);
-  await page.waitForSelector('#selected-product');
-  check('project query selects PacketLark', (await page.locator('#selected-product h3').innerText()) === 'PacketLark');
-  const selector = page.locator('.project-selector');
+  const activeProject = page.locator('.v5-slide:not([inert]) h3');
+  const waitForProject = (view, name) => view.waitForFunction(title =>
+    document.querySelector('.v5-slide:not([inert]) h3')?.textContent === title, name);
+  await activeProject.waitFor();
+  check('project query selects PacketLark', await activeProject.innerText() === 'PacketLark');
+  const selector = page.getByRole('group', { name: 'Jump to a featured project' });
   await selector.getByRole('button', {name:'Fixo Flow'}).click();
   await selector.getByRole('button', {name:'Framecast Studio'}).click();
   await selector.getByRole('button', {name:'PacketLark'}).click();
-  await page.waitForFunction(()=>document.querySelector('#selected-product h3')?.textContent === 'PacketLark');
-  check('rapid selection settles on the last project', await page.locator('#selected-product h3').innerText() === 'PacketLark');
+  await page.waitForFunction(() => {
+    const rail = document.querySelector('.v5-work-rail');
+    return Math.abs(rail.scrollLeft - rail.clientWidth) < 2
+      && document.querySelector('.v5-slide:not([inert]) h3')?.textContent === 'PacketLark';
+  });
+  check('rapid selection settles on the last project', await activeProject.innerText() === 'PacketLark');
   await selector.getByRole('button', {name:'PacketLark'}).press('Home');
-  await page.waitForFunction(()=>document.querySelector('#selected-product h3')?.textContent === 'Fixo Flow');
-  check('Home key selects first product', await page.locator('#selected-product h3').innerText() === 'Fixo Flow');
+  await waitForProject(page, 'Fixo Flow');
+  check('Home key selects first project', await activeProject.innerText() === 'Fixo Flow');
   await selector.getByRole('button', {name:'Fixo Flow'}).press('End');
-  await page.waitForFunction(()=>document.querySelector('#selected-product h3')?.textContent === 'Framecast Studio');
-  check('End key selects last product', await page.locator('#selected-product h3').innerText() === 'Framecast Studio');
-  await page.getByRole('button',{name:'Explore in 3D'}).click();
-  check('Explore mode exposes reset and exit', await page.getByRole('button',{name:'Reset view'}).count() === 1);
+  await waitForProject(page, 'Framecast Studio');
+  check('End key selects last project', await activeProject.innerText() === 'Framecast Studio');
+  check('selection preserves the work fragment', new URL(page.url()).hash === '#work');
+  await page.getByRole('button', {name:'Next project'}).click();
+  await waitForProject(page, 'Fixo Flow');
+  check('next project wraps to the first', await activeProject.innerText() === 'Fixo Flow');
+  const sheet = page.getByRole('group', { name: 'Project contact sheet' });
+  await sheet.getByRole('button', { name: 'PacketLark' }).click();
+  await waitForProject(page, 'PacketLark');
+  check('hero and work gallery share the selected project', await activeProject.innerText() === 'PacketLark');
+  await page.getByRole('button', { name: 'Inspect', exact: true }).click();
+  check('hero inspection exposes an engineering detail', /Engineering detail/i.test(await page.locator('#v5-projection-detail').innerText()));
   await page.keyboard.press('Escape');
-  check('Escape exits Explore', await page.getByRole('button',{name:'Explore in 3D'}).count() === 1);
+  check('Escape restores the hero overview and focus', await page.getByRole('button', { name: 'Inspect', exact: true }).evaluate(button => button === document.activeElement && button.getAttribute('aria-expanded') === 'false'));
+  check('hero retains a direct case study link', await page.getByRole('link', { name: 'Read the PacketLark case study' }).getAttribute('href') === '/work/packetlark/');
   await page.goto(`${BASE}/?project=unknown#work`);
-  check('unknown project query uses the default', await page.locator('#selected-product h3').innerText() === 'Fixo Flow');
-  await page.getByRole('button',{name:'Inside the build',exact:true}).click();
-  check('inspection reveals architecture', await page.locator('#engineering-layers').isVisible());
+  check('unknown project query uses the default', await activeProject.innerText() === 'Fixo Flow');
+  const layer = page.locator('.v5-engineering-record details').nth(1);
+  await layer.locator('summary').click();
+  check('engineering layer reveals its detail', await layer.locator('p').isVisible());
 
   const fallbackContext = await browser.newContext({reducedMotion:'reduce',viewport:{width:390,height:844}});
   await fallbackContext.addInitScript(() => {
-    HTMLCanvasElement.prototype.getContext = function(type) { if (type === 'webgl' || type === 'webgl2') return null; return null; };
+    const getContext = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function(type, ...options) {
+      return type === 'webgl' || type === 'webgl2' ? null : getContext.call(this, type, ...options);
+    };
   });
   const fallback = await fallbackContext.newPage();
   await fallback.goto(`${BASE}/#work`);
-  await fallback.waitForSelector('#selected-product');
-  await fallback.locator('.project-selector').getByRole('button',{name:'PacketLark'}).click();
-  await fallback.waitForFunction(()=>document.querySelector('#selected-product h3')?.textContent === 'PacketLark');
-  check('failed WebGL retains usable project selection', await fallback.locator('#selected-product h3').innerText() === 'PacketLark');
+  await fallback.getByRole('group', { name: 'Jump to a featured project' }).getByRole('button', { name: 'PacketLark' }).click();
+  await waitForProject(fallback, 'PacketLark');
+  check('reduced-motion gallery works without WebGL', await fallback.locator('.v5-slide:not([inert]) h3').innerText() === 'PacketLark');
+  check('reduced motion removes the contact sheet scan', !await fallback.locator('.v5-frame-scan').isVisible());
   await fallbackContext.close();
 
   await mobileContext.close();

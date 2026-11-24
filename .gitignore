@@ -159,3 +159,8 @@ src/generated/
 
 # Deploy archive
 dist.zip
+
+# Lyzo AI memory index
+.lyzo/memory.db
+.lyzo/memory.db-wal
+.lyzo/memory.db-shm

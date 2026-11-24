@@ -24,8 +24,14 @@
     "version": 4,
     "slug": "zero-to-built",
     "name": "Build Room",
-    "commit": "23e12ff71db5923f7303aea154a6c47f097c4030",
-    "date": "2026-11-19",
+    "commit": "32300307da910a03a97e289a81a142d172e033fc",
+    "date": "2026-11-19"
+  },
+  {
+    "version": 5,
+    "slug": "contact-sheet",
+    "name": "Contact Sheet",
+    "date": "2026-11-20",
     "current": true
   }
 ]
