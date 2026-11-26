@@ -1,8 +1,8 @@
-import { useSearchParams, Link } from 'react-router-dom';
-import { ArrowUpRight } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
 import SEO from '../components/SEO';
 import { Masthead } from '../components/v5/Primitives';
-import { projects, projectPath } from '../lib/projects';
+import { projects } from '../lib/projects';
+import { ProjectFrame, WorkGallery } from '../components/v5/WorkGallery';
 
 const categories = ['All', 'Featured', ...new Set(projects.map((project) => project.category))];
 
@@ -10,6 +10,10 @@ export default function Work() {
   const [params, setParams] = useSearchParams();
   const filter = categories.find((category) => category === params.get('category')) || 'All';
   const visible = projects.filter((project) => filter === 'All' || (filter === 'Featured' ? project.featured : project.category === filter));
+
+  const featured = visible.filter(project => project.featured);
+  const gallery = featured.length > 1 ? featured : [];
+  const list = gallery.length ? visible.filter(project => !project.featured) : visible;
 
   return (
     <main className="signal-work-page">
@@ -27,16 +31,11 @@ export default function Work() {
           ))}
         </div>
         <p className="signal-label signal-results" role="status">{visible.length} {visible.length === 1 ? 'project' : 'projects'}</p>
-        <div className="signal-work-grid">
-          {visible.map((project, index) => (
-            <article className="signal-work-card" key={project.slug}>
-              <Link to={projectPath(project.slug)}>
-                <div className="signal-work-image"><img src={project.image} alt={project.imageAlt} width="900" height="600" loading={index < 2 ? 'eager' : 'lazy'} /></div>
-                <div className="signal-work-card-body"><p className="signal-label">{project.category} / {project.status}</p><h2>{project.title} <ArrowUpRight aria-hidden="true" /></h2><p>{project.summary}</p></div>
-              </Link>
-            </article>
-          ))}
-        </div>
+        {gallery.length > 0 && <WorkGallery key={filter} items={gallery} />}
+        {list.length > 0 && <div className="signal-work-grid">
+          {gallery.length > 0 && <p className="signal-label">Project archive</p>}
+          {list.map((project) => <ProjectFrame key={project.slug} project={project} />)}
+        </div>}
       </section>
     </main>
   );

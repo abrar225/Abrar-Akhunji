@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 import SEO from '../components/SEO';
 import { Masthead, SignalLink } from '../components/v5/Primitives';
 import NotFound from './NotFound';
+import ProjectZoom from '../components/v5/ProjectZoom';
 import { findProject, projects, projectPath } from '../lib/projects';
 
 const topics = [
@@ -43,10 +44,7 @@ export default function CaseStudy() {
       </Masthead>
       <div className="signal-wrap">
         <Link className="signal-inline signal-case-back" to="/work/"><ArrowLeft size={16} /> Project index</Link>
-        <figure className="signal-case-visual">
-          <div><img src={project.image} alt={project.imageAlt} width="1200" height="750" fetchPriority="high" /></div>
-          <figcaption className="signal-label">Project preview / {project.status}{slug === 'packetlark' ? ' · The Node workbench runs locally' : ''}</figcaption>
-        </figure>
+        <ProjectZoom project={project} />
         <div className="signal-case-layout">
           <aside className="signal-case-index">
             <p className="signal-label">Inside this build</p>

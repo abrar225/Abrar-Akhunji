@@ -73,13 +73,21 @@ async function main() {
     imagesWithoutAlt: document.querySelectorAll('img:not([alt])').length,
   }));
 
-  check('home renders the V5 identity', /Abrar\s+Akhunji/.test(home.h1), home.h1);
+  check('home renders the V5 identity', /Abrar\s+Akhunji/i.test(home.h1), home.h1);
   check('home title targets Ahmedabad', /Ahmedabad/.test(home.title), home.title);
   check('home canonical is the root URL', home.canonical === 'https://abrarakhunji.com/', home.canonical);
   check('home description mentions Ahmedabad', /Ahmedabad/.test(home.metaDescription), home.metaDescription);
   check('home has the services section', home.hasServices);
   check('home links to the hire page', home.hasHireLink);
   check('every home image has an alt attribute', home.imagesWithoutAlt === 0, `${home.imagesWithoutAlt} missing`);
+  const inkCursor = page.locator('.signal-ink-cursor');
+  await page.mouse.move(340, 250);
+  await page.locator('.signal-ink-cursor[data-active=true]').waitFor();
+  const firstPoint = await inkCursor.evaluate(node => node.style.transform);
+  await page.mouse.move(770, 300);
+  await page.waitForFunction(point => document.querySelector('.signal-ink-cursor').style.transform !== point, firstPoint);
+  check('the desktop ink responds to pointer movement', await page.locator('.signal-ink-canvas[data-active=true]').isVisible());
+
   const writingLinks = page.locator('#writing .signal-notes a');
   check('home presents three direct article links', await writingLinks.count() === 3);
   await writingLinks.first().focus();
@@ -216,6 +224,9 @@ async function main() {
   }));
   check('mobile home has no horizontal overflow', mobileLayout.scrollWidth <= mobileLayout.innerWidth + 2, JSON.stringify(mobileLayout));
 
+  check('touch devices use a still background and native pointer',
+    !await mobile.locator('.signal-ink-canvas').isVisible() && !await mobile.locator('.signal-ink-cursor').isVisible());
+
   const navButton = mobile.locator('button[aria-label="Open menu"]');
   check('mobile navigation trigger exists', (await navButton.count()) === 1);
   if (await navButton.count()) {
@@ -233,10 +244,31 @@ async function main() {
       check('mobile hire navigation works', false, 'Hire item not found');
     }
   }
+  await mobile.goto(`${BASE}/work/`);
+  const mobileGallery = mobile.getByRole('region', { name: 'Featured project gallery' });
+  await mobileGallery.getByRole('button', { name: 'Next project' }).click();
+  await mobile.waitForFunction(() => document.querySelector('.signal-gallery-window')?.scrollLeft > 40);
+  check('mobile gallery uses native horizontal scrolling without pinning', await mobileGallery.getAttribute('data-scrub') === null);
+
   // New project archive and direct-load case studies.
   await page.goto(`${BASE}/work/`);
   await page.waitForSelector('.signal-work-grid');
   check('archive exposes all ten case studies', await page.locator('.signal-work-card').count() === 10);
+  const gallery = page.locator('.signal-gallery[data-scrub=true]');
+  await gallery.waitFor();
+  await gallery.getByRole('button', { name: 'Next project' }).click();
+  await page.waitForFunction(() => document.querySelector('.signal-gallery-window')?.scrollLeft > 50);
+  check('desktop project gallery couples scrolling to the horizontal strip',
+    await gallery.locator('.signal-gallery-window').evaluate(strip => strip.scrollLeft > 50));
+  await page.goto(`${BASE}/work/packetlark/`);
+  const zoom = page.getByRole('button', { name: 'Expand project image' });
+  await zoom.click();
+  const dialog = page.getByRole('dialog', { name: 'PacketLark preview' });
+  await dialog.waitFor();
+  await page.keyboard.press('Escape');
+  check('project image can be expanded and dismissed with focus restored',
+    !await dialog.isVisible() && await zoom.evaluate(button => document.activeElement === button));
+
   for (const slug of ['fixo-flow','packetlark','framecast-studio','cattle-breed']) {
     const response = await page.goto(`${BASE}/work/${slug}/`);
     await page.waitForSelector('.signal-case-body');
@@ -268,6 +300,18 @@ async function main() {
   await activeProject.waitFor();
   check('unknown project query uses the default', await activeProject.innerText() === 'Fixo Flow');
 
+  const navigation = page.getByRole('navigation', { name: 'Main navigation' });
+  await navigation.getByRole('link', { name: 'Work' }).click();
+  await page.locator('.signal-work-page h1').waitFor();
+  check('page transition focuses the new content and leaves one route',
+    await page.locator('.signal-route:focus').count() === 1
+    && await page.locator('.signal-route').count() === 1
+    && await page.locator('#main-content').count() === 0);
+  await navigation.getByRole('link', { name: 'Home' }).click();
+  await page.locator('.signal-hero-title').waitFor();
+  check('returning home after a transition restores focus to the route',
+    await page.locator('.signal-route:focus').count() === 1);
+
   for (const path of ['work/', 'work/packetlark/', 'blog/', 'about/', 'hire/', 'contact/', 'terms/', 'privacy/', 'missing-page/']) {
     await page.goto(`${BASE}/${path}`);
     await page.locator('.signal-route h1').waitFor();
@@ -280,11 +324,11 @@ async function main() {
   await fallback.goto(`${BASE}/#work`);
   await fallback.getByRole('group', { name: 'Featured projects' }).getByRole('button', { name: /PacketLark/ }).click();
   check('reduced motion keeps projects selectable', await fallback.locator('.signal-feature h3').innerText() === 'PacketLark');
-  const poster = fallback.locator('.signal-scope-image img');
+  const poster = fallback.locator('.signal-photo-print img');
   await poster.scrollIntoViewIfNeeded();
-  check('reduced motion uses a static signal sculpture',
+  check('reduced motion keeps the printed portrait visible',
     await poster.evaluate(img => img.complete && img.naturalWidth > 0)
-    && await fallback.locator('.signal-scope-image canvas').count() === 0);
+    && await fallback.locator('.signal-route').evaluate(route => getComputedStyle(route).transform === 'none'));
   await fallbackContext.close();
 
   await mobileContext.close();

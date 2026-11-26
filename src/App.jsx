@@ -1,29 +1,49 @@
-import { Routes, Route, useLocation } from 'react-router-dom';
-import { lazy, Suspense, useEffect, useRef } from 'react';
+import { Routes, Route, matchRoutes, useLocation } from 'react-router-dom';
+import { Suspense, use, useCallback, useEffect, useLayoutEffect, useRef } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import ErrorBoundary from './components/ErrorBoundary';
 import Home from './pages/Home';
 import { SignalFooter, SignalHeader } from './components/v5/Chrome';
 import NotFound from './pages/NotFound';
 
-const BlogList = lazy(() => import('./pages/BlogList'));
-const BlogPost = lazy(() => import('./pages/BlogPost'));
-const Hire = lazy(() => import('./pages/Hire'));
-const Work = lazy(() => import('./pages/Work'));
-const CaseStudy = lazy(() => import('./pages/CaseStudy'));
-const About = lazy(() => import('./pages/About'));
-const Contact = lazy(() => import('./pages/Contact'));
-const Terms = lazy(() => import('./pages/Terms'));
-const Privacy = lazy(() => import('./pages/Privacy'));
+const pages = [
+  ['/', Home],
+  ['/about', () => import('./pages/About'), true],
+  ['/contact', () => import('./pages/Contact'), true],
+  ['/terms', () => import('./pages/Terms'), true],
+  ['/privacy', () => import('./pages/Privacy'), true],
+  ['/blog', () => import('./pages/BlogList'), true],
+  ['/blog/:slug', () => import('./pages/BlogPost'), true],
+  ['/hire', () => import('./pages/Hire'), true],
+  ['/work', () => import('./pages/Work'), true],
+  ['/work/:slug', () => import('./pages/CaseStudy'), true],
+  ['*', NotFound],
+].map(([path, entry, deferred]) => {
+  if (!deferred) return { path, Component: entry };
 
-function RouteContent({ children }) {
-  const { pathname, hash } = useLocation();
-  const previous = useRef(null);
+  let resolved;
+  let pending;
+  const preload = () => {
+    pending ??= entry().then((module) => {
+      resolved = module.default;
+      return module;
+    });
+    return pending;
+  };
+  const Component = () => {
+    const Page = resolved || use(preload()).default;
+    return <Page />;
+  };
+
+  return { path, Component, preload };
+});
+
+function RouteContent({ children, page, hash, onArrival, animate }) {
   const content = useRef(null);
 
-  useEffect(() => {
-    const from = previous.current;
-    previous.current = pathname;
-    if (from && from !== pathname) content.current.focus({ preventScroll: true });
+  useLayoutEffect(() => { onArrival(page, content.current); }, [page, onArrival]);
+
+  useLayoutEffect(() => {
     if (!hash) {
       window.scrollTo(0, 0);
       return;
@@ -45,36 +65,49 @@ function RouteContent({ children }) {
     });
     observer.observe(content.current, { childList: true, subtree: true });
     return () => observer.disconnect();
-  }, [pathname, hash]);
+  }, [hash]);
 
-  return <div id="route-content" className="signal-route" tabIndex={-1} ref={content}>{children}</div>;
+  return (
+    <motion.div id="route-content" className="signal-route" tabIndex={-1} ref={content}
+      initial={animate ? { opacity: .45, y: 18 } : false}
+      animate={{ opacity: 1, y: 0, transition: { duration: animate ? .32 : 0, ease: [.21,.68,.29,1] } }}
+      exit={animate ? { opacity: .26, y: -9, transition: { duration: .14, ease: 'easeIn' } } : { transition: { duration: 0 } }}>
+      {children}
+    </motion.div>
+  );
 }
 
 export default function App() {
-  const { pathname } = useLocation();
+  const location = useLocation();
+  const page = location.pathname.replace(/\/$/, '') || '/';
+  const lastPage = useRef(null);
+  const onArrival = useCallback((nextPage, element) => {
+    if (lastPage.current && lastPage.current !== nextPage) element.focus({ preventScroll: true });
+    lastPage.current = nextPage;
+  }, []);
+  const reduce = useReducedMotion();
+  useEffect(() => {
+    // Fetch the next route during the exit, before its first animated paint.
+    const match = matchRoutes(pages, page)?.[0];
+    match?.route.preload?.().catch(() => {
+      // Let the route error boundary handle failed imports at render time.
+    });
+  }, [page]);
   return (
     <div className="signal-shell">
       <a className="skip-link" href="#route-content">Skip to content</a>
       <SignalHeader />
-      <RouteContent>
-        <ErrorBoundary key={pathname}>
-          <Suspense fallback={<div className="signal-loading" role="status">Loading page…</div>}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/terms" element={<Terms />} />
-              <Route path="/privacy" element={<Privacy />} />
-              <Route path="/blog" element={<BlogList />} />
-              <Route path="/blog/:slug" element={<BlogPost />} />
-              <Route path="/hire" element={<Hire />} />
-              <Route path="/work" element={<Work />} />
-              <Route path="/work/:slug" element={<CaseStudy />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Suspense>
-        </ErrorBoundary>
-      </RouteContent>
+      <AnimatePresence mode="wait" initial={false}>
+        <RouteContent key={page} page={page} hash={location.hash} onArrival={onArrival} animate={!reduce}>
+          <ErrorBoundary>
+            <Suspense fallback={<div className="signal-loading" role="status">Loading page…</div>}>
+              <Routes location={location}>
+                {pages.map(({ path, Component }) => <Route key={path} path={path} element={<Component />} />)}
+              </Routes>
+            </Suspense>
+          </ErrorBoundary>
+        </RouteContent>
+      </AnimatePresence>
       <SignalFooter />
     </div>
   );
