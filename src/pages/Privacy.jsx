@@ -1,15 +1,8 @@
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ArrowLeft, ShieldCheck, Lock, EyeOff, Server } from 'lucide-react';
+import { ShieldCheck, Lock, EyeOff, Server } from 'lucide-react';
 import SEO from '../components/SEO';
+import { Masthead } from '../components/v5/Primitives';
 import { absoluteUrl, privacyPath } from '../lib/content/urls.js';
-
-const fadeUp = {
-  initial: { opacity: 0, y: 16 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-60px' },
-  transition: { duration: 0.5, ease: [0.23, 1, 0.32, 1] },
-};
 
 export default function Privacy() {
   const canonical = absoluteUrl(privacyPath());
@@ -40,26 +33,11 @@ export default function Privacy() {
         keywords={['Privacy Policy', 'data protection', 'Abrar Akhunji']}
       />
 
-      <main className="min-h-screen bg-canvas text-fg pt-28 pb-24 px-6 sm:px-10 max-w-4xl mx-auto">
-        <motion.div {...fadeUp} className="mb-8">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 text-sm text-muted hover:text-fg transition-colors"
-          >
-            <ArrowLeft size={16} />
-            <span>Back to home</span>
-          </Link>
-        </motion.div>
+      <main className="signal-policy">
+      <Masthead label="Last updated / November 2026" title={<>Privacy policy<span>.</span></>} />
+      <div className="signal-wrap signal-info-body">
 
-        <motion.header {...fadeUp} className="mb-14">
-          <p className="text-xs uppercase tracking-widest text-accent font-mono mb-2">Data Protection</p>
-          <h1 className="text-4xl sm:text-5xl font-display font-bold tracking-tight mb-4">
-            Privacy Policy
-          </h1>
-          <p className="text-sm font-mono text-muted">Last updated: November 2026</p>
-        </motion.header>
-
-        <motion.div {...fadeUp} className="space-y-10 text-muted leading-relaxed text-base">
+        <div className="space-y-10 text-muted leading-relaxed text-base">
           <section className="space-y-3">
             <h2 className="text-xl font-display font-semibold text-fg flex items-center gap-2">
               <ShieldCheck size={20} className="text-accent" />
@@ -101,15 +79,16 @@ export default function Privacy() {
               You have the right to request access to or deletion of any email correspondence you have sent us. To make a request, contact <a href="mailto:abrar@abrarakhunji.com" className="text-accent hover:underline">abrar@abrarakhunji.com</a>.
             </p>
           </section>
-        </motion.div>
+        </div>
 
         {/* Footer Navigation */}
-        <motion.footer {...fadeUp} className="border-t border-border mt-16 pt-8 flex flex-wrap gap-4 items-center text-sm text-muted">
+        <footer className="border-t border-border mt-16 pt-8 flex flex-wrap gap-4 items-center text-sm text-muted">
           <Link to="/about/" className="hover:text-fg transition-colors">About</Link>
           <Link to="/contact/" className="hover:text-fg transition-colors">Contact</Link>
           <Link to="/terms/" className="hover:text-fg transition-colors">Terms of Service</Link>
           <Link to="/hire/" className="hover:text-fg transition-colors">Work with me</Link>
-        </motion.footer>
+        </footer>
+      </div>
       </main>
     </>
   );

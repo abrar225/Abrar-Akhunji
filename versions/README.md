@@ -8,7 +8,7 @@
 | v2 Terminal Pulse | `2c3376d` | New homepage and blog experience with project modals and sound. The networked Digital Twin evolved into this release. Its retired assistant is replaced with a contact link. |
 | v3 Halide Signal | `8bffe4b` | Final Halide build, including the staged ASCII hero, river simulation and the hiring route added by the October platform rebuild. |
 | v4 Build Room | `3230030` | Final workshop design with a guided 3D scene, GitHub contribution city, and standalone Agents at Work showcase. |
-| v5 Contact Sheet | Current | Homepage with a project contact sheet, a swipeable work gallery, and editorial sections for engineering, experience, writing, and contact. |
+| v5 Signal Field | Current | Cobalt portfolio with a 3D point sculpture, featured project selector, and shared visual system for work, writing, hiring, and utility pages. |
 
 GitHub reported `main` and `codex/zero-to-built` and no tags. Remote `main` at `40c013e` adds only a contribution refresh to the local reviewed baseline. Build and completion evidence establish the design stages. Historical production dates are unavailable.
 

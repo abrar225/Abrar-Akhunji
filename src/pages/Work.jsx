@@ -1,12 +1,43 @@
-import { useRef } from 'react';
-import useEditorialMotion from '../lib/useEditorialMotion';
-import { Link } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
 import SEO from '../components/SEO';
+import { Masthead } from '../components/v5/Primitives';
 import { projects, projectPath } from '../lib/projects';
 
+const categories = ['All', 'Featured', ...new Set(projects.map((project) => project.category))];
+
 export default function Work() {
-  const page = useRef(null);
-  useEditorialMotion(page);
-  return <main ref={page} id="main-content" className="work-archive page-container"><SEO title="Engineering projects | Abrar Akhunji" description="Local AI, full-stack applications, developer tools and native software by Abrar Akhunji. Explore the problems, decisions and evidence behind ten builds." path="/work/" image="/assets/build-room/og-home.jpg"/><div className="page-intro"><p className="section-kicker">The project shelf</p><h1>Useful things.<br/>Different kinds of hard.</h1><p>AI, developer tools, native software, and the web.<br/>A closer look at the problems and the builds.</p></div><div className="work-grid">{projects.map((p,i)=><Link className="work-card" key={p.id} to={projectPath(p.slug)}><div className="work-card-image"><img src={p.image} alt={p.imageAlt} width="900" height="600" loading={i<2?'eager':'lazy'}/><span className="status-label">{p.status}</span></div><p className="project-category">{p.category}</p><h2>{p.title}<ArrowUpRight size={23}/></h2><p>{p.summary}</p><small>{p.tech.slice(0,4).join(' / ')}</small></Link>)}</div></main>;
+  const [params, setParams] = useSearchParams();
+  const filter = categories.find((category) => category === params.get('category')) || 'All';
+  const visible = projects.filter((project) => filter === 'All' || (filter === 'Featured' ? project.featured : project.category === filter));
+
+  return (
+    <main className="signal-work-page">
+      <SEO title="Selected work — Abrar Akhunji" description="Explore local AI projects, developer tools, native apps, and web systems by Abrar Akhunji." path="/work/" />
+      <Masthead label="Project index" title={<>A body of work<span>.</span></>} description="Local AI, developer tools, native software, and the web. Explore the projects, then get into the decisions behind each build." />
+      <section className="signal-wrap signal-work-index" aria-label="Projects">
+        <div className="signal-filters" role="group" aria-label="Filter projects">
+          {categories.map((category) => (
+            <button key={category} aria-pressed={filter === category} type="button" onClick={() => {
+              const next = new URLSearchParams(params);
+              if (category === 'All') next.delete('category');
+              else next.set('category', category);
+              setParams(next, { replace: true, preventScrollReset: true });
+            }}>{category}</button>
+          ))}
+        </div>
+        <p className="signal-label signal-results" role="status">{visible.length} {visible.length === 1 ? 'project' : 'projects'}</p>
+        <div className="signal-work-grid">
+          {visible.map((project, index) => (
+            <article className="signal-work-card" key={project.slug}>
+              <Link to={projectPath(project.slug)}>
+                <div className="signal-work-image"><img src={project.image} alt={project.imageAlt} width="900" height="600" loading={index < 2 ? 'eager' : 'lazy'} /></div>
+                <div className="signal-work-card-body"><p className="signal-label">{project.category} / {project.status}</p><h2>{project.title} <ArrowUpRight aria-hidden="true" /></h2><p>{project.summary}</p></div>
+              </Link>
+            </article>
+          ))}
+        </div>
+      </section>
+    </main>
+  );
 }

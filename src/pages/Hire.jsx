@@ -1,26 +1,15 @@
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import {
-  ArrowLeft, ArrowUpRight, Brain, Check, Eye, Globe, Layers, Mail, MapPin, Sparkles,
+  ArrowUpRight, Brain, Check, Eye, Globe, Layers, Mail, MapPin, Sparkles,
 } from 'lucide-react';
 import SEO from '../components/SEO';
-import ThemeToggle from '../components/ThemeToggle';
-import { useTheme } from '../lib/useTheme';
-import { soundFX } from '../lib/soundFX';
+import { Masthead, SignalLink } from '../components/v5/Primitives';
 import { PERSON_ID, LOCATIONS, absoluteUrl, hirePath } from '../lib/content/urls.js';
 import data from '../data/services.json';
 
 const ICONS = { brain: Brain, eye: Eye, sparkles: Sparkles, layers: Layers };
 
-const fadeUp = {
-  initial: { opacity: 0, y: 16 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-60px' },
-  transition: { duration: 0.5, ease: [0.23, 1, 0.32, 1] },
-};
-
 export default function Hire() {
-  const { theme, toggleTheme } = useTheme();
   const canonical = absoluteUrl(hirePath());
 
   const schemas = [{
@@ -34,7 +23,7 @@ export default function Hire() {
     areaServed: LOCATIONS.map((city) => ({ '@type': 'City', name: city })),
     availableLanguage: ['English', 'Hindi', 'Gujarati'],
     email: data.email,
-    telephone: data.telephone || '+91-79-4000-1234',
+    ...(data.telephone ? { telephone: data.telephone } : {}),
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
       name: 'Engineering services',
@@ -65,19 +54,7 @@ export default function Hire() {
   }];
 
   return (
-    <main className="min-h-dvh bg-canvas text-fg">
-      <div className="subpage-topbar">
-        <Link to="/" className="flex items-center gap-2 text-sm font-mono text-muted hover:text-accent transition-colors">
-          <ArrowLeft size={16} /> Portfolio
-        </Link>
-        <div className="flex items-center gap-4">
-          <Link to="/blog/" className="hidden sm:inline text-[11px] font-mono uppercase tracking-[0.16em] text-muted hover:text-accent transition-colors">
-            The Neural Log
-          </Link>
-          <ThemeToggle theme={theme} toggleTheme={() => { soundFX.playToggle(); toggleTheme(); }} />
-        </div>
-      </div>
-
+    <main className="signal-hire">
       <SEO
         title="Hire an AI/ML & Full-Stack Engineer in Ahmedabad | Abrar Akhunji"
         description="Hire Abrar Akhunji for AI/ML engineering, computer vision, LLM systems and full-stack product builds. Based in Ahmedabad, available in Gandhinagar, Bangalore and remotely."
@@ -93,33 +70,12 @@ export default function Hire() {
         ]}
       />
 
-      <div className="max-w-[1100px] mx-auto px-6 md:px-12 pt-28 pb-20">
-        <motion.div {...fadeUp} className="max-w-3xl">
-          <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent mb-5">Work with me</p>
-          <h1 className="font-serif text-4xl md:text-6xl leading-[1.05] tracking-tight text-fg">
-            {data.headline}
-          </h1>
-          <p className="mt-6 text-muted text-base md:text-lg leading-relaxed max-w-2xl">{data.intro}</p>
-          <p className="mt-4 text-sm text-fg/80 flex items-center gap-2">
-            <span className="status-dot inline-block w-1.5 h-1.5 rounded-full bg-accent" />
-            {data.availability}
-          </p>
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <a
-              href={`mailto:${data.email}?subject=Project%20enquiry`}
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-accent text-on-accent text-sm font-medium"
-            >
-              <Mail size={15} /> Start a conversation
-            </a>
-            <Link
-              to="/#work"
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-full border border-line text-sm text-fg hover:border-accent transition-colors"
-            >
-              See selected work <ArrowUpRight size={15} />
-            </Link>
-          </div>
-        </motion.div>
-
+      <Masthead label="Work with me" title={<>{data.headline.replace(/\.$/, '')}<span>.</span></>} description={data.intro}>
+        <SignalLink href={`mailto:${data.email}?subject=Project%20enquiry`}>Start a conversation</SignalLink>
+        <SignalLink to="/work/" outline>See selected work</SignalLink>
+      </Masthead>
+      <div className="signal-wrap signal-info-body">
+        <p className="signal-label signal-availability">{data.availability}</p>
         <section className="mt-20" aria-labelledby="services-heading">
           <div className="flex items-end justify-between gap-6 mb-8">
             <div>
@@ -131,9 +87,9 @@ export default function Hire() {
             {data.services.map((service) => {
               const Icon = ICONS[service.icon] || Layers;
               return (
-                <motion.article
+                <article
                   key={service.id}
-                  {...fadeUp}
+
                   className="rounded-2xl border border-line bg-surface p-6 md:p-7 flex flex-col"
                 >
                   <div className="flex items-center justify-between mb-5">
@@ -150,7 +106,7 @@ export default function Hire() {
                     ))}
                   </ul>
                   <p className="mt-auto pt-5 text-[11px] font-mono text-faint">{service.tech.join(' · ')}</p>
-                </motion.article>
+                </article>
               );
             })}
           </div>

@@ -6,7 +6,7 @@ Built with React 19 and Vite 6. Content is markdown in git. The deploy target is
 
 ## What is in the site
 
-- **Portfolio** — the V5 Contact Sheet homepage, swipeable selected work, engineering evidence, experience, writing and contact. Earlier designs, including the 3D Build Room, are available through the version archive.
+- **Portfolio** — the V5 Signal Field homepage, interactive selected work, engineering evidence, experience, writing and contact. Earlier designs, including the 3D Build Room, are available through the version archive.
 - **The Neural Log** — 57 AI/systems posts with ELI5 and Developer reading modes, interactive widgets, topic filters, a prerequisite tech tree and related posts.
 - **Hire** — services, engagement models, process, FAQ and location coverage for Ahmedabad, Gandhinagar, Bangalore and remote work.
 - **Static SEO layer** — per-post semantic HTML, canonical URLs, Person/WebSite/Article/FAQ schema, sitemap, RSS, `llms.txt`, `llms-full.txt` and explicit AI crawler rules.

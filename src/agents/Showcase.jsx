@@ -12,11 +12,11 @@ export default function Showcase() {
   const { toggleTheme } = useTheme();
   useEffect(() => startShowcase(root.current), []);
   return <div ref={root} className={styles.page}>
-    <header className={styles.nav}><a href="/">ABRAR.</a><span>A small experiment in building.</span><button onClick={toggleTheme}>Change theme</button></header>
+    <header className={styles.nav}><a href="/">Abrar Akhunji</a><span>Agents at Work</span><button onClick={toggleTheme}>Change theme</button></header>
     <main>
       <section data-section="" className={styles.hero}>
         <Block code={'<Introduction name="Abrar" />'}><p className={styles.eyebrow}>Abrar Akhunji · AI & Full-Stack Engineer</p></Block>
-        <Block code={'<Headline />'} agent="Copy" type heading="h1">Good ideas deserve to be built.</Block>
+        <Block code={'<Headline />'} agent="Copy" type heading="h1">Agents at work.</Block>
         <Block code={'<Introduction />'}><p className={styles.lead}>I turn models, interfaces and systems into useful software. Here’s a little of that work, assembled in front of you.</p><p className={styles.note}>A choreographed cursor experiment. Real projects, human decisions.</p></Block>
         <Block code={'<ProjectIndex />'}><a href="#projects">Meet the builds ↓</a><span className={styles.divider}> / </span><a href="/">Explore my full portfolio ↗</a></Block>
       </section>

@@ -3,8 +3,9 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { getAllBlogs, getTopTags } from '../lib/blogUtils';
 import { postPath, blogPath, BLOG_NAME } from '../lib/content/urls.js';
 import SEO from '../components/SEO';
+import { Masthead } from '../components/v5/Primitives';
 import TechTree from '../components/blog/TechTree';
-import { ArrowLeft, ArrowUpRight, List, GitBranch, Search, X } from 'lucide-react';
+import { ArrowUpRight, List, GitBranch, Search, X } from 'lucide-react';
 
 const BLOG_DESCRIPTION = 'Deep dives into AI systems, inference engineering, model architecture and production software, explained with the engineering detail that matters.';
 const dateLabel = (date) => new Date(`${date}T00:00:00`).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -71,14 +72,9 @@ export default function BlogList() {
     <main className="reading-desk">
       <SEO title={`${BLOG_NAME} — AI & Systems Engineering Blog | Abrar Akhunji`} description={BLOG_DESCRIPTION} path={blogPath()}
         keywords={['AI engineering blog', 'LLM inference', 'agent systems', 'model architecture', 'computer vision engineering']} schema={schema} />
-      <div className="desk-topline">
-        <Link to="/" className="desk-back"><ArrowLeft size={16} /> Abrar Akhunji</Link>
-      </div>
-      <header className="desk-header">
-        <p className="desk-note">A working collection of ideas</p>
-        <h1>{BLOG_NAME}<span aria-hidden="true">.</span></h1>
-        <p>Field notes on AI systems, inference engineering and production software. Explained simply, then taken apart properly.</p>
-      </header>
+      <Masthead label="Engineering notes" title={<>{BLOG_NAME}<span>.</span></>}
+        description="Field notes on AI systems, inference engineering, and production software. Start with the plain-language explanation or go deeper into the implementation." />
+      <div className="signal-wrap signal-desk-index">
       <div className="desk-tools">
         <label className="desk-search"><Search size={18} /><span className="sr-only">Search articles</span><input ref={searchRef} type="search" placeholder="Find a thought, a model, a system…" value={query} onChange={(event) => updateFilter('q', event.target.value)} /><kbd className="desk-search-hint" aria-hidden="true">/</kbd></label>
         <div className="desk-view" aria-label="Article view">
@@ -94,14 +90,18 @@ export default function BlogList() {
       <p className="desk-result" role="status">{blogs.length} {blogs.length === 1 ? 'note' : 'notes'}{activeTag ? ` on ${activeTag}` : ''}{query.trim() ? ` matching “${query.trim()}”` : ''}</p>
       {view === 'tree' ? <div className="desk-tree"><TechTree blogs={blogs} /></div> : <>
         {featured && <section className="desk-feature" aria-label="Latest article">
+          {featured.heroImage && <Link className="signal-desk-cover" to={postPath(featured.slug)} tabIndex={-1} aria-hidden="true"><img src={featured.heroImage} alt="" width="640" height="400" loading="lazy" /></Link>}
+          <div className="signal-desk-feature-copy">
           <div className="desk-feature-meta"><span>Latest note</span><time dateTime={featured.date}>{dateLabel(featured.date)}</time><span>{featured.readingTime} min read</span></div>
           <Link to={postPath(featured.slug)} data-cursor="Read" className="desk-feature-link"><h2>{featured.title}</h2><p>{featured.description}</p><span className="desk-read">Read the note <ArrowUpRight size={17} /></span></Link>
+          </div>
         </section>}
         {blogs.length === 0 ? <div className="desk-empty"><h2>No notes found.</h2><p>Try another topic or a different search.</p><button type="button" onClick={() => setSearchParams({}, { replace: true, preventScrollReset: true })}>Show all notes</button></div> : <div className="desk-articles">
           {remaining.map((blog) => <article key={blog.slug} className="desk-entry"><time dateTime={blog.date}>{dateLabel(blog.date)}</time><Link to={postPath(blog.slug)} data-cursor="Read"><h2>{blog.title}</h2><p>{blog.description}</p><span>{blog.tags.slice(0, 2).join(' / ')}<span className="desk-entry-time">{blog.readingTime} min</span></span></Link><ArrowUpRight className="desk-entry-arrow" size={20} aria-hidden="true" /></article>)}
         </div>}
       </>}
       <footer className="desk-footer"><div><p>Have a useful problem in mind?</p><span>I build AI applications and full-stack products.</span></div><Link to="/hire/">Work with me <ArrowUpRight size={17} /></Link></footer>
+      </div>
     </main>
   );
 }

@@ -2,13 +2,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import { lazy, Suspense, useEffect, useRef } from 'react';
 import ErrorBoundary from './components/ErrorBoundary';
 import Home from './pages/Home';
-import SiteHeader from './components/site/SiteHeader';
-import SiteFooter from './components/site/SiteFooter';
-import SiteMotion from './components/site/SiteMotion';
-import Soundscape from './components/site/Soundscape';
-import WorkshopCreatures from './components/site/WorkshopCreatures';
-import { HomeFooter, HomeHeader } from './components/v5/Chrome';
-import { useTheme } from './lib/useTheme';
+import { SignalFooter, SignalHeader } from './components/v5/Chrome';
 import NotFound from './pages/NotFound';
 
 const BlogList = lazy(() => import('./pages/BlogList'));
@@ -21,99 +15,67 @@ const Contact = lazy(() => import('./pages/Contact'));
 const Terms = lazy(() => import('./pages/Terms'));
 const Privacy = lazy(() => import('./pages/Privacy'));
 
-function RouteScroll() {
-  const { pathname, hash, search } = useLocation();
+function RouteContent({ children }) {
+  const { pathname, hash } = useLocation();
   const previous = useRef(null);
+  const content = useRef(null);
 
   useEffect(() => {
     const from = previous.current;
-    previous.current = { pathname, hash, search };
-    if (from?.pathname === pathname && from.search !== search && (from.hash === hash || !hash)) return;
-    let disposed = false;
-    const scroll = () => {
-      if (disposed) return;
-      if (hash) {
-        let id;
-        try { id = decodeURIComponent(hash.slice(1)); } catch { id = ''; }
-        const target = document.getElementById(id);
-        if (target) {
-          target.scrollIntoView({ behavior: !from || from.pathname !== pathname || window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'start' });
-          return;
-        }
-      }
+    previous.current = pathname;
+    if (from && from !== pathname) content.current.focus({ preventScroll: true });
+    if (!hash) {
       window.scrollTo(0, 0);
+      return;
+    }
+
+    let id;
+    try { id = decodeURIComponent(hash.slice(1)); } catch { return; }
+    const scrollToTarget = () => {
+      const target = document.getElementById(id);
+      if (!target) return false;
+      target.scrollIntoView();
+      return true;
     };
 
-    const timer = setTimeout(() => {
-      if (hash) document.fonts.ready.then(scroll);
-      else scroll();
-    }, 160);
-    return () => { disposed = true; clearTimeout(timer); };
-  }, [pathname, hash, search]);
+    if (scrollToTarget()) return;
+    // Direct article links can target headings inserted after Markdown loads.
+    const observer = new MutationObserver(() => {
+      if (scrollToTarget()) observer.disconnect();
+    });
+    observer.observe(content.current, { childList: true, subtree: true });
+    return () => observer.disconnect();
+  }, [pathname, hash]);
 
-  return null;
-}
-
-function RouteBoundary({ children }) {
-  const location = useLocation();
-  return <ErrorBoundary key={location.pathname}>{children}</ErrorBoundary>;
-}
-
-function RouteFallback() {
-  return (
-    <div className="min-h-dvh bg-canvas flex items-center justify-center" aria-busy="true" aria-label="Loading page">
-      <div className="flex items-center gap-3 text-fg">
-        <span className="font-display font-semibold tracking-[-0.04em]">ABRAR.</span>
-        <span className="h-px w-10 bg-accent animate-pulse" />
-      </div>
-    </div>
-  );
+  return <div id="route-content" className="signal-route" tabIndex={-1} ref={content}>{children}</div>;
 }
 
 export default function App() {
-  const { theme } = useTheme();
   const { pathname } = useLocation();
-  useEffect(() => { document.documentElement.classList.remove('light','dark'); document.documentElement.classList.add(theme); document.documentElement.style.colorScheme = theme; }, [theme]);
-  if (pathname === '/') {
-    return (
-      <RouteBoundary>
-        <div className="v5-shell">
-          <RouteScroll />
-          <a className="skip-link" href="#main-content">Skip to content</a>
-          <HomeHeader />
-          <Home />
-          <HomeFooter />
-        </div>
-      </RouteBoundary>
-    );
-  }
   return (
-    <RouteBoundary>
-      <SiteMotion />
-      <div className="site-experience">
-      <RouteScroll />
+    <div className="signal-shell">
       <a className="skip-link" href="#route-content">Skip to content</a>
-      <SiteHeader/>
-      <Soundscape/>
-      <WorkshopCreatures/>
-      <div id="route-content" tabIndex={-1}>
-      <Suspense fallback={<RouteFallback />}>
-        <Routes>
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="/privacy" element={<Privacy />} />
-          <Route path="/blog" element={<BlogList />} />
-          <Route path="/blog/:slug" element={<BlogPost />} />
-          <Route path="/hire" element={<Hire />} />
-          <Route path="/work" element={<Work />} />
-          <Route path="/work/:slug" element={<CaseStudy />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Suspense>
-      </div>
-      <SiteFooter/>
-      </div>
-    </RouteBoundary>
+      <SignalHeader />
+      <RouteContent>
+        <ErrorBoundary key={pathname}>
+          <Suspense fallback={<div className="signal-loading" role="status">Loading page…</div>}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/blog" element={<BlogList />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
+              <Route path="/hire" element={<Hire />} />
+              <Route path="/work" element={<Work />} />
+              <Route path="/work/:slug" element={<CaseStudy />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </ErrorBoundary>
+      </RouteContent>
+      <SignalFooter />
+    </div>
   );
 }

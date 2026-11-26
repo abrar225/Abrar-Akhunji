@@ -51,7 +51,7 @@ async function main() {
   const consoleErrors = [];
   const pageErrors = [];
   page.on('console', (message) => {
-    if (message.type() === 'error') consoleErrors.push(message.text());
+    if (message.type() === 'error') consoleErrors.push([message.text(), message.location().url].filter(Boolean).join(' — '));
   });
   page.on('pageerror', (error) => pageErrors.push(error.message));
 
@@ -60,6 +60,9 @@ async function main() {
   await page.waitForSelector('h1', { timeout: 20_000 });
   await page.waitForTimeout(900);
 
+  if (process.env.PORTFOLIO_CAPTURE_DIR) {
+    await page.screenshot({ path: `${process.env.PORTFOLIO_CAPTURE_DIR}/desktop.png`, animations: 'disabled' });
+  }
   const home = await page.evaluate(() => ({
     title: document.title,
     h1: document.querySelector('h1')?.innerText || '',
@@ -77,12 +80,10 @@ async function main() {
   check('home has the services section', home.hasServices);
   check('home links to the hire page', home.hasHireLink);
   check('every home image has an alt attribute', home.imagesWithoutAlt === 0, `${home.imagesWithoutAlt} missing`);
-  const writingEntries = page.locator('.v5-writing-grid li');
-  const focusedArticle = writingEntries.nth(1).getByRole('link');
-  await focusedArticle.focus();
-  await writingEntries.nth(2).getByRole('link').hover();
-  check('writing cover follows keyboard focus while the pointer moves',
-    await page.locator('.v5-writing-cover').getAttribute('href') === await focusedArticle.getAttribute('href'));
+  const writingLinks = page.locator('#writing .signal-notes a');
+  check('home presents three direct article links', await writingLinks.count() === 3);
+  await writingLinks.first().focus();
+  check('home article link is keyboard reachable', await writingLinks.first().evaluate(link => link === document.activeElement));
 
   const internalLinks = await page.evaluate(() => [...new Set(
     [...document.querySelectorAll('a[href^="/"]')]
@@ -174,7 +175,7 @@ async function main() {
     body: document.body.innerText,
     robots: document.querySelector('meta[name=robots]')?.content || '',
   }));
-  check('unknown route shows the custom 404', /slipped out of the index/.test(`${notFound.h1}\n${notFound.body}`), notFound.h1);
+  check('unknown route shows the custom 404', /Signal lost/.test(`${notFound.h1}\n${notFound.body}`), notFound.h1);
   check('404 is noindex', /noindex/.test(notFound.robots), notFound.robots);
 
   // ── Theme ────────────────────────────────────────────────────
@@ -206,13 +207,16 @@ async function main() {
   await mobile.waitForSelector('h1');
   await mobile.waitForTimeout(800);
 
+  if (process.env.PORTFOLIO_CAPTURE_DIR) {
+    await mobile.screenshot({ path: `${process.env.PORTFOLIO_CAPTURE_DIR}/mobile.png`, animations: 'disabled', fullPage: true });
+  }
   const mobileLayout = await mobile.evaluate(() => ({
     scrollWidth: document.documentElement.scrollWidth,
     innerWidth: window.innerWidth,
   }));
   check('mobile home has no horizontal overflow', mobileLayout.scrollWidth <= mobileLayout.innerWidth + 2, JSON.stringify(mobileLayout));
 
-  const navButton = mobile.locator('button[aria-label="Open navigation"]');
+  const navButton = mobile.locator('button[aria-label="Open menu"]');
   check('mobile navigation trigger exists', (await navButton.count()) === 1);
   if (await navButton.count()) {
     await navButton.click();
@@ -220,7 +224,7 @@ async function main() {
     await mobile.keyboard.press('Escape');
     check('Escape closes the mobile navigation and restores focus', await navButton.evaluate(button => document.activeElement === button));
     await navButton.click();
-    const hireItem = mobile.getByRole('navigation', { name: 'Mobile navigation' }).getByRole('link', { name: 'Hire me' });
+    const hireItem = mobile.getByRole('navigation', { name: 'Mobile navigation' }).getByRole('link', { name: 'Work with me' });
     if (await hireItem.count()) {
       await hireItem.first().click();
       await mobile.waitForURL('**/hire/', { timeout: 10_000 });
@@ -231,71 +235,56 @@ async function main() {
   }
   // New project archive and direct-load case studies.
   await page.goto(`${BASE}/work/`);
-  await page.waitForSelector('.work-grid');
-  check('archive exposes all ten case studies', await page.locator('.work-card').count() === 10);
+  await page.waitForSelector('.signal-work-grid');
+  check('archive exposes all ten case studies', await page.locator('.signal-work-card').count() === 10);
   for (const slug of ['fixo-flow','packetlark','framecast-studio','cattle-breed']) {
     const response = await page.goto(`${BASE}/work/${slug}/`);
-    await page.waitForSelector('.case-body');
-    check(`${slug} case study loads directly`, response.status() === 200 && await page.locator('.case-body h2').count() >= 6);
+    await page.waitForSelector('.signal-case-body');
+    check(`${slug} case study loads directly`, response.status() === 200 && await page.locator('.signal-case-body h2').count() >= 6);
     check(`${slug} has the canonical URL`, await page.locator('link[rel=canonical]').getAttribute('href') === `https://abrarakhunji.com/work/${slug}/`);
   }
   await page.goto(`${BASE}/work/not-a-project/`);
   await page.waitForSelector('meta[name=robots][content*=noindex]', {state:'attached'});
   check('unknown project is noindex', /noindex/.test(await page.locator('meta[name=robots]').getAttribute('content')));
   await page.goto(`${BASE}/?project=packetlark#work`);
-  const activeProject = page.locator('.v5-slide:not([inert]) h3');
-  const waitForProject = (view, name) => view.waitForFunction(title =>
-    document.querySelector('.v5-slide:not([inert]) h3')?.textContent === title, name);
+  const activeProject = page.locator('.signal-feature h3');
   await activeProject.waitFor();
   check('project query selects PacketLark', await activeProject.innerText() === 'PacketLark');
-  const selector = page.getByRole('group', { name: 'Jump to a featured project' });
-  await selector.getByRole('button', {name:'Fixo Flow'}).click();
-  await selector.getByRole('button', {name:'Framecast Studio'}).click();
-  await selector.getByRole('button', {name:'PacketLark'}).click();
-  await page.waitForFunction(() => {
-    const rail = document.querySelector('.v5-work-rail');
-    return Math.abs(rail.scrollLeft - rail.clientWidth) < 2
-      && document.querySelector('.v5-slide:not([inert]) h3')?.textContent === 'PacketLark';
-  });
-  check('rapid selection settles on the last project', await activeProject.innerText() === 'PacketLark');
-  await selector.getByRole('button', {name:'PacketLark'}).press('Home');
-  await waitForProject(page, 'Fixo Flow');
-  check('Home key selects first project', await activeProject.innerText() === 'Fixo Flow');
-  await selector.getByRole('button', {name:'Fixo Flow'}).press('End');
-  await waitForProject(page, 'Framecast Studio');
-  check('End key selects last project', await activeProject.innerText() === 'Framecast Studio');
+  const selector = page.getByRole('group', { name: 'Featured projects' });
+  await selector.getByRole('button', { name: /Fixo Flow/ }).click();
+  await selector.getByRole('button', { name: /Framecast Studio/ }).click();
+  const packetLark = selector.getByRole('button', { name: /PacketLark/ });
+  await packetLark.focus();
+  await packetLark.press('Enter');
+  await selector.locator('button[aria-pressed=true]').filter({ hasText: 'PacketLark' }).waitFor();
+  check('keyboard selection updates the evidence and selected state',
+    await activeProject.innerText() === 'PacketLark'
+    && await packetLark.getAttribute('aria-pressed') === 'true'
+    && /PacketLark/i.test(await page.locator('#engineering').innerText()));
   check('selection preserves the work fragment', new URL(page.url()).hash === '#work');
-  await page.getByRole('button', {name:'Next project'}).click();
-  await waitForProject(page, 'Fixo Flow');
-  check('next project wraps to the first', await activeProject.innerText() === 'Fixo Flow');
-  const sheet = page.getByRole('group', { name: 'Project contact sheet' });
-  await sheet.getByRole('button', { name: 'PacketLark' }).click();
-  await waitForProject(page, 'PacketLark');
-  check('hero and work gallery share the selected project', await activeProject.innerText() === 'PacketLark');
-  await page.getByRole('button', { name: 'Inspect', exact: true }).click();
-  check('hero inspection exposes an engineering detail', /Engineering detail/i.test(await page.locator('#v5-projection-detail').innerText()));
-  await page.keyboard.press('Escape');
-  check('Escape restores the hero overview and focus', await page.getByRole('button', { name: 'Inspect', exact: true }).evaluate(button => button === document.activeElement && button.getAttribute('aria-expanded') === 'false'));
-  check('hero retains a direct case study link', await page.getByRole('link', { name: 'Read the PacketLark case study' }).getAttribute('href') === '/work/packetlark/');
+  check('featured work retains a direct case study link',
+    await page.getByRole('link', { name: 'Read the case study' }).getAttribute('href') === '/work/packetlark/');
   await page.goto(`${BASE}/?project=unknown#work`);
+  await activeProject.waitFor();
   check('unknown project query uses the default', await activeProject.innerText() === 'Fixo Flow');
-  const layer = page.locator('.v5-engineering-record details').nth(1);
-  await layer.locator('summary').click();
-  check('engineering layer reveals its detail', await layer.locator('p').isVisible());
 
-  const fallbackContext = await browser.newContext({reducedMotion:'reduce',viewport:{width:390,height:844}});
-  await fallbackContext.addInitScript(() => {
-    const getContext = HTMLCanvasElement.prototype.getContext;
-    HTMLCanvasElement.prototype.getContext = function(type, ...options) {
-      return type === 'webgl' || type === 'webgl2' ? null : getContext.call(this, type, ...options);
-    };
-  });
+  for (const path of ['work/', 'work/packetlark/', 'blog/', 'about/', 'hire/', 'contact/', 'terms/', 'privacy/', 'missing-page/']) {
+    await page.goto(`${BASE}/${path}`);
+    await page.locator('.signal-route h1').waitFor();
+    check(`/${path} shares V5 chrome`, await page.locator('.signal-header').count() === 1
+      && await page.locator('.signal-footer').count() === 1 && await page.locator('.site-header').count() === 0);
+  }
+
+  const fallbackContext = await browser.newContext({ reducedMotion: 'reduce', viewport: { width: 390, height: 844 } });
   const fallback = await fallbackContext.newPage();
   await fallback.goto(`${BASE}/#work`);
-  await fallback.getByRole('group', { name: 'Jump to a featured project' }).getByRole('button', { name: 'PacketLark' }).click();
-  await waitForProject(fallback, 'PacketLark');
-  check('reduced-motion gallery works without WebGL', await fallback.locator('.v5-slide:not([inert]) h3').innerText() === 'PacketLark');
-  check('reduced motion removes the contact sheet scan', !await fallback.locator('.v5-frame-scan').isVisible());
+  await fallback.getByRole('group', { name: 'Featured projects' }).getByRole('button', { name: /PacketLark/ }).click();
+  check('reduced motion keeps projects selectable', await fallback.locator('.signal-feature h3').innerText() === 'PacketLark');
+  const poster = fallback.locator('.signal-scope-image img');
+  await poster.scrollIntoViewIfNeeded();
+  check('reduced motion uses a static signal sculpture',
+    await poster.evaluate(img => img.complete && img.naturalWidth > 0)
+    && await fallback.locator('.signal-scope-image canvas').count() === 0);
   await fallbackContext.close();
 
   await mobileContext.close();

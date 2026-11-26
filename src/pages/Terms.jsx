@@ -1,15 +1,8 @@
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ArrowLeft, Shield, Scale, Bot, FileText } from 'lucide-react';
+import { Shield, Scale, Bot, FileText } from 'lucide-react';
 import SEO from '../components/SEO';
+import { Masthead } from '../components/v5/Primitives';
 import { absoluteUrl, termsPath } from '../lib/content/urls.js';
-
-const fadeUp = {
-  initial: { opacity: 0, y: 16 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-60px' },
-  transition: { duration: 0.5, ease: [0.23, 1, 0.32, 1] },
-};
 
 export default function Terms() {
   const canonical = absoluteUrl(termsPath());
@@ -40,26 +33,11 @@ export default function Terms() {
         keywords={['Terms of Service', 'legal terms', 'agent policy', 'Abrar Akhunji']}
       />
 
-      <main className="min-h-screen bg-canvas text-fg pt-28 pb-24 px-6 sm:px-10 max-w-4xl mx-auto">
-        <motion.div {...fadeUp} className="mb-8">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 text-sm text-muted hover:text-fg transition-colors"
-          >
-            <ArrowLeft size={16} />
-            <span>Back to home</span>
-          </Link>
-        </motion.div>
+      <main className="signal-policy">
+      <Masthead label="Last updated / November 2026" title={<>Terms of service<span>.</span></>} />
+      <div className="signal-wrap signal-info-body">
 
-        <motion.header {...fadeUp} className="mb-14">
-          <p className="text-xs uppercase tracking-widest text-accent font-mono mb-2">Legal Terms</p>
-          <h1 className="text-4xl sm:text-5xl font-display font-bold tracking-tight mb-4">
-            Terms of Service
-          </h1>
-          <p className="text-sm font-mono text-muted">Last updated: November 2026</p>
-        </motion.header>
-
-        <motion.div {...fadeUp} className="space-y-10 text-muted leading-relaxed text-base">
+        <div className="space-y-10 text-muted leading-relaxed text-base">
           <section className="space-y-3">
             <h2 className="text-xl font-display font-semibold text-fg flex items-center gap-2">
               <Scale size={20} className="text-accent" />
@@ -81,7 +59,7 @@ export default function Terms() {
             <ul className="list-disc pl-6 space-y-2">
               <li><strong className="text-fg">Search and Indexing:</strong> Permitted (<code className="text-xs font-mono">search=yes</code>). Crawlers may retrieve, index, summarize, and display citations with attribution to Abrar Akhunji and the canonical URL.</li>
               <li><strong className="text-fg">Model Training:</strong> Prohibited without written authorization (<code className="text-xs font-mono">ai-train=no</code>). Scraping this site for frontier foundation model pre-training is not permitted.</li>
-              <li><strong className="text-fg">Machine-Readable Discovery:</strong> Agents are encouraged to fetch <Link to="/llms.txt" className="text-accent hover:underline">/llms.txt</Link>, <Link to="/llms-full.txt" className="text-accent hover:underline">/llms-full.txt</Link>, and our MCP Server Card at <code className="text-xs font-mono">/.well-known/mcp/server-card.json</code>.</li>
+              <li><strong className="text-fg">Machine-Readable Discovery:</strong> Agents are encouraged to fetch <a href="/llms.txt" className="text-accent hover:underline">/llms.txt</a>, <a href="/llms-full.txt" className="text-accent hover:underline">/llms-full.txt</a>, and our MCP Server Card at <code className="text-xs font-mono">/.well-known/mcp/server-card.json</code>.</li>
             </ul>
           </section>
 
@@ -121,15 +99,16 @@ export default function Terms() {
               For legal inquiries, licensing requests, or questions regarding these Terms, contact <a href="mailto:abrar@abrarakhunji.com" className="text-accent hover:underline">abrar@abrarakhunji.com</a> or visit our <Link to="/contact/" className="text-accent hover:underline">Contact page</Link>.
             </p>
           </section>
-        </motion.div>
+        </div>
 
         {/* Footer Navigation */}
-        <motion.footer {...fadeUp} className="border-t border-border mt-16 pt-8 flex flex-wrap gap-4 items-center text-sm text-muted">
+        <footer className="border-t border-border mt-16 pt-8 flex flex-wrap gap-4 items-center text-sm text-muted">
           <Link to="/about/" className="hover:text-fg transition-colors">About</Link>
           <Link to="/contact/" className="hover:text-fg transition-colors">Contact</Link>
           <Link to="/privacy/" className="hover:text-fg transition-colors">Privacy Policy</Link>
           <Link to="/hire/" className="hover:text-fg transition-colors">Work with me</Link>
-        </motion.footer>
+        </footer>
+      </div>
       </main>
     </>
   );

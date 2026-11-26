@@ -305,7 +305,7 @@ function renderArticle(post) {
           <time datetime="${post.date}">${post.date}</time> &bull;
           <span>${post.readingTime} min read</span>
         </div>
-        ${post.heroImageUrl ? `<figure style="margin:1.5rem 0;"><img src="${escapeHtml(post.heroImageUrl)}" alt="${escapeHtml(post.title)}" style="max-width:100%;height:auto;border-radius:12px;" loading="eager" fetchpriority="high" /></figure>` : ''}
+        ${post.heroImage ? `<figure style="margin:1.5rem 0;"><img src="${escapeHtml(post.heroImage)}" alt="${escapeHtml(post.title)}" style="max-width:100%;height:auto;border-radius:12px;" loading="eager" fetchpriority="high" /></figure>` : ''}
         <p style="font-size:1.125rem;color:#B8C4D4;font-style:italic;">${escapeHtml(post.description)}</p>
       </header>
       <div class="article-body">${renderSections(post.sections)}</div>

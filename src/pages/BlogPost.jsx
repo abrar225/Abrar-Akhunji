@@ -282,7 +282,9 @@ export default function BlogPost() {
         keywords={meta.tags}
         schema={schemas}
       />
+      <main className="signal-article">
       <article className="editorial-reader">
+        <div className="signal-article-hero">
         <div className="reader-toolbar">
           <Link to="/blog/" className="reader-back"><ArrowLeft size={16} /> The Neural Log</Link>
           <div className="reader-toolbar-actions">
@@ -300,8 +302,9 @@ export default function BlogPost() {
           <h1>{meta.title}</h1>
           <p className="reader-description">{meta.description}</p>
           <div className="reader-byline"><span>By {meta.author}</span><time dateTime={meta.date}>{new Date(`${meta.date}T00:00:00`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</time><span>{meta.readingTime} min read</span></div>
-          {meta.heroImage && <figure className="reader-hero"><img src={meta.heroImage} alt={meta.title} loading="eager" decoding="async" fetchPriority="high" /></figure>}
         </header>
+        </div>
+        {meta.heroImage && <figure className="reader-hero"><img src={meta.heroImage} alt={meta.title} loading="eager" decoding="async" fetchPriority="high" /></figure>}
         {!post && !loadError && <PostSkeleton />}
         {loadError && <LoadError error={loadError} onRetry={() => setReloadKey((key) => key + 1)} />}
         {post && <>
@@ -328,6 +331,7 @@ export default function BlogPost() {
           </footer>
         </>}
       </article>
+      </main>
     </>
   );
 }
