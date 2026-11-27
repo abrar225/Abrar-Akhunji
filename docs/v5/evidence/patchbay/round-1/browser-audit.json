@@ -1,0 +1,433 @@
+{
+  "url": "http://127.0.0.1:5181/docs/v5/prototypes/patchbay.html",
+  "browser": "158.0.8127.37",
+  "viewports": {
+    "desktop": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "deviceScaleFactor": 1
+    },
+    "mobile": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 1,
+      "hasTouch": true,
+      "isMobile": true
+    }
+  },
+  "play": {
+    "slow": 2700,
+    "fast": 800
+  },
+  "config": {
+    "jpegQuality": 82,
+    "fps": 30,
+    "leadInMs": 400,
+    "atProjectMs": 700,
+    "settleMs": 700
+  },
+  "samples": {
+    "desktop": {
+      "errors": [],
+      "initial": {
+        "y": 0,
+        "workY": 1557,
+        "width": 1440,
+        "height": 900,
+        "overflow": 0,
+        "title": "PacketLark",
+        "input": {}
+      },
+      "recordings": {
+        "slow": {
+          "start": {
+            "y": 0,
+            "workY": 1557,
+            "width": 1440,
+            "height": 900,
+            "overflow": 0,
+            "title": "PacketLark",
+            "input": {}
+          },
+          "landing": {
+            "y": 1557,
+            "workY": 1557,
+            "width": 1440,
+            "height": 900,
+            "overflow": 0,
+            "title": "PacketLark",
+            "input": {
+              "wheel": 162
+            }
+          },
+          "end": {
+            "y": 0,
+            "workY": 1557,
+            "width": 1440,
+            "height": 900,
+            "overflow": 0,
+            "title": "PacketLark",
+            "input": {
+              "wheel": 324
+            }
+          },
+          "frames": 412,
+          "downMs": 2759,
+          "upMs": 2763
+        },
+        "fast": {
+          "start": {
+            "y": 0,
+            "workY": 1557,
+            "width": 1440,
+            "height": 900,
+            "overflow": 0,
+            "title": "PacketLark",
+            "input": {
+              "wheel": 324
+            }
+          },
+          "landing": {
+            "y": 1557,
+            "workY": 1557,
+            "width": 1440,
+            "height": 900,
+            "overflow": 0,
+            "title": "PacketLark",
+            "input": {
+              "wheel": 373
+            }
+          },
+          "end": {
+            "y": 0,
+            "workY": 1557,
+            "width": 1440,
+            "height": 900,
+            "overflow": 0,
+            "title": "PacketLark",
+            "input": {
+              "wheel": 422
+            }
+          },
+          "frames": 188,
+          "downMs": 869,
+          "upMs": 865
+        }
+      },
+      "positions": [
+        {
+          "percent": 0,
+          "target": 0,
+          "y": 0,
+          "workY": 1557,
+          "width": 1440,
+          "height": 900,
+          "overflow": 0,
+          "title": "PacketLark",
+          "input": {
+            "wheel": 422
+          }
+        },
+        {
+          "percent": 25,
+          "target": 389,
+          "y": 389,
+          "workY": 1557,
+          "width": 1440,
+          "height": 900,
+          "overflow": 0,
+          "title": "PacketLark",
+          "input": {
+            "wheel": 422
+          }
+        },
+        {
+          "percent": 50,
+          "target": 779,
+          "y": 779,
+          "workY": 1557,
+          "width": 1440,
+          "height": 900,
+          "overflow": 0,
+          "title": "PacketLark",
+          "input": {
+            "wheel": 422
+          }
+        },
+        {
+          "percent": 75,
+          "target": 1168,
+          "y": 1168,
+          "workY": 1557,
+          "width": 1440,
+          "height": 900,
+          "overflow": 0,
+          "title": "PacketLark",
+          "input": {
+            "wheel": 422
+          }
+        },
+        {
+          "percent": 100,
+          "target": 1557,
+          "y": 1557,
+          "workY": 1557,
+          "width": 1440,
+          "height": 900,
+          "overflow": 0,
+          "title": "PacketLark",
+          "input": {
+            "wheel": 422
+          }
+        }
+      ],
+      "alternative": {
+        "first": {
+          "y": 0,
+          "workY": 1557,
+          "width": 1440,
+          "height": 900,
+          "overflow": 0,
+          "title": "PacketLark",
+          "input": {}
+        },
+        "choice": "voice",
+        "selected": {
+          "y": 0,
+          "workY": 1557,
+          "width": 1440,
+          "height": 900,
+          "overflow": 0,
+          "title": "Fixo Flow",
+          "input": {}
+        },
+        "errors": []
+      },
+      "reduced": {
+        "first": {
+          "y": 0,
+          "workY": 945,
+          "width": 1440,
+          "height": 900,
+          "overflow": 0,
+          "title": "PacketLark",
+          "input": {}
+        },
+        "choice": "voice",
+        "selected": {
+          "y": 0,
+          "workY": 945,
+          "width": 1440,
+          "height": 900,
+          "overflow": 0,
+          "title": "Fixo Flow",
+          "input": {}
+        },
+        "errors": []
+      }
+    },
+    "mobile": {
+      "errors": [],
+      "initial": {
+        "y": 0,
+        "workY": 1367,
+        "width": 390,
+        "height": 844,
+        "overflow": 0,
+        "title": "PacketLark",
+        "input": {}
+      },
+      "recordings": {
+        "slow": {
+          "start": {
+            "y": 0,
+            "workY": 1367,
+            "width": 390,
+            "height": 844,
+            "overflow": 0,
+            "title": "PacketLark",
+            "input": {}
+          },
+          "landing": {
+            "y": 1367,
+            "workY": 1367,
+            "width": 390,
+            "height": 844,
+            "overflow": 0,
+            "title": "PacketLark",
+            "input": {
+              "touchmove": 18
+            }
+          },
+          "end": {
+            "y": 1,
+            "workY": 1367,
+            "width": 390,
+            "height": 844,
+            "overflow": 0,
+            "title": "PacketLark",
+            "input": {
+              "touchmove": 35
+            }
+          },
+          "frames": 412,
+          "downMs": 2886,
+          "upMs": 2881
+        },
+        "fast": {
+          "start": {
+            "y": 1,
+            "workY": 1367,
+            "width": 390,
+            "height": 844,
+            "overflow": 0,
+            "title": "PacketLark",
+            "input": {
+              "touchmove": 35
+            }
+          },
+          "landing": {
+            "y": 1361,
+            "workY": 1367,
+            "width": 390,
+            "height": 844,
+            "overflow": 0,
+            "title": "PacketLark",
+            "input": {
+              "touchmove": 42
+            }
+          },
+          "end": {
+            "y": 0,
+            "workY": 1367,
+            "width": 390,
+            "height": 844,
+            "overflow": 0,
+            "title": "PacketLark",
+            "input": {
+              "touchmove": 49
+            }
+          },
+          "frames": 192,
+          "downMs": 973,
+          "upMs": 964
+        }
+      },
+      "positions": [
+        {
+          "percent": 0,
+          "target": 0,
+          "y": 0,
+          "workY": 1367,
+          "width": 390,
+          "height": 844,
+          "overflow": 0,
+          "title": "PacketLark",
+          "input": {
+            "touchmove": 49
+          }
+        },
+        {
+          "percent": 25,
+          "target": 342,
+          "y": 342,
+          "workY": 1367,
+          "width": 390,
+          "height": 844,
+          "overflow": 0,
+          "title": "PacketLark",
+          "input": {
+            "touchmove": 49
+          }
+        },
+        {
+          "percent": 50,
+          "target": 684,
+          "y": 684,
+          "workY": 1367,
+          "width": 390,
+          "height": 844,
+          "overflow": 0,
+          "title": "PacketLark",
+          "input": {
+            "touchmove": 49
+          }
+        },
+        {
+          "percent": 75,
+          "target": 1025,
+          "y": 1025,
+          "workY": 1367,
+          "width": 390,
+          "height": 844,
+          "overflow": 0,
+          "title": "PacketLark",
+          "input": {
+            "touchmove": 49
+          }
+        },
+        {
+          "percent": 100,
+          "target": 1367,
+          "y": 1367,
+          "workY": 1367,
+          "width": 390,
+          "height": 844,
+          "overflow": 0,
+          "title": "PacketLark",
+          "input": {
+            "touchmove": 49
+          }
+        }
+      ],
+      "alternative": {
+        "first": {
+          "y": 0,
+          "workY": 1367,
+          "width": 390,
+          "height": 844,
+          "overflow": 0,
+          "title": "PacketLark",
+          "input": {}
+        },
+        "choice": "voice",
+        "selected": {
+          "y": 0,
+          "workY": 1367,
+          "width": 390,
+          "height": 844,
+          "overflow": 0,
+          "title": "Fixo Flow",
+          "input": {}
+        },
+        "errors": []
+      },
+      "reduced": {
+        "first": {
+          "y": 0,
+          "workY": 838,
+          "width": 390,
+          "height": 844,
+          "overflow": 0,
+          "title": "PacketLark",
+          "input": {}
+        },
+        "choice": "voice",
+        "selected": {
+          "y": 0,
+          "workY": 838,
+          "width": 390,
+          "height": 844,
+          "overflow": 0,
+          "title": "Fixo Flow",
+          "input": {}
+        },
+        "errors": []
+      }
+    }
+  }
+}

@@ -1,0 +1,443 @@
+{
+  "url": "http://127.0.0.1:5181/docs/v5/prototypes/patchbay.html",
+  "browser": "158.0.8127.37",
+  "viewports": {
+    "desktop": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "deviceScaleFactor": 1
+    },
+    "mobile": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 1,
+      "hasTouch": true,
+      "isMobile": true
+    }
+  },
+  "play": {
+    "slow": 2700,
+    "fast": 800
+  },
+  "config": {
+    "jpegQuality": 82,
+    "fps": 30,
+    "leadInMs": 400,
+    "atProjectMs": 700,
+    "settleMs": 700
+  },
+  "samples": {
+    "desktop": {
+      "errors": [],
+      "initial": {
+        "y": 0,
+        "workY": 1395,
+        "width": 1440,
+        "height": 900,
+        "overflow": 0,
+        "title": "PacketLark",
+        "input": {}
+      },
+      "recordings": {
+        "slow": {
+          "start": {
+            "y": 0,
+            "workY": 1395,
+            "width": 1440,
+            "height": 900,
+            "overflow": 0,
+            "title": "PacketLark",
+            "input": {}
+          },
+          "landing": {
+            "y": 1395,
+            "workY": 1395,
+            "width": 1440,
+            "height": 900,
+            "overflow": 0,
+            "title": "PacketLark",
+            "input": {
+              "wheel": 162
+            }
+          },
+          "end": {
+            "y": 0,
+            "workY": 1395,
+            "width": 1440,
+            "height": 900,
+            "overflow": 0,
+            "title": "PacketLark",
+            "input": {
+              "wheel": 325
+            }
+          },
+          "downMs": 2785,
+          "upMs": 2762,
+          "frames": 410
+        },
+        "fast": {
+          "start": {
+            "y": 0,
+            "workY": 1395,
+            "width": 1440,
+            "height": 900,
+            "overflow": 0,
+            "title": "PacketLark",
+            "input": {
+              "wheel": 325
+            }
+          },
+          "landing": {
+            "y": 1395,
+            "workY": 1395,
+            "width": 1440,
+            "height": 900,
+            "overflow": 0,
+            "title": "PacketLark",
+            "input": {
+              "wheel": 374
+            }
+          },
+          "end": {
+            "y": 0,
+            "workY": 1395,
+            "width": 1440,
+            "height": 900,
+            "overflow": 0,
+            "title": "PacketLark",
+            "input": {
+              "wheel": 423
+            }
+          },
+          "downMs": 861,
+          "upMs": 866,
+          "frames": 187
+        }
+      },
+      "positions": [
+        {
+          "percent": 0,
+          "target": 0,
+          "y": 0,
+          "workY": 1395,
+          "width": 1440,
+          "height": 900,
+          "overflow": 0,
+          "title": "PacketLark",
+          "input": {
+            "wheel": 423
+          }
+        },
+        {
+          "percent": 25,
+          "target": 349,
+          "y": 349,
+          "workY": 1395,
+          "width": 1440,
+          "height": 900,
+          "overflow": 0,
+          "title": "PacketLark",
+          "input": {
+            "wheel": 423
+          }
+        },
+        {
+          "percent": 50,
+          "target": 698,
+          "y": 698,
+          "workY": 1395,
+          "width": 1440,
+          "height": 900,
+          "overflow": 0,
+          "title": "PacketLark",
+          "input": {
+            "wheel": 423
+          }
+        },
+        {
+          "percent": 75,
+          "target": 1046,
+          "y": 1046,
+          "workY": 1395,
+          "width": 1440,
+          "height": 900,
+          "overflow": 0,
+          "title": "PacketLark",
+          "input": {
+            "wheel": 423
+          }
+        },
+        {
+          "percent": 100,
+          "target": 1395,
+          "y": 1395,
+          "workY": 1395,
+          "width": 1440,
+          "height": 900,
+          "overflow": 0,
+          "title": "PacketLark",
+          "input": {
+            "wheel": 423
+          }
+        }
+      ],
+      "alternative": {
+        "first": {
+          "y": 0,
+          "workY": 1395,
+          "width": 1440,
+          "height": 900,
+          "overflow": 0,
+          "title": "PacketLark",
+          "input": {}
+        },
+        "choice": "voice",
+        "input": "pointer",
+        "selected": {
+          "y": 0,
+          "workY": 1395,
+          "width": 1440,
+          "height": 900,
+          "overflow": 0,
+          "title": "Fixo Flow",
+          "input": {}
+        },
+        "keyboard": "Framecast Studio",
+        "interfaceDialog": "opened, image decoded, enlarged, panned with native input, closed, focus restored",
+        "errors": []
+      },
+      "reduced": {
+        "first": {
+          "y": 0,
+          "workY": 945,
+          "width": 1440,
+          "height": 900,
+          "overflow": 0,
+          "title": "PacketLark",
+          "input": {}
+        },
+        "choice": "voice",
+        "input": "pointer",
+        "selected": {
+          "y": 0,
+          "workY": 945,
+          "width": 1440,
+          "height": 900,
+          "overflow": 0,
+          "title": "Fixo Flow",
+          "input": {}
+        },
+        "keyboard": "Framecast Studio",
+        "interfaceDialog": "opened, image decoded, enlarged, panned with native input, closed, focus restored",
+        "errors": []
+      }
+    },
+    "mobile": {
+      "errors": [],
+      "initial": {
+        "y": 0,
+        "workY": 1148,
+        "width": 390,
+        "height": 844,
+        "overflow": 0,
+        "title": "PacketLark",
+        "input": {}
+      },
+      "recordings": {
+        "slow": {
+          "start": {
+            "y": 0,
+            "workY": 1148,
+            "width": 390,
+            "height": 844,
+            "overflow": 0,
+            "title": "PacketLark",
+            "input": {}
+          },
+          "landing": {
+            "y": 1148,
+            "workY": 1148,
+            "width": 390,
+            "height": 844,
+            "overflow": 0,
+            "title": "PacketLark",
+            "input": {
+              "touchmove": 17
+            }
+          },
+          "end": {
+            "y": 0,
+            "workY": 1148,
+            "width": 390,
+            "height": 844,
+            "overflow": 0,
+            "title": "PacketLark",
+            "input": {
+              "touchmove": 35
+            }
+          },
+          "downMs": 2902,
+          "upMs": 2882,
+          "frames": 412
+        },
+        "fast": {
+          "start": {
+            "y": 0,
+            "workY": 1148,
+            "width": 390,
+            "height": 844,
+            "overflow": 0,
+            "title": "PacketLark",
+            "input": {
+              "touchmove": 35
+            }
+          },
+          "landing": {
+            "y": 1146,
+            "workY": 1148,
+            "width": 390,
+            "height": 844,
+            "overflow": 0,
+            "title": "PacketLark",
+            "input": {
+              "touchmove": 42
+            }
+          },
+          "end": {
+            "y": 2,
+            "workY": 1148,
+            "width": 390,
+            "height": 844,
+            "overflow": 0,
+            "title": "PacketLark",
+            "input": {
+              "touchmove": 49
+            }
+          },
+          "downMs": 1139,
+          "upMs": 964,
+          "frames": 189
+        }
+      },
+      "positions": [
+        {
+          "percent": 0,
+          "target": 0,
+          "y": 0,
+          "workY": 1148,
+          "width": 390,
+          "height": 844,
+          "overflow": 0,
+          "title": "PacketLark",
+          "input": {
+            "touchmove": 49
+          }
+        },
+        {
+          "percent": 25,
+          "target": 287,
+          "y": 287,
+          "workY": 1148,
+          "width": 390,
+          "height": 844,
+          "overflow": 0,
+          "title": "PacketLark",
+          "input": {
+            "touchmove": 49
+          }
+        },
+        {
+          "percent": 50,
+          "target": 574,
+          "y": 574,
+          "workY": 1148,
+          "width": 390,
+          "height": 844,
+          "overflow": 0,
+          "title": "PacketLark",
+          "input": {
+            "touchmove": 49
+          }
+        },
+        {
+          "percent": 75,
+          "target": 861,
+          "y": 861,
+          "workY": 1148,
+          "width": 390,
+          "height": 844,
+          "overflow": 0,
+          "title": "PacketLark",
+          "input": {
+            "touchmove": 49
+          }
+        },
+        {
+          "percent": 100,
+          "target": 1148,
+          "y": 1148,
+          "workY": 1148,
+          "width": 390,
+          "height": 844,
+          "overflow": 0,
+          "title": "PacketLark",
+          "input": {
+            "touchmove": 49
+          }
+        }
+      ],
+      "alternative": {
+        "first": {
+          "y": 0,
+          "workY": 1148,
+          "width": 390,
+          "height": 844,
+          "overflow": 0,
+          "title": "PacketLark",
+          "input": {}
+        },
+        "choice": "voice",
+        "input": "touch",
+        "selected": {
+          "y": 0,
+          "workY": 1148,
+          "width": 390,
+          "height": 844,
+          "overflow": 0,
+          "title": "Fixo Flow",
+          "input": {}
+        },
+        "interfaceDialog": "opened, image decoded, enlarged, panned with native input, closed, focus restored",
+        "errors": []
+      },
+      "reduced": {
+        "first": {
+          "y": 0,
+          "workY": 838,
+          "width": 390,
+          "height": 844,
+          "overflow": 0,
+          "title": "PacketLark",
+          "input": {}
+        },
+        "choice": "voice",
+        "input": "touch",
+        "selected": {
+          "y": 0,
+          "workY": 838,
+          "width": 390,
+          "height": 844,
+          "overflow": 0,
+          "title": "Fixo Flow",
+          "input": {}
+        },
+        "interfaceDialog": "opened, image decoded, enlarged, panned with native input, closed, focus restored",
+        "errors": []
+      }
+    }
+  }
+}

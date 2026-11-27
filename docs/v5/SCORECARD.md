@@ -1,5 +1,7 @@
 # Gate 1 scorecard
 
+This records the initial three-direction review. The later Patchbay rounds and their matched blind comparisons are in [Patchbay’s revised scorecard](PATCHBAY.md#evidence-and-decision-log).
+
 The independent critic reviewed captures at 0%, 25%, 50%, 75%, and 100% plus native-input recordings. Scores describe the opening and first project transition. A score of 4 is the brief’s minimum for the later slice and final build. Unbuilt pages, production graphics and end-to-end checks remain open.
 
 | §14 dimension | A perceived ascent | A literal reverse | B folio | C patchbay final |

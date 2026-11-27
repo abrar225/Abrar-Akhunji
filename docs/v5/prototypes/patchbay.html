@@ -1,61 +1,85 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex"><link rel="icon" href="data:,"><title>The patchbay / Abrar Akhunji</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="data:,">
+  <title>Abrar Akhunji / The Patchbay</title>
   <link rel="stylesheet" href="./prototype.css">
+  <link rel="stylesheet" href="./patchbay.css">
+  <script type="module" src="./patchbay.js"></script>
 </head>
-<body class="patch" data-project="fixo">
-  <a class="skip" href="#output">Skip to project</a>
-  <main>
-    <section id="arrival" class="c-hero" data-arrival aria-labelledby="c-name">
-      <header class="c-header c-wrap">
-        <a class="back" href="./index.html">← Directions</a>
-        <nav aria-label="Portfolio"><a href="#output">Work</a><a href="https://drive.google.com/file/d/1dV5ukxF-i-9JcWCaxsbQljNwL7Dni8Jc/view?usp=sharing">Résumé</a><a href="mailto:abrar@abrarakhunji.com">Contact</a></nav>
+<body class="patchbay">
+  <a class="skip" href="#work">Skip to work</a>
+  <main class="journey">
+    <div class="projection" aria-hidden="true"><canvas></canvas></div>
+    <section class="opening" aria-labelledby="name">
+      <header class="opening-nav bay-wrap">
+        <a href="./index.html">← Directions</a>
+        <nav aria-label="Portfolio">
+          <a href="#work">Work</a>
+          <a href="https://drive.google.com/file/d/1dV5ukxF-i-9JcWCaxsbQljNwL7Dni8Jc/view?usp=sharing">Résumé</a>
+          <a href="mailto:abrar@abrarakhunji.com">Contact</a>
+        </nav>
       </header>
-      <div class="c-wrap c-opening">
-        <div class="c-copy">
-          <h1 id="c-name">Abrar Akhunji</h1>
-          <p>AI &amp; full-stack engineer</p>
-          <p class="c-title">Follow<br>the signal.</p>
-          <p>I build local AI tools, developer software, and native apps.</p>
+      <div class="opening-body bay-wrap">
+        <div class="identity">
+          <div class="byline"><img src="/assets/build-room/portrait.webp" width="44" height="44" alt=""><p>AI &amp; full-stack engineer<br>Ahmedabad, India</p></div>
+          <h1 id="name">Abrar<br>Akhunji<span>.</span></h1>
+          <p class="bio">I build local AI tools, developer software, and native apps.</p>
+          <p class="available"><i aria-hidden="true"></i> Open to engineering roles &amp; collaborations</p>
         </div>
-        <div class="c-board">
-          <h2>Choose a signal</h2>
-          <div class="c-ports" role="group" aria-label="Choose a project">
-            <button type="button" data-port="fixo" aria-pressed="true"><span>Voice</span><small>Fixo Flow</small><i aria-hidden="true"></i></button>
-            <button type="button" data-port="packet" aria-pressed="false"><span>Request</span><small>PacketLark</small><i aria-hidden="true"></i></button>
-            <button type="button" data-port="frame" aria-pressed="false"><span>Screen</span><small>Framecast Studio</small><i aria-hidden="true"></i></button>
+        <div class="selector">
+          <p id="choose-route">Explore a different project</p>
+          <div class="route-options" role="group" aria-labelledby="choose-route">
+            <button type="button" data-route="packet" aria-pressed="true">Request</button>
+            <button type="button" data-route="voice" aria-pressed="false">Voice</button>
+            <button type="button" data-route="screen" aria-pressed="false">Screen</button>
           </div>
-          <svg viewBox="0 0 180 216" preserveAspectRatio="none" class="c-traces" aria-hidden="true" fill="none">
-            <path d="M0 29C76 29 47 107 172 108"/><path d="M0 108C76 108 92 109 172 108"/><path d="M0 187C76 187 47 109 172 108"/>
-            <path class="c-trace-live" data-line="fixo" d="M0 29C76 29 47 107 172 108"/><path class="c-trace-live" data-line="packet" d="M0 108C76 108 92 109 172 108"/><path class="c-trace-live" data-line="frame" d="M0 187C76 187 47 109 172 108"/>
-            <circle cx="172" cy="108" r="5" fill="currentColor"/>
-          </svg>
-          <div class="c-destination" aria-live="polite"><span>Output</span><strong data-c-output>Local text</strong><a href="#output">View project ↓</a></div>
+          <p class="route-caption" aria-live="polite">Request <span aria-hidden="true">→</span> PacketLark</p>
         </div>
-        <p class="c-status"><span class="status-dot" aria-hidden="true"></span> Open to engineering roles &amp; collaborations <span>Ahmedabad, India</span></p>
+        <a class="follow" href="#work">Follow the signal to work <span aria-hidden="true">↓</span></a>
       </div>
     </section>
-    <section id="output" class="c-output" data-next aria-labelledby="c-project" tabindex="-1">
-      <div class="c-blades" aria-hidden="true"><i></i><i></i><i></i></div>
-      <div class="c-wrap c-result">
-        <header class="c-result-bar"><a class="back" href="#arrival">← Change signal</a><p class="case-tag" data-c-tag>Voice / Desktop preview</p></header>
-        <div class="c-inspector">
-          <div class="c-details">
-            <h2 id="c-project" data-c-name>Fixo Flow</h2>
-            <p data-c-info>English dictation with local speech recognition, writing styles and recoverable history.</p>
-            <div class="c-decision">
-              <h3 data-c-decision>Recognition stays local</h3>
-              <p data-c-reason>Local inference avoids a cloud transcription dependency.</p>
-            </div>
-            <a class="case-link" data-c-link href="https://github.com/abrar225/FixoFlow">Fixo Flow source ↗</a>
-          </div>
-          <figure><img data-c-image src="/assets/build-room/products/fixo-flow.webp" alt="Fixo Flow’s macOS writing styles interface" width="1040" height="768"><figcaption data-c-caption>Fixo Flow / Writing styles</figcaption></figure>
+    <div class="paper-crossing" aria-hidden="true">
+      <div class="paper-stack">
+        <svg viewBox="0 0 1440 900" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="paper-light" x2=".45" y2="1"><stop stop-color="#fffaf0"/><stop offset="1" stop-color="#f5f0e3"/></linearGradient>
+            <pattern id="paper-rule" width="17" height="17" patternUnits="userSpaceOnUse"><path d="M0 16.5h17" stroke="#201d28" stroke-opacity=".11"/></pattern>
+          </defs>
+          <g class="paper-depth"><path d="M0 287 240 205 437 253 668 59 854 187 1132 90 1440 151V900H0Z" fill="#2637c7"/><path d="M0 287 240 205 437 253 668 59 854 187 1132 90 1440 151V900H0Z" fill="url(#paper-rule)"/></g>
+          <path class="paper-core" d="M0 325 240 235 437 282 668 105 854 219 1132 130 1440 189V900H0Z" fill="#f59bb6"/>
+          <path class="paper-face" d="M0 378 240 284 437 330 668 143 854 261 1132 165 1440 237V900H0Z" fill="url(#paper-light)"/>
+        </svg>
+      </div>
+    </div>
+    <section id="work" class="work-plate" aria-labelledby="project-title" tabindex="-1">
+      <div class="case-layout bay-wrap">
+        <div class="case-copy">
+          <p class="case-state" data-status>Developer software / Released</p>
+          <h2 id="project-title" data-project-title>PacketLark</h2>
+          <p class="case-lead" data-description>A local API workbench for repeatable requests, response inspection, and isolated test scripts.</p>
+          <div class="case-decision"><h3 data-decision>A local workspace</h3><p data-reason>Collections and environments remain inspectable files.</p></div>
+          <div class="case-actions"><button type="button" data-inspect hidden>Inspect interface <span aria-hidden="true">↗</span></button><a class="case-link" data-source href="https://github.com/abrar225/packetlark">View source ↗</a></div>
         </div>
+        <figure class="rest-proof">
+          <img src="/assets/build-room/products/packetlark.webp" width="1200" height="833" alt="PacketLark’s request workbench with its response panel">
+          <figcaption data-caption>PacketLark / Request workbench</figcaption>
+        </figure>
       </div>
     </section>
   </main>
-  <script type="module" src="./motion.js"></script>
+  <dialog class="interface-dialog" aria-labelledby="interface-title">
+    <header><h2 id="interface-title">PacketLark interface</h2><form method="dialog"><button autofocus>Close</button></form></header>
+    <div class="interface-tools">
+      <button type="button" data-zoom aria-controls="interface-viewport" aria-pressed="false">Detail view</button>
+      <p data-zoom-help hidden>Swipe or use arrow keys to pan.</p>
+    </div>
+    <div id="interface-viewport" class="interface-viewport" role="region" aria-label="Product screenshot" tabindex="0">
+      <img alt="">
+    </div>
+  </dialog>
 </body>
 </html>

@@ -13,7 +13,6 @@ const directions = [
   { id: 'a-ascent', page: 'ascent.html', anchor: 'capture' },
   { id: 'a-reverse', page: 'ascent.html?scroll=reverse', anchor: 'capture' },
   { id: 'b-folio', page: 'folio.html', anchor: 'spread' },
-  { id: 'c-patchbay', page: 'patchbay.html', anchor: 'output' },
 ];
 const sizes = {
   desktop: { width: 1440, height: 900, isMobile: false, hasTouch: false },
@@ -74,15 +73,6 @@ async function recording(page, context, direction, device, initial) {
   });
   await cdp.send('Page.startScreencast', { format: 'jpeg', quality: 80, maxWidth: 1120, maxHeight: 820, everyNthFrame: 1 });
   await page.waitForTimeout(250);
-  if (direction.id === 'c-patchbay') {
-    const button = page.getByRole('button', { name: 'Request PacketLark' });
-    if (device === 'mobile') await button.tap();
-    else { await button.focus(); await page.keyboard.press('Enter'); }
-    assert.equal(await button.getAttribute('aria-pressed'), 'true');
-    assert.equal(await page.locator('[data-c-name]').textContent(), 'PacketLark');
-    assert.equal(await page.locator('[data-c-decision]').textContent(), 'A local workspace');
-    await page.waitForTimeout(670);
-  }
   if (device === 'desktop') {
     await page.mouse.move(1000, 265);
     await page.waitForTimeout(300);

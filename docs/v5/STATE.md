@@ -2,7 +2,7 @@
 
 ## Checkpoint
 
-Phase 0 and Phase 1 evidence is ready. Gate 1 is awaiting a direction and scroll-mode decision. The baseline is `abb86caf65f3b06c4a9c369759b2519c42cedde9`, tagged `v5-signal-field-before-rebuild`. Working branch: `codex/portfolio-v5-gate-1`.
+Gate 1 is unapproved. Round 4 passed the targeted Patchbay prototype review. Patchbay with normal scroll is the lead candidate, awaiting Abrar’s choice. The baseline is `abb86caf65f3b06c4a9c369759b2519c42cedde9`, tagged `v5-signal-field-before-rebuild`. Working branch: `codex/portfolio-v5-gate-1`.
 
 ## Inputs
 
@@ -30,7 +30,11 @@ With Node 22+ and an installed dependency tree, run `npm run dev` for V5 develop
 
 The original brief is preserved byte-for-byte. The root V5 rules are appended. The current palette, gradients, themes, content, routes and preserved behavior are documented. The five-version browser audit covers 804 desktop and emulated-mobile route visits, motion recordings for each version, and targeted controls. The [evidence index](evidence/baseline/README.md) describes the locally stored full corpus and curated checkpoint evidence.
 
-The [Gate 1 directions](DIRECTIONS.md) include three whole-Home storyboards and four running variants at the [prototype chooser](http://127.0.0.1:5181/docs/v5/prototypes/). See the [scorecard](SCORECARD.md), [captures](evidence/directions/README.md), [effect ledger](LEDGER.md), [route inventory](routes.md) and [source research](SOURCES.md). The recommendation is C with normal scroll. V4 still leads in distinctiveness and motion continuity in the first blind comparison. The current-site dark quote, animated desktop Work filter, and Home history findings are in [CRITIQUE.md](CRITIQUE.md).
+The [Gate 1 directions](DIRECTIONS.md) include three whole-Home storyboards and four running variants at the [prototype chooser](http://127.0.0.1:5181/docs/v5/prototypes/). See the [scorecard](SCORECARD.md), [captures](evidence/directions/README.md), [effect ledger](LEDGER.md), [route inventory](routes.md) and [source research](SOURCES.md). The initial recommendation was C with normal scroll. The pre-revision blind comparisons favoured V4 on distinctiveness and motion continuity. The current-site dark quote, animated desktop Work filter, and Home history findings are in [CRITIQUE.md](CRITIQUE.md).
+
+## Patchbay revision
+
+Round 4 scored 33/40 with all prototype dimensions at 4 or above. Matched blind motion was 4.5 vs 3.8 on desktop and 4.3 vs 2.8 on mobile, and recruiter clarity was 4.7 vs 3.4, Patchbay vs V4. V4 still led on first-frame distinctiveness. The paper-cutout reference and GitHub animation URL are still missing. See the [revision and scorecard](PATCHBAY.md), [recordings](evidence/patchbay/README.md) and [regression diagnoses](REGRESSIONS.md).
 
 ## Next
 

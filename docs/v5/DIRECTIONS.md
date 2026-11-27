@@ -54,6 +54,8 @@ Risks. Print cues already appear in the outgoing V5. The hinge, whole-spread com
 
 ## C. The patchbay
 
+The live link opens the revised candidate. The frames and art direction in this section describe the initial proposal at `b6bfe60`. [Active Patchbay review](PATCHBAY.md)
+
 A visitor asks for a voice, HTTP request or screen signal and sees which of Abrar’s builds turns it into usable output. The relationship is derived from Fixo Flow, PacketLark and Framecast Studio. The board changes the case rather than just decorating it.
 
 [Open C](http://127.0.0.1:5181/docs/v5/prototypes/patchbay.html) · [Desktop opening](evidence/directions/c-patchbay/desktop-000.jpg) · [Mobile opening](evidence/directions/c-patchbay/mobile-000.jpg) · [Desktop evidence scene](evidence/directions/c-patchbay/desktop-100.jpg) · [Desktop motion](evidence/directions/c-patchbay/desktop-motion.mp4) · [Mobile motion](evidence/directions/c-patchbay/mobile-motion.mp4)
