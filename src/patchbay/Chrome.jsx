@@ -3,6 +3,7 @@ import { Link, NavLink, useLocation } from 'react-router-dom';
 import { ArrowUpRight, Menu, Moon, Sun, X } from 'lucide-react';
 import { EMAIL, RESUME } from '../lib/projects';
 import { useTheme } from '../lib/useTheme';
+import versions from '../../versions/manifest.json';
 
 const directory = [
   ['Work', '/work/'], ['Writing', '/blog/'], ['About', '/about/'],
@@ -44,6 +45,9 @@ export function PatchHeader() {
             <Menu size={19} aria-hidden="true" />
           </button>
         </div>
+        {import.meta.env.VITE_SHOW_VERSIONS === '1' && <details className="version-switcher patch-archive">
+          <summary>Versions</summary><ul aria-label="Portfolio versions">{versions.toReversed().map(version => <li key={version.slug}><a href={version.current ? '/' : `/versions/${version.slug}/`} aria-current={version.current?'true':undefined}>v{version.version} · {version.current?'The Patchbay':version.name}</a></li>)}</ul>
+        </details>}
       </div>
       <dialog className="patch-menu" id="patch-menu" ref={menu} aria-label="Portfolio menu" onClose={() => trigger.current?.focus({ preventScroll: true })}>
         <div className="patch-wide">

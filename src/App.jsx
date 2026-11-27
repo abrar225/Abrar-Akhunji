@@ -42,7 +42,7 @@ export default function App() {
               transition={{ duration: reduce ? 0 : .18 }}>
               <Routes>
                 {pages.map(([path, Page]) => (
-                  <Route key={path} path={path} element={<div className={page === '/' ? undefined : 'patch-interior signal-shell'}><Page /></div>} />
+                  <Route key={path} path={path} element={<Page />} />
                 ))}
               </Routes>
             </motion.div>

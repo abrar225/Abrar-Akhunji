@@ -1,0 +1,27 @@
+@import "tailwindcss" source(none);
+@source "../";
+@source "../../index.html";
+
+@theme inline {
+  --font-display: var(--patch-display);
+  --font-serif: var(--patch-serif);
+  --font-body: var(--patch-body);
+  --font-mono: var(--patch-mono);
+  --color-canvas: var(--patch-ui-canvas);
+  --color-surface: var(--patch-ui-surface);
+  --color-elevated: var(--patch-ui-elevated);
+  --color-fg: var(--patch-ui-fg);
+  --color-muted: var(--patch-ui-muted);
+  --color-faint: var(--patch-ui-faint);
+  --color-line: var(--patch-ui-line);
+  --color-accent: var(--patch-ui-accent);
+  --color-on-accent: var(--patch-ui-on-accent);
+}
+
+html { scroll-behavior:auto; overflow-x:clip; }
+body { margin:0; min-height:100vh; background:#f5f0e3; }
+html.dark body { background:#211f30; }
+:root { color-scheme:light; }
+html.dark { color-scheme:dark; }
+a,button { -webkit-tap-highlight-color:transparent; }
+html::selection { color:#121331; background:#e6fa8d; }

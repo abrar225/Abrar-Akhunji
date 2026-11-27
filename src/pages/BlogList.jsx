@@ -3,7 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { getAllBlogs, getTopTags } from '../lib/blogUtils';
 import { postPath, blogPath, BLOG_NAME } from '../lib/content/urls.js';
 import SEO from '../components/SEO';
-import { Masthead } from '../components/v5/Primitives';
+import { PageLead } from '../patchbay/Interior';
 import TechTree from '../components/blog/TechTree';
 import { ArrowUpRight, List, GitBranch, Search, X } from 'lucide-react';
 
@@ -72,9 +72,9 @@ export default function BlogList() {
     <main className="reading-desk">
       <SEO title={`${BLOG_NAME} — AI & Systems Engineering Blog | Abrar Akhunji`} description={BLOG_DESCRIPTION} path={blogPath()}
         keywords={['AI engineering blog', 'LLM inference', 'agent systems', 'model architecture', 'computer vision engineering']} schema={schema} />
-      <Masthead label="Engineering notes" title={<>{BLOG_NAME}<span>.</span></>}
+      <PageLead label="Engineering notes" title={<>{BLOG_NAME}<span>.</span></>}
         description="Field notes on AI systems, inference engineering, and production software. Start with the plain-language explanation or go deeper into the implementation." />
-      <div className="signal-wrap signal-desk-index">
+      <div className="patch-wide patch-desk-index">
       <div className="desk-tools">
         <label className="desk-search"><Search size={18} /><span className="sr-only">Search articles</span><input ref={searchRef} type="search" placeholder="Find a thought, a model, a system…" value={query} onChange={(event) => updateFilter('q', event.target.value)} /><kbd className="desk-search-hint" aria-hidden="true">/</kbd></label>
         <div className="desk-view" aria-label="Article view">
@@ -90,8 +90,8 @@ export default function BlogList() {
       <p className="desk-result" role="status">{blogs.length} {blogs.length === 1 ? 'note' : 'notes'}{activeTag ? ` on ${activeTag}` : ''}{query.trim() ? ` matching “${query.trim()}”` : ''}</p>
       {view === 'tree' ? <div className="desk-tree"><TechTree blogs={blogs} /></div> : <>
         {featured && <section className="desk-feature" aria-label="Latest article">
-          {featured.heroImage && <Link className="signal-desk-cover" to={postPath(featured.slug)} tabIndex={-1} aria-hidden="true"><img src={featured.heroImage} alt="" width="640" height="400" loading="lazy" /></Link>}
-          <div className="signal-desk-feature-copy">
+          {featured.heroImage && <Link className="patch-desk-cover" to={postPath(featured.slug)} tabIndex={-1} aria-hidden="true"><img src={featured.heroImage} alt="" width="640" height="400" loading="lazy" /></Link>}
+          <div className="patch-desk-feature-copy">
           <div className="desk-feature-meta"><span>Latest note</span><time dateTime={featured.date}>{dateLabel(featured.date)}</time><span>{featured.readingTime} min read</span></div>
           <Link to={postPath(featured.slug)} data-cursor="Read" className="desk-feature-link"><h2>{featured.title}</h2><p>{featured.description}</p><span className="desk-read">Read the note <ArrowUpRight size={17} /></span></Link>
           </div>

@@ -3,7 +3,7 @@ import {
   ArrowUpRight, Brain, Check, Eye, Globe, Layers, Mail, MapPin, Sparkles,
 } from 'lucide-react';
 import SEO from '../components/SEO';
-import { Masthead, SignalLink } from '../components/v5/Primitives';
+import { PageLead, Action } from '../patchbay/Interior';
 import { PERSON_ID, LOCATIONS, absoluteUrl, hirePath } from '../lib/content/urls.js';
 import data from '../data/services.json';
 
@@ -54,7 +54,7 @@ export default function Hire() {
   }];
 
   return (
-    <main className="signal-hire">
+    <main className="patch-hire">
       <SEO
         title="Hire an AI/ML & Full-Stack Engineer in Ahmedabad | Abrar Akhunji"
         description="Hire Abrar Akhunji for AI/ML engineering, computer vision, LLM systems and full-stack product builds. Based in Ahmedabad, available in Gandhinagar, Bangalore and remotely."
@@ -70,12 +70,12 @@ export default function Hire() {
         ]}
       />
 
-      <Masthead label="Work with me" title={<>{data.headline.replace(/\.$/, '')}<span>.</span></>} description={data.intro}>
-        <SignalLink href={`mailto:${data.email}?subject=Project%20enquiry`}>Start a conversation</SignalLink>
-        <SignalLink to="/work/" outline>See selected work</SignalLink>
-      </Masthead>
-      <div className="signal-wrap signal-info-body">
-        <p className="signal-label signal-availability">{data.availability}</p>
+      <PageLead label="Work with me" title={<>{data.headline.replace(/\.$/, '')}<span>.</span></>} description={data.intro}>
+        <Action href={`mailto:${data.email}?subject=Project%20enquiry`}>Start a conversation</Action>
+        <Action to="/work/">See selected work</Action>
+      </PageLead>
+      <div className="patch-wide patch-info-body">
+        <p className="patch-label patch-availability">{data.availability}</p>
         <section className="mt-20" aria-labelledby="services-heading">
           <div className="flex items-end justify-between gap-6 mb-8">
             <div>

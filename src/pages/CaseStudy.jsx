@@ -1,9 +1,9 @@
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 import SEO from '../components/SEO';
-import { Masthead, SignalLink } from '../components/v5/Primitives';
+import { PageLead, Action } from '../patchbay/Interior';
 import NotFound from './NotFound';
-import ProjectZoom from '../components/v5/ProjectZoom';
+import { MediaProof } from '../patchbay/Interior';
 import { findProject, projects, projectPath } from '../lib/projects';
 
 const topics = [
@@ -35,23 +35,23 @@ export default function CaseStudy() {
   }];
 
   return (
-    <main className="signal-case">
+    <main className="patch-case">
       <SEO title={`${project.title} — The build | Abrar Akhunji`} description={project.summary} path={projectPath(slug)} image={`/assets/build-room/og-${slug}.jpg`} schema={schema} />
-      <Masthead label={`${project.category} / ${project.status}`} title={<>{project.title}<span>.</span></>} description={project.summary}>
-        {project.demo && <SignalLink href={project.demo}>{slug === 'packetlark' ? 'Product website' : 'View project'}</SignalLink>}
-        {project.github && <SignalLink href={project.github} outline>Source on GitHub</SignalLink>}
-        {project.release && <SignalLink href={project.release} outline>Release packages</SignalLink>}
-      </Masthead>
-      <div className="signal-wrap">
-        <Link className="signal-inline signal-case-back" to="/work/"><ArrowLeft size={16} /> Project index</Link>
-        <ProjectZoom project={project} />
-        <div className="signal-case-layout">
-          <aside className="signal-case-index">
-            <p className="signal-label">Inside this build</p>
+      <PageLead label={`${project.category} / ${project.status}`} title={<>{project.title}<span>.</span></>} description={project.summary}>
+        {project.demo && <Action href={project.demo}>{slug === 'packetlark' ? 'Product website' : 'View project'}</Action>}
+        {project.github && <Action href={project.github}>Source on GitHub</Action>}
+        {project.release && <Action href={project.release}>Release packages</Action>}
+      </PageLead>
+      <div className="patch-wide">
+        <Link className="patch-inline patch-case-back" to="/work/"><ArrowLeft size={16} /> Project index</Link>
+        <MediaProof project={project} />
+        <div className="patch-case-layout">
+          <aside className="patch-case-index">
+            <p className="patch-label">Inside this build</p>
             <nav aria-label="Case study contents">{topics.map(([id, name]) => <a href={`#${id}`} key={id}>{name}</a>)}</nav>
-            <ul className="signal-tags" aria-label="Technologies">{project.tech.map((tech) => <li key={tech}>{tech}</li>)}</ul>
+            <ul className="patch-tags" aria-label="Technologies">{project.tech.map((tech) => <li key={tech}>{tech}</li>)}</ul>
           </aside>
-          <div className="signal-case-body">
+          <div className="patch-case-body">
             <section id="problem"><h2>The problem</h2><p>{project.problem}</p></section>
             <section id="contribution"><h2>My contribution</h2><p>{project.contribution}</p></section>
             {project.media && <section>
@@ -64,8 +64,8 @@ export default function CaseStudy() {
             </section>}
             <section id="architecture">
               <h2>How the parts connect</h2>
-              <ol className="signal-case-layers">{project.layers.map((layer, index) =>
-                <li key={layer.title}><span className="signal-label">{String(index + 1).padStart(2, '0')}</span><div><h3>{layer.title}</h3><p>{layer.detail}</p></div></li>
+              <ol className="patch-case-layers">{project.layers.map((layer, index) =>
+                <li key={layer.title}><span className="patch-label">{String(index + 1).padStart(2, '0')}</span><div><h3>{layer.title}</h3><p>{layer.detail}</p></div></li>
               )}</ol>
             </section>
             <section id="decisions"><h2>The decisions</h2>{project.decisions.map((item) => <article key={item.title}><h3>{item.title}</h3><p>{item.detail}</p></article>)}</section>
@@ -76,7 +76,7 @@ export default function CaseStudy() {
               </article>)}
             </section>
             <section id="limitations"><h2>Current limitations</h2><ul>{project.limitations.map((item) => <li key={item}>{item}</li>)}</ul></section>
-            <Link className="signal-next-case" to={projectPath(next.slug)}><span className="signal-label">Next project</span><strong>{next.title}</strong><ArrowUpRight aria-hidden="true" /></Link>
+            <Link className="patch-next-case" to={projectPath(next.slug)}><span className="patch-label">Next project</span><strong>{next.title}</strong><ArrowUpRight aria-hidden="true" /></Link>
           </div>
         </div>
       </div>

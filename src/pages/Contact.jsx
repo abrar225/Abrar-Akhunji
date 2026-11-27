@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { ArrowUpRight, Copy, Check } from 'lucide-react';
 import SEO from '../components/SEO';
-import { Masthead, SignalLink } from '../components/v5/Primitives';
+import { PageLead, Action } from '../patchbay/Interior';
 import { PERSON_ID, absoluteUrl, contactPath } from '../lib/content/urls.js';
 import services from '../data/services.json';
 
@@ -52,31 +52,31 @@ export default function Contact() {
         keywords={['Contact Abrar Akhunji', 'hire AI engineer', 'contact ML consultant Ahmedabad']}
       />
 
-      <main className="signal-contact">
-      <Masthead label="Contact" title={<>Let’s talk<span>.</span></>}
+      <main className="patch-contact">
+      <PageLead label="Contact" title={<>Let’s talk<span>.</span></>}
         description="For engineering roles, project inquiries, and collaborations, tell me what you’re building or the kind of teammate you’re looking for.">
-        <SignalLink href={`mailto:${services.email}`}>Send an email</SignalLink>
-        <SignalLink to="/hire/" outline>Ways to work together</SignalLink>
-      </Masthead>
-      <div className="signal-wrap signal-info-body">
+        <Action href={`mailto:${services.email}`}>Send an email</Action>
+        <Action to="/hire/">Ways to work together</Action>
+      </PageLead>
+      <div className="patch-wide patch-info-body">
 
-        <div className="signal-contact-grid">
-          <section className="signal-contact-address">
+        <div className="patch-contact-grid">
+          <section className="patch-contact-address">
             <h2>Direct email</h2>
             <a href={`mailto:${services.email}`}>{services.email} <ArrowUpRight size={20} /></a>
             <button type="button" onClick={copyEmail}>{copyStatus === 'Email address copied.' ? <Check size={17} /> : <Copy size={17} />} Copy email</button>
-            <p className="signal-copy-status" role="status">{copyStatus}</p>
+            <p className="patch-copy-status" role="status">{copyStatus}</p>
             <p>Typically respond within 24 business hours. Based in Ahmedabad, on India Standard Time (UTC+5:30).</p>
           </section>
-          <section className="signal-contact-social">
+          <section className="patch-contact-social">
             <h2>Find me elsewhere</h2>
             <ul>{social.map(([name, url]) => <li key={name}><a href={url} target="_blank" rel="noreferrer">{name}<ArrowUpRight size={18} /></a></li>)}</ul>
           </section>
         </div>
-        <section className="signal-locations">
+        <section className="patch-locations">
           <h2>Where I work</h2>
           <ul>{services.locations.map(({ city, note }) => <li key={city}><h3>{city}</h3><p>{note}</p></li>)}</ul>
-          <Link className="signal-inline" to="/hire/">Engineering services <ArrowUpRight size={17} /></Link>
+          <Link className="patch-inline" to="/hire/">Engineering services <ArrowUpRight size={17} /></Link>
         </section>
       </div>
       </main>

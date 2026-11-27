@@ -1,6 +1,6 @@
 import { ArrowUpRight } from 'lucide-react';
 import SEO from '../components/SEO';
-import { Masthead, SignalLink } from '../components/v5/Primitives';
+import { PageLead, Action } from '../patchbay/Interior';
 import { PERSON_ID, absoluteUrl, aboutPath } from '../lib/content/urls.js';
 import { RESUME } from '../lib/projects';
 import portfolio from '../data/portfolio.json';
@@ -35,33 +35,33 @@ export default function About() {
         keywords={['About Abrar Akhunji', 'AI engineer Ahmedabad', 'ML developer India', 'software engineer biography']}
       />
 
-      <main className="signal-about">
-      <Masthead label="About" title={<>Abrar Akhunji<span>.</span></>}
+      <main className="patch-about">
+      <PageLead label="About" title={<>Abrar Akhunji<span>.</span></>}
         description="I’m an AI/ML and full-stack engineer in Ahmedabad, India. I work across model inference, system architecture, and the production interfaces people use."
         aside={<figure><img src="/assets/build-room/portrait.webp" alt="Abrar Akhunji" width="480" height="540" /></figure>}>
-        <SignalLink href={RESUME}>View résumé</SignalLink>
-        <SignalLink to="/contact/" outline>Get in touch</SignalLink>
-      </Masthead>
-      <div className="signal-wrap signal-info-body signal-profile-index">
+        <Action href={RESUME}>View résumé</Action>
+        <Action to="/contact/">Get in touch</Action>
+      </PageLead>
+      <div className="patch-wide patch-info-body patch-profile-index">
 
-        <section className="signal-profile-row">
+        <section className="patch-profile-row">
           <h2>What I work on</h2>
           <div>
             <p>I build software around local model inference, computer vision, and the full-stack systems that put those capabilities in people’s hands.</p>
             <p>Lately I’ve been exploring local AI execution and developer toolchains, and writing about latent attention, KV caching, and speculative decoding.</p>
-            <SignalLink to="/blog/">Read my writing</SignalLink>
+            <Action to="/blog/">Read my writing</Action>
           </div>
         </section>
-        <section id="experience" className="signal-profile-row">
+        <section id="experience" className="patch-profile-row">
           <h2>Experience</h2>
-          <ol className="signal-timeline">
-            {portfolio.experience.map((item) => <li key={item.role}><p className="signal-label">{item.date}</p><h3>{item.role}</h3><p>{item.desc}</p></li>)}
+          <ol className="patch-timeline">
+            {portfolio.experience.map((item) => <li key={item.role}><p className="patch-label">{item.date}</p><h3>{item.role}</h3><p>{item.desc}</p></li>)}
           </ol>
         </section>
-        <section className="signal-profile-row">
+        <section className="patch-profile-row">
           <h2>Education &amp; credentials</h2>
-          <ul className="signal-timeline">
-            {portfolio.education.map((item) => <li key={item.degree}><p className="signal-label">{item.date}</p><h3>{item.degree}</h3><p>{item.school}</p></li>)}
+          <ul className="patch-timeline">
+            {portfolio.education.map((item) => <li key={item.degree}><p className="patch-label">{item.date}</p><h3>{item.degree}</h3><p>{item.school}</p></li>)}
             {portfolio.certifications.map((item) => <li key={item.title}><h3>{item.driveLink ? <a href={item.driveLink} target="_blank" rel="noreferrer">{item.title} <ArrowUpRight size={15} /></a> : item.title}</h3><p>{item.desc}</p></li>)}
           </ul>
         </section>

@@ -16,7 +16,7 @@ const screenshots = new Map(Object.entries({
   '/v5-no-page/':'client-404','/404.html':'static-404',
   '/blog/?q=v5-no-matching-article':'search-empty','/work/?category=COMPUTER%20VISION':'work-filter',
 }));
-const directory = `docs/v5/evidence/routes-${engine}`;
+const directory = process.env.PATCHBAY_CAPTURE_DIR || `docs/v5/evidence/routes-${engine}`;
 await mkdir(directory,{recursive:true});
 const browserType = {chromium,firefox,webkit}[engine];
 if (!browserType) throw new Error(`Unknown engine: ${engine}`);
@@ -28,6 +28,7 @@ try {
   for (const [width,height] of [[1440,900],[390,844]]) {
     const touch = width<500;
     const context=await browser.newContext({ viewport:{width,height},hasTouch:touch,isMobile:touch&&engine!=='firefox' });
+    await context.route('**/*',route=>new URL(route.request().url()).origin === origin ? route.continue() : route.abort());
     const page=await context.newPage();
     for (const path of new Set(all ? [...canonical,...states,...recovery] : screenshots.keys())) {
       const errors=[];
@@ -42,7 +43,7 @@ try {
       page.on('console',logIssue);
       page.on('response',failedResource);
       try {
-        const response=await page.goto(permalink(path),{waitUntil:'load',timeout:20000});
+        const response=await page.goto(permalink(path),{waitUntil:'domcontentloaded',timeout:9000});
         if(path!=='/404.html') await page.locator('[data-portfolio-version="v5"] h1').first().waitFor({timeout:4500});
         const state=await page.evaluate(async()=>{
           await document.fonts.ready;

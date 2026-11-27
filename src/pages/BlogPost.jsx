@@ -282,9 +282,9 @@ export default function BlogPost() {
         keywords={meta.tags}
         schema={schemas}
       />
-      <main className="signal-article">
+      <main className="patch-article">
       <article className="editorial-reader">
-        <div className="signal-article-hero">
+        <div className="patch-article-hero">
         <div className="reader-toolbar">
           <Link to="/blog/" className="reader-back"><ArrowLeft size={16} /> The Neural Log</Link>
           <div className="reader-toolbar-actions">

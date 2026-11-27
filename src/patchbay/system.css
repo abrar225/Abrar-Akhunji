@@ -30,6 +30,15 @@
 }
 
 .patch-shell {
+  --patch-ui-canvas: var(--color-canvas);
+  --patch-ui-surface: var(--color-surface);
+  --patch-ui-elevated: var(--color-elevated);
+  --patch-ui-fg: var(--color-fg);
+  --patch-ui-muted: var(--color-muted);
+  --patch-ui-faint: var(--color-faint);
+  --patch-ui-line: var(--color-line);
+  --patch-ui-accent: var(--color-accent);
+  --patch-ui-on-accent: var(--color-on-accent);
   --color-canvas: var(--patch-stock);
   --color-surface: var(--patch-white);
   --color-elevated: #ebe5d8;
@@ -181,3 +190,10 @@
 @media (prefers-reduced-motion:reduce) {
   .patch-loading svg { animation:none; }
 }
+
+.patch-header-inner { position:relative; }
+.patch-archive { position:absolute; z-index:2; top:100%; right:0; padding:0 .65rem; background:var(--patch-night); color:var(--patch-white); }
+.patch-archive summary { min-height:34px; display:flex; align-items:center; cursor:pointer; font:.73rem var(--patch-mono); }
+.patch-archive ul { list-style:none; padding:0 .25rem .55rem; }
+.patch-archive a { display:inline-flex; align-items:center; min-height:40px; }
+.patch-archive a:hover { color:var(--patch-lime); }

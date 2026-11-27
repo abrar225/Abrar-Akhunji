@@ -1,40 +1,69 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import data from '../data/portfolio.json';
 import { useTheme } from '../lib/useTheme';
-import { startShowcase } from './controller';
 import styles from './showcase.module.css';
 
-function Block({ children, code, agent, type = false, heading: Heading = 'h2', className = '' }) {
-  return <div data-block="" data-code={code} data-agent={agent} className={`${styles.block} ${className}`}><div className={styles.fill}>{type ? <Heading data-type="">{children}</Heading> : children}</div></div>;
-}
+const projects = data.projects.filter(project=>project.featured);
+
 export default function Showcase() {
-  const root = useRef(null);
   const { toggleTheme } = useTheme();
-  useEffect(() => startShowcase(root.current), []);
-  return <div ref={root} className={styles.page}>
-    <header className={styles.nav}><a href="/">Abrar Akhunji</a><span>Agents at Work</span><button onClick={toggleTheme}>Change theme</button></header>
+  const [index,setIndex] = useState(projects.length);
+  const [playing,setPlaying] = useState(false);
+
+  useEffect(() => {
+    if (new URLSearchParams(location.search).has('play') && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      requestAnimationFrame(() => { setIndex(0); setPlaying(true); });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!playing) return;
+    const timer = setTimeout(() => {
+      const next = Math.min(projects.length,index+1);
+      setIndex(next);
+      if (next===projects.length) setPlaying(false);
+    },850);
+    return () => clearTimeout(timer);
+  }, [playing,index]);
+
+  function rebuild() {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { setIndex(projects.length); return; }
+    setIndex(0);
+    setPlaying(true);
+  }
+
+  return <div className={`patch-shell ${styles.page}`} data-portfolio-version="v5">
+    <header className={styles.header}><div className="patch-wide">
+      <a href="/">Abrar Akhunji</a><nav aria-label="Portfolio"><a href="/work/">Work</a><a href="/blog/">Writing</a><a href="/contact/">Contact</a></nav>
+      <button onClick={toggleTheme}>Change theme</button>
+    </div></header>
     <main>
-      <section data-section="" className={styles.hero}>
-        <Block code={'<Introduction name="Abrar" />'}><p className={styles.eyebrow}>Abrar Akhunji · AI & Full-Stack Engineer</p></Block>
-        <Block code={'<Headline />'} agent="Copy" type heading="h1">Agents at work.</Block>
-        <Block code={'<Introduction />'}><p className={styles.lead}>I turn models, interfaces and systems into useful software. Here’s a little of that work, assembled in front of you.</p><p className={styles.note}>A choreographed cursor experiment. Real projects, human decisions.</p></Block>
-        <Block code={'<ProjectIndex />'}><a href="#projects">Meet the builds ↓</a><span className={styles.divider}> / </span><a href="/">Explore my full portfolio ↗</a></Block>
+      <section className={styles.lead}><div className="patch-wide">
+        <p className="patch-label">Abrar Akhunji / AI &amp; full-stack engineer</p>
+        <h1>Agents at Work.</h1>
+        <p>I turn models, interfaces and systems into useful software. Here’s a little of that work, assembled in front of you.</p>
+        <a href="#projects">Meet the builds ↓</a>
+      </div></section>
+      <section id="projects" className={`patch-wide ${styles.projects}`}>
+        <header><h2>From friction to something useful.</h2><div className={styles.controls}>
+          <button type="button" onClick={rebuild}>Rebuild</button>
+          {index<projects.length && <button type="button" onClick={()=>setPlaying(!playing)}>{playing?'Pause':'Resume'}</button>}
+          <button type="button" onClick={()=>{setPlaying(false);setIndex(projects.length);}}>Skip</button>
+          <span role="status">{index===projects.length?'Projects ready':`${index} of ${projects.length} projects ready`}</span>
+        </div></header>
+        <ol>
+          {projects.map((project,i)=><li key={project.slug} data-ready={i<index}>
+            <img src={project.image} alt={project.imageAlt} width="800" height="525" />
+            <div><p className="patch-label">{project.category} · {project.status}</p><h3>{project.title}</h3><p>{project.summary}</p><a href={`/work/${project.slug}/`}>Read the build ↗</a></div>
+          </li>)}
+        </ol>
       </section>
-      <section data-section="" id="projects">
-        <Block code={'<SectionHeading />'} agent="Type" type>From friction to something useful.</Block>
-        <div className={styles.projects}>{data.projects.filter(p => p.featured).map(p => <Block key={p.slug} code={`<Project slug="${p.slug}" />`} agent="Builder"><article className={styles.card}><img src={p.image} alt={p.imageAlt} width="800" height="500"/><div><p className={styles.eyebrow}>{p.category} · {p.status}</p><h3>{p.title}</h3><p>{p.summary}</p><a href={`/work/${p.slug}/`}>Read the build ↗</a></div></article></Block>)}</div>
-      </section>
-      <section data-section="" className={styles.engineering}>
-        <Block code={'<EngineeringHeading />'} type>The screen is only the start.</Block>
-        <div className={styles.columns}>{[['Models that belong in products','Local inference, computer vision and the application around the model.','AI'],['Interfaces with a purpose','Native tools, API workflows and software that makes the next step clear.','Layout'],['The work of shipping','Tests, packaging, resource lifetimes and honest limits are part of the build.','Ship']].map(([title,copy,agent]) => <Block key={agent} agent={agent} code={`<Practice name="${agent}" />`}><h3>{title}</h3><p>{copy}</p></Block>)}</div>
-      </section>
-      <section data-section="" className={styles.contact}>
-        <Block code={'<ContactHeading />'} agent="Copy" type>What should we build next?</Block>
-        <Block code={'<Contact />'}><p>A role on your team. A useful tool. A problem worth solving.</p><a className={styles.email} href="mailto:abrar@abrarakhunji.com">abrar@abrarakhunji.com ↗</a><p><a href="/">Back to the portfolio</a> · <a href="https://github.com/abrar225">GitHub</a></p></Block>
-      </section>
+      <section className={styles.practice}><div className="patch-wide"><h2>The screen is only the start.</h2><dl>
+        <div><dt>Models that belong in products</dt><dd>Local inference, computer vision and the application around the model.</dd></div>
+        <div><dt>Interfaces with a purpose</dt><dd>Native tools, API workflows and software that makes the next step clear.</dd></div>
+        <div><dt>The work of shipping</dt><dd>Tests, packaging, resource lifetimes and honest limits are part of the build.</dd></div>
+      </dl></div></section>
     </main>
-    <aside className={styles.console} aria-label="Build controls"><div><strong data-progress="">Ready to build</strong><button data-skip="">Skip</button><button data-rebuild="">Rebuild</button></div><div data-log="" className={styles.log} aria-hidden="true"/><span className={styles.sr} role="status" data-status=""/></aside>
-    <div data-cursors="" className={styles.cursors} aria-hidden="true"/>
-    <footer>Made by Abrar. Inspired by <a href="https://www.avivashishta.com/blog/agents-at-work-a-page-that-builds-itself">Agents at Work</a>.</footer>
+    <footer className={styles.footer}><div className="patch-wide"><h2>What should we build next?</h2><a href="mailto:abrar@abrarakhunji.com">abrar@abrarakhunji.com</a><p>Made by Abrar. Inspired by <a href="https://www.avivashishta.com/blog/agents-at-work-a-page-that-builds-itself">Agents at Work</a>.</p></div></footer>
   </div>;
 }

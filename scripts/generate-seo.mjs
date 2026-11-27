@@ -13,6 +13,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import katex from 'katex';
+import { staticRoot } from './patchbay-static.mjs';
 import { renderWork, renderProject, renderBuildHome } from './project-pages.mjs';
 import {
   parseFrontmatter,
@@ -972,7 +973,7 @@ function main() {
         articleSection: post.techTree?.branch,
         schema: buildArticleSchemas(post),
       })}</head>`)
-      .replace('<div id="root"></div>', `<div id="root">${renderArticle(post)}</div>`);
+      .replace('<div id="root"></div>', staticRoot(renderArticle(post), 'article'));
     writePage(`blog/${post.slug}`, html);
   }
 
@@ -985,7 +986,7 @@ function main() {
       keywords: ['AI engineering blog', 'LLM inference', 'agent systems', 'model architecture', 'computer vision engineering'],
       schema: buildBlogListSchemas(posts),
     })}</head>`)
-    .replace('<div id="root"></div>', `<div id="root">${renderBlogList(posts)}</div>`);
+    .replace('<div id="root"></div>', staticRoot(renderBlogList(posts), 'writing'));
   writePage('blog', blogHtml);
 
   // Hire page
@@ -997,7 +998,7 @@ function main() {
       keywords: ['hire AI engineer Ahmedabad', 'computer vision engineer India', 'LLM engineer Gandhinagar', 'full-stack developer Bangalore', 'AI consultant Ahmedabad'],
       schema: buildHireSchemas(),
     })}</head>`)
-    .replace('<div id="root"></div>', `<div id="root">${renderHire()}</div>`);
+    .replace('<div id="root"></div>', staticRoot(renderHire(), 'hire'));
   writePage('hire', hireHtml);
 
   // About page
@@ -1009,7 +1010,7 @@ function main() {
       keywords: ['About Abrar Akhunji', 'AI engineer biography', 'software engineer Ahmedabad'],
       schema: buildAboutSchemas(),
     })}</head>`)
-    .replace('<div id="root"></div>', `<div id="root">${renderAbout()}</div>`);
+    .replace('<div id="root"></div>', staticRoot(renderAbout(), 'about'));
   writePage('about', aboutHtml);
 
   // Contact page
@@ -1021,7 +1022,7 @@ function main() {
       keywords: ['Contact Abrar Akhunji', 'hire AI engineer Ahmedabad', 'contact ML developer'],
       schema: buildContactSchemas(),
     })}</head>`)
-    .replace('<div id="root"></div>', `<div id="root">${renderContact()}</div>`);
+    .replace('<div id="root"></div>', staticRoot(renderContact(), 'contact'));
   writePage('contact', contactHtml);
 
   // Terms page
@@ -1033,7 +1034,7 @@ function main() {
       keywords: ['Terms of Service', 'legal terms', 'agent policy', 'Abrar Akhunji'],
       schema: buildTermsSchemas(),
     })}</head>`)
-    .replace('<div id="root"></div>', `<div id="root">${renderTerms()}</div>`);
+    .replace('<div id="root"></div>', staticRoot(renderTerms(), 'legal'));
   writePage('terms', termsHtml);
 
   // Privacy page
@@ -1045,14 +1046,14 @@ function main() {
       keywords: ['Privacy Policy', 'data protection', 'Abrar Akhunji'],
       schema: buildPrivacySchemas(),
     })}</head>`)
-    .replace('<div id="root"></div>', `<div id="root">${renderPrivacy()}</div>`);
+    .replace('<div id="root"></div>', staticRoot(renderPrivacy(), 'legal'));
   writePage('privacy', privacyHtml);
 
   const projectSchemas = project => [{ '@context':'https://schema.org', '@type':'CreativeWork', name:project.title, description:project.summary, url:`${SITE_URL}/work/${project.slug}/`, creator:{'@id':PERSON_ID} }, { '@context':'https://schema.org', '@type':'BreadcrumbList', itemListElement:[{'@type':'ListItem',position:1,name:'Home',item:SITE_URL+'/'},{'@type':'ListItem',position:2,name:'Work',item:SITE_URL+'/work/'},{'@type':'ListItem',position:3,name:project.title,item:`${SITE_URL}/work/${project.slug}/`}]}];
-  const workHtml = cleanBaseHtml(baseHtml).replace('</head>', `${headTags({title:'Engineering projects | Abrar Akhunji',description:'Local AI, developer tools, native software and full-stack projects by Abrar Akhunji.',pagePath:'/work/',image:'/assets/build-room/og-home.jpg'})}</head>`).replace('<div id="root"></div>',`<div id="root">${renderWork(portfolio.projects)}</div>`);
+  const workHtml = cleanBaseHtml(baseHtml).replace('</head>', `${headTags({title:'Engineering projects | Abrar Akhunji',description:'Local AI, developer tools, native software and full-stack projects by Abrar Akhunji.',pagePath:'/work/',image:'/assets/build-room/og-home.jpg'})}</head>`).replace('<div id="root"></div>',staticRoot(renderWork(portfolio.projects), 'work'));
   writePage('work',workHtml);
   for (const project of portfolio.projects) {
-    const html = cleanBaseHtml(baseHtml).replace('</head>',`${headTags({title:`${project.title} — The build | Abrar Akhunji`,description:project.summary,pagePath:`/work/${project.slug}/`,image:`/assets/build-room/og-${project.slug}.jpg`,schema:projectSchemas(project)})}</head>`).replace('<div id="root"></div>',`<div id="root">${renderProject(project)}</div>`);
+    const html = cleanBaseHtml(baseHtml).replace('</head>',`${headTags({title:`${project.title} — The build | Abrar Akhunji`,description:project.summary,pagePath:`/work/${project.slug}/`,image:`/assets/build-room/og-${project.slug}.jpg`,schema:projectSchemas(project)})}</head>`).replace('<div id="root"></div>',staticRoot(renderProject(project), 'case'));
     writePage(`work/${project.slug}`,html);
   }
 
@@ -1061,7 +1062,7 @@ function main() {
     /<div id="root">[\s\S]*<\/div>\s*<script type="module"/,
     `<div id="root"></div>\n    <script type="module"`
   );
-  homeHtml = homeHtml.replace('<div id="root"></div>', `<div id="root">${renderBuildHome(portfolio, posts, githubContributions)}</div>`);
+  homeHtml = homeHtml.replace('<div id="root"></div>', staticRoot(renderBuildHome(portfolio, posts, githubContributions), 'home'));
   fs.writeFileSync(indexPath, homeHtml, 'utf8');
   console.log('✓ / (home fallback)');
 

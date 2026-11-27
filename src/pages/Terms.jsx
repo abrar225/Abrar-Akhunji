@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Shield, Scale, Bot, FileText } from 'lucide-react';
 import SEO from '../components/SEO';
-import { Masthead } from '../components/v5/Primitives';
+import { PageLead } from '../patchbay/Interior';
 import { absoluteUrl, termsPath } from '../lib/content/urls.js';
 
 export default function Terms() {
@@ -33,9 +33,9 @@ export default function Terms() {
         keywords={['Terms of Service', 'legal terms', 'agent policy', 'Abrar Akhunji']}
       />
 
-      <main className="signal-policy">
-      <Masthead label="Last updated / November 2026" title={<>Terms of service<span>.</span></>} />
-      <div className="signal-wrap signal-info-body">
+      <main className="patch-policy">
+      <PageLead label="Last updated / November 2026" title={<>Terms of service<span>.</span></>} />
+      <div className="patch-wide patch-info-body">
 
         <div className="space-y-10 text-muted leading-relaxed text-base">
           <section className="space-y-3">
