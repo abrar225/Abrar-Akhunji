@@ -1,114 +1,55 @@
-import { Routes, Route, matchRoutes, useLocation } from 'react-router-dom';
-import { Suspense, use, useCallback, useEffect, useLayoutEffect, useRef } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { lazy, Suspense, useRef } from 'react';
+import { Route, Routes, useLocation, useNavigationType } from 'react-router-dom';
+import { motion, useReducedMotion } from 'framer-motion';
 import ErrorBoundary from './components/ErrorBoundary';
 import Home from './pages/Home';
-import { SignalFooter, SignalHeader } from './components/v5/Chrome';
 import NotFound from './pages/NotFound';
+import { PatchFooter, PatchHeader, PatchStatus } from './patchbay/Chrome';
+import { useRouteArrival } from './patchbay/useRouteArrival';
 
 const pages = [
   ['/', Home],
-  ['/about', () => import('./pages/About'), true],
-  ['/contact', () => import('./pages/Contact'), true],
-  ['/terms', () => import('./pages/Terms'), true],
-  ['/privacy', () => import('./pages/Privacy'), true],
-  ['/blog', () => import('./pages/BlogList'), true],
-  ['/blog/:slug', () => import('./pages/BlogPost'), true],
-  ['/hire', () => import('./pages/Hire'), true],
-  ['/work', () => import('./pages/Work'), true],
-  ['/work/:slug', () => import('./pages/CaseStudy'), true],
+  ['/about', lazy(() => import('./pages/About'))],
+  ['/contact', lazy(() => import('./pages/Contact'))],
+  ['/terms', lazy(() => import('./pages/Terms'))],
+  ['/privacy', lazy(() => import('./pages/Privacy'))],
+  ['/blog', lazy(() => import('./pages/BlogList'))],
+  ['/blog/:slug', lazy(() => import('./pages/BlogPost'))],
+  ['/hire', lazy(() => import('./pages/Hire'))],
+  ['/work', lazy(() => import('./pages/Work'))],
+  ['/work/:slug', lazy(() => import('./pages/CaseStudy'))],
   ['*', NotFound],
-].map(([path, entry, deferred]) => {
-  if (!deferred) return { path, Component: entry };
-
-  let resolved;
-  let pending;
-  const preload = () => {
-    pending ??= entry().then((module) => {
-      resolved = module.default;
-      return module;
-    });
-    return pending;
-  };
-  const Component = () => {
-    const Page = resolved || use(preload()).default;
-    return <Page />;
-  };
-
-  return { path, Component, preload };
-});
-
-function RouteContent({ children, page, hash, onArrival, animate }) {
-  const content = useRef(null);
-
-  useLayoutEffect(() => { onArrival(page, content.current); }, [page, onArrival]);
-
-  useLayoutEffect(() => {
-    if (!hash) {
-      window.scrollTo(0, 0);
-      return;
-    }
-
-    let id;
-    try { id = decodeURIComponent(hash.slice(1)); } catch { return; }
-    const scrollToTarget = () => {
-      const target = document.getElementById(id);
-      if (!target) return false;
-      target.scrollIntoView();
-      return true;
-    };
-
-    if (scrollToTarget()) return;
-    // Direct article links can target headings inserted after Markdown loads.
-    const observer = new MutationObserver(() => {
-      if (scrollToTarget()) observer.disconnect();
-    });
-    observer.observe(content.current, { childList: true, subtree: true });
-    return () => observer.disconnect();
-  }, [hash]);
-
-  return (
-    <motion.div id="route-content" className="signal-route" tabIndex={-1} ref={content}
-      initial={animate ? { opacity: .45, y: 18 } : false}
-      animate={{ opacity: 1, y: 0, transition: { duration: animate ? .32 : 0, ease: [.21,.68,.29,1] } }}
-      exit={animate ? { opacity: .26, y: -9, transition: { duration: .14, ease: 'easeIn' } } : { transition: { duration: 0 } }}>
-      {children}
-    </motion.div>
-  );
-}
+];
 
 export default function App() {
   const location = useLocation();
-  const page = location.pathname.replace(/\/$/, '') || '/';
-  const lastPage = useRef(null);
-  const onArrival = useCallback((nextPage, element) => {
-    if (lastPage.current && lastPage.current !== nextPage) element.focus({ preventScroll: true });
-    lastPage.current = nextPage;
-  }, []);
+  const type = useNavigationType();
   const reduce = useReducedMotion();
-  useEffect(() => {
-    // Fetch the next route during the exit, before its first animated paint.
-    const match = matchRoutes(pages, page)?.[0];
-    match?.route.preload?.().catch(() => {
-      // Let the route error boundary handle failed imports at render time.
-    });
-  }, [page]);
+  const content = useRef(null);
+  const page = location.pathname.replace(/\/$/, '') || '/';
+  useRouteArrival(location, type, content);
+
   return (
-    <div className="signal-shell">
-      <a className="skip-link" href="#route-content">Skip to content</a>
-      <SignalHeader />
-      <AnimatePresence mode="wait" initial={false}>
-        <RouteContent key={page} page={page} hash={location.hash} onArrival={onArrival} animate={!reduce}>
-          <ErrorBoundary>
-            <Suspense fallback={<div className="signal-loading" role="status">Loading page…</div>}>
-              <Routes location={location}>
-                {pages.map(({ path, Component }) => <Route key={path} path={path} element={<Component />} />)}
+    <div className="patch-shell" data-portfolio-version="v5">
+      <a className="patch-skip" href="#route-content">Skip to content</a>
+      <PatchHeader />
+      <div id="route-content" className="patch-route" tabIndex={-1} ref={content}>
+        <ErrorBoundary key={page} fallback={(props) => <PatchStatus {...props} />}>
+          <Suspense fallback={<PatchStatus />}>
+            <motion.div key={page}
+              initial={reduce ? false : { opacity: .72 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: reduce ? 0 : .18 }}>
+              <Routes>
+                {pages.map(([path, Page]) => (
+                  <Route key={path} path={path} element={<div className={'patch-interior signal-shell'}><Page /></div>} />
+                ))}
               </Routes>
-            </Suspense>
-          </ErrorBoundary>
-        </RouteContent>
-      </AnimatePresence>
-      <SignalFooter />
+            </motion.div>
+          </Suspense>
+        </ErrorBoundary>
+      </div>
+      <PatchFooter />
     </div>
   );
 }

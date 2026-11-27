@@ -3832,4 +3832,4 @@ THIS IS A PLACEHOLDER USERPREFRENCES TEXT WHICH SHOULD BE INCLUDED IN FULL PRINT
 - Never edit the brief or its rubric to make a check pass. Propose changes to me.
 - Visual work is not done until you have run it in a browser and looked at desktop and mobile captures.
 - You may use subagents for parallel audits and independent design review.
-- Stop at Gate 1 and Gate 2 and wait for my approval.
+- Gate 1 is approved. At Gate 2, commit the verified slice, record its preview in STATE.md, and continue under docs/v5/FINAL_BUILD.md.

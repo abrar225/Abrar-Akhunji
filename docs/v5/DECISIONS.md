@@ -12,3 +12,5 @@
 | Gate 1 | Use the audit's curated captures in Git. | The 47.3 MiB bulk ZIP and raw frames remain available in the same workspace and can be recreated using the linked harness. |
 | Gate 1 Patchbay revision | Use one authored Canvas 2D strip from arrival through work, driven by native document scroll. | No URL or app component changes. The strip changes geometry and becomes the aperture for the real interface. Independent paper layers follow its signed displacement. The reduced-motion scene is in normal document flow. |
 | Gate 1 Patchbay revision | Default to Request and PacketLark, with Voice and Screen selectable. | The story works on scroll alone. A choice changes the strip and the project evidence. The original screenshot remains an HTML image for the calm and accessible paths. |
+| Final build | Gate 1 approved Direction C with normal scroll. | The reverse-scroll experiment is retired. |
+| Final build | Verify and commit the slice at Gate 2, then continue. | Review is batched at slice, route-complete and final milestones, with one final blind V4 comparison. Follow the requested build order and keep HANDOFF current. |

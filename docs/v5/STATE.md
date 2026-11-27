@@ -1,8 +1,17 @@
 # Portfolio V5 state
 
+## HANDOFF
+
+- Last good checkpoint: `git log -1 --format=%h -- docs/v5/STATE.md` (foundation).
+- Done: backup, extraction, route inventory and Gate 1. Final build rules imported. Verified 333 extracted files against the tag. V5 shell, theme tokens, menu and app-level 404 are implemented and visually checked at 1440 and 390 px.
+- In progress: the slice will replace the old Home. Other route bodies and static SEO presentation still run through a temporary compatibility bridge.
+- Next: build production Home-into-PacketLark slice and capture milestone 1, then continue to route breadth.
+- Open: paper-cutout image and animation profile URL missing; active build audits pending.
+- Run: `npm run dev -- --host 127.0.0.1 --port 5181`.
+
 ## Checkpoint
 
-Gate 1 is unapproved. Round 4 passed the targeted Patchbay prototype review. Patchbay with normal scroll is the lead candidate, awaiting Abrar’s choice. The baseline is `abb86caf65f3b06c4a9c369759b2519c42cedde9`, tagged `v5-signal-field-before-rebuild`. Working branch: `codex/portfolio-v5-gate-1`.
+Gate 1 approved. Patchbay with native downward scroll proceeds under FINAL_BUILD.md. The baseline is `abb86caf65f3b06c4a9c369759b2519c42cedde9`, tagged `v5-signal-field-before-rebuild`. Working branch: `codex/portfolio-v5-gate-1`.
 
 ## Inputs
 
@@ -36,6 +45,6 @@ The [Gate 1 directions](DIRECTIONS.md) include three whole-Home storyboards and 
 
 Round 4 scored 33/40 with all prototype dimensions at 4 or above. Matched blind motion was 4.5 vs 3.8 on desktop and 4.3 vs 2.8 on mobile, and recruiter clarity was 4.7 vs 3.4, Patchbay vs V4. V4 still led on first-frame distinctiveness. The paper-cutout reference and GitHub animation URL are still missing. See the [revision and scorecard](PATCHBAY.md), [recordings](evidence/patchbay/README.md) and [regression diagnoses](REGRESSIONS.md).
 
-## Next
+## Build order
 
-Gate 1 requires Abrar’s direction and scroll choice, plus any requested changes. After approval, re-read the brief and this state, author `DESIGN.md` and its section contract, then complete the Phase 2 slice. The current V5 presentation, application routes, archive pins, and deployment configuration are untouched. No deployment took place.
+Foundation, slice and critic, route breadth, depth and critic, hardening, then final review and blind V4 comparison. See [FINAL_BUILD.md](FINAL_BUILD.md).

@@ -4,6 +4,7 @@ import './index.css'
 import './reader.css'
 import './v5.css'
 import './print-motion.css'
+import './patchbay/system.css'
 import App from './App.jsx'
 
 import { BrowserRouter } from 'react-router-dom';

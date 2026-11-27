@@ -1,0 +1,109 @@
+@font-face { font-family: Patch Display; src: url('/assets/build-room/fonts/display-bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+@font-face { font-family: Patch Sans; src: url('/assets/build-room/fonts/body-regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: Patch Sans; src: url('/assets/build-room/fonts/body-semibold.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+@font-face { font-family: Patch Serif; src: url('/assets/editorial/fonts/reader-serif.woff2') format('woff2'); font-display: swap; }
+@font-face { font-family: Patch Mono; src: url('/assets/build-room/fonts/mono.woff2') format('woff2'); font-display: swap; }
+
+:root {
+  --patch-blue: #2637c7;
+  --patch-cobalt: #202eb0;
+  --patch-sky: #5281ff;
+  --patch-stock: #f5f0e3;
+  --patch-white: #fffaf0;
+  --patch-print: #201d28;
+  --patch-night: #121331;
+  --patch-pink: #f59bb6;
+  --patch-yellow: #ffd85b;
+  --patch-lime: #e6fa8d;
+  --patch-lilac: #dcd9f5;
+  --patch-sage: #d9e7ab;
+  --patch-ease: cubic-bezier(.2,.75,.25,1);
+  --patch-depth: 0 16px 40px #12133129;
+  --patch-display: Patch Display, Bricolage, system-ui, sans-serif;
+  --patch-serif: Patch Serif, Georgia, serif;
+  --patch-body: Patch Sans, system-ui, sans-serif;
+  --patch-mono: Patch Mono, ui-monospace, monospace;
+  --patch-header-size: 58px;
+  --patch-gutter: clamp(1rem, 5vw, 5.5rem);
+  --patch-grid: linear-gradient(#ffffff24 1px, transparent 1px) 0 0 / 32px 32px,
+    linear-gradient(90deg,#ffffff24 1px, transparent 1px) 0 0 / 32px 32px;
+}
+
+.patch-shell {
+  --color-canvas: var(--patch-stock);
+  --color-surface: var(--patch-white);
+  --color-elevated: #ebe5d8;
+  --color-fg: var(--patch-print);
+  --color-muted: #535670;
+  --color-faint: #626481;
+  --color-line: #c9c1b1;
+  --color-border: var(--color-line);
+  --color-accent: var(--patch-blue);
+  --color-on-accent: var(--patch-white);
+  --font-display: var(--patch-display);
+  --font-body: var(--patch-body);
+  --font-serif: var(--patch-serif);
+  --font-mono: var(--patch-mono);
+  background: var(--color-canvas);
+  color: var(--color-fg);
+  font-family: var(--patch-body);
+  min-height: 100svh;
+}
+.dark .patch-shell {
+  --color-canvas: #211f30;
+  --color-surface: #302d42;
+  --color-elevated: #34365d;
+  --color-fg: #f2f1ff;
+  --color-muted: #c4c7e4;
+  --color-faint: #a9accb;
+  --color-line: #47496a;
+  --color-accent: #b7c3ff;
+  --color-on-accent: var(--patch-night);
+}
+.patch-shell :where([id]) { scroll-margin-top: calc(var(--patch-header-size) + 12px); }
+.patch-shell :focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+.patch-wide { width: min(calc(100% - 2 * var(--patch-gutter)), 92rem); margin-inline: auto; }
+.patch-label { font: .76rem/1.45 var(--patch-mono); }
+.patch-actions { display: flex; gap: .85rem; align-items: center; flex-wrap: wrap; }
+.patch-actions :where(a,button) { display:inline-flex; min-height:44px; align-items:center; font-weight:600; text-underline-offset:.24em; text-decoration:underline; }
+.patch-skip { position: fixed; z-index: 80; top: .5rem; left: .5rem; padding: .65rem; background: var(--patch-lime); color: var(--patch-night); transform: translateY(-160%); }
+.patch-skip:focus { transform: none; }
+.patch-route:focus { outline: none; }
+.patch-header { position: sticky; top: 0; z-index: 20; background: var(--patch-night); color: var(--patch-white); }
+.patch-header-inner { min-height: var(--patch-header-size); display:flex; justify-content:space-between; gap:.3rem; align-items:center; }
+.patch-brand { display:inline-flex; align-items:center; gap:.45rem; min-height:44px; color:var(--patch-lime); font: .86rem var(--patch-mono); }
+.patch-main-links { display:flex; gap:clamp(.65rem, 2.5vw, 2.35rem); align-items:center; }
+.patch-main-links a { display:inline-flex; align-items:center; min-height:44px; font-weight:600; }
+.patch-main-links a[aria-current], .patch-main-links a:hover { color:var(--patch-lime); }
+.patch-header-actions { display:flex; align-items:center; }
+.patch-header-actions button, .patch-close { min-width:44px; min-height:44px; display:grid; place-items:center; cursor:pointer; }
+.patch-menu { position:fixed; inset:0; margin:0; width:100%; height:100%; max-width:none; max-height:none; background:var(--patch-cobalt); color:var(--patch-white); overflow:auto; border:0; }
+.patch-menu::backdrop { background: var(--patch-night); }
+.patch-menu .patch-wide { padding-block:1rem 3rem; }
+.patch-close { margin-inline-start:auto; }
+.patch-menu nav { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.2em 1rem; font:400 clamp(2.6rem, 8vw, 8rem)/.88 var(--patch-serif); }
+.patch-menu nav a { padding-block:.13em; width:fit-content; }
+.patch-menu nav a:hover { color:var(--patch-lime); }
+.patch-footer { background:var(--patch-night); color:var(--patch-white); padding-block:clamp(2.4rem,7vw,7rem); }
+.patch-footer-grid { display:grid; grid-template-columns:2.3fr 1fr 1fr; gap:2rem; }
+.patch-footer p { font:400 clamp(3rem,8vw,7.7rem)/.89 var(--patch-serif); margin-block:.2em .28em; }
+.patch-footer svg { color:var(--patch-lime); }
+.patch-footer a { width:fit-content; display:inline-flex; gap:.4em; align-items:center; min-height:44px; }
+.patch-footer a:hover { color:var(--patch-lime); }
+.patch-footer nav { display:flex; flex-direction:column; }
+.patch-status { min-height:62svh; display:grid; align-content:center; justify-items:start; gap:.75rem; padding-block:clamp(3rem,9vw,9rem); }
+.patch-status svg { color:var(--color-accent); }
+.patch-status h1 { font:400 clamp(3rem, 8vw, 8rem)/.9 var(--patch-serif); }
+.patch-status button { border-bottom:1px solid currentColor; cursor:pointer; }
+
+@media (max-width:750px) {
+  .patch-extra { display:none !important; }
+  .patch-brand span { display:none; }
+  .patch-main-links { font-size:.88rem; gap:clamp(.55rem, 3.1vw, 1.65rem); }
+  .patch-header-actions button { min-width:44px; }
+  .patch-footer-grid { grid-template-columns:1fr 1fr; gap:1.6rem 1rem; }
+  .patch-footer-grid > div { grid-column:1/-1; }
+}
+@media (max-width:420px) {
+  .patch-header-inner { width:calc(100% - 1.3rem); }
+}
