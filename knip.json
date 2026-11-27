@@ -2,7 +2,6 @@
   "$schema": "https://unpkg.com/knip@5/schema.json",
   "entry": [
     "index.html",
-    "src/agents/entry.jsx",
     "scripts/*.mjs"
   ],
   "project": [

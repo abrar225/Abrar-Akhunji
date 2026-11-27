@@ -91,7 +91,7 @@ export default function BlogList() {
       <p className="desk-result" role="status">{blogs.length} {blogs.length === 1 ? 'note' : 'notes'}{activeTag ? ` on ${activeTag}` : ''}{query.trim() ? ` matching “${query.trim()}”` : ''}</p>
       {view === 'tree' ? <div className="desk-tree"><TechTree blogs={blogs} /></div> : <>
         {featured && <section className="desk-feature" aria-label="Latest article">
-          {featured.heroImage && <Link className="patch-desk-cover" to={postPath(featured.slug)} tabIndex={-1} aria-hidden="true"><img src={featured.heroImage} alt="" width="640" height="400" loading="lazy" /></Link>}
+          {featured.heroImage && <Link className="patch-desk-cover" to={postPath(featured.slug)} tabIndex={-1} aria-hidden="true"><img src={featured.heroImage} alt="" decoding="async" /></Link>}
           <div className="patch-desk-feature-copy">
           <div className="desk-feature-meta"><span>Latest note</span><time dateTime={featured.date}>{dateLabel(featured.date)}</time><span>{featured.readingTime} min read</span></div>
           <Link to={postPath(featured.slug)} data-cursor="Read" className="desk-feature-link"><h2>{featured.title}</h2><p>{featured.description}</p><span className="desk-read">Read the note <ArrowUpRight size={17} /></span></Link>

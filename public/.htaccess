@@ -13,6 +13,9 @@ AddDefaultCharset UTF-8
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
+  # The standalone showcase remains available only in its archived release.
+  RewriteRule ^agents-at-work(?:/|$) - [G,L]
+
   # Ensure .well-known directory is accessible (MCP Server Card, security.txt)
   RewriteRule ^\.well-known/ - [L]
 

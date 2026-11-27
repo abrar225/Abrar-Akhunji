@@ -155,11 +155,11 @@ try {
     await page.waitForFunction(() => document.querySelector('.patch-global-cursor').dataset.action === 'true');
     const grid = page.locator('.patch-ripple');
     await grid.scrollIntoViewIfNeeded();
-    const cells = grid.locator('span');
+    const cells = grid.locator('[data-ripple-cell]');
     await cells.nth(0).click();
     await page.waitForFunction(() => {
-      const cells = document.querySelector('.patch-ripple').children;
-      return Number(getComputedStyle(cells[0]).opacity) > Number(getComputedStyle(cells[47]).opacity) + .1;
+      const cells = document.querySelectorAll('.patch-ripple-dot');
+      return Number(getComputedStyle(cells[0]).opacity) > Number(getComputedStyle(cells[cells.length - 1]).opacity) + .1;
     });
     await shot(page, '1440-footer');
     const iconUrl = await page.locator('link[rel=icon]').getAttribute('href');
@@ -184,6 +184,10 @@ try {
     await shot(page, '390-contact');
     const menu = page.getByRole('dialog', { name: 'Portfolio menu' });
     await button(page, 'Open menu').tap();
+    for (const name of ['Work', 'Résumé', 'Contact']) {
+      assert.ok(await menu.getByRole('link', { name, exact: true }).isVisible());
+    }
+    assert.equal(await page.getByRole('navigation', { name: 'Primary' }).isVisible(), false);
     await page.waitForTimeout(650);
     await shot(page, '390-menu');
     await menu.getByRole('link', { name: 'Work', exact: true }).tap();
@@ -206,6 +210,24 @@ try {
     await page.locator('.patch-selectors').waitFor();
     assert.equal(await page.locator('.patch-autoplay, .patch-loading, .patch-cursor-field, .patch-assembly canvas').count(), 0);
   });
+
+  for (const viewport of [desktop, mobile]) {
+    await check(`Writing cover preserves its intrinsic size ratio at ${viewport.viewport.width}px`, viewport, async page => {
+      await visit(page, '/blog/');
+      await page.waitForFunction(() => document.querySelector('.patch-desk-cover img')?.naturalWidth > 0);
+      const cover = page.locator('.patch-desk-cover');
+      const geometry = await cover.evaluate(wrapper => {
+        const image = wrapper.querySelector('img');
+        const { width, height } = image.getBoundingClientRect();
+        return { error: Math.abs(height - width * image.naturalHeight / image.naturalWidth),
+          gap: Math.abs(wrapper.getBoundingClientRect().height - height) };
+      });
+      assert.ok(geometry.error < 1 && geometry.gap < 1, JSON.stringify(geometry));
+      await cover.scrollIntoViewIfNeeded();
+      await shot(page, `${viewport.viewport.width}-writing-cover`);
+      return geometry;
+    });
+  }
 } finally {
   await browser.close();
   await writeFile(join(directory, 'checks.json'), JSON.stringify({ result, errors }, null, 2) + '\n');

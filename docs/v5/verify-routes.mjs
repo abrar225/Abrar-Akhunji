@@ -11,7 +11,7 @@ const recovery = ['/v5-no-page/','/work/v5-no-project/','/blog/v5-no-note/','/40
 const states = ['/?project=framecast-studio','/work/?category=COMPUTER%20VISION','/blog/?q=v5-no-matching-article','/blog/?tag=AI'];
 const screenshots = new Map(Object.entries({
   '/':'home','/work/':'work','/about/':'about','/contact/':'contact','/hire/':'hire','/blog/':'writing',
-  '/privacy/':'privacy','/terms/':'terms','/agents-at-work/':'agents','/work/packetlark/':'case',
+  '/privacy/':'privacy','/terms/':'terms','/work/packetlark/':'case',
   [canonical.find(path=>path.includes('/blog/') && path!=='/blog/') || '/blog/']:'article',
   '/v5-no-page/':'client-404','/404.html':'static-404',
   '/blog/?q=v5-no-matching-article':'search-empty','/work/?category=COMPUTER%20VISION':'work-filter',

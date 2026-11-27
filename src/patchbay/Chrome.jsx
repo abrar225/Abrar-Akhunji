@@ -2,14 +2,14 @@ import { useEffect, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import { motion, useScroll } from 'framer-motion';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { ArrowUpRight, Menu, Moon, Sun, X } from 'lucide-react';
+import { ArrowUpRight, Menu, Moon, RotateCcw, Sun, X } from 'lucide-react';
 import { EMAIL, RESUME } from '../lib/projects';
 import { useTheme } from '../lib/useTheme';
-import versions from '../../versions/manifest.json';
+import VersionSwitcher from '../components/site/VersionSwitcher';
 
 const directory = [
   ['Work', '/work/'], ['Writing', '/blog/'], ['About', '/about/'],
-  ['Hire', '/hire/'], ['Contact', '/contact/'], ['Agents at Work', '/agents-at-work/'],
+  ['Hire', '/hire/'], ['Contact', '/contact/'],
 ];
 
 function Mark() {
@@ -53,12 +53,13 @@ export function PatchHeader() {
         <Link to="/" className="patch-brand" aria-label="Abrar Akhunji, home"><Mark /><span>AA</span></Link>
         <nav className="patch-main-links" aria-label="Primary">
           <NavLink to="/work/">Work</NavLink>
-          <NavLink to="/blog/" className="patch-extra">Writing</NavLink>
-          <NavLink to="/about/" className="patch-extra">About</NavLink>
+          <NavLink to="/blog/">Writing</NavLink>
+          <NavLink to="/about/">About</NavLink>
           <a href={RESUME}>Résumé</a>
           <NavLink to="/contact/">Contact</NavLink>
         </nav>
         <div className="patch-header-actions">
+          <VersionSwitcher />
           <button type="button" aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'} onClick={changeTheme}>
             {theme === 'dark' ? <Sun size={17} aria-hidden="true" /> : <Moon size={17} aria-hidden="true" />}
           </button>
@@ -70,9 +71,6 @@ export function PatchHeader() {
             <Menu size={19} aria-hidden="true" />
           </button>
         </div>
-        {import.meta.env.VITE_SHOW_VERSIONS === '1' && <details className="version-switcher patch-archive">
-          <summary>Versions</summary><ul aria-label="Portfolio versions">{versions.toReversed().map(version => <li key={version.slug}><a href={version.current ? '/' : `/versions/${version.slug}/`} aria-current={version.current?'true':undefined}>v{version.version} · {version.current?'The Patchbay':version.name}</a></li>)}</ul>
-        </details>}
       </div>
       <motion.span aria-hidden="true" className="patch-scroll-progress" style={{ scaleX: scrollYProgress }} />
       <dialog className="patch-menu" id="patch-menu" ref={menu} aria-label="Portfolio menu" onClose={() => {
@@ -81,11 +79,11 @@ export function PatchHeader() {
       }}>
         <div className="patch-wide">
           <div className="patch-menu-head"><Mark /><button className="patch-close" onClick={() => menu.current.close()} aria-label="Close menu" autoFocus><X aria-hidden="true" /></button></div>
-          <nav aria-label="Site directory">
+          <nav aria-label="Site directory" onClick={event => {
+            if (event.target.closest('a[aria-current="page"]')) menu.current.close();
+          }}>
             <NavLink to="/" end>Home</NavLink>
-            {directory.map(([name, url]) => url.startsWith('/agents')
-              ? <a href={url} key={url}>{name}</a>
-              : <NavLink to={url} key={url}>{name}</NavLink>)}
+            {directory.map(([name, url]) => <NavLink to={url} key={url}>{name}</NavLink>)}
             <a href={RESUME}>Résumé <ArrowUpRight aria-hidden="true" /></a>
           </nav>
         </div>
@@ -95,7 +93,7 @@ export function PatchHeader() {
 }
 
 const rippleColumns = 12;
-const rippleRows = 4;
+const rippleRows = 5;
 
 function FooterSignature() {
   const grid = useRef(null);
@@ -112,32 +110,40 @@ function FooterSignature() {
     return () => { preference.removeEventListener('change', clear); clear(); };
   }, []);
 
-  async function ripple(event) {
+  async function ripple(origin) {
     const preference = matchMedia('(prefers-reduced-motion: reduce)');
     if (preference.matches) return;
-    const button = event.currentTarget;
-    const cells = [...button.children];
-    const hit = cells.indexOf(event.target);
-    const origin = hit === -1 ? 'center' : hit;
-    const [{ gsap }, { SplitText }] = await Promise.all([import('./scroll'), import('gsap/SplitText')]);
+    const button = grid.current;
+    const modules = await Promise.all([import('./scroll'), import('gsap/SplitText')]).catch(() => null);
+    if (!modules) return;
+    const [{ gsap }, { SplitText }] = modules;
     if (preference.matches || grid.current !== button) return;
     animation.current?.revert();
     gsap.registerPlugin(SplitText);
-    const stagger = { grid: [rippleRows, rippleColumns], from: origin, amount: .38 };
+    const stagger = { grid: [rippleRows, rippleColumns], from: origin, amount: .49, repeat: 1, yoyo: true };
     animation.current = gsap.context(() => {
       const split = SplitText.create(name.current, { type: 'words', aria: 'none' });
       gsap.timeline()
-        .fromTo(cells, { scale: .28, opacity: .32 }, { scale: 1.08, opacity: .9, duration: .17, ease: 'power2.out', stagger }, 0)
-        .to(cells, { scale: 1, opacity: .32, duration: .43, ease: 'power3.out', stagger }, .17)
-        .fromTo(split.words, { yPercent: 8 }, { yPercent: 0, duration: .54, stagger: .07, ease: 'power3.out' }, .08);
+        .to('.patch-ripple-dot', { scale: 1.53, opacity: 1, duration: .24, ease: 'power2.out', stagger }, 0)
+        .fromTo(split.words, { yPercent: 4 }, { yPercent: 0, duration: .52, stagger: .065, ease: 'power3.out' }, .07);
       return () => split.revert();
     }, button);
   }
 
+  function tapGrid(event) {
+    const hit = event.target.closest('[data-ripple-cell]');
+    ripple(event.detail && hit ? Number(hit.dataset.rippleCell) : 'center');
+  }
+
   return <div className="patch-wide patch-signature">
-    <button ref={grid} className="patch-ripple" type="button" onClick={ripple} aria-label="Send a ripple through the footer">
-      {Array.from({ length: rippleColumns * rippleRows }, (_, index) => <span key={index} aria-hidden="true" />)}
-    </button>
+    <div className="patch-ripple-frame">
+      <button className="patch-ripple-replay" type="button" onClick={() => ripple('center')}><RotateCcw size={15} aria-hidden="true" /> Replay</button>
+      <button ref={grid} className="patch-ripple" type="button" onClick={tapGrid} aria-label="Send a ripple through the footer">
+        {Array.from({ length: rippleColumns * rippleRows }, (_, index) => (
+          <span key={index} data-ripple-cell={index} aria-hidden="true"><i className="patch-ripple-dot" /></span>
+        ))}
+      </button>
+    </div>
     <p ref={name}>Abrar Akhunji</p>
   </div>;
 }
@@ -153,7 +159,7 @@ export function PatchFooter() {
           <a href={`mailto:${EMAIL}`}>{EMAIL} <ArrowUpRight size={16} aria-hidden="true" /></a>
           {home && <div id="services" className="patch-actions"><Link to="/contact/">Contact Abrar</Link><Link to="/hire/">Engineering services</Link></div>}
         </div>
-        <nav aria-label="Footer">{directory.map(([name, path]) => path.startsWith('/agents') ? <a key={path} href={path}>{name}</a> : <Link key={path} to={path}>{name}</Link>)}</nav>
+        <nav aria-label="Footer">{directory.map(([name, path]) => <Link key={path} to={path}>{name}</Link>)}</nav>
         <nav aria-label="Elsewhere">
           <a href="https://github.com/abrar225">GitHub</a><a href="https://www.linkedin.com/in/abrar-akhunji/">LinkedIn</a><a href={RESUME}>Résumé</a>
           <Link to="/privacy/">Privacy</Link><Link to="/terms/">Terms</Link>

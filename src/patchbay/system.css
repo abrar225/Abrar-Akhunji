@@ -106,9 +106,7 @@
 .patch-status button { border-bottom:1px solid currentColor; cursor:pointer; }
 
 @media (max-width:750px) {
-  .patch-extra { display:none !important; }
   .patch-brand span { display:none; }
-  .patch-main-links { font-size:.88rem; gap:clamp(.55rem, 3.1vw, 1.65rem); }
   .patch-header-actions button { min-width:44px; }
   .patch-footer-grid { grid-template-columns:1fr 1fr; gap:1.6rem 1rem; }
   .patch-footer-grid > div { grid-column:1/-1; }
@@ -192,11 +190,6 @@
 }
 
 .patch-header-inner { position:relative; }
-.patch-archive { position:absolute; z-index:2; top:100%; right:0; padding:0 .65rem; background:var(--patch-night); color:var(--patch-white); }
-.patch-archive summary { min-height:34px; display:flex; align-items:center; cursor:pointer; font:.73rem var(--patch-mono); }
-.patch-archive ul { list-style:none; padding:0 .25rem .55rem; }
-.patch-archive a { display:inline-flex; align-items:center; min-height:40px; }
-.patch-archive a:hover { color:var(--patch-lime); }
 
 .patch-home :where(.patch-home-collection,.patch-home-writing,.patch-home-background) h2,.patch-engineering h2,.patch-home-contact h2 {
   font:400 clamp(3.25rem,8.8vw,8.4rem)/.88 var(--patch-serif); letter-spacing:-.028em; margin:.13em 0 .25em;

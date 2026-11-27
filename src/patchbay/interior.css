@@ -82,12 +82,24 @@
 .desk-view button[aria-pressed='true'],.desk-topics button[aria-pressed='true'] { background:var(--color-accent); color:var(--color-on-accent); }
 .desk-topics { margin-block:.9rem; gap:.35rem; }
 .desk-result,.desk-footer { margin-block:1rem; color:var(--color-muted); }
-.desk-feature { display:grid; grid-template-columns:1.2fr .8fr; margin:2rem 0; background:var(--color-surface); }
-.patch-desk-cover { display:block; background:var(--patch-night); }
-.patch-desk-cover img { display:block; width:100%; height:100%; max-height:480px; object-fit:cover; }
-.patch-desk-feature-copy { align-self:center; padding:clamp(1rem,4vw,4rem); }
-.patch-desk-feature-copy h2,.desk-empty h2 { font:400 clamp(2rem,5vw,4.8rem)/.93 var(--patch-serif); margin:.2em 0; }
-.desk-feature-link { display:inline-flex; align-items:center; gap:.55em; min-height:44px; text-decoration:underline; }
+.desk-feature {
+  display:grid;
+  grid-template-columns:minmax(0,1.32fr) minmax(0,1fr);
+  align-items:center;
+  gap:clamp(.9rem,3vw,3rem);
+  margin:2rem 0;
+  padding-block:1rem;
+  border-block:1px solid var(--color-line);
+}
+.desk-feature:not(:has(.patch-desk-cover)) { grid-template-columns:minmax(0,1fr); }
+.patch-desk-cover { display:block; }
+.patch-desk-cover img { display:block; width:100%; height:auto; aspect-ratio:auto 16/9; }
+.patch-desk-feature-copy { padding:clamp(1rem,2.2vw,2.4rem); background:var(--color-surface); }
+.patch-desk-feature-copy h2 { font:400 clamp(1.9rem,3.15vw,3.8rem)/1 var(--patch-serif); margin:.32em 0; overflow-wrap:anywhere; }
+.desk-empty h2 { font:400 clamp(2rem,5vw,4.8rem)/.93 var(--patch-serif); margin:.2em 0; }
+.desk-feature-link { display:block; }
+.desk-feature-link:hover h2 { color:var(--color-accent); }
+.desk-feature-link .desk-read { text-decoration:underline; text-underline-offset:.2em; }
 .desk-entry { display:grid; grid-template-columns:1fr auto; align-items:center; border-top:1px solid var(--color-line); padding:1.05rem 0; gap:.8rem; }
 .desk-entry h2,.desk-entry h3 { font:400 clamp(1.75rem,4vw,3.5rem)/.97 var(--patch-serif); }
 .desk-articles a:hover { color:var(--color-accent); }
@@ -162,7 +174,6 @@
 .patch-hire .patch-page-lead-inner { padding-left:1.5vw; }
 .reading-desk .patch-page-lead { background:var(--color-canvas); color:var(--color-fg); }
 .reading-desk .patch-page-lead-inner { border-top:4px solid var(--color-accent); padding-top:1rem; }
-.desk-feature-link { display:block; }
 .desk-feature-meta,.desk-read { display:flex; flex-wrap:wrap; gap:.7rem; align-items:center; }
 .desk-feature-meta { font:.72rem var(--patch-mono); }
 .desk-read { margin-top:.8rem; }

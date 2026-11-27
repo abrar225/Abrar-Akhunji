@@ -176,7 +176,7 @@ try {
     }
     await run({...desktop,colorScheme:'dark'},async (page,context)=>{
       await context.addInitScript(()=>localStorage.setItem('theme','dark'));
-      for(const [path,slug] of [['/work/','work'],['/about/','about'],['/blog/','writing'],['/hire/','hire'],['/contact/','contact'],['/work/packetlark/','case'],['/agents-at-work/','agents'],['/privacy/','privacy'],['/terms/','terms'],['/404.html','404']]){
+      for(const [path,slug] of [['/work/','work'],['/about/','about'],['/blog/','writing'],['/hire/','hire'],['/contact/','contact'],['/work/packetlark/','case'],['/privacy/','privacy'],['/terms/','terms'],['/404.html','404']]){
         await goto(page,path);
         await page.locator('h1').first().waitFor();
         await page.evaluate(()=>document.fonts.ready);

@@ -74,11 +74,22 @@ try {
           && ['fetch', 'xhr', 'ping'].includes(request.resourceType())) serviceCalls.push(request.url());
     });
     await page.goto(origin);
+    await page.getByRole('button', { name: 'Open menu' }).waitFor();
     const current = page.locator('.version-switcher');
-    const headerFits = await page.locator('.header-actions').evaluate(element =>
+    const headerFits = await page.locator('.patch-header-actions').evaluate(element =>
       element.getBoundingClientRect().right <= innerWidth);
     assert.ok(headerFits, `Header controls overflow at ${width}px`);
     await checkDisclosure(current, versions.at(-1).version);
+    if (width < 768) {
+      assert.equal(await page.getByRole('navigation', { name: 'Primary' }).isVisible(), false);
+      await page.getByRole('button', { name: 'Open menu' }).tap();
+      const menu = page.getByRole('dialog', { name: 'Portfolio menu' });
+      for (const name of ['Work', 'Résumé', 'Contact']) {
+        assert.ok(await menu.getByRole('link', { name, exact: true }).isVisible(), name);
+      }
+      await page.getByRole('button', { name: 'Close menu' }).tap();
+    }
+    assert.equal(await current.locator('li').count(), versions.length);
     await current.locator('summary').click();
     await current.getByRole('link', { name: /v1 ·/ }).click();
     await page.waitForURL(`**/versions/${archives[0].slug}/`);
@@ -114,6 +125,10 @@ try {
           assert.equal((await page.reload()).status(), 200, `Reloading archive route: ${page.url()}`);
         }
       }
+      if (slug === 'zero-to-built') {
+        assert.equal((await page.goto(base + 'agents-at-work/')).status(), 200);
+        await page.getByRole('heading', { name: /Agents at Work/ }).waitFor();
+      }
       assert.equal((await page.goto(base + 'missing-route/')).status(), 404);
       await marker.locator('summary').click();
       await marker.getByRole('link', { name: /Current/ }).click();
@@ -122,6 +137,7 @@ try {
     for (const retired of ['original', 'motion']) {
       assert.equal((await page.goto(`${origin}/versions/${retired}/`)).status(), 404);
     }
+    assert.equal((await page.goto(`${origin}/agents-at-work/`)).status(), 404);
     assert.deepEqual(errors, []);
     assert.deepEqual(serviceCalls, []);
     assert.deepEqual(missingAssets, []);
