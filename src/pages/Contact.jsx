@@ -53,9 +53,8 @@ export default function Contact() {
       />
 
       <main className="patch-contact">
-      <PageLead label="Contact" title={<>Let’s talk<span>.</span></>}
+      <PageLead title="Let’s talk."
         description="For engineering roles, project inquiries, and collaborations, tell me what you’re building or the kind of teammate you’re looking for.">
-        <Action href={`mailto:${services.email}`}>Send an email</Action>
         <Action to="/hire/">Ways to work together</Action>
       </PageLead>
       <div className="patch-wide patch-info-body">

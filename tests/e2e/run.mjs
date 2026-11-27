@@ -40,18 +40,19 @@ async function main() {
     throw new Error(`Preview server did not start.\n${serverLog}`);
   }
 
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({ headless: true, channel: process.env.PATCHBAY_CHROME_CHANNEL || undefined });
   testBrowser = browser;
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  await context.route('**/*', route => new URL(route.request().url()).origin === BASE ? route.continue() : route.abort());
   await context.addInitScript(() => {
-    try { sessionStorage.setItem('abrar_intro_seen', '1'); } catch { /* ignore */ }
+    try { sessionStorage.setItem('patchbay-arrived', '1'); } catch { /* ignore */ }
   });
 
   const page = await context.newPage();
   const consoleErrors = [];
   const pageErrors = [];
   page.on('console', (message) => {
-    if (message.type() === 'error') consoleErrors.push([message.text(), message.location().url].filter(Boolean).join(' — '));
+    if (message.type() === 'error' && !message.text().startsWith('Failed to load resource: net::ERR_FAILED')) consoleErrors.push([message.text(), message.location().url].filter(Boolean).join(' — '));
   });
   page.on('pageerror', (error) => pageErrors.push(error.message));
 
@@ -80,15 +81,15 @@ async function main() {
   check('home has the services section', home.hasServices);
   check('home links to the hire page', home.hasHireLink);
   check('every home image has an alt attribute', home.imagesWithoutAlt === 0, `${home.imagesWithoutAlt} missing`);
-  const inkCursor = page.locator('.signal-ink-cursor');
+  const inkCursor = page.locator('.patch-cursor-field');
   await page.mouse.move(340, 250);
-  await page.locator('.signal-ink-cursor[data-active=true]').waitFor();
+  await inkCursor.waitFor({state:'attached'});
   const firstPoint = await inkCursor.evaluate(node => node.style.transform);
   await page.mouse.move(770, 300);
-  await page.waitForFunction(point => document.querySelector('.signal-ink-cursor').style.transform !== point, firstPoint);
-  check('the desktop ink responds to pointer movement', await page.locator('.signal-ink-canvas[data-active=true]').isVisible());
+  await page.waitForFunction(point => document.querySelector('.patch-cursor-field').style.transform !== point, firstPoint);
+  check('the desktop ink responds to pointer movement', await inkCursor.count() === 1);
 
-  const writingLinks = page.locator('#writing .signal-notes a');
+  const writingLinks = page.locator('#writing ol a');
   check('home presents three direct article links', await writingLinks.count() === 3);
   await writingLinks.first().focus();
   check('home article link is keyboard reachable', await writingLinks.first().evaluate(link => link === document.activeElement));
@@ -183,7 +184,7 @@ async function main() {
     body: document.body.innerText,
     robots: document.querySelector('meta[name=robots]')?.content || '',
   }));
-  check('unknown route shows the custom 404', /Signal lost/.test(`${notFound.h1}\n${notFound.body}`), notFound.h1);
+  check('unknown route shows the custom 404', /This signal ends here/.test(`${notFound.h1}\n${notFound.body}`), notFound.h1);
   check('404 is noindex', /noindex/.test(notFound.robots), notFound.robots);
 
   // ── Theme ────────────────────────────────────────────────────
@@ -208,7 +209,7 @@ async function main() {
   // ── Mobile ───────────────────────────────────────────────────
   const mobileContext = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
   await mobileContext.addInitScript(() => {
-    try { sessionStorage.setItem('abrar_intro_seen', '1'); } catch { /* ignore */ }
+    try { sessionStorage.setItem('patchbay-arrived', '1'); } catch { /* ignore */ }
   });
   const mobile = await mobileContext.newPage();
   await mobile.goto(`${BASE}/`, { waitUntil: 'domcontentloaded' });
@@ -224,8 +225,8 @@ async function main() {
   }));
   check('mobile home has no horizontal overflow', mobileLayout.scrollWidth <= mobileLayout.innerWidth + 2, JSON.stringify(mobileLayout));
 
-  check('touch devices use a still background and native pointer',
-    !await mobile.locator('.signal-ink-canvas').isVisible() && !await mobile.locator('.signal-ink-cursor').isVisible());
+  check('touch devices mount no custom cursor',
+    await mobile.locator('.patch-cursor-field').count() === 0);
 
   const navButton = mobile.locator('button[aria-label="Open menu"]');
   check('mobile navigation trigger exists', (await navButton.count()) === 1);
@@ -235,7 +236,7 @@ async function main() {
     await mobile.keyboard.press('Escape');
     check('Escape closes the mobile navigation and restores focus', await navButton.evaluate(button => document.activeElement === button));
     await navButton.click();
-    const hireItem = mobile.getByRole('navigation', { name: 'Mobile navigation' }).getByRole('link', { name: 'Work with me' });
+    const hireItem = mobile.getByRole('navigation', { name: 'Site directory' }).getByRole('link', { name: 'Hire' });
     if (await hireItem.count()) {
       await hireItem.first().click();
       await mobile.waitForURL('**/hire/', { timeout: 10_000 });
@@ -245,25 +246,20 @@ async function main() {
     }
   }
   await mobile.goto(`${BASE}/work/`);
-  const mobileGallery = mobile.getByRole('region', { name: 'Featured project gallery' });
-  await mobileGallery.getByRole('button', { name: 'Next project' }).click();
-  await mobile.waitForFunction(() => document.querySelector('.signal-gallery-window')?.scrollLeft > 40);
-  check('mobile gallery uses native horizontal scrolling without pinning', await mobileGallery.getAttribute('data-scrub') === null);
+  await mobile.getByRole('button', { name:'COMPUTER VISION', exact:true }).tap();
+  await mobile.getByRole('status').filter({hasText:'1 project'}).waitFor();
+  check('mobile can filter projects in the document flow', await mobile.locator('.patch-work-list li').count()===1);
 
-  // New project archive and direct-load case studies.
   await page.goto(`${BASE}/work/`);
-  await page.waitForSelector('.signal-work-grid');
-  check('archive exposes all ten case studies', await page.locator('.signal-work-card').count() === 10);
-  const gallery = page.locator('.signal-gallery[data-scrub=true]');
-  await gallery.waitFor();
-  await gallery.getByRole('button', { name: 'Next project' }).click();
-  await page.waitForFunction(() => document.querySelector('.signal-gallery-window')?.scrollLeft > 50);
-  check('desktop project gallery couples scrolling to the horizontal strip',
-    await gallery.locator('.signal-gallery-window').evaluate(strip => strip.scrollLeft > 50));
+  await page.waitForSelector('.patch-work-list');
+  check('archive exposes all ten case studies', await page.locator('.patch-work-list li').count() === 10);
+  await page.locator('.patch-work-list li a').nth(1).focus();
+  await page.locator('.patch-work-preview figcaption').filter({hasText:'PacketLark'}).waitFor();
+  check('desktop project preview follows keyboard focus', await page.locator('.patch-work-preview').isVisible());
   await page.goto(`${BASE}/work/packetlark/`);
-  const zoom = page.getByRole('button', { name: 'Expand project image' });
+  const zoom = page.getByRole('button', { name: 'Inspect interface' });
   await zoom.click();
-  const dialog = page.getByRole('dialog', { name: 'PacketLark preview' });
+  const dialog = page.getByRole('dialog', { name: 'PacketLark interface' });
   await dialog.waitFor();
   await page.keyboard.press('Escape');
   check('project image can be expanded and dismissed with focus restored',
@@ -271,20 +267,20 @@ async function main() {
 
   for (const slug of ['fixo-flow','packetlark','framecast-studio','cattle-breed']) {
     const response = await page.goto(`${BASE}/work/${slug}/`);
-    await page.waitForSelector('.signal-case-body');
-    check(`${slug} case study loads directly`, response.status() === 200 && await page.locator('.signal-case-body h2').count() >= 6);
+    await page.waitForSelector('.patch-case-body');
+    check(`${slug} case study loads directly`, response.status() === 200 && await page.locator('.patch-case-body h2').count() >= 6);
     check(`${slug} has the canonical URL`, await page.locator('link[rel=canonical]').getAttribute('href') === `https://abrarakhunji.com/work/${slug}/`);
   }
   await page.goto(`${BASE}/work/not-a-project/`);
   await page.waitForSelector('meta[name=robots][content*=noindex]', {state:'attached'});
   check('unknown project is noindex', /noindex/.test(await page.locator('meta[name=robots]').getAttribute('content')));
   await page.goto(`${BASE}/?project=packetlark#work`);
-  const activeProject = page.locator('.signal-feature h3');
+  const activeProject = page.locator('#patch-project');
   await activeProject.waitFor();
   check('project query selects PacketLark', await activeProject.innerText() === 'PacketLark');
-  const selector = page.getByRole('group', { name: 'Featured projects' });
+  const selector = page.getByRole('group', { name: 'Choose which project to follow' });
   await selector.getByRole('button', { name: /Fixo Flow/ }).click();
-  await selector.getByRole('button', { name: /Framecast Studio/ }).click();
+  await selector.getByRole('button', { name: /Framecast/ }).click();
   const packetLark = selector.getByRole('button', { name: /PacketLark/ });
   await packetLark.focus();
   await packetLark.press('Enter');
@@ -298,37 +294,37 @@ async function main() {
     await page.getByRole('link', { name: 'Read the case study' }).getAttribute('href') === '/work/packetlark/');
   await page.goto(`${BASE}/?project=unknown#work`);
   await activeProject.waitFor();
-  check('unknown project query uses the default', await activeProject.innerText() === 'Fixo Flow');
+  check('unknown project query uses the default', await activeProject.innerText() === 'PacketLark');
 
-  const navigation = page.getByRole('navigation', { name: 'Main navigation' });
+  const navigation = page.getByRole('navigation', { name: 'Primary' });
   await navigation.getByRole('link', { name: 'Work' }).click();
-  await page.locator('.signal-work-page h1').waitFor();
+  await page.locator('.patch-work-page h1').waitFor();
   check('page transition focuses the new content and leaves one route',
-    await page.locator('.signal-route:focus').count() === 1
-    && await page.locator('.signal-route').count() === 1
+    await page.locator('.patch-route:focus').count() === 1
+    && await page.locator('.patch-route').count() === 1
     && await page.locator('#main-content').count() === 0);
-  await navigation.getByRole('link', { name: 'Home' }).click();
-  await page.locator('.signal-hero-title').waitFor();
+  await page.getByRole('link', { name: 'Abrar Akhunji, home' }).click();
+  await page.locator('#patch-name').waitFor();
   check('returning home after a transition restores focus to the route',
-    await page.locator('.signal-route:focus').count() === 1);
+    await page.locator('.patch-route:focus').count() === 1);
 
   for (const path of ['work/', 'work/packetlark/', 'blog/', 'about/', 'hire/', 'contact/', 'terms/', 'privacy/', 'missing-page/']) {
     await page.goto(`${BASE}/${path}`);
-    await page.locator('.signal-route h1').waitFor();
-    check(`/${path} shares V5 chrome`, await page.locator('.signal-header').count() === 1
-      && await page.locator('.signal-footer').count() === 1 && await page.locator('.site-header').count() === 0);
+    await page.locator('.patch-route h1').waitFor();
+    check(`/${path} shares V5 chrome`, await page.locator('.patch-header').count() === 1
+      && await page.locator('.patch-footer').count() === 1 && await page.locator('.site-header').count() === 0);
   }
 
   const fallbackContext = await browser.newContext({ reducedMotion: 'reduce', viewport: { width: 390, height: 844 } });
   const fallback = await fallbackContext.newPage();
   await fallback.goto(`${BASE}/#work`);
-  await fallback.getByRole('group', { name: 'Featured projects' }).getByRole('button', { name: /PacketLark/ }).click();
-  check('reduced motion keeps projects selectable', await fallback.locator('.signal-feature h3').innerText() === 'PacketLark');
-  const poster = fallback.locator('.signal-photo-print img');
+  await fallback.getByRole('group', { name: 'Choose which project to follow' }).getByRole('button', { name: /PacketLark/ }).click();
+  check('reduced motion keeps projects selectable', await fallback.locator('#patch-project').innerText() === 'PacketLark');
+  const poster = fallback.locator('.patch-author img');
   await poster.scrollIntoViewIfNeeded();
   check('reduced motion keeps the printed portrait visible',
     await poster.evaluate(img => img.complete && img.naturalWidth > 0)
-    && await fallback.locator('.signal-route').evaluate(route => getComputedStyle(route).transform === 'none'));
+    && await fallback.locator('.patch-route').evaluate(route => getComputedStyle(route).transform === 'none'));
   await fallbackContext.close();
 
   await mobileContext.close();

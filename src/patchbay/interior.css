@@ -148,3 +148,48 @@
 .patch-static-project img { max-width:100%; max-height:52vh; object-fit:contain; }
 .patch-static-project article { padding:1rem 0; border-bottom:1px solid var(--color-line); }
 .patch-static-project a,.patch-static-hero a { text-decoration:underline; }
+
+.patch-case .patch-page-lead { background:linear-gradient(136deg,#5281ff68,transparent 70%),var(--patch-grid),var(--patch-cobalt); }
+.patch-case .patch-page-lead-inner { align-items:end; grid-template-columns:minmax(0,1fr) minmax(6rem,.14fr); }
+.patch-case .patch-page-lead-inner::after { content:''; justify-self:end; width:100%; height:clamp(3rem,12vw,10rem); background:var(--patch-lime); clip-path:polygon(5% 0,100% 0,100% 90%,15% 100%,0 17%,7% 18%,19% 90%,91% 83%,94% 7%,8% 8%); }
+.patch-case-layers { position:relative; border:0; padding:0; }
+.patch-case-layers li { display:grid; grid-template-columns:minmax(9rem,1fr) minmax(0,1.5fr); align-items:center; gap:1rem; border:1px solid var(--color-line); padding:.75rem; transition:background .22s var(--patch-ease),border-color .22s var(--patch-ease); }
+.patch-case-layers li[data-current='true'] { background:var(--color-surface); border-color:var(--color-accent); }
+.patch-case-layers button { display:flex; align-items:center; gap:.45rem; min-height:44px; cursor:pointer; text-align:left; font-weight:600; }
+.patch-case-layers button span { display:grid; place-items:center; min-width:26px; min-height:26px; border:1px solid var(--color-accent); border-radius:50%; }
+.patch-case-layers [aria-pressed='true'] span { background:var(--color-accent); color:var(--color-on-accent); }
+.patch-about .patch-page-lead { background:linear-gradient(135deg,#121331c9,transparent 80%),var(--patch-cobalt); }
+.patch-about .patch-page-lead figure { justify-self:end; transform:rotate(-3deg); padding:.55rem; background:var(--patch-stock); box-shadow:var(--patch-depth); }
+.patch-about .patch-page-lead img { width:100%; }
+.patch-about .patch-profile-row:nth-child(2) { padding-top:2.5rem; }
+.patch-about .patch-timeline { list-style:none; padding:0; }
+.patch-about .patch-timeline li { position:relative; padding-inline-start:1rem; border-inline-start:2px solid var(--color-accent); }
+.patch-contact .patch-page-lead { background:linear-gradient(142deg,#2637c7a8,transparent 68%),var(--patch-night); }
+.patch-contact-address { border-inline-start:4px solid var(--color-accent); padding-inline-start:1rem; }
+.patch-contact-address > a { font:400 clamp(1.9rem,5.5vw,5rem)/.92 var(--patch-serif); text-decoration:none; }
+.patch-contact-social { border-block-start:1px solid var(--color-line); padding-top:1.2rem; }
+.patch-hire .patch-page-lead { background:linear-gradient(90deg,var(--patch-cobalt) max(16px,4vw),var(--patch-lilac) 0); }
+.patch-hire .patch-page-lead-inner { padding-left:1.5vw; }
+.reading-desk .patch-page-lead { background:var(--color-canvas); }
+.reading-desk .patch-page-lead-inner { border-top:4px solid var(--color-accent); padding-top:1rem; }
+.desk-feature-link { display:block; }
+.desk-feature-meta,.desk-read { display:flex; flex-wrap:wrap; gap:.7rem; align-items:center; }
+.desk-feature-meta { font:.72rem var(--patch-mono); }
+.desk-read { margin-top:.8rem; }
+.desk-view button,.desk-search button { display:inline-flex; gap:.4rem; align-items:center; }
+.desk-entry { grid-template-columns:6.8rem minmax(0,1fr) 1.2rem; }
+.desk-entry time { align-self:start; font:.74rem var(--patch-mono); }
+.desk-entry p { margin:.45em 0; }
+.desk-entry-time { margin-inline-start:.7rem; }
+@media(max-width:750px) {
+  .patch-about .patch-page-lead figure { justify-self:start; width:min(45%,160px); }
+  .patch-case-layers li { grid-template-columns:minmax(0,1fr); gap:.35rem; }
+  .patch-case .patch-page-lead-inner { grid-template-columns:minmax(0,1fr); }
+  .patch-case .patch-page-lead-inner::after { display:none; }
+  .desk-entry { grid-template-columns:minmax(0,1fr) 1.2rem; }
+  .desk-entry time { grid-column:1/-1; }
+}
+
+.desk-filter { margin-block:.85rem; }
+.desk-filter summary { width:fit-content; min-height:44px; padding:.7rem .8rem; border:1px solid var(--color-line); cursor:pointer; font:.8rem var(--patch-mono); }
+.patch-case-visual figcaption button { white-space:nowrap; flex:none; }

@@ -108,7 +108,7 @@ async function openPage(context) {
 
 const state = (page) => page.evaluate(() => {
   const work = document.querySelector('#work');
-  const title = document.querySelector('[data-project-title], #selected-product h3');
+  const title = document.querySelector('[data-project-title], #patch-project, #selected-product h3');
   return {
     y: scrollY,
     workY: Math.round(scrollY + work.getBoundingClientRect().top),
@@ -327,7 +327,7 @@ try {
     } finally {
       await context.close();
     }
-    if (!isBaseline) {
+    if (!isBaseline && !process.env.PATCHBAY_SCROLL_ONLY) {
       report.samples[device].alternative = await optionalPatch(options, device, 'no-preference');
       report.samples[device].reduced = await optionalPatch(options, device, 'reduce');
     }

@@ -2,11 +2,11 @@
 
 ## HANDOFF
 
-- Last good checkpoint: `git log -1 --format=%h -- docs/v5/STATE.md` (route breadth).
+- Last good checkpoint: `git log -1 --format=%h -- docs/v5/STATE.md` (depth and hardening code).
 - Done: backup, extraction, route inventory and Gate 1. Final build rules imported. Verified 333 extracted files against the tag. V5 shell, menu, app 404 and production Home slice captured at 1440 and 390 px. Gate 2 critic and rescore recorded. Rebuilt every live route archetype and the static SEO shell. The production archetype run has 30 loads, zero page findings and zero additional local link failures.
-- In progress: full production route crawl running; its results are separate from the verified archetype set.
-- Next: finish Home’s storyboard and R1–R9, then deepen Work, case studies, About, Contact and the remaining routes before milestone 2.
-- Open: paper-cutout image and animation profile URL missing; slice scored 4/4/4/4/3/4/4/4; independent 3D, physics and background interaction evidence remains open for depth.
+- In progress: the depth pass is implemented and browser-checked. The breadth crawl passed 218 loads; depth archetypes passed 30. The first behavior audit pass for depth fixed its locators and all eight behavior groups subsequently passed. Hardening is in progress. Browser route, performance and final-blind evidence jobs have separate output directories or a production-final capture set.
+- Next: finish final Chromium/WebKit/Firefox, E2E and Lighthouse evidence from the optimized production build. Then submit the two final independent reviews and write the section 14 report.
+- Open: paper-cutout image and animation profile URL missing; depth initial 4/4/4/4/3/4/5/4. Interaction fix evidence exists. Firefox launch under host restrictions and mobile lab LCP target still open; real phone performance is untested.
 - Run: `npm run dev -- --host 127.0.0.1 --port 5181` or `npm run build && npm run preview -- --host 127.0.0.1 --port 5183`.
 
 ## Checkpoint

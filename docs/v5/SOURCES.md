@@ -59,3 +59,7 @@ Installed versions are from this working tree. Registry tags were checked on the
 | PixelFX | MIT for the public repo. Verify bundled inputs separately if ever needed. | Interesting for an authored pixel language. The paper and fluid concepts need material depth rather than a collection of sprite effects. | [Project and licence](https://github.com/patch-gg/pixelfx) |
 
 This research introduced no third-party code, package, paid plan, fonts or asset into the prototypes. The captured reference imagery stays in the research evidence folder.
+
+## Production implementation
+
+The build uses the installed GSAP and ScrollTrigger for the native scroll timeline, Motion for layout and route entry, Three.js for a single lazy procedural assembly, and Lucide for interface symbols. The cut layers, ribbon aperture, signal mark, and procedural models were authored in the project. Fonts remain the locally licensed Bricolage Grotesque, Instrument Sans, Instrument Serif, and DM Mono documented in the extraction. The source screenshots, portrait and project details come from the repository. No reference-site assets or component snippets were imported. The paper-cutout image and GitHub animation profile remain unavailable.

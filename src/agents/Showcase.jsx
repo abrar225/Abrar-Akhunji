@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import data from '../data/portfolio.json';
+import { RESUME } from '../lib/projects';
 import { useTheme } from '../lib/useTheme';
 import styles from './showcase.module.css';
 
@@ -34,7 +35,7 @@ export default function Showcase() {
 
   return <div className={`patch-shell ${styles.page}`} data-portfolio-version="v5">
     <header className={styles.header}><div className="patch-wide">
-      <a href="/">Abrar Akhunji</a><nav aria-label="Portfolio"><a href="/work/">Work</a><a href="/blog/">Writing</a><a href="/contact/">Contact</a></nav>
+      <a href="/">Abrar Akhunji</a><nav aria-label="Portfolio"><a href="/work/">Work</a><a href="/blog/">Writing</a><a href={RESUME}>Résumé</a><a href="/contact/">Contact</a></nav>
       <button onClick={toggleTheme}>Change theme</button>
     </div></header>
     <main>

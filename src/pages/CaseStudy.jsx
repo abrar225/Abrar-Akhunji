@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 import SEO from '../components/SEO';
@@ -18,6 +19,7 @@ const topics = [
 export default function CaseStudy() {
   const { slug } = useParams();
   const project = findProject(slug);
+  const [layer,setLayer] = useState(0);
   if (!project) return <NotFound />;
 
   const next = projects[(projects.indexOf(project) + 1) % projects.length];
@@ -37,7 +39,7 @@ export default function CaseStudy() {
   return (
     <main className="patch-case">
       <SEO title={`${project.title} — The build | Abrar Akhunji`} description={project.summary} path={projectPath(slug)} image={`/assets/build-room/og-${slug}.jpg`} schema={schema} />
-      <PageLead label={`${project.category} / ${project.status}`} title={<>{project.title}<span>.</span></>} description={project.summary}>
+      <PageLead label={`${project.category} / ${project.status}`} title={project.title} description={project.summary}>
         {project.demo && <Action href={project.demo}>{slug === 'packetlark' ? 'Product website' : 'View project'}</Action>}
         {project.github && <Action href={project.github}>Source on GitHub</Action>}
         {project.release && <Action href={project.release}>Release packages</Action>}
@@ -64,9 +66,13 @@ export default function CaseStudy() {
             </section>}
             <section id="architecture">
               <h2>How the parts connect</h2>
-              <ol className="patch-case-layers">{project.layers.map((layer, index) =>
-                <li key={layer.title}><span className="patch-label">{String(index + 1).padStart(2, '0')}</span><div><h3>{layer.title}</h3><p>{layer.detail}</p></div></li>
-              )}</ol>
+              <ol className="patch-case-layers">{project.layers.map((part,index)=>
+                <li key={part.title} data-current={layer===index}>
+                  <button type="button" aria-pressed={layer===index} onClick={()=>setLayer(index)}>
+                    <span className="patch-label">{index+1}</span>{part.title}
+                  </button>
+                  <p>{part.detail}</p>
+                </li>)}</ol>
             </section>
             <section id="decisions"><h2>The decisions</h2>{project.decisions.map((item) => <article key={item.title}><h3>{item.title}</h3><p>{item.detail}</p></article>)}</section>
             <section id="delivery">

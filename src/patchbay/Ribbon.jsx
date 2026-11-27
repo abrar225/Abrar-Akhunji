@@ -25,10 +25,12 @@ function spline(points) {
 export default function Ribbon({ story, hero, work, proof, route, image }) {
   const elements = useRef(null);
   const inputs = useRef(route);
+  const currentImage = useRef(image);
   useLayoutEffect(() => {
     inputs.current = route;
+    currentImage.current = image;
     elements.current.dispatchEvent(new Event('patchroute'));
-  }, [route]);
+  }, [route,image]);
 
   useEffect(() => {
     const svg = elements.current;
@@ -87,7 +89,10 @@ export default function Ribbon({ story, hero, work, proof, route, image }) {
         mask.setAttribute('d', d + 'Z');
         const media = { x: cx - widthHalf, y: cy - heightHalf, width: widthHalf * 2, height: heightHalf * 2 };
         for (const [name, value] of Object.entries(media)) photo.setAttribute(name, value);
-        photo.style.opacity = gsap.parseEase('power2.in')(clamp((square - .35) / .65));
+        const opacity = gsap.parseEase('power2.in')(clamp((square - .35) / .65));
+        if (opacity > 0 && photo.getAttribute('href') !== currentImage.current) photo.setAttribute('href',currentImage.current);
+        if (!opacity && photo.hasAttribute('href')) photo.removeAttribute('href');
+        photo.style.opacity = opacity;
         svg.style.opacity = clamp((1 - s) / .033);
         svg.style.setProperty('--ribbon-flat', square);
         root.style.setProperty('--proof-visibility', clamp((s - .962) / .035));
@@ -118,17 +123,39 @@ export default function Ribbon({ story, hero, work, proof, route, image }) {
       const desktop = gsap.matchMedia();
       desktop.add('(hover: hover) and (pointer: fine)', () => {
         const easePointer = gsap.quickTo(movement,'pointer',{ duration:.36,ease:'power3.out',onUpdate:draw });
+        let halo, moveX, moveY;
         const onPointer = event => {
           if (event.pointerType !== 'mouse') return;
           const bounds = field.getBoundingClientRect();
-          easePointer((event.clientX - bounds.left) / bounds.width * 2 - 1);
+          const x = event.clientX - bounds.left;
+          const y = event.clientY - bounds.top;
+          if (!halo) {
+            halo = document.createElement('span');
+            halo.className = 'patch-cursor-field';
+            halo.setAttribute('aria-hidden','true');
+            field.prepend(halo);
+            gsap.set(halo,{x,y});
+            moveX = gsap.quickTo(halo,'x',{duration:.45,ease:'power3.out'});
+            moveY = gsap.quickTo(halo,'y',{duration:.45,ease:'power3.out'});
+          }
+          moveX(x);
+          moveY(y);
+          easePointer(x / bounds.width * 2 - 1);
         };
-        const resetPointer = () => easePointer(0);
+        const resetPointer = () => {
+          easePointer(0);
+          if (halo) {
+            gsap.killTweensOf(halo);
+            halo.remove();
+            halo = undefined;
+          }
+        };
         field.addEventListener('pointermove',onPointer,{passive:true});
         field.addEventListener('pointerleave',resetPointer);
         return () => {
           field.removeEventListener('pointermove',onPointer);
           field.removeEventListener('pointerleave',resetPointer);
+          resetPointer();
           easePointer.tween.kill();
           movement.pointer = 0;
         };
@@ -158,7 +185,7 @@ export default function Ribbon({ story, hero, work, proof, route, image }) {
       <clipPath id="patch-ribbon-aperture"><path data-ribbon-mask="" /></clipPath>
       <linearGradient id="patch-ribbon-face" x2=".7" y2="1"><stop stopColor="var(--route-light)"/><stop offset=".45" stopColor="var(--route-shadow)"/><stop offset=".66" stopColor="var(--route-light)"/><stop offset="1" stopColor="var(--route-shadow)"/></linearGradient>
     </defs>
-    <image href={image} clipPath="url(#patch-ribbon-aperture)" preserveAspectRatio="xMidYMid meet" style={{opacity:0}} />
+    <image clipPath="url(#patch-ribbon-aperture)" preserveAspectRatio="xMidYMid meet" style={{opacity:0}} />
     <path data-ribbon-stroke="" className="patch-ribbon-shadow" transform="translate(5 12)"/>
     <path data-ribbon-stroke="" className="patch-ribbon-edge"/>
     <path data-ribbon-stroke="" className="patch-ribbon-face"/>

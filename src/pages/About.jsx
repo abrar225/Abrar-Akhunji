@@ -36,7 +36,7 @@ export default function About() {
       />
 
       <main className="patch-about">
-      <PageLead label="About" title={<>Abrar Akhunji<span>.</span></>}
+      <PageLead label="About" title="Abrar Akhunji"
         description="I’m an AI/ML and full-stack engineer in Ahmedabad, India. I work across model inference, system architecture, and the production interfaces people use."
         aside={<figure><img src="/assets/build-room/portrait.webp" alt="Abrar Akhunji" width="480" height="540" /></figure>}>
         <Action href={RESUME}>View résumé</Action>

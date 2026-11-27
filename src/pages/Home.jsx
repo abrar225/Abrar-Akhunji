@@ -1,10 +1,12 @@
-import { useRef } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { lazy, Suspense, useRef } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowDown, ArrowUpRight } from 'lucide-react';
 import SEO from '../components/SEO';
 import { featuredProjects, projectPath } from '../lib/projects';
-import Ribbon from '../patchbay/Ribbon';
+import HomeSections from '../patchbay/HomeSections';
 import { useInitialProof } from '../patchbay/useInitialProof';
+
+const Ribbon = lazy(() => import('../patchbay/Ribbon'));
 
 const inputs = [
   { label: 'Request', name: 'PacketLark', slug: 'packetlark', shape: 0 },
@@ -13,19 +15,22 @@ const inputs = [
 ];
 
 export default function Home() {
-  const [params, setParams] = useSearchParams();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const params = new URLSearchParams(location.search);
   const selected = inputs.find(input => input.slug === params.get('project')) || inputs[0];
   const project = featuredProjects.find(entry => entry.slug === selected.slug);
   const story = useRef(null);
   const hero = useRef(null);
   const work = useRef(null);
   const proof = useRef(null);
+  const dialog = useRef(null);
   const [pending, skip] = useInitialProof(project.image);
 
   function change(input) {
     const next = new URLSearchParams(params);
     next.set('project', input.slug);
-    setParams(next, { replace: true, preventScrollReset: true });
+    navigate({ search: next.toString(), hash: location.hash }, { replace: true, preventScrollReset: true });
   }
 
   return <main id="main-content" className="patch-home">
@@ -35,8 +40,9 @@ export default function Home() {
       <span role="status">Opening Patchbay</span><button onClick={skip}>Skip intro</button>
     </div>}
     <div className="patch-story" ref={story} data-input={selected.slug}>
-      <div className="patch-projection"><Ribbon story={story} hero={hero} work={work} proof={proof} route={selected.shape} image={project.image} /></div>
+      <div className="patch-projection"><Suspense fallback={null}><Ribbon story={story} hero={hero} work={work} proof={proof} route={selected.shape} image={project.image} /></Suspense></div>
       <section id="home" className="patch-hero" ref={hero} aria-labelledby="patch-name">
+        <div className="patch-fluid" aria-hidden="true"><i/><i/></div>
         <div className="patch-wide patch-hero-grid">
           <div className="patch-identity">
             <p className="patch-label">AI &amp; full-stack engineer <span>Ahmedabad, India</span></p>
@@ -64,8 +70,8 @@ export default function Home() {
       <section id="work" className="patch-proof" ref={work} tabIndex={-1} aria-labelledby="patch-project">
         <div className="patch-wide patch-proof-grid">
           <figure>
-            <img ref={proof} className="patch-proof-image" src={project.image} alt={project.imageAlt} width="1200" height="833" />
-            <figcaption className="patch-label">{project.title} · Product interface</figcaption>
+            <img ref={proof} className="patch-proof-image" src={project.image} alt={project.imageAlt} width="1200" height="833" fetchPriority="high" />
+            <figcaption className="patch-label">{project.title} · Product interface <button type="button" onClick={()=>dialog.current.showModal()}>Inspect interface</button></figcaption>
           </figure>
           <div className="patch-proof-copy">
             <p className="patch-label">{project.category} / {project.status}</p>
@@ -78,5 +84,10 @@ export default function Home() {
         </div>
       </section>
     </div>
+    <dialog className="patch-media-dialog patch-home-inspector" ref={dialog} aria-label={`${project.title} interface`}>
+      <form method="dialog"><button autoFocus>Close</button></form>
+      <div tabIndex={0} data-detail="true" role="region" aria-label="Product screenshot, swipe or use arrow keys to pan"><img src={project.image} alt={project.imageAlt} loading="lazy" /></div>
+    </dialog>
+    <HomeSections project={project} />
   </main>;
 }

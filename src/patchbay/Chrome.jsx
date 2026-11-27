@@ -66,10 +66,16 @@ export function PatchHeader() {
 }
 
 export function PatchFooter() {
+  const home = useLocation().pathname === '/';
   return (
     <footer className="patch-footer" id="playground">
       <div className="patch-wide patch-footer-grid">
-        <div><Mark /><p>Let’s work together.</p><a href={`mailto:${EMAIL}`}>{EMAIL} <ArrowUpRight size={16} aria-hidden="true" /></a></div>
+        <div id={home ? 'contact' : undefined}><Mark />
+          {home && <span className="patch-label patch-footer-status">Open to engineering roles &amp; collaborations</span>}
+          <p>{home ? 'Let’s make something useful.' : 'Let’s work together.'}</p>
+          <a href={`mailto:${EMAIL}`}>{EMAIL} <ArrowUpRight size={16} aria-hidden="true" /></a>
+          {home && <div id="services" className="patch-actions"><Link to="/contact/">Contact Abrar</Link><Link to="/hire/">Engineering services</Link></div>}
+        </div>
         <nav aria-label="Footer">{directory.map(([name, path]) => path.startsWith('/agents') ? <a key={path} href={path}>{name}</a> : <Link key={path} to={path}>{name}</Link>)}</nav>
         <nav aria-label="Elsewhere">
           <a href="https://github.com/abrar225">GitHub</a><a href="https://www.linkedin.com/in/abrar-akhunji/">LinkedIn</a><a href={RESUME}>Résumé</a>

@@ -82,11 +82,12 @@ export default function BlogList() {
           <button type="button" aria-pressed={view === 'tree'} onClick={() => setView('tree')}><GitBranch size={16} /> Tech Tree</button>
         </div>
       </div>
-      <div className="desk-topics" aria-label="Filter articles by topic">
+      <details className="desk-filter"><summary>Topics{activeTag && ` / ${activeTag}`}</summary><div className="desk-topics" aria-label="Filter articles by topic">
         <button type="button" aria-pressed={!activeTag} onClick={() => updateFilter('tag', null)}>All posts <span>{allBlogs.length}</span></button>
         {tags.map(({ tag, count }) => <button key={tag} type="button" aria-pressed={activeTag === tag} onClick={() => updateFilter('tag', tag)}>{tag} <span>{count}</span></button>)}
         {activeTag && !tags.some(({ tag }) => tag === activeTag) && <button type="button" aria-pressed="true" onClick={() => updateFilter('tag', null)}>{activeTag} <X size={12} /></button>}
       </div>
+      </details>
       <p className="desk-result" role="status">{blogs.length} {blogs.length === 1 ? 'note' : 'notes'}{activeTag ? ` on ${activeTag}` : ''}{query.trim() ? ` matching “${query.trim()}”` : ''}</p>
       {view === 'tree' ? <div className="desk-tree"><TechTree blogs={blogs} /></div> : <>
         {featured && <section className="desk-feature" aria-label="Latest article">
