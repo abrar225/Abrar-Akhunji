@@ -1,8 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import { ArrowUpRight, Copy, Check } from 'lucide-react';
+import { ArrowUpRight, Copy, Check, Globe2, Mail } from 'lucide-react';
 import SEO from '../components/SEO';
-import { PageLead, Action } from '../patchbay/Interior';
 import { PERSON_ID, absoluteUrl, contactPath } from '../lib/content/urls.js';
 import services from '../data/services.json';
 
@@ -53,31 +52,32 @@ export default function Contact() {
       />
 
       <main className="patch-contact">
-      <PageLead title="Let’s talk."
-        description="For engineering roles, project inquiries, and collaborations, tell me what you’re building or the kind of teammate you’re looking for.">
-        <Action to="/hire/">Ways to work together</Action>
-      </PageLead>
-      <div className="patch-wide patch-info-body">
-
-        <div className="patch-contact-grid">
-          <section className="patch-contact-address">
-            <h2>Direct email</h2>
-            <a href={`mailto:${services.email}`}>{services.email} <ArrowUpRight size={20} /></a>
-            <button type="button" onClick={copyEmail}>{copyStatus === 'Email address copied.' ? <Check size={17} /> : <Copy size={17} />} Copy email</button>
-            <p className="patch-copy-status" role="status">{copyStatus}</p>
-            <p>Typically respond within 24 business hours. Based in Ahmedabad, on India Standard Time (UTC+5:30).</p>
-          </section>
+        <header className="patch-contact-lead">
+          <div className="patch-wide patch-contact-grid">
+            <div className="patch-contact-intro">
+              <h1>Let’s talk.</h1>
+              <p>Tell me what you’re building or the kind of teammate you’re looking for. I’m open to engineering roles, projects, and collaborations.</p>
+              <Link className="patch-action" to="/hire/">Ways to work together <ArrowUpRight size={17} aria-hidden="true" /></Link>
+            </div>
+            <section className="patch-contact-panel" aria-labelledby="direct-email">
+              <h2 id="direct-email"><Mail size={19} aria-hidden="true" /> Direct email</h2>
+              <a className="patch-contact-email" href={`mailto:${services.email}`}>{services.email}<ArrowUpRight size={22} aria-hidden="true" /></a>
+              <button type="button" onClick={copyEmail}>{copyStatus === 'Email address copied.' ? <Check size={17} aria-hidden="true" /> : <Copy size={17} aria-hidden="true" />} Copy email</button>
+              <p className="patch-copy-status" role="status">{copyStatus}</p>
+              <p className="patch-contact-hours"><Globe2 size={17} aria-hidden="true" /><span>Ahmedabad, India · UTC+5:30<br />Typically reply within 24 business hours.</span></p>
+            </section>
+          </div>
+        </header>
+        <div className="patch-wide patch-info-body patch-contact-grid patch-contact-directory">
           <section className="patch-contact-social">
             <h2>Find me elsewhere</h2>
-            <ul>{social.map(([name, url]) => <li key={name}><a href={url} target="_blank" rel="noreferrer">{name}<ArrowUpRight size={18} /></a></li>)}</ul>
+            <ul>{social.map(([name, url]) => <li key={name}><a href={url} target="_blank" rel="noreferrer">{name}<ArrowUpRight size={18} aria-hidden="true" /></a></li>)}</ul>
+          </section>
+          <section className="patch-locations">
+            <h2>Where I work</h2>
+            <ul>{services.locations.map(({ city, note }) => <li key={city}><h3>{city}</h3><p>{note}</p></li>)}</ul>
           </section>
         </div>
-        <section className="patch-locations">
-          <h2>Where I work</h2>
-          <ul>{services.locations.map(({ city, note }) => <li key={city}><h3>{city}</h3><p>{note}</p></li>)}</ul>
-          <Link className="patch-inline" to="/hire/">Engineering services <ArrowUpRight size={17} /></Link>
-        </section>
-      </div>
       </main>
     </>
   );

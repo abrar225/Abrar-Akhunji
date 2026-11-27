@@ -18,11 +18,21 @@ function Engineering({ project }) {
   const reduced=useReducedMotion();
 
   useEffect(()=>{
-    const watch=new IntersectionObserver(([entry])=>{
-      if(entry.isIntersecting){setNear(true);watch.disconnect();}
-    },{rootMargin:'250px'});
-    watch.observe(room.current);
-    return ()=>watch.disconnect();
+    const desktop = matchMedia('(min-width: 751px) and (pointer: fine) and (hover: hover)');
+    const watch = new IntersectionObserver(([entry]) => {
+      setNear(entry.isIntersecting && desktop.matches);
+    }, { rootMargin: '250px' });
+    function update() {
+      watch.disconnect();
+      if (desktop.matches) watch.observe(room.current);
+      else setNear(false);
+    }
+    desktop.addEventListener('change', update);
+    update();
+    return () => {
+      watch.disconnect();
+      desktop.removeEventListener('change', update);
+    };
   },[]);
 
   return <section id="engineering" className="patch-engineering" ref={room} aria-labelledby="engineering-title">

@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 import { PatchFooter, PatchHeader, PatchStatus } from './patchbay/Chrome';
 import { useRouteArrival } from './patchbay/useRouteArrival';
+const PortfolioMotion = lazy(() => import('./patchbay/PortfolioMotion'));
 
 const pages = [
   ['/', Home],
@@ -37,9 +38,9 @@ export default function App() {
         <ErrorBoundary key={page} fallback={(props) => <PatchStatus {...props} />}>
           <Suspense fallback={<PatchStatus />}>
             <motion.div key={page}
-              initial={reduce ? false : { opacity: .72 }}
+              initial={reduce ? false : { opacity: .82 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: reduce ? 0 : .18 }}>
+              transition={{ duration: reduce ? 0 : .24, ease: [.2,.75,.25,1] }}>
               <Routes>
                 {pages.map(([path, Page]) => (
                   <Route key={path} path={path} element={<Page />} />
@@ -50,6 +51,7 @@ export default function App() {
         </ErrorBoundary>
       </div>
       <PatchFooter />
+      <Suspense fallback={null}><PortfolioMotion /></Suspense>
     </div>
   );
 }

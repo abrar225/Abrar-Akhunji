@@ -110,7 +110,12 @@ try {
   await check('Engineering assembly and bento at desktop and touch',async()=>{
     for(const view of [desktop,mobile]) await run(view,async page=>{
       await goto(page,'/#engineering');
-      await page.locator('.patch-assembly[data-ready=true]').waitFor({state:'attached',timeout:7000});
+      if(view.hasTouch) {
+        await page.locator('.patch-assembly-fallback').waitFor();
+        assert.equal(await page.locator('.patch-assembly canvas').count(),0);
+      } else {
+        await page.locator('.patch-assembly[data-ready=true]').waitFor({state:'attached',timeout:7000});
+      }
       const layer=page.locator('.patch-layer button').nth(1);
       if(view.hasTouch) await layer.tap(); else {await layer.focus();await page.keyboard.press('Enter');}
       assert.equal(await layer.getAttribute('aria-expanded'),'true');
@@ -146,7 +151,8 @@ try {
         HTMLCanvasElement.prototype.getContext=function(type,...params){return type.startsWith('webgl')?null:get.call(this,type,...params);};
       });
       await goto(page,'/#engineering');
-      await page.locator('.patch-assembly canvas').waitFor({state:'attached'});
+      await page.locator('.patch-assembly').waitFor({state:'attached'});
+      await page.locator('.patch-assembly-fallback').waitFor();
       assert.equal(await page.locator('.patch-assembly[data-ready=true]').count(),0);
       await button(page,'HTTP engine').click();
       assert.match(await page.locator('.patch-assembly-plate figcaption').textContent(),/HTTP engine/);

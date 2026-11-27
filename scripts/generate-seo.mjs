@@ -568,33 +568,38 @@ function buildAboutSchemas() {
 }
 
 function renderContact() {
+  const email = escapeHtml(services.email);
   return `
-    <main class="pre-rendered-blog" style="max-width:900px;margin:0 auto;padding:3rem 1.5rem;font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#E8EEF6;line-height:1.7;">
-      <nav aria-label="Breadcrumb" style="font-size:0.875rem;margin-bottom:1.5rem;">
-        <a href="/" style="color:#79D0E0;">Home</a> &gt; <span>Contact</span>
-      </nav>
-      <header style="margin-bottom:2.5rem;">
-        <p style="font-size:0.75rem;color:#79D0E0;text-transform:uppercase;letter-spacing:0.1em;font-family:monospace;margin-bottom:0.5rem;">Get in touch</p>
-        <h1 style="font-size:2.5rem;margin:0 0 1rem;line-height:1.2;">Contact &amp; Collaboration</h1>
-        <p style="font-size:1.125rem;color:#B8C4D4;">Direct channels for project proposals, AI systems consulting, contract engineering, and technical advisory.</p>
+    <main class="patch-contact">
+      <header class="patch-contact-lead">
+        <div class="patch-wide patch-contact-grid">
+          <div class="patch-contact-intro">
+            <h1>Let’s talk.</h1>
+            <p>Tell me what you’re building or the kind of teammate you’re looking for. I’m open to engineering roles, projects, and collaborations.</p>
+            <a class="patch-action" href="/hire/">Ways to work together</a>
+          </div>
+          <section class="patch-contact-panel">
+            <h2>Direct email</h2>
+            <a class="patch-contact-email" href="mailto:${email}">${email}</a>
+            <p class="patch-contact-hours">Ahmedabad, India · UTC+5:30<br>Typically reply within 24 business hours.</p>
+          </section>
+        </div>
       </header>
-      <section style="margin-bottom:2.5rem;">
-        <h2 style="font-size:1.5rem;margin-bottom:1rem;">Primary Channel</h2>
-        <p>Email: <a href="mailto:${escapeHtml(services.email)}" style="color:#79D0E0;font-family:monospace;font-size:1.125rem;">${escapeHtml(services.email)}</a></p>
-        <p style="color:#9AA7B8;">Response turnaround: typically within 24 business hours. Timezone: IST (UTC+5:30) with active EU / US-East overlap.</p>
-      </section>
-      <section style="margin-bottom:2.5rem;">
-        <h2 style="font-size:1.5rem;margin-bottom:1rem;">Public Channels &amp; Code</h2>
-        <ul>
-          <li>GitHub: <a href="https://github.com/abrar225" style="color:#79D0E0;">github.com/abrar225</a></li>
-          <li>LinkedIn: <a href="https://www.linkedin.com/in/abrar-akhunji/" style="color:#79D0E0;">linkedin.com/in/abrar-akhunji</a></li>
-          <li>X: <a href="https://x.com/Abrarakhunji" style="color:#79D0E0;">x.com/Abrarakhunji</a></li>
-          <li>Hugging Face: <a href="https://huggingface.co/abrar225" style="color:#79D0E0;">huggingface.co/abrar225</a></li>
-        </ul>
-      </section>
-      <footer style="margin-top:3rem;padding-top:2rem;border-top:1px solid #283446;">
-        <p><a href="/about/" style="color:#79D0E0;">About</a> &bull; <a href="/hire/" style="color:#79D0E0;">Services &amp; Pricing</a> &bull; <a href="/terms/" style="color:#79D0E0;">Terms of Service</a> &bull; <a href="/privacy/" style="color:#79D0E0;">Privacy Policy</a></p>
-      </footer>
+      <div class="patch-wide patch-info-body patch-contact-grid patch-contact-directory">
+        <section class="patch-contact-social">
+          <h2>Find me elsewhere</h2>
+          <ul>
+            <li><a href="https://github.com/abrar225">GitHub</a></li>
+            <li><a href="https://www.linkedin.com/in/abrar-akhunji/">LinkedIn</a></li>
+            <li><a href="https://x.com/Abrarakhunji">X</a></li>
+            <li><a href="https://huggingface.co/abrar225">Hugging Face</a></li>
+          </ul>
+        </section>
+        <section>
+          <h2>Where I work</h2>
+          <ul>${services.locations.map(({ city, note }) => `<li><h3>${escapeHtml(city)}</h3><p>${escapeHtml(note)}</p></li>`).join('')}</ul>
+        </section>
+      </div>
     </main>`;
 }
 

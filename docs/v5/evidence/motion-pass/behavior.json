@@ -1,0 +1,52 @@
+{
+  "checks": [
+    {
+      "name": "Home project and scroll survive Back and Forward",
+      "status": "PASS"
+    },
+    {
+      "name": "Work filters before/after scroll, rapid change, direct load and reduced touch",
+      "status": "PASS"
+    },
+    {
+      "name": "Printed quote passes contrast in both themes on desktop and touch",
+      "status": "PASS",
+      "detail": [
+        10.278403393501865,
+        10.278403393501865,
+        10.278403393501865,
+        10.278403393501865
+      ]
+    },
+    {
+      "name": "Mouse-only cursor changes the field and ribbon",
+      "status": "PASS"
+    },
+    {
+      "name": "Engineering assembly and bento at desktop and touch",
+      "status": "PASS"
+    },
+    {
+      "name": "Reduced and denied WebGL keep static proof and usable keyboard anchors",
+      "status": "PASS"
+    },
+    {
+      "name": "All required responsive widths and dark page types",
+      "status": "PASS",
+      "detail": [
+        "360x800",
+        "390x844",
+        "768x1024",
+        "1024x768",
+        "1440x900",
+        "1920x1080",
+        "844x390"
+      ]
+    },
+    {
+      "name": "Menu, image viewer, search and article modes",
+      "status": "PASS"
+    }
+  ],
+  "issue": []
+}

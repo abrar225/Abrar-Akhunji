@@ -15,7 +15,7 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
-            if (id.includes('/node_modules/three/')) return 'vendor-three';
+            if (/\/node_modules\/(three|@react-three\/fiber|react-reconciler|react-use-measure|suspend-react|its-fine|zustand)\//.test(id)) return 'vendor-three';
             if (id.includes('/node_modules/katex/')) return 'vendor-katex';
             if (id.includes('/node_modules/marked/')) return 'vendor-markdown';
             if (id.includes('/node_modules/gsap/')) return 'vendor-scroll';

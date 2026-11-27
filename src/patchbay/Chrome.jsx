@@ -1,4 +1,6 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
+import { motion, useScroll } from 'framer-motion';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { ArrowUpRight, Menu, Moon, Sun, X } from 'lucide-react';
 import { EMAIL, RESUME } from '../lib/projects';
@@ -17,14 +19,33 @@ function Mark() {
 export function PatchHeader() {
   const menu = useRef(null);
   const trigger = useRef(null);
+  const themeTransition = useRef(null);
+  const [expanded, setExpanded] = useState(false);
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
+  const { scrollYProgress } = useScroll();
 
   useEffect(() => {
     if (menu.current?.open) menu.current.close();
-  }, [location.key]);
+  }, [location.pathname]);
 
-  function closeMenu() { menu.current.close(); }
+  function changeTheme() {
+    if (!document.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      toggleTheme();
+      return;
+    }
+    if (themeTransition.current) {
+      const pending = themeTransition.current;
+      pending.skipTransition();
+      void pending.updateCallbackDone.then(toggleTheme, toggleTheme);
+      return;
+    }
+    const transition = document.startViewTransition(() => flushSync(toggleTheme));
+    themeTransition.current = transition;
+    function finish() { if (themeTransition.current === transition) themeTransition.current = null; }
+    void transition.ready.catch(() => {});
+    void transition.finished.then(finish, finish);
+  }
 
   return (
     <header className="patch-header">
@@ -38,10 +59,14 @@ export function PatchHeader() {
           <NavLink to="/contact/">Contact</NavLink>
         </nav>
         <div className="patch-header-actions">
-          <button type="button" aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'} onClick={toggleTheme}>
+          <button type="button" aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'} onClick={changeTheme}>
             {theme === 'dark' ? <Sun size={17} aria-hidden="true" /> : <Moon size={17} aria-hidden="true" />}
           </button>
-          <button type="button" ref={trigger} aria-label="Open menu" aria-haspopup="dialog" aria-controls="patch-menu" onClick={() => menu.current.showModal()}>
+          <button type="button" ref={trigger} aria-label="Open menu" aria-haspopup="dialog" aria-controls="patch-menu" aria-expanded={expanded} onClick={() => {
+            trigger.current.focus({ preventScroll: true });
+            menu.current.showModal();
+            setExpanded(true);
+          }}>
             <Menu size={19} aria-hidden="true" />
           </button>
         </div>
@@ -49,20 +74,72 @@ export function PatchHeader() {
           <summary>Versions</summary><ul aria-label="Portfolio versions">{versions.toReversed().map(version => <li key={version.slug}><a href={version.current ? '/' : `/versions/${version.slug}/`} aria-current={version.current?'true':undefined}>v{version.version} · {version.current?'The Patchbay':version.name}</a></li>)}</ul>
         </details>}
       </div>
-      <dialog className="patch-menu" id="patch-menu" ref={menu} aria-label="Portfolio menu" onClose={() => trigger.current?.focus({ preventScroll: true })}>
+      <motion.span aria-hidden="true" className="patch-scroll-progress" style={{ scaleX: scrollYProgress }} />
+      <dialog className="patch-menu" id="patch-menu" ref={menu} aria-label="Portfolio menu" onClose={() => {
+        setExpanded(false);
+        if (document.activeElement === document.body) trigger.current?.focus({ preventScroll: true });
+      }}>
         <div className="patch-wide">
-          <button className="patch-close" onClick={closeMenu} aria-label="Close menu"><X aria-hidden="true" /></button>
+          <div className="patch-menu-head"><Mark /><button className="patch-close" onClick={() => menu.current.close()} aria-label="Close menu" autoFocus><X aria-hidden="true" /></button></div>
           <nav aria-label="Site directory">
-            <Link to="/">Home</Link>
+            <NavLink to="/" end>Home</NavLink>
             {directory.map(([name, url]) => url.startsWith('/agents')
               ? <a href={url} key={url}>{name}</a>
-              : <Link to={url} key={url}>{name}</Link>)}
+              : <NavLink to={url} key={url}>{name}</NavLink>)}
             <a href={RESUME}>Résumé <ArrowUpRight aria-hidden="true" /></a>
           </nav>
         </div>
       </dialog>
     </header>
   );
+}
+
+const rippleColumns = 12;
+const rippleRows = 4;
+
+function FooterSignature() {
+  const grid = useRef(null);
+  const name = useRef(null);
+  const animation = useRef(null);
+
+  useEffect(() => {
+    const preference = matchMedia('(prefers-reduced-motion: reduce)');
+    function clear() {
+      animation.current?.revert();
+      animation.current = null;
+    }
+    preference.addEventListener('change', clear);
+    return () => { preference.removeEventListener('change', clear); clear(); };
+  }, []);
+
+  async function ripple(event) {
+    const preference = matchMedia('(prefers-reduced-motion: reduce)');
+    if (preference.matches) return;
+    const button = event.currentTarget;
+    const cells = [...button.children];
+    const hit = cells.indexOf(event.target);
+    const origin = hit === -1 ? 'center' : hit;
+    const [{ gsap }, { SplitText }] = await Promise.all([import('./scroll'), import('gsap/SplitText')]);
+    if (preference.matches || grid.current !== button) return;
+    animation.current?.revert();
+    gsap.registerPlugin(SplitText);
+    const stagger = { grid: [rippleRows, rippleColumns], from: origin, amount: .38 };
+    animation.current = gsap.context(() => {
+      const split = SplitText.create(name.current, { type: 'words', aria: 'none' });
+      gsap.timeline()
+        .fromTo(cells, { scale: .28, opacity: .32 }, { scale: 1.08, opacity: .9, duration: .17, ease: 'power2.out', stagger }, 0)
+        .to(cells, { scale: 1, opacity: .32, duration: .43, ease: 'power3.out', stagger }, .17)
+        .fromTo(split.words, { yPercent: 8 }, { yPercent: 0, duration: .54, stagger: .07, ease: 'power3.out' }, .08);
+      return () => split.revert();
+    }, button);
+  }
+
+  return <div className="patch-wide patch-signature">
+    <button ref={grid} className="patch-ripple" type="button" onClick={ripple} aria-label="Send a ripple through the footer">
+      {Array.from({ length: rippleColumns * rippleRows }, (_, index) => <span key={index} aria-hidden="true" />)}
+    </button>
+    <p ref={name}>Abrar Akhunji</p>
+  </div>;
 }
 
 export function PatchFooter() {
@@ -82,6 +159,7 @@ export function PatchFooter() {
           <Link to="/privacy/">Privacy</Link><Link to="/terms/">Terms</Link>
         </nav>
       </div>
+      <FooterSignature />
     </footer>
   );
 }

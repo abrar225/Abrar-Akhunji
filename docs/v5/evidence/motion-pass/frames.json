@@ -1,0 +1,26 @@
+{
+  "environment": "Headless desktop Chromium, 1440×900, no CPU throttle",
+  "checks": [
+    {
+      "label": "Home ribbon",
+      "fps": 60,
+      "p95FrameMs": 16.7,
+      "framesOver25Ms": 0,
+      "sampleFrames": 103
+    },
+    {
+      "label": "Work preview",
+      "fps": 60,
+      "p95FrameMs": 16.7,
+      "framesOver25Ms": 0,
+      "sampleFrames": 102
+    },
+    {
+      "label": "About trace",
+      "fps": 60,
+      "p95FrameMs": 16.7,
+      "framesOver25Ms": 0,
+      "sampleFrames": 103
+    }
+  ]
+}

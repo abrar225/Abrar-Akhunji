@@ -1,8 +1,5 @@
 import { useEffect, useLayoutEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import { gsap } from './scroll';
 
 const knot = [
   [-1,.46],[-.73,1],[-.32,.9],[-.07,.05],

@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './patchbay/base.css'
 import './patchbay/system.css'
 import './patchbay/interior.css'
+import './patchbay/motion.css'
 import App from './App.jsx'
 
 import { BrowserRouter } from 'react-router-dom';

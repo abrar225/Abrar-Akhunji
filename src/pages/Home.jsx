@@ -1,6 +1,8 @@
-import { lazy, Suspense, useRef } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ArrowDown, ArrowUpRight } from 'lucide-react';
+import { ArrowDown, ArrowUpRight, Pause, Play } from 'lucide-react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import SEO from '../components/SEO';
 import { featuredProjects, projectPath } from '../lib/projects';
 import HomeSections from '../patchbay/HomeSections';
@@ -18,7 +20,13 @@ export default function Home() {
   const location = useLocation();
   const navigate = useNavigate();
   const params = new URLSearchParams(location.search);
-  const selected = inputs.find(input => input.slug === params.get('project')) || inputs[0];
+  const linked = inputs.find(input => input.slug === params.get('project'));
+  const [cycle, setCycle] = useState(0);
+  const [playing, setPlaying] = useState(() => !linked && !location.hash);
+  const [heroVisible, setHeroVisible] = useState(false);
+  const [pageVisible, setPageVisible] = useState(() => !document.hidden);
+  const reduce = useReducedMotion();
+  const selected = playing && !reduce ? inputs[cycle] : linked || inputs[cycle];
   const project = featuredProjects.find(entry => entry.slug === selected.slug);
   const story = useRef(null);
   const hero = useRef(null);
@@ -27,7 +35,26 @@ export default function Home() {
   const dialog = useRef(null);
   const [pending, skip] = useInitialProof(project.image);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => setHeroVisible(entry.intersectionRatio >= .35), { threshold: .35 });
+    observer.observe(hero.current);
+    const visibility = () => setPageVisible(!document.hidden);
+    document.addEventListener('visibilitychange', visibility);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', visibility);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (reduce || !playing || !heroVisible || !pageVisible || pending) return;
+    const timer = setTimeout(() => setCycle(current => (current + 1) % inputs.length), 6500);
+    return () => clearTimeout(timer);
+  }, [cycle, heroVisible, pageVisible, pending, playing, reduce]);
+
   function change(input) {
+    setPlaying(false);
+    setCycle(inputs.indexOf(input));
     const next = new URLSearchParams(params);
     next.set('project', input.slug);
     navigate({ search: next.toString(), hash: location.hash }, { replace: true, preventScrollReset: true });
@@ -35,10 +62,18 @@ export default function Home() {
 
   return <main id="main-content" className="patch-home">
     <SEO title="Abrar Akhunji — AI & Full-Stack Engineer in Ahmedabad" description="AI and full-stack engineer in Ahmedabad. Explore local AI tools, developer software, and native products by Abrar Akhunji." path="/" image="/assets/v5/og-home.jpg" />
-    {pending && <div className="patch-loading" aria-label="Preparing project evidence">
-      <svg viewBox="0 0 120 48" aria-hidden="true"><path d="M4 43C49 43 36 5 60 5s12 38 56 38" /></svg>
-      <span role="status">Opening Patchbay</span><button onClick={skip}>Skip intro</button>
-    </div>}
+    {createPortal(<AnimatePresence>
+      {pending && !reduce && <motion.div className="patch-loading" aria-label="Preparing project evidence"
+        exit={{ opacity: 0, y: '4%' }} transition={{ duration: .3, ease: [.2,.75,.25,1] }}>
+        <div className="patch-loading-card">
+          <svg viewBox="0 0 120 48" aria-hidden="true"><path d="M4 41C41 41 34 7 60 7S79 41 116 41" /></svg>
+          <span role="status">Opening Patchbay</span><button type="button" onClick={() => {
+            skip();
+            hero.current.querySelector('h1').focus({ preventScroll: true });
+          }}>Skip intro</button>
+        </div>
+      </motion.div>}
+    </AnimatePresence>, document.body)}
     <div className="patch-story" ref={story} data-input={selected.slug}>
       <div className="patch-projection"><Suspense fallback={null}><Ribbon story={story} hero={hero} work={work} proof={proof} route={selected.shape} image={project.image} /></Suspense></div>
       <section id="home" className="patch-hero" ref={hero} aria-labelledby="patch-name">
@@ -46,12 +81,20 @@ export default function Home() {
         <div className="patch-wide patch-hero-grid">
           <div className="patch-identity">
             <p className="patch-label">AI &amp; full-stack engineer <span>Ahmedabad, India</span></p>
-            <h1 id="patch-name">Abrar<br />Akhunji<span>.</span></h1>
+            <h1 id="patch-name" tabIndex={-1}>Abrar<br />Akhunji<span>.</span></h1>
             <p className="patch-bio">I build local AI tools, developer software, and native apps.</p>
             <p className="patch-availability">Open to engineering roles &amp; collaborations</p>
             <div className="patch-selectors" role="group" aria-label="Choose which project to follow">
               {inputs.map(input => <button type="button" key={input.slug} aria-pressed={input === selected} onClick={() => change(input)}><span>{input.label}</span><small>{input.name}</small></button>)}
             </div>
+            {!reduce && <button className="patch-autoplay" type="button"
+              onClick={() => {
+                if (playing) change(selected);
+                else { setCycle(inputs.indexOf(selected)); setPlaying(true); }
+              }}>
+              {playing ? <Pause size={15} aria-hidden="true" /> : <Play size={15} aria-hidden="true" />}
+              {playing ? 'Pause autoplay' : 'Play project rotation'}
+            </button>}
             <a href="#work" className="patch-follow"><span>Follow the signal to {project.title}</span><ArrowDown size={18} aria-hidden="true" /></a>
           </div>
           <figure className="patch-author">

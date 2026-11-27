@@ -2,6 +2,7 @@
 
 ## HANDOFF
 
+- Follow-up motion and contrast pass: the shared chrome, Home, Work, About, and Contact were updated. Local production preview runs at [localhost:4173](http://localhost:4173/). [Motion pass, desktop and phone evidence](evidence/motion-pass/README.md)
 - Last good checkpoint: `git log -1 --format=%h -- docs/v5/STATE.md` (final production audit).
 - Done: foundation, production slice, native route breadth, route depth, hardening and both final reviews. Current build has 218 passing Chromium loads, 30 passing WebKit archetype loads, 69 passing E2E checks and 58 passing unit tests. [Final checklist and verdict](FINAL_REVIEW.md)
 - In progress: none. Gate 1 approved normal scroll. Gate 2 finished and work continued under FINAL_BUILD.md. The local build is **NOT READY** for release review under that file's checklist.
