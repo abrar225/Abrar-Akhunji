@@ -1,0 +1,59 @@
+{
+  "path": "/versions/zero-to-built/work/",
+  "status": 200,
+  "title": "Engineering projects | Abrar Akhunji",
+  "h1": [
+    "Useful things. Different kinds of hard."
+  ],
+  "headings": [
+    "Fixo Flow",
+    "PacketLark",
+    "Framecast Studio",
+    "FixO CLI",
+    "GourmetGo",
+    "Library Management System",
+    "Real vs AI Image Detector",
+    "Cattle Breed Identification System",
+    "Brain Tumor Detection (MRI)",
+    "Kid's Space (Android App)",
+    "Abrar Akhunji"
+  ],
+  "width": 1440,
+  "scrollWidth": 1440,
+  "height": 900,
+  "scrollHeight": 4478,
+  "canvases": [
+    "workshop-creatures",
+    ""
+  ],
+  "markers": [
+    "workshop-creatures",
+    "portfolio-archive"
+  ],
+  "aboveFold": [
+    "abrar . The build room",
+    "Work",
+    "About",
+    "Writing",
+    "Hire",
+    "Contact",
+    "Resume",
+    "Useful things. Different kinds of hard.",
+    "Preview LOCAL AI Fixo Flow Your voice, in the apps you already use. Python / Whisper / MLX / SQLite",
+    "Released DEVELOPER TOOLS PacketLark A local workbench for requests, tests and API discovery. TypeScript / Node.js / QuickJS / MCP"
+  ],
+  "vitals": {
+    "lcpMs": 404,
+    "cls": 0.000004818512088477365,
+    "longTaskBlockingMs": 0
+  },
+  "domContentLoadedMs": 51,
+  "bytesByType": {
+    "css": 156116,
+    "woff2": 95900,
+    "js": 781778,
+    "svg": 2464,
+    "webp": 335618
+  },
+  "notes": []
+}

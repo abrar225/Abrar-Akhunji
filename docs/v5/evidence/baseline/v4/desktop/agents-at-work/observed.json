@@ -1,0 +1,42 @@
+{
+  "path": "/versions/zero-to-built/agents-at-work/",
+  "status": 200,
+  "title": "Agents at work — Abrar Akhunji",
+  "h1": [
+    "Good ideas deserve to be built."
+  ],
+  "headings": [
+    "From friction to something useful.",
+    "The screen is only the start.",
+    "What should we build next?"
+  ],
+  "width": 1440,
+  "scrollWidth": 1440,
+  "height": 900,
+  "scrollHeight": 2487,
+  "canvases": [],
+  "markers": [],
+  "aboveFold": [
+    "ABRAR.",
+    "Change theme",
+    "Good ideas deserve to be built.",
+    "Meet the builds ↓",
+    "Explore my full portfolio ↗",
+    "Skip",
+    "Rebuild"
+  ],
+  "vitals": {
+    "lcpMs": 148,
+    "cls": 0.008395602379316164,
+    "longTaskBlockingMs": 4
+  },
+  "domContentLoadedMs": 53,
+  "bytesByType": {
+    "js": 341452,
+    "css": 6749,
+    "webp": 97510,
+    "woff2": 39824,
+    "svg": 310
+  },
+  "notes": []
+}

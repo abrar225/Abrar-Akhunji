@@ -1,0 +1,58 @@
+[
+  {
+    "title": "desktop-direct",
+    "path": "/work/?category=COMPUTER+VISION",
+    "pressed": "COMPUTER VISION",
+    "count": "1 project",
+    "heading": "A body of work.",
+    "alert": null,
+    "pageText": "Skip to content\nAA / PORTFOLIO\nHome\nWork\nWriting\nAbout\nRésumé\nContact\n\nPROJECT INDEX\n\nA body of work.\n\nLocal AI, developer tools, native software, and the web. Explore the projects, then get into the decisions behind each build.\n\nAll\nFeatured\nLOCAL AI\nDEVELOPER TOOLS\nNATIVE SOFTWARE\nAI DEVTOOL\nFULL STACK\nCOMPUTER VISION\nAI/ML\nHEALTHCARE AI\nANDROID\n\n1 PROJECT\n\nCOMPUTER VISION / ARCHIVED\n\nReal vs AI Image Detector\n\nA deep-learning powered system that identifies whether an image is AI-generated or real using advanced image forensics and transformer-based feature extraction..\n\nABRAR AKHUNJI / EXPLORE\n\nProjects\nThe Neural Log\nBackground\n\nRECRUITIN",
+    "messages": []
+  },
+  {
+    "title": "desktop-filter-first",
+    "path": "/work/?category=COMPUTER+VISION",
+    "pressed": null,
+    "count": null,
+    "heading": "Something broke on this page.",
+    "alert": null,
+    "pageText": "Skip to content\nAA / PORTFOLIO\nHome\nWork\nWriting\nAbout\nRésumé\nContact\n\nUNEXPECTED ERROR\n\nSomething broke on this page.\n\nThe interface hit an error it could not recover from. Reloading usually fixes it. If it keeps happening, email abrar@abrarakhunji.com.\n\nReload\nBack home\n\nABRAR AKHUNJI / EXPLORE\n\nProjects\nThe Neural Log\nBackground\n\nRECRUITING & COLLABORATIONS\n\nGet in touch\nabrar@abrarakhunji.com\nAbrar Akhunji\nHire\nAgents at Work\nGitHub\nLinkedIn\nPrivacy\nTerms\n© 2026",
+    "messages": [
+      "NotFoundError: Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.\n    at Kh (http://127.0.0.1:55102/assets/vendor-core-BlHVXupw.js:48:99244)\n    at Jl (http://127.0.0.1:55102/assets/vendor-core-BlHVXupw.js:48:98639)\n    at Kh (http://127.0.0.1:55102/assets",
+      "[ui] render error NotFoundError: Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.\n    at Kh (http://127.0.0.1:55102/assets/vendor-core-BlHVXupw.js:48:99244)\n    at Jl (http://127.0.0.1:55102/assets/vendor-core-BlHVXupw.js:48:98639)\n    at Kh (http://127."
+    ]
+  },
+  {
+    "title": "desktop-after-gallery",
+    "path": "/work/?category=COMPUTER+VISION",
+    "pressed": null,
+    "count": null,
+    "heading": "Something broke on this page.",
+    "alert": null,
+    "pageText": "Skip to content\nAA / PORTFOLIO\nHome\nWork\nWriting\nAbout\nRésumé\nContact\n\nUNEXPECTED ERROR\n\nSomething broke on this page.\n\nThe interface hit an error it could not recover from. Reloading usually fixes it. If it keeps happening, email abrar@abrarakhunji.com.\n\nReload\nBack home\n\nABRAR AKHUNJI / EXPLORE\n\nProjects\nThe Neural Log\nBackground\n\nRECRUITING & COLLABORATIONS\n\nGet in touch\nabrar@abrarakhunji.com\nAbrar Akhunji\nHire\nAgents at Work\nGitHub\nLinkedIn\nPrivacy\nTerms\n© 2026",
+    "messages": [
+      "NotFoundError: Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.\n    at Kh (http://127.0.0.1:55102/assets/vendor-core-BlHVXupw.js:48:99244)\n    at Jl (http://127.0.0.1:55102/assets/vendor-core-BlHVXupw.js:48:98639)\n    at Kh (http://127.0.0.1:55102/assets",
+      "[ui] render error NotFoundError: Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.\n    at Kh (http://127.0.0.1:55102/assets/vendor-core-BlHVXupw.js:48:99244)\n    at Jl (http://127.0.0.1:55102/assets/vendor-core-BlHVXupw.js:48:98639)\n    at Kh (http://127."
+    ]
+  },
+  {
+    "title": "desktop-reduced-motion",
+    "path": "/work/?category=COMPUTER+VISION",
+    "pressed": "COMPUTER VISION",
+    "count": "1 project",
+    "heading": "A body of work.",
+    "alert": null,
+    "pageText": "Skip to content\nAA / PORTFOLIO\nHome\nWork\nWriting\nAbout\nRésumé\nContact\n\nPROJECT INDEX\n\nA body of work.\n\nLocal AI, developer tools, native software, and the web. Explore the projects, then get into the decisions behind each build.\n\nAll\nFeatured\nLOCAL AI\nDEVELOPER TOOLS\nNATIVE SOFTWARE\nAI DEVTOOL\nFULL STACK\nCOMPUTER VISION\nAI/ML\nHEALTHCARE AI\nANDROID\n\n1 PROJECT\n\nCOMPUTER VISION / ARCHIVED\n\nReal vs AI Image Detector\n\nA deep-learning powered system that identifies whether an image is AI-generated or real using advanced image forensics and transformer-based feature extraction..\n\nABRAR AKHUNJI / EXPLORE\n\nProjects\nThe Neural Log\nBackground\n\nRECRUITIN",
+    "messages": []
+  },
+  {
+    "title": "mobile-filter-first",
+    "path": "/work/?category=COMPUTER+VISION",
+    "pressed": "COMPUTER VISION",
+    "count": "1 project",
+    "heading": "A body of work.",
+    "alert": null,
+    "pageText": "Skip to content\nAA\nRésumé\n\nPROJECT INDEX\n\nA body of work.\n\nLocal AI, developer tools, native software, and the web. Explore the projects, then get into the decisions behind each build.\n\nAll\nFeatured\nLOCAL AI\nDEVELOPER TOOLS\nNATIVE SOFTWARE\nAI DEVTOOL\nFULL STACK\nCOMPUTER VISION\nAI/ML\nHEALTHCARE AI\nANDROID\n\n1 PROJECT\n\nCOMPUTER VISION / ARCHIVED\n\nReal vs AI Image Detector\n\nA deep-learning powered system that identifies whether an image is AI-generated or real using advanced image forensics and transformer-based feature extraction..\n\nABRAR AKHUNJI / EXPLORE\n\nProjects\nThe Neural Log\nBackground\n\nRECRUITING & COLLABORATIONS\n\nGet in touch\nabrar@abrar",
+    "messages": []
+  }
+]

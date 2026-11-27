@@ -1,0 +1,122 @@
+[
+  {
+    "path": "/versions/zero-to-built/",
+    "device": "desktop",
+    "offsets": [
+      650,
+      1300,
+      1950,
+      2600,
+      3250,
+      3900
+    ]
+  },
+  {
+    "path": "/versions/zero-to-built/",
+    "device": "mobile",
+    "offsets": [
+      578,
+      1158,
+      1736,
+      2310,
+      2888,
+      3465
+    ]
+  },
+  {
+    "path": "/",
+    "device": "desktop",
+    "offsets": [
+      650,
+      1300,
+      1950,
+      2600,
+      3250,
+      3900
+    ]
+  },
+  {
+    "path": "/",
+    "device": "mobile",
+    "offsets": [
+      578,
+      1154,
+      1731,
+      2310,
+      2886,
+      3464
+    ]
+  },
+  {
+    "path": "/versions/serif/",
+    "device": "desktop",
+    "offsets": [
+      586,
+      1189,
+      1885,
+      2541,
+      3087,
+      3832
+    ]
+  },
+  {
+    "path": "/versions/serif/",
+    "device": "mobile",
+    "offsets": [
+      578,
+      1158,
+      1735,
+      2312,
+      2890,
+      3466
+    ]
+  },
+  {
+    "path": "/versions/cyberterminal/",
+    "device": "desktop",
+    "offsets": [
+      587,
+      1231,
+      1892,
+      2532,
+      3181,
+      3830
+    ]
+  },
+  {
+    "path": "/versions/cyberterminal/",
+    "device": "mobile",
+    "offsets": [
+      577,
+      1154,
+      1732,
+      2308,
+      2886,
+      3463
+    ]
+  },
+  {
+    "path": "/versions/halide/",
+    "device": "desktop",
+    "offsets": [
+      593,
+      1239,
+      1857,
+      2538,
+      3188,
+      3839
+    ]
+  },
+  {
+    "path": "/versions/halide/",
+    "device": "mobile",
+    "offsets": [
+      580,
+      1154,
+      1730,
+      2307,
+      2885,
+      3454
+    ]
+  }
+]

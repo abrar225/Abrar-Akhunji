@@ -1,0 +1,46 @@
+{
+  "path": "/versions/zero-to-built/contact/",
+  "status": 200,
+  "title": "Contact Abrar Akhunji | AI & Full-Stack Engineer",
+  "h1": [
+    "Contact & Collaboration"
+  ],
+  "headings": [
+    "Direct Email",
+    "Response SLA & Hours",
+    "Locations Served",
+    "Verified Public Channels",
+    "Abrar Akhunji"
+  ],
+  "width": 390,
+  "scrollWidth": 390,
+  "height": 844,
+  "scrollHeight": 2982,
+  "canvases": [
+    "workshop-creatures",
+    ""
+  ],
+  "markers": [
+    "workshop-creatures",
+    "portfolio-archive"
+  ],
+  "aboveFold": [
+    "abrar .",
+    "Back to home",
+    "Contact & Collaboration",
+    "abrar@abrarakhunji.com"
+  ],
+  "vitals": {
+    "lcpMs": 400,
+    "cls": 0,
+    "longTaskBlockingMs": 0
+  },
+  "domContentLoadedMs": 57,
+  "bytesByType": {
+    "css": 156116,
+    "woff2": 95900,
+    "js": 786614,
+    "svg": 310
+  },
+  "notes": []
+}

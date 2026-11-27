@@ -1,0 +1,37 @@
+{
+  "path": "/versions/cyberterminal/blog/2026-07-20-ponytail-ai-agent-lazy-senior-dev/",
+  "status": 200,
+  "title": "The Ponytail Effect: How One GitHub Repo Stops Claude Code From Over-Building Everything | Abrar Akhunji",
+  "h1": [
+    "The Ponytail Effect: How One GitHub Repo Stops Claude Code From Over-Building Everything"
+  ],
+  "headings": [],
+  "width": 1440,
+  "scrollWidth": 1440,
+  "height": 900,
+  "scrollHeight": 6346,
+  "canvases": [],
+  "markers": [
+    "portfolio-archive"
+  ],
+  "aboveFold": [
+    "Posts",
+    "The Ponytail Effect: How One GitHub Repo Stops Claude Code From Over-Building Everything",
+    "1x",
+    "👩 👩 👨",
+    "🧒 Simple",
+    "👨‍💻 Developer"
+  ],
+  "vitals": {
+    "lcpMs": 1188,
+    "cls": 0.000007037144204389574,
+    "longTaskBlockingMs": 0
+  },
+  "domContentLoadedMs": 126,
+  "bytesByType": {
+    "css": 65621,
+    "js": 1964840,
+    "svg": 491
+  },
+  "notes": []
+}

@@ -1,0 +1,72 @@
+{
+  "path": "/versions/zero-to-built/blog/",
+  "status": 200,
+  "title": "The Neural Log — AI & Systems Engineering Blog | Abrar Akhunji",
+  "h1": [
+    "The Neural Log."
+  ],
+  "headings": [
+    "H-Spec: Why Block-Parallel Drafters Waste 30% of VRAM on Shadow KV Caches, and How Hybrid Context Injection Eliminates Them",
+    "MiniCache: Why Evicting Tokens Destroys Long Contexts, and How Depth-Dimension Merging Squeezes KV Caches by 5x",
+    "CacheBlend: Why Prefix Caching Collapses in Real-World RAG, and How Cached Knowledge Fusion Reclaims 3.3x TTFT Speedups",
+    "SparseSpec: Why Reasoning Chains Choke on KV Cache Bandwidth, and How PillarAttn Reuses Verification Attention for 2.1x Lossless Speedups",
+    "AgentSpec: Why Speculative Decoding Collapses in Agent Batches, and How Structure-Isolated Drafting Recovers 2.4x Throughput",
+    "Google Willow and the Multiverse Myth: Inside the 10-Septillion-Year Quantum Supremacy Benchmark",
+    "The AI Bubble: Inside the $600B CapEx Chasm, Tech Layoffs, and the Enterprise ROI Crisis",
+    "RTP-LLM: Building an Evolvable and Reliable LLM Inference Engine at Alibaba Scale",
+    "FluidPD: In-Place Elasticity for SLO-Aware Prefill-Decode Disaggregated LLM Serving",
+    "SARIA: Persistence-Aware KV Caching with Coordinated DRAM-SSD Reload for Multi-Turn LLM Agents",
+    "AKV: Cache Engineering for Autonomous Agents and State-Preserving Prefix Invalidation Bypass",
+    "HAWK: Heterogeneity-Aware KV Cache Transfer for GPU-NPU Phase-Disaggregated LLM Inference",
+    "UlaCache: Unified Logical Addressing for Sparse LLM Serving",
+    "Adaptive DHiSparse: Speculative Decoding over a Load-Adaptive KV Hierarchy",
+    "DLite: History-Free Speculative Decoding and the Elimination of Drafter-Side KV Cache Bottlenecks in Agentic AI",
+    "Gemini 4 Carbon: The Frontier Architecture of Defensive Cybersecurity, 0.0% Prompt Injection Vulnerability, and Verified Agentic Reasoning",
+    "FlashMap: Flow Map Speculative Decoding and the Mathematical Elimination of Suffix Decay",
+    "llm-d 1.0: Dissecting the CNCF Distributed Inference Engine for Prefill-Decode Disaggregation and Prefix-Aware Routing"
+  ],
+  "width": 390,
+  "scrollWidth": 390,
+  "height": 844,
+  "scrollHeight": 26001,
+  "canvases": [
+    "workshop-creatures",
+    ""
+  ],
+  "markers": [
+    "workshop-creatures",
+    "portfolio-archive"
+  ],
+  "aboveFold": [
+    "abrar .",
+    "Abrar Akhunji",
+    "The Neural Log.",
+    "List",
+    "Tech Tree",
+    "All posts 75",
+    "Systems Engineering 28",
+    "AI 27",
+    "Agentic AI 23",
+    "vLLM 21",
+    "LLM Inference 18",
+    "KV Cache 16",
+    "CUDA 15",
+    "Mixture of Experts 13",
+    "Systems Architecture 13",
+    "Inference Optimization 11",
+    "H-Spec: Why Block-Parallel Drafters Waste 30% of VRAM on Shadow KV Caches, and How Hybrid Context Injection Eliminates Them A systems engineering deep dive into H-Spec, detailing why block-parallel drafters suffer severe memory fragmentation in high-concurrency serving, and how hybrid Mamba-attention eliminates drafter KV caches entirely. Read the note"
+  ],
+  "vitals": {
+    "lcpMs": 412,
+    "cls": 0,
+    "longTaskBlockingMs": 0
+  },
+  "domContentLoadedMs": 67,
+  "bytesByType": {
+    "css": 156116,
+    "woff2": 121112,
+    "js": 900408,
+    "svg": 310
+  },
+  "notes": []
+}

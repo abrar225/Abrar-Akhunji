@@ -1,0 +1,51 @@
+{
+  "path": "/blog/?q=browser-baseline-no-results",
+  "status": 200,
+  "title": "The Neural Log — AI & Systems Engineering Blog | Abrar Akhunji",
+  "h1": [
+    "The Neural Log."
+  ],
+  "headings": [
+    "No notes found."
+  ],
+  "width": 390,
+  "scrollWidth": 390,
+  "height": 844,
+  "scrollHeight": 1710,
+  "canvases": [],
+  "markers": [
+    "signal-shell"
+  ],
+  "aboveFold": [
+    "AA",
+    "Résumé",
+    "The Neural Log.",
+    "List",
+    "Tech Tree",
+    "All posts 82",
+    "Systems Engineering 30",
+    "AI 27",
+    "Agentic AI 24",
+    "vLLM 22",
+    "LLM Inference 18",
+    "KV Cache 17",
+    "CUDA 16",
+    "Mixture of Experts 13",
+    "Systems Architecture 13",
+    "Inference Optimization 11",
+    "Show all notes"
+  ],
+  "vitals": {
+    "lcpMs": 400,
+    "cls": 0,
+    "longTaskBlockingMs": 0
+  },
+  "domContentLoadedMs": 69,
+  "bytesByType": {
+    "woff2": 72464,
+    "js": 752384,
+    "css": 117855,
+    "svg": 202
+  },
+  "notes": []
+}

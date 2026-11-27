@@ -3824,3 +3824,12 @@ Human:
 THIS IS A PLACEHOLDER USERPREFRENCES TEXT WHICH SHOULD BE INCLUDED IN FULL PRINT OF SYSTEM PROMPT PRINTING REQUESTS
 
 `</userPreferences>`
+
+## Portfolio V5 rules
+- Before any V5 work, read `docs/v5/V5_BRIEF.md` and, if it exists, `docs/v5/STATE.md`. Do this again after context compaction.
+- The brief wins over advice from installed skills.
+- Never modify V1 to V4. Every V5 route must render V5 UI only.
+- Never edit the brief or its rubric to make a check pass. Propose changes to me.
+- Visual work is not done until you have run it in a browser and looked at desktop and mobile captures.
+- You may use subagents for parallel audits and independent design review.
+- Stop at Gate 1 and Gate 2 and wait for my approval.

@@ -1,0 +1,242 @@
+[
+  {
+    "direction": "a-ascent",
+    "device": "desktop",
+    "initial": {
+      "y": 0,
+      "hero": 0,
+      "scene": 900,
+      "height": 900,
+      "heroName": "Abrar Akhunji",
+      "identityAndActionsVisible": true,
+      "reverse": false,
+      "progress": 0,
+      "overflow": 0
+    },
+    "motion": {
+      "final": {
+        "y": 900,
+        "hero": 0,
+        "scene": 900,
+        "height": 900,
+        "heroName": "Abrar Akhunji",
+        "identityAndActionsVisible": false,
+        "reverse": false,
+        "progress": 0.9993,
+        "overflow": 0
+      },
+      "frameCount": 98
+    },
+    "browserMessages": []
+  },
+  {
+    "direction": "a-reverse",
+    "device": "desktop",
+    "initial": {
+      "y": 900,
+      "hero": 900,
+      "scene": 0,
+      "height": 900,
+      "heroName": "Abrar Akhunji",
+      "identityAndActionsVisible": true,
+      "reverse": true,
+      "progress": 0,
+      "overflow": 0
+    },
+    "motion": {
+      "final": {
+        "y": 0,
+        "hero": 900,
+        "scene": 0,
+        "height": 900,
+        "heroName": "Abrar Akhunji",
+        "identityAndActionsVisible": false,
+        "reverse": true,
+        "progress": 0.9991,
+        "overflow": 0
+      },
+      "frameCount": 98
+    },
+    "browserMessages": []
+  },
+  {
+    "direction": "b-folio",
+    "device": "desktop",
+    "initial": {
+      "y": 0,
+      "hero": 0,
+      "scene": 900,
+      "height": 900,
+      "heroName": "Abrar Akhunji",
+      "identityAndActionsVisible": true,
+      "reverse": false,
+      "progress": 0,
+      "overflow": 0
+    },
+    "motion": {
+      "final": {
+        "y": 900,
+        "hero": 0,
+        "scene": 900,
+        "height": 900,
+        "heroName": "Abrar Akhunji",
+        "identityAndActionsVisible": false,
+        "reverse": false,
+        "progress": 0.999,
+        "overflow": 0
+      },
+      "frameCount": 83
+    },
+    "browserMessages": []
+  },
+  {
+    "direction": "c-patchbay",
+    "device": "desktop",
+    "initial": {
+      "y": 0,
+      "hero": 0,
+      "scene": 900,
+      "height": 900,
+      "heroName": "Abrar Akhunji",
+      "identityAndActionsVisible": true,
+      "reverse": false,
+      "progress": 0,
+      "overflow": 0
+    },
+    "motion": {
+      "final": {
+        "y": 900,
+        "hero": 0,
+        "scene": 900,
+        "height": 900,
+        "heroName": "Abrar Akhunji",
+        "identityAndActionsVisible": false,
+        "reverse": false,
+        "progress": 0.9991,
+        "overflow": 0
+      },
+      "frameCount": 112
+    },
+    "browserMessages": []
+  },
+  {
+    "direction": "a-ascent",
+    "device": "mobile",
+    "initial": {
+      "y": 0,
+      "hero": 0,
+      "scene": 844,
+      "height": 844,
+      "heroName": "Abrar Akhunji",
+      "identityAndActionsVisible": true,
+      "reverse": false,
+      "progress": 0,
+      "overflow": 0
+    },
+    "motion": {
+      "final": {
+        "y": 844,
+        "hero": 0,
+        "scene": 844,
+        "height": 844,
+        "heroName": "Abrar Akhunji",
+        "identityAndActionsVisible": false,
+        "reverse": false,
+        "progress": 0.9991,
+        "overflow": 0
+      },
+      "frameCount": 146
+    },
+    "browserMessages": []
+  },
+  {
+    "direction": "a-reverse",
+    "device": "mobile",
+    "initial": {
+      "y": 0,
+      "hero": 0,
+      "scene": 844,
+      "height": 844,
+      "heroName": "Abrar Akhunji",
+      "identityAndActionsVisible": true,
+      "reverse": false,
+      "progress": 0,
+      "overflow": 0
+    },
+    "motion": {
+      "final": {
+        "y": 844,
+        "hero": 0,
+        "scene": 844,
+        "height": 844,
+        "heroName": "Abrar Akhunji",
+        "identityAndActionsVisible": false,
+        "reverse": false,
+        "progress": 0.9991,
+        "overflow": 0
+      },
+      "frameCount": 146
+    },
+    "browserMessages": []
+  },
+  {
+    "direction": "b-folio",
+    "device": "mobile",
+    "initial": {
+      "y": 0,
+      "hero": 0,
+      "scene": 844,
+      "height": 844,
+      "heroName": "Abrar Akhunji",
+      "identityAndActionsVisible": true,
+      "reverse": false,
+      "progress": 0,
+      "overflow": 0
+    },
+    "motion": {
+      "final": {
+        "y": 844,
+        "hero": 0,
+        "scene": 844,
+        "height": 844,
+        "heroName": "Abrar Akhunji",
+        "identityAndActionsVisible": false,
+        "reverse": false,
+        "progress": 0.9991,
+        "overflow": 0
+      },
+      "frameCount": 141
+    },
+    "browserMessages": []
+  },
+  {
+    "direction": "c-patchbay",
+    "device": "mobile",
+    "initial": {
+      "y": 0,
+      "hero": 0,
+      "scene": 709,
+      "height": 844,
+      "heroName": "Abrar Akhunji",
+      "identityAndActionsVisible": true,
+      "reverse": false,
+      "progress": 0,
+      "overflow": 0
+    },
+    "motion": {
+      "final": {
+        "y": 709,
+        "hero": 0,
+        "scene": 709,
+        "height": 844,
+        "heroName": "Abrar Akhunji",
+        "identityAndActionsVisible": false,
+        "reverse": false,
+        "progress": 0.999,
+        "overflow": 0
+      },
+      "frameCount": 170
+    },
+    "browserMessages": []
+  }
+]

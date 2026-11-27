@@ -1,0 +1,68 @@
+{
+  "path": "/versions/halide/blog/",
+  "status": 200,
+  "title": "The Neural Log — AI & Systems Engineering Blog | Abrar Akhunji",
+  "h1": [
+    "The Neural Log."
+  ],
+  "headings": [
+    "Hy-Memory 2.0 and Hy-Memory-30B-A3B: Tencent Open-Sources a 3B-Active Cognitive Memory Architecture",
+    "DeepInfer: DeepSeek Open-Sources Its Production Blackwell Inference Stack with FlashMLA, DeepEP, and DSpark Confidence Scheduling",
+    "Headroom and Claude-Mem: Taming Coding Agent Token Burn, KV-Cache Invalidation, and Cross-Session Amnesia",
+    "Spark-X2.6-4B: The Pocket-Sized 4B Frontier Agent Outperforming 9B Models with 1M Hybrid Context and Controllable Thinking Budgets",
+    "NVIDIA Nemotron 3.5 Bolt: Inside the 74B-A9B Hybrid Mamba-2 LatentMoE Architecture, 24GB VRAM Quantization, Star Elastic NAS, and 84 Tok/s Local Inference",
+    "LongCat 2.5 Preview: Inside the 1.6T Sparse MoE Architecture, LongCat Sparse Attention (LSA), Hierarchical Cross-Layer Indexing, and Domestic ASIC Superpod Inference",
+    "Meta Muse-Spark-Open-816B-A42B: Inside Meta's 816B Sparse MoE Titan, NVFP4 Quantization, Dual-Channel Reasoning, and Running Local Clusters on Apple Silicon M5 Ultra",
+    "Second Thought Architecture: Asynchronous Speculative Reasoning in Parallel with Agent Tool Execution and How Hiding Observation Latency Cuts Decoding by 43%",
+    "NVIDIA AVO Deep Dive: Agentic Variation Operators, Blackwell CUDA Kernel Synthesis, and How Agent Harnesses Conquered ARC-AGI-3 with 100% Completion",
+    "Kolibri 1 Deep Dive: Aleph Alpha’s 78.1B Apache 2.0 MoE, 3.46B Active Parameters, 384 Micro-Experts, Hybrid Attention, and Sovereign European Intelligence",
+    "Ling 3.1 Flash Deep Dive: 560B Sparse MoE, 25B Active Parameters, Hybrid Test-Time Reasoning, and Ant Group’s Enterprise Agent Engine",
+    "Claude Haiku 5.5 Deep Dive: 72.4% OSWorld, 39.2% Terminal-Bench, $0.10/MTok, and the Subagent Swarm Economics of Anthropic's Speed King",
+    "Mistral Large 4 ('Le Chonk') Deep Dive: 1.05T Open-Weights Granular MoE, 49B Active Parameters, 1.6B Vision Backbone, and Sovereign Cyber-Agentic Intelligence",
+    "The Rise of Overfit Inference Engines: Why DwarfStar (ds4), Strata & ninfer are Replacing vLLM and llama.cpp for Frontier Local LLMs",
+    "MiMo-V2.6-Pro Deep Dive: 1.02T Open-Weights Omnimodal MoE, Execution-Trace Agentic Graders (GAGAR), and MOPD Policy Distillation",
+    "Reflection AI Beam Deep Dive: 501B Open-Weights MoE, Intelligence-per-Token Scaling, 100M RL Rollouts, and 1M Context",
+    "Gemini 4 Argon Deep Dive: 1-Million Autoregressive Output Tokens, DeepSWE 77.9%, and the Architecture of Unbounded Code Generation",
+    "Percepta Spotlight Deep Dive: Decoupling Intelligence from Memory with 2D Lattice Recurrent States and O(1) Token-Time Compute"
+  ],
+  "width": 1440,
+  "scrollWidth": 1440,
+  "height": 900,
+  "scrollHeight": 14516,
+  "canvases": [],
+  "markers": [
+    "portfolio-archive"
+  ],
+  "aboveFold": [
+    "The Neural Log.",
+    "WORK WITH ME",
+    "Portfolio",
+    "List",
+    "Tech Tree",
+    "All posts",
+    "AI 27",
+    "Agentic AI 18",
+    "Systems Engineering 14",
+    "Mixture of Experts 13",
+    "Systems Architecture 13",
+    "Inference Optimization 11",
+    "LLM 11",
+    "LLM Inference 10",
+    "Cybersecurity 7",
+    "vLLM 7",
+    "01 2026-10-24 14 MIN Hy-Memory 2.0 and Hy-Memory-30B-A3B: Tencent Open-Sources a 3B-Active Cognitive Memory Architecture An architectural teardown of Tencent Hunyuan's Hy-Memory 2.0 and Hy-Memory-30B-A3B: dedicated MoE memory write-path specialization, Attributed Memory Reinforcement Learning (AMRL), and tripartite cognitive persistence across chat, working, and code memory. Abrar Akhunji Tencent Hunyuan Hy-Memory",
+    "02 2026-10-22 13 MIN DeepInfer: DeepSeek Open-Sources Its Production Blackwell Inference Stack with FlashMLA, DeepEP, and DSpark Confidence Scheduling An architectural deep dive into DeepSeek's open-source DeepInfer engine: FlashMLA latent attention kernels, DeepEP communication-computation overlap for MoE expert parallelism, DSpark confidence-scheduled speculative decoding, and Blackwell SM100 optimization. Abrar Akhunji DeepSeek DeepInfer DSpark"
+  ],
+  "vitals": {
+    "lcpMs": 564,
+    "cls": 0,
+    "longTaskBlockingMs": 0
+  },
+  "domContentLoadedMs": 205,
+  "bytesByType": {
+    "css": 84425,
+    "js": 747105,
+    "svg": 310
+  },
+  "notes": []
+}

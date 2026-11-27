@@ -1,0 +1,53 @@
+{
+  "path": "/versions/zero-to-built/about/",
+  "status": 200,
+  "title": "About Abrar Akhunji | AI & Full-Stack Engineer",
+  "h1": [
+    "Abrar Akhunji"
+  ],
+  "headings": [
+    "Location & Hub",
+    "Specialization",
+    "The Journey",
+    "Experience & Milestones",
+    "Education & Credentials",
+    "Get in Touch",
+    "Abrar Akhunji"
+  ],
+  "width": 1440,
+  "scrollWidth": 1440,
+  "height": 900,
+  "scrollHeight": 2916,
+  "canvases": [
+    "workshop-creatures",
+    ""
+  ],
+  "markers": [
+    "workshop-creatures",
+    "portfolio-archive"
+  ],
+  "aboveFold": [
+    "abrar . The build room",
+    "Work",
+    "About",
+    "Writing",
+    "Hire",
+    "Contact",
+    "Resume",
+    "Back to home",
+    "Abrar Akhunji"
+  ],
+  "vitals": {
+    "lcpMs": 388,
+    "cls": 0.000004818512088477365,
+    "longTaskBlockingMs": 0
+  },
+  "domContentLoadedMs": 49,
+  "bytesByType": {
+    "css": 156116,
+    "woff2": 95900,
+    "js": 787368,
+    "svg": 310
+  },
+  "notes": []
+}

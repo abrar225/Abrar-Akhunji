@@ -1,0 +1,47 @@
+[
+  {
+    "case": "v4 3D inspect and Escape",
+    "before": 1,
+    "after": 1,
+    "active": true,
+    "point": {
+      "x": 900,
+      "y": 340
+    },
+    "poseBefore": "7.33,7.04,12.31",
+    "poseAfter": "0.15,12.31,13.06",
+    "restored": true
+  },
+  {
+    "case": "v5 project picker, navigation and historical restoration",
+    "setup": 781,
+    "picked": "packetlark",
+    "offsetBeforeNavigation": 781,
+    "beforePath": "/?project=packetlark",
+    "focus": "route-content",
+    "back": {
+      "y": 0,
+      "pathname": "/",
+      "search": "?project=packetlark",
+      "native": true
+    }
+  },
+  {
+    "case": "v5 desktop featured gallery movement",
+    "track": [
+      0,
+      732
+    ]
+  },
+  {
+    "case": "v5 case-study screenshot dialog",
+    "open": true,
+    "closed": true
+  },
+  {
+    "case": "v5 mobile menu keyboard disclosure",
+    "visible": true,
+    "closed": true,
+    "focus": "Open menu"
+  }
+]

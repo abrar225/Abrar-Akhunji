@@ -1,0 +1,46 @@
+{
+  "path": "/versions/zero-to-built/privacy/",
+  "status": 200,
+  "title": "Privacy Policy | Abrar Akhunji",
+  "h1": [
+    "Privacy Policy"
+  ],
+  "headings": [
+    "1. Overview & Commitment",
+    "2. Information We Collect",
+    "3. Cookies & Tracking",
+    "4. Data Retention & Rights",
+    "Abrar Akhunji"
+  ],
+  "width": 390,
+  "scrollWidth": 390,
+  "height": 844,
+  "scrollHeight": 2300,
+  "canvases": [
+    "workshop-creatures",
+    ""
+  ],
+  "markers": [
+    "workshop-creatures",
+    "portfolio-archive"
+  ],
+  "aboveFold": [
+    "abrar .",
+    "Back to home",
+    "Privacy Policy",
+    "abrar@abrarakhunji.com"
+  ],
+  "vitals": {
+    "lcpMs": 412,
+    "cls": 0,
+    "longTaskBlockingMs": 0
+  },
+  "domContentLoadedMs": 76,
+  "bytesByType": {
+    "css": 156116,
+    "woff2": 95900,
+    "js": 785225,
+    "svg": 310
+  },
+  "notes": []
+}

@@ -1,0 +1,15 @@
+# Full route sweeps remain local. Keep the manually reviewed templates and reports.
+/bulk-route-frames.zip
+/v2/*/blog--*/
+/v3/*/blog--*/
+/v4/*/blog--*/
+/v5/*/blog--*/
+/v4/*/work--*/
+/v5/*/work--*/
+!/v2/*/blog--2026-07-20-ponytail-ai-agent-lazy-senior-dev/
+!/v3/*/blog--2026-07-20-ponytail-ai-agent-lazy-senior-dev/
+!/v4/*/blog--2026-07-20-ponytail-ai-agent-lazy-senior-dev/
+!/v5/*/blog--kv4-hopper-4bit-kv-cache-decoding-cuda-kernels/
+!/v5/*/blog---q-browser-baseline-no-results/
+!/v5/*/work--packetlark/
+!/v4/*/work--packetlark/

@@ -1,0 +1,38 @@
+{
+  "path": "/missing-route-audit/",
+  "status": 404,
+  "title": "Page not found | Abrar Akhunji",
+  "h1": [
+    "Signal lost."
+  ],
+  "headings": [],
+  "width": 1440,
+  "scrollWidth": 1440,
+  "height": 900,
+  "scrollHeight": 900,
+  "canvases": [],
+  "markers": [],
+  "aboveFold": [
+    "Signal lost.",
+    "Portfolio",
+    "The Neural Log",
+    "Work with me",
+    "Email"
+  ],
+  "vitals": {
+    "lcpMs": 44,
+    "cls": 0,
+    "longTaskBlockingMs": 0
+  },
+  "domContentLoadedMs": 15,
+  "bytesByType": {
+    "woff2": 23004,
+    "ico": 0
+  },
+  "notes": [
+    {
+      "kind": "error",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    }
+  ]
+}

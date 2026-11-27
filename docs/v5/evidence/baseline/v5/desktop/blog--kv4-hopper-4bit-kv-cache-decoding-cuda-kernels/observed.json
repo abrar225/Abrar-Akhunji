@@ -1,0 +1,52 @@
+{
+  "path": "/blog/kv4-hopper-4bit-kv-cache-decoding-cuda-kernels/",
+  "status": 200,
+  "title": "kv4-hopper: Why 4-Bit KV Caches Stall on Hopper GPUs, and How Register-Direct WGMMA Fixes Them | Abrar Akhunji",
+  "h1": [
+    "kv4-hopper: Why 4-Bit KV Caches Stall on Hopper GPUs, and How Register-Direct WGMMA Fixes Them"
+  ],
+  "headings": [
+    "Listen to this note",
+    "Related notes"
+  ],
+  "width": 1440,
+  "scrollWidth": 1440,
+  "height": 900,
+  "scrollHeight": 6640,
+  "canvases": [],
+  "markers": [
+    "signal-shell"
+  ],
+  "aboveFold": [
+    "AA / PORTFOLIO",
+    "Home",
+    "Work",
+    "Writing",
+    "About",
+    "Résumé",
+    "Contact",
+    "The Neural Log",
+    "CUDA",
+    "Hopper",
+    "KV Cache",
+    "Quantization",
+    "vLLM",
+    "Inference Systems",
+    "WGMMA",
+    "kv4-hopper: Why 4-Bit KV Caches Stall on Hopper GPUs, and How Register-Direct WGMMA Fixes Them"
+  ],
+  "vitals": {
+    "lcpMs": 408,
+    "cls": 0.5000008129866526,
+    "longTaskBlockingMs": 0
+  },
+  "domContentLoadedMs": 63,
+  "bytesByType": {
+    "woff2": 97676,
+    "js": 1247251,
+    "css": 117855,
+    "jpg": 874665,
+    "svg": 202
+  },
+  "notes": []
+}

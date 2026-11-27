@@ -1,0 +1,38 @@
+{
+  "path": "/versions/halide/missing-route-audit/",
+  "status": 404,
+  "title": "Page unavailable",
+  "h1": [
+    "Page unavailable in this version"
+  ],
+  "headings": [],
+  "width": 390,
+  "scrollWidth": 390,
+  "height": 844,
+  "scrollHeight": 844,
+  "canvases": [],
+  "markers": [
+    "portfolio-archive"
+  ],
+  "aboveFold": [
+    "Page unavailable in this version",
+    "Back to Halide Signal"
+  ],
+  "vitals": {
+    "lcpMs": 32,
+    "cls": 0,
+    "longTaskBlockingMs": 0
+  },
+  "domContentLoadedMs": 22,
+  "bytesByType": {
+    "css": 1116,
+    "js": 388,
+    "ico": 0
+  },
+  "notes": [
+    {
+      "kind": "error",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    }
+  ]
+}

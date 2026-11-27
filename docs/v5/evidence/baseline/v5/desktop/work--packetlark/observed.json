@@ -1,0 +1,52 @@
+{
+  "path": "/work/packetlark/",
+  "status": 200,
+  "title": "PacketLark — The build | Abrar Akhunji",
+  "h1": [
+    "PacketLark."
+  ],
+  "headings": [
+    "The problem",
+    "My contribution",
+    "How the parts connect",
+    "The decisions",
+    "Build evidence",
+    "Current limitations"
+  ],
+  "width": 1440,
+  "scrollWidth": 1440,
+  "height": 900,
+  "scrollHeight": 4266,
+  "canvases": [],
+  "markers": [
+    "signal-shell"
+  ],
+  "aboveFold": [
+    "AA / PORTFOLIO",
+    "Home",
+    "Work",
+    "Writing",
+    "About",
+    "Résumé",
+    "Contact",
+    "PacketLark.",
+    "Product website",
+    "Source on GitHub",
+    "Project index",
+    "Expand image"
+  ],
+  "vitals": {
+    "lcpMs": 416,
+    "cls": 0.5000008129866526,
+    "longTaskBlockingMs": 0
+  },
+  "domContentLoadedMs": 70,
+  "bytesByType": {
+    "woff2": 72464,
+    "js": 745259,
+    "css": 117855,
+    "webp": 25334,
+    "svg": 202
+  },
+  "notes": []
+}

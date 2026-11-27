@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex"><link rel="icon" href="data:,"><title>From model to interface / Abrar Akhunji</title>
+  <script>
+    const useReverse = matchMedia('(min-width: 850px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
+    const wantsReverse = new URLSearchParams(location.search).get('scroll') === 'reverse';
+    if (wantsReverse && useReverse.matches) {
+      document.documentElement.dataset.reverse = '';
+      if (!location.hash && performance.getEntriesByType('navigation')[0]?.type === 'navigate') {
+        document.documentElement.dataset.seek = '';
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="./prototype.css">
+</head>
+<body class="ascent">
+  <a class="skip" href="#capture">Skip to project</a>
+  <main>
+    <section id="arrival" class="a-hero" data-arrival aria-labelledby="a-name" tabindex="-1">
+      <header class="a-header a-wrap">
+        <a class="back" href="./index.html">← Directions</a>
+        <nav aria-label="Portfolio"><a href="#capture">Work</a><a href="https://drive.google.com/file/d/1dV5ukxF-i-9JcWCaxsbQljNwL7Dni8Jc/view?usp=sharing">Résumé</a><a href="mailto:abrar@abrarakhunji.com">Contact</a></nav>
+      </header>
+      <div class="a-wrap a-body">
+        <div class="a-copy">
+          <div class="a-person">
+            <img src="/assets/build-room/portrait.webp" width="56" height="56" alt="">
+            <div><h1 id="a-name">Abrar Akhunji</h1><p>AI &amp; full-stack engineer</p></div>
+          </div>
+          <p class="a-title">From model<br>to interface<span>.</span></p>
+          <p class="a-summary">I build local AI tools, developer software, and native apps.</p>
+          <a class="a-action" href="#capture">Explore my work <span aria-hidden="true">↗</span></a>
+        </div>
+        <figure class="a-figure" aria-label="Fixo Flow from microphone capture to local inference, history, and app insertion">
+          <div class="a-stages" aria-hidden="true"><span>App insertion</span><span>History &amp; clipboard</span><span>Local inference</span><b>Microphone capture</b></div>
+          <svg class="a-object" viewBox="0 0 560 510" fill="none" aria-hidden="true">
+            <defs>
+              <pattern id="grid" width="17" height="17" patternUnits="userSpaceOnUse"><path d="M17 0H0v17" stroke="#ffffff40" fill="none"/></pattern>
+              <linearGradient id="face" x1="0" x2="1" y2="1" gradientUnits="objectBoundingBox"><stop stop-color="#455fff"/><stop offset="1" stop-color="#202eb0"/></linearGradient>
+              <path id="layer" d="M25 185 292 85l243 104-270 104z"/>
+              <path id="edge" d="M25 185v15l240 106 270-104v-13L265 293z"/>
+            </defs>
+            <ellipse cx="276" cy="465" rx="216" ry="24" fill="#121331" opacity=".25"/>
+            <g class="a-plate a-plate-base" transform="translate(0 174)">
+              <use href="#edge" fill="#121331"/><use href="#layer" fill="#2a3195" stroke="#ffffff40"/>
+              <use href="#layer" fill="url(#grid)"/>
+              <path d="m168 207 24-9 12 3 13-18 12 21 20-21 12 3 13-23 11 14 13-6 13 5 23-9" stroke="#e6fa8d" stroke-width="3" stroke-linejoin="round"/>
+            </g>
+            <g class="a-plate a-plate-lilac" transform="translate(0 116)">
+              <use href="#edge" fill="#5767f4"/><use href="#layer" fill="#dcd9f5" fill-opacity=".64" stroke="#ffffff40"/>
+              <path d="m137 190 130-48m-101 64 188-70m-149 85 174-65m-135 81 115-43" stroke="#202eb0" stroke-width="2" opacity=".6"/>
+            </g>
+            <g class="a-plate a-plate-pink" transform="translate(0 58)">
+              <use href="#edge" fill="#2a3195"/><use href="#layer" fill="#f59bb6" fill-opacity=".82" stroke="#ffffff40"/>
+              <path d="m139 180 122 52 154-58-122-52zm37 3 89 38 116-44-88-37z" stroke="#121331" opacity=".55"/>
+            </g>
+            <g class="a-plate a-plate-top">
+              <use href="#edge" fill="#131d75"/><use href="#layer" fill="url(#face)" stroke="#ffffff80"/>
+              <use href="#layer" fill="url(#grid)"/>
+              <path d="M25 185 265 293m27-208 243 104m-270 104 270-104" stroke="#ffffff80"/>
+              <path class="a-wave" d="m98 198 45-17 15 7 13-22 15 25 15-41 15 17 14-11 14 10 12-36 15 22 13-10 14 4 16-24 15 10 15-5 26-10" stroke="#ffd85b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="98" cy="198" r="6" fill="#ffd85b"/><circle cx="370" cy="117" r="5" fill="#ffd85b"/>
+              <path d="m165 226 66 28 174-66-65-28zm72 33 77-29" stroke="#f5f0e3" opacity=".6"/>
+            </g>
+            <path d="M292 85v-34m-267 134v174m510-170v170" stroke="#ffffff55" stroke-dasharray="3 6"/>
+            <path d="m288 56 4-7 4 7" stroke="#ffd85b" stroke-width="1.5"/>
+          </svg>
+          <figcaption><span>Fixo Flow</span> From microphone to app insertion</figcaption>
+        </figure>
+      </div>
+      <div class="a-wrap a-foot">
+        <p><span class="status-dot" aria-hidden="true"></span> Open to engineering roles &amp; collaborations <span class="a-location">/ Ahmedabad, India</span></p>
+        <a class="a-scroll" href="#capture"><span class="a-down">Scroll down to climb ↓</span><span class="a-up">Scroll up to climb ↑</span></a>
+      </div>
+    </section>
+    <section id="capture" class="a-capture" data-next aria-labelledby="a-work" tabindex="-1">
+      <div class="a-seams" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="a-wrap a-sheet">
+        <div class="a-evidence-text">
+          <a class="back" href="#arrival">← Arrival</a>
+          <p class="case-tag">Local AI / Desktop preview</p>
+          <h2 id="a-work">The words<br>stay local.</h2>
+          <p>Fixo Flow turns English speech into text, with local recognition and a recoverable history.</p>
+          <a class="case-link" href="https://github.com/abrar225/FixoFlow">Fixo Flow source ↗</a>
+        </div>
+        <figure class="a-window"><img src="/assets/build-room/products/fixo-flow.webp" alt="Fixo Flow’s macOS writing styles interface" width="1040" height="768"><figcaption>The Fixo Flow writing styles interface</figcaption></figure>
+      </div>
+    </section>
+  </main>
+  <script>
+    if ('seek' in document.documentElement.dataset) {
+      window.scrollTo(0, document.documentElement.scrollHeight);
+      delete document.documentElement.dataset.seek;
+    }
+  </script>
+  <script type="module" src="./motion.js"></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+{
+  "path": "/terms/",
+  "status": 200,
+  "title": "Terms of Service | Abrar Akhunji",
+  "h1": [
+    "Terms of service."
+  ],
+  "headings": [
+    "1. Agreement to Terms",
+    "2. Automated Agent Access & Content Signals",
+    "3. Intellectual Property Rights",
+    "4. Disclaimer & Limitation of Liability",
+    "5. Governing Law & Jurisdiction",
+    "6. Contact & Questions"
+  ],
+  "width": 1440,
+  "scrollWidth": 1440,
+  "height": 900,
+  "scrollHeight": 2375,
+  "canvases": [],
+  "markers": [
+    "signal-shell"
+  ],
+  "aboveFold": [
+    "AA / PORTFOLIO",
+    "Home",
+    "Work",
+    "Writing",
+    "About",
+    "Résumé",
+    "Contact",
+    "Terms of service."
+  ],
+  "vitals": {
+    "lcpMs": 384,
+    "cls": 0.48169569145887475,
+    "longTaskBlockingMs": 0
+  },
+  "domContentLoadedMs": 54,
+  "bytesByType": {
+    "woff2": 72464,
+    "css": 117855,
+    "js": 746207,
+    "svg": 202
+  },
+  "notes": []
+}

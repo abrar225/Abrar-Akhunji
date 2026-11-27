@@ -1,0 +1,55 @@
+{
+  "path": "/versions/cyberterminal/",
+  "status": 200,
+  "title": "Abrar Akhunji — AI/ML Engineer & Full-Stack Developer Portfolio",
+  "h1": [
+    "Engineer of Intelligent Systems."
+  ],
+  "headings": [
+    "Selected Works",
+    "The Stack",
+    "Path & Recognition",
+    "The Neural Log"
+  ],
+  "width": 1440,
+  "scrollWidth": 1440,
+  "height": 900,
+  "scrollHeight": 16071,
+  "canvases": [
+    ""
+  ],
+  "markers": [
+    "portfolio-archive"
+  ],
+  "aboveFold": [
+    "ABRAR.",
+    "GH",
+    "LI",
+    "IG",
+    "BLOG",
+    "Home",
+    "About",
+    "Work",
+    "Path",
+    "Resume",
+    "Contact",
+    "About the archived terminal",
+    "Mute SFX",
+    "Blog",
+    "Hire Me",
+    "Contact Abrar",
+    "Engineer of Intelligent Systems."
+  ],
+  "vitals": {
+    "lcpMs": 448,
+    "cls": 0.04829037483121142,
+    "longTaskBlockingMs": 0
+  },
+  "domContentLoadedMs": 216,
+  "bytesByType": {
+    "css": 65621,
+    "js": 1094794,
+    "svg": 491
+  },
+  "notes": []
+}

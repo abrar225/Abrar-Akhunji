@@ -1,0 +1,44 @@
+{
+  "path": "/contact/",
+  "status": 200,
+  "title": "Contact Abrar Akhunji | AI & Full-Stack Engineer",
+  "h1": [
+    "Let’s talk."
+  ],
+  "headings": [
+    "Direct email",
+    "Find me elsewhere",
+    "Where I work"
+  ],
+  "width": 390,
+  "scrollWidth": 390,
+  "height": 844,
+  "scrollHeight": 2260,
+  "canvases": [],
+  "markers": [
+    "signal-shell"
+  ],
+  "aboveFold": [
+    "AA",
+    "Résumé",
+    "Let’s talk.",
+    "Send an email",
+    "Ways to work together",
+    "abrar@abrarakhunji.com",
+    "Copy email",
+    "GitHub"
+  ],
+  "vitals": {
+    "lcpMs": 372,
+    "cls": 0,
+    "longTaskBlockingMs": 0
+  },
+  "domContentLoadedMs": 49,
+  "bytesByType": {
+    "woff2": 72464,
+    "js": 748106,
+    "css": 117855,
+    "svg": 202
+  },
+  "notes": []
+}

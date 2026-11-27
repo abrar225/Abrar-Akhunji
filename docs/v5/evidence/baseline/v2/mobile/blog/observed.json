@@ -1,0 +1,43 @@
+{
+  "path": "/versions/cyberterminal/blog/",
+  "status": 200,
+  "title": "Blog | Abrar Akhunji",
+  "h1": [
+    "The Neural Log."
+  ],
+  "headings": [
+    "Google Ships Gemini 3.6 Flash While 3.5 Pro Keeps Waiting",
+    "2.4 Trillion Parameters, Zero Benchmarks: Inside Qwen3.8-Max",
+    "The Ponytail Effect: How One GitHub Repo Stops Claude Code From Over-Building Everything",
+    "Tabs, Ship: OpenCode Desktop Just Landed",
+    "Kimi K3: The 2.8T Parameter Multimodal Giant",
+    "The Agent Awakens: Meta Unleashes Muse Spark 1.1 and the Model API"
+  ],
+  "width": 390,
+  "scrollWidth": 390,
+  "height": 844,
+  "scrollHeight": 2503,
+  "canvases": [],
+  "markers": [
+    "portfolio-archive"
+  ],
+  "aboveFold": [
+    "The Neural Log.",
+    "List",
+    "Tech Tree",
+    "2026-07-22 11 min AI GEMINI 3.6 FLASH GOOGLE LLM AGENTIC AI ANTIGRAVITY Google Ships Gemini 3.6 Flash While 3.5 Pro Keeps Waiting Google's Gemini 3.6 Flash cuts output tokens 17%, drops pricing to $7.50/1M output, and ships alongside 3.5 Flash-Lite and a restricted Flash Cyber. Full breakdown. Written by Abrar Akhunji 🎧 AUDIO 🧒 ELI5 🎮 INTERACTIVE",
+    "2026-07-22 12 min AI QWEN3.8-MAX ALIBABA LLM AI BENCHMARKS FRONTIER MODELS 2.4 Trillion Parameters, Zero Benchmarks: Inside Qwen3.8-Max Alibaba's Qwen3.8-Max previewed at 2.4T parameters with a bold 'second only to Fable 5' claim — but no benchmarks exist yet. Here is everything confirmed so far. Written by Abrar Akhunji 🎧 AUDIO 🧒 ELI5 🎮 INTERACTIVE"
+  ],
+  "vitals": {
+    "lcpMs": 544,
+    "cls": 0,
+    "longTaskBlockingMs": 0
+  },
+  "domContentLoadedMs": 187,
+  "bytesByType": {
+    "css": 65621,
+    "js": 672969,
+    "svg": 491
+  },
+  "notes": []
+}

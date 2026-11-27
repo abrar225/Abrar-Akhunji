@@ -1,0 +1,42 @@
+{
+  "path": "/agents-at-work/",
+  "status": 200,
+  "title": "Agents at work — Abrar Akhunji",
+  "h1": [
+    "Agents at work."
+  ],
+  "headings": [
+    "From friction to something useful.",
+    "The screen is only the start.",
+    "What should we build next?"
+  ],
+  "width": 1440,
+  "scrollWidth": 1440,
+  "height": 900,
+  "scrollHeight": 2388,
+  "canvases": [],
+  "markers": [],
+  "aboveFold": [
+    "Abrar Akhunji",
+    "Change theme",
+    "Agents at work.",
+    "Meet the builds ↓",
+    "Explore my full portfolio ↗",
+    "Skip",
+    "Rebuild"
+  ],
+  "vitals": {
+    "lcpMs": 80,
+    "cls": 0.017253497942386845,
+    "longTaskBlockingMs": 0
+  },
+  "domContentLoadedMs": 72,
+  "bytesByType": {
+    "js": 368573,
+    "webp": 97510,
+    "css": 7534,
+    "woff2": 39824,
+    "svg": 202
+  },
+  "notes": []
+}

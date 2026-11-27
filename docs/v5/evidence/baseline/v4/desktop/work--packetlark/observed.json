@@ -1,0 +1,56 @@
+{
+  "path": "/versions/zero-to-built/work/packetlark/",
+  "status": 200,
+  "title": "PacketLark — The build | Abrar Akhunji",
+  "h1": [
+    "PacketLark"
+  ],
+  "headings": [
+    "The problem.",
+    "My contribution.",
+    "How the parts connect.",
+    "The decisions.",
+    "Build, test, deliver.",
+    "What to keep in mind.",
+    "Abrar Akhunji"
+  ],
+  "width": 1440,
+  "scrollWidth": 1440,
+  "height": 900,
+  "scrollHeight": 4367,
+  "canvases": [
+    "workshop-creatures",
+    ""
+  ],
+  "markers": [
+    "workshop-creatures",
+    "portfolio-archive"
+  ],
+  "aboveFold": [
+    "abrar . The build room",
+    "Work",
+    "About",
+    "Writing",
+    "Hire",
+    "Contact",
+    "Resume",
+    "Back to the build line",
+    "PacketLark",
+    "Product website",
+    "Source on GitHub"
+  ],
+  "vitals": {
+    "lcpMs": 376,
+    "cls": 0.000004818512088477365,
+    "longTaskBlockingMs": 0
+  },
+  "domContentLoadedMs": 50,
+  "bytesByType": {
+    "css": 156116,
+    "woff2": 95900,
+    "js": 785050,
+    "svg": 310,
+    "webp": 25334
+  },
+  "notes": []
+}

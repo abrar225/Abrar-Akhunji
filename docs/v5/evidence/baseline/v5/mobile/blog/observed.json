@@ -1,0 +1,68 @@
+{
+  "path": "/blog/",
+  "status": 200,
+  "title": "The Neural Log — AI & Systems Engineering Blog | Abrar Akhunji",
+  "h1": [
+    "The Neural Log."
+  ],
+  "headings": [
+    "kv4-hopper: Why 4-Bit KV Caches Stall on Hopper GPUs, and How Register-Direct WGMMA Fixes Them",
+    "Claude Fable 5.2 and Mythos 5.2 Architecture Teardown: Prefix-Checked Preserved Thinking, Effort Economics, and 1,000-Agent Formalization Benchmarks",
+    "Fixo Flow Architecture: Zero-Cloud Desktop Dictation on Apple MLX and CTranslate2",
+    "FrameCast Studio Architecture: Native macOS Dual-Canvas Compositing, 32-Bit Float Mixing, and Crash-Safe fMP4 Recording",
+    "PacketLark Internals: QuickJS Script Isolation, DNS-Pinned Capability Grants, and OpenAPI 3.1 Inference",
+    "SkillKit Architecture: Staged MCP Skill Routing, 317-Byte Payloads, and Honest Gap Refusal Benchmarks",
+    "Gemini 4 Architecture Teardown: The Elemental Lineup (Argon, Carbon, Neon, Hydrogen), Test-Time Compute Scaling, and Benchmark Empirical Realities",
+    "H-Spec: Why Block-Parallel Drafters Waste 30% of VRAM on Shadow KV Caches, and How Hybrid Context Injection Eliminates Them",
+    "MiniCache: Why Evicting Tokens Destroys Long Contexts, and How Depth-Dimension Merging Squeezes KV Caches by 5x",
+    "CacheBlend: Why Prefix Caching Collapses in Real-World RAG, and How Cached Knowledge Fusion Reclaims 3.3x TTFT Speedups",
+    "SparseSpec: Why Reasoning Chains Choke on KV Cache Bandwidth, and How PillarAttn Reuses Verification Attention for 2.1x Lossless Speedups",
+    "AgentSpec: Why Speculative Decoding Collapses in Agent Batches, and How Structure-Isolated Drafting Recovers 2.4x Throughput",
+    "Google Willow and the Multiverse Myth: Inside the 10-Septillion-Year Quantum Supremacy Benchmark",
+    "The AI Bubble: Inside the $600B CapEx Chasm, Tech Layoffs, and the Enterprise ROI Crisis",
+    "RTP-LLM: Building an Evolvable and Reliable LLM Inference Engine at Alibaba Scale",
+    "FluidPD: In-Place Elasticity for SLO-Aware Prefill-Decode Disaggregated LLM Serving",
+    "SARIA: Persistence-Aware KV Caching with Coordinated DRAM-SSD Reload for Multi-Turn LLM Agents",
+    "AKV: Cache Engineering for Autonomous Agents and State-Preserving Prefix Invalidation Bypass"
+  ],
+  "width": 390,
+  "scrollWidth": 390,
+  "height": 844,
+  "scrollHeight": 24513,
+  "canvases": [],
+  "markers": [
+    "signal-shell"
+  ],
+  "aboveFold": [
+    "AA",
+    "Résumé",
+    "The Neural Log.",
+    "List",
+    "Tech Tree",
+    "All posts 82",
+    "Systems Engineering 30",
+    "AI 27",
+    "Agentic AI 24",
+    "vLLM 22",
+    "LLM Inference 18",
+    "KV Cache 17",
+    "CUDA 16",
+    "Mixture of Experts 13",
+    "Systems Architecture 13",
+    "Inference Optimization 11"
+  ],
+  "vitals": {
+    "lcpMs": 400,
+    "cls": 0,
+    "longTaskBlockingMs": 0
+  },
+  "domContentLoadedMs": 55,
+  "bytesByType": {
+    "woff2": 72464,
+    "js": 752384,
+    "css": 117855,
+    "svg": 202,
+    "jpg": 874665
+  },
+  "notes": []
+}

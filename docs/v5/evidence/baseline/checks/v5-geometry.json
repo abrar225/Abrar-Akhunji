@@ -1,0 +1,6596 @@
+[
+  {
+    "width": 360,
+    "height": 800,
+    "dark": false,
+    "viewport": [
+      360,
+      800
+    ],
+    "scrollWidth": 360,
+    "samples": [
+      {
+        "id": "writing",
+        "selectors": {
+          ".signal-notes h3": [
+            {
+              "text": "kv4-hopper: Why 4-Bit KV Caches Stall on Hopper GPUs, and How Register-Direct WGMMA Fixes Them",
+              "rect": [
+                33,
+                349.2,
+                268,
+                86.8
+              ],
+              "lineBoxes": [
+                [
+                  33,
+                  348.2,
+                  224.1,
+                  23
+                ],
+                [
+                  33,
+                  369.9,
+                  202.8,
+                  23
+                ],
+                [
+                  33,
+                  391.6,
+                  214.9,
+                  23
+                ],
+                [
+                  33,
+                  413.3,
+                  237.9,
+                  23
+                ]
+              ],
+              "color": "rgb(255, 250, 240)",
+              "font": "Bricolage, system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3243,
+                    360,
+                    4897.8
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3243,
+                    360,
+                    4897.8
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "Claude Fable 5.2 and Mythos 5.2 Architecture Teardown: Prefix-Checked Preserved Thinking, Effort Economics, and 1,000-Agent Formalization Benchmarks",
+              "rect": [
+                33,
+                511.4,
+                268,
+                130.1
+              ],
+              "lineBoxes": [
+                [
+                  33,
+                  510.4,
+                  179.2,
+                  23
+                ],
+                [
+                  33,
+                  532.1,
+                  211.7,
+                  23
+                ],
+                [
+                  33,
+                  553.8,
+                  229.7,
+                  23
+                ],
+                [
+                  33,
+                  575.5,
+                  229,
+                  23
+                ],
+                [
+                  33,
+                  597.2,
+                  244.6,
+                  23
+                ],
+                [
+                  33,
+                  618.8,
+                  236.3,
+                  23
+                ]
+              ],
+              "color": "rgb(255, 250, 240)",
+              "font": "Bricolage, system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(54, 56, 96)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3243,
+                    360,
+                    4897.8
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3243,
+                    360,
+                    4897.8
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "Fixo Flow Architecture: Zero-Cloud Desktop Dictation on Apple MLX and CTranslate2",
+              "rect": [
+                33,
+                717,
+                268,
+                65.1
+              ],
+              "lineBoxes": [
+                [
+                  33,
+                  716,
+                  250.1,
+                  23
+                ],
+                [
+                  33,
+                  737.7,
+                  237.2,
+                  23
+                ],
+                [
+                  33,
+                  759.4,
+                  240.2,
+                  23
+                ]
+              ],
+              "color": "rgb(255, 250, 240)",
+              "font": "Bricolage, system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(50, 54, 92)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3243,
+                    360,
+                    4897.8
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3243,
+                    360,
+                    4897.8
+                  ]
+                }
+              ]
+            }
+          ],
+          ".signal-notes a > svg": [
+            {
+              "text": "",
+              "rect": [
+                309,
+                383.6,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(255, 250, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3243,
+                    360,
+                    4897.8
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3243,
+                    360,
+                    4897.8
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "",
+              "rect": [
+                309,
+                567.5,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(255, 250, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(54, 56, 96)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3243,
+                    360,
+                    4897.8
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3243,
+                    360,
+                    4897.8
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "",
+              "rect": [
+                309,
+                740.5,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(255, 250, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(50, 54, 92)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3243,
+                    360,
+                    4897.8
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3243,
+                    360,
+                    4897.8
+                  ]
+                }
+              ]
+            }
+          ],
+          ".signal-notes .signal-label": [
+            {
+              "text": "2026-11-27 / 18 min",
+              "rect": [
+                33,
+                321.3,
+                294,
+                16.7
+              ],
+              "lineBoxes": [
+                [
+                  33,
+                  321.3,
+                  81.8,
+                  15
+                ],
+                [
+                  114.8,
+                  321.3,
+                  24.5,
+                  15
+                ],
+                [
+                  139.3,
+                  321.3,
+                  16.4,
+                  15
+                ],
+                [
+                  155.7,
+                  321.3,
+                  32.7,
+                  15
+                ]
+              ],
+              "color": "rgb(214, 217, 255)",
+              "font": "\"DM Mono\", ui-monospace, monospace",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3243,
+                    360,
+                    4897.8
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3243,
+                    360,
+                    4897.8
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "2026-11-25 / 20 min",
+              "rect": [
+                33,
+                483.5,
+                294,
+                16.7
+              ],
+              "lineBoxes": [
+                [
+                  33,
+                  483.5,
+                  81.8,
+                  15
+                ],
+                [
+                  114.8,
+                  483.5,
+                  24.5,
+                  15
+                ],
+                [
+                  139.3,
+                  483.5,
+                  16.4,
+                  15
+                ],
+                [
+                  155.7,
+                  483.5,
+                  32.7,
+                  15
+                ]
+              ],
+              "color": "rgb(214, 217, 255)",
+              "font": "\"DM Mono\", ui-monospace, monospace",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(54, 56, 96)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3243,
+                    360,
+                    4897.8
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3243,
+                    360,
+                    4897.8
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "2026-11-25 / 13 min",
+              "rect": [
+                33,
+                689.1,
+                294,
+                16.7
+              ],
+              "lineBoxes": [
+                [
+                  33,
+                  689.1,
+                  81.8,
+                  15
+                ],
+                [
+                  114.8,
+                  689.1,
+                  24.5,
+                  15
+                ],
+                [
+                  139.3,
+                  689.1,
+                  16.4,
+                  15
+                ],
+                [
+                  155.7,
+                  689.1,
+                  32.7,
+                  15
+                ]
+              ],
+              "color": "rgb(214, 217, 255)",
+              "font": "\"DM Mono\", ui-monospace, monospace",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(50, 54, 92)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3243,
+                    360,
+                    4897.8
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3243,
+                    360,
+                    4897.8
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "engineering",
+        "selectors": {
+          ".signal-bento-source a": [
+            {
+              "text": "Architecture & evidence",
+              "rect": [
+                71,
+                628.1,
+                194.4,
+                23.6
+              ],
+              "lineBoxes": [
+                [
+                  71,
+                  630.1,
+                  176.4,
+                  19
+                ]
+              ],
+              "color": "rgb(32, 29, 40)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "signal-bento-source",
+                  "overflow": "clip",
+                  "rect": [
+                    16,
+                    610.7,
+                    328,
+                    58.4
+                  ]
+                },
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1823,
+                    360,
+                    4897.8
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1823,
+                    360,
+                    4897.8
+                  ]
+                }
+              ]
+            }
+          ],
+          ".signal-bento-source a svg": [
+            {
+              "text": "",
+              "rect": [
+                247.4,
+                632.3,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(32, 29, 40)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "signal-bento-source",
+                  "overflow": "clip",
+                  "rect": [
+                    16,
+                    610.7,
+                    328,
+                    58.4
+                  ]
+                },
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1823,
+                    360,
+                    4897.8
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1823,
+                    360,
+                    4897.8
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "about-me",
+        "selectors": {
+          ".signal-profile-inset .signal-handwriting": [
+            {
+              "text": "I care about how it feels to use.",
+              "rect": [
+                42.2,
+                373.6,
+                265.6,
+                51.5
+              ],
+              "lineBoxes": [
+                [
+                  42.2,
+                  378,
+                  221.1,
+                  44.9
+                ]
+              ],
+              "color": "rgb(83, 86, 112)",
+              "font": "Schoolbell, cursive",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(247, 189, 196)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2577,
+                    360,
+                    4897.8
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2577,
+                    360,
+                    4897.8
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "contact",
+        "selectors": {
+          ".signal-home-contact a.signal-button": [
+            {
+              "text": "Work with me",
+              "rect": [
+                16,
+                123,
+                168.5,
+                48
+              ],
+              "lineBoxes": [
+                [
+                  32.2,
+                  136.6,
+                  104.5,
+                  20
+                ]
+              ],
+              "color": "rgb(255, 250, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgb(32, 29, 40)",
+              "opacity": "1",
+              "face": "rgb(32, 29, 40)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -4098,
+                    360,
+                    4897.8
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -4098,
+                    360,
+                    4897.8
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "dark": false,
+    "viewport": [
+      390,
+      844
+    ],
+    "scrollWidth": 390,
+    "samples": [
+      {
+        "id": "writing",
+        "selectors": {
+          ".signal-notes h3": [
+            {
+              "text": "kv4-hopper: Why 4-Bit KV Caches Stall on Hopper GPUs, and How Register-Direct WGMMA Fixes Them",
+              "rect": [
+                33,
+                364,
+                298,
+                86.8
+              ],
+              "lineBoxes": [
+                [
+                  33,
+                  363,
+                  224.1,
+                  23
+                ],
+                [
+                  33,
+                  384.6,
+                  202.8,
+                  23
+                ],
+                [
+                  33,
+                  406.3,
+                  214.9,
+                  23
+                ],
+                [
+                  33,
+                  428,
+                  237.9,
+                  23
+                ]
+              ],
+              "color": "rgb(255, 250, 240)",
+              "font": "Bricolage, system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "Claude Fable 5.2 and Mythos 5.2 Architecture Teardown: Prefix-Checked Preserved Thinking, Effort Economics, and 1,000-Agent Formalization Benchmarks",
+              "rect": [
+                33,
+                526.2,
+                298,
+                108.4
+              ],
+              "lineBoxes": [
+                [
+                  33,
+                  525.2,
+                  280.3,
+                  23
+                ],
+                [
+                  33,
+                  546.9,
+                  266.6,
+                  23
+                ],
+                [
+                  33,
+                  568.5,
+                  254.7,
+                  23
+                ],
+                [
+                  33,
+                  590.2,
+                  248,
+                  23
+                ],
+                [
+                  33,
+                  611.9,
+                  292.2,
+                  23
+                ]
+              ],
+              "color": "rgb(255, 250, 240)",
+              "font": "Bricolage, system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(54, 56, 96)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "Fixo Flow Architecture: Zero-Cloud Desktop Dictation on Apple MLX and CTranslate2",
+              "rect": [
+                33,
+                710.1,
+                298,
+                65.1
+              ],
+              "lineBoxes": [
+                [
+                  33,
+                  709.1,
+                  250.1,
+                  23
+                ],
+                [
+                  33,
+                  730.8,
+                  237.2,
+                  23
+                ],
+                [
+                  33,
+                  752.5,
+                  240.2,
+                  23
+                ]
+              ],
+              "color": "rgb(255, 250, 240)",
+              "font": "Bricolage, system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(50, 54, 92)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                }
+              ]
+            }
+          ],
+          ".signal-notes a > svg": [
+            {
+              "text": "",
+              "rect": [
+                339,
+                398.3,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(255, 250, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "",
+              "rect": [
+                339,
+                571.4,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(255, 250, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(54, 56, 96)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "",
+              "rect": [
+                339,
+                733.6,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(255, 250, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(50, 54, 92)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                }
+              ]
+            }
+          ],
+          ".signal-notes .signal-label": [
+            {
+              "text": "2026-11-27 / 18 min",
+              "rect": [
+                33,
+                336.1,
+                324,
+                16.7
+              ],
+              "lineBoxes": [
+                [
+                  33,
+                  336.1,
+                  81.8,
+                  15
+                ],
+                [
+                  114.8,
+                  336.1,
+                  24.5,
+                  15
+                ],
+                [
+                  139.3,
+                  336.1,
+                  16.4,
+                  15
+                ],
+                [
+                  155.7,
+                  336.1,
+                  32.7,
+                  15
+                ]
+              ],
+              "color": "rgb(214, 217, 255)",
+              "font": "\"DM Mono\", ui-monospace, monospace",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "2026-11-25 / 20 min",
+              "rect": [
+                33,
+                498.3,
+                324,
+                16.7
+              ],
+              "lineBoxes": [
+                [
+                  33,
+                  498.3,
+                  81.8,
+                  15
+                ],
+                [
+                  114.8,
+                  498.3,
+                  24.5,
+                  15
+                ],
+                [
+                  139.3,
+                  498.3,
+                  16.4,
+                  15
+                ],
+                [
+                  155.7,
+                  498.3,
+                  32.7,
+                  15
+                ]
+              ],
+              "color": "rgb(214, 217, 255)",
+              "font": "\"DM Mono\", ui-monospace, monospace",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(54, 56, 96)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "2026-11-25 / 13 min",
+              "rect": [
+                33,
+                682.2,
+                324,
+                16.7
+              ],
+              "lineBoxes": [
+                [
+                  33,
+                  682.2,
+                  81.8,
+                  15
+                ],
+                [
+                  114.8,
+                  682.2,
+                  24.5,
+                  15
+                ],
+                [
+                  139.3,
+                  682.2,
+                  16.4,
+                  15
+                ],
+                [
+                  155.7,
+                  682.2,
+                  32.7,
+                  15
+                ]
+              ],
+              "color": "rgb(214, 217, 255)",
+              "font": "\"DM Mono\", ui-monospace, monospace",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(50, 54, 92)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "engineering",
+        "selectors": {
+          ".signal-bento-source a": [
+            {
+              "text": "Architecture & evidence",
+              "rect": [
+                71,
+                603.8,
+                194.4,
+                23.6
+              ],
+              "lineBoxes": [
+                [
+                  71,
+                  605.8,
+                  176.4,
+                  19
+                ]
+              ],
+              "color": "rgb(32, 29, 40)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "signal-bento-source",
+                  "overflow": "clip",
+                  "rect": [
+                    16,
+                    586.4,
+                    358,
+                    58.4
+                  ]
+                },
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1823,
+                    390,
+                    4869.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1823,
+                    390,
+                    4869.9
+                  ]
+                }
+              ]
+            }
+          ],
+          ".signal-bento-source a svg": [
+            {
+              "text": "",
+              "rect": [
+                247.4,
+                607.9,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(32, 29, 40)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "signal-bento-source",
+                  "overflow": "clip",
+                  "rect": [
+                    16,
+                    586.4,
+                    358,
+                    58.4
+                  ]
+                },
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1823,
+                    390,
+                    4869.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1823,
+                    390,
+                    4869.9
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "about-me",
+        "selectors": {
+          ".signal-profile-inset .signal-handwriting": [
+            {
+              "text": "I care about how it feels to use.",
+              "rect": [
+                43.5,
+                373.9,
+                293.1,
+                54.4
+              ],
+              "lineBoxes": [
+                [
+                  43.5,
+                  381.2,
+                  221.1,
+                  44.9
+                ]
+              ],
+              "color": "rgb(83, 86, 112)",
+              "font": "Schoolbell, cursive",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(247, 189, 196)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2553,
+                    390,
+                    4869.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2553,
+                    390,
+                    4869.9
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "contact",
+        "selectors": {
+          ".signal-home-contact a.signal-button": [
+            {
+              "text": "Work with me",
+              "rect": [
+                16,
+                166.1,
+                168.5,
+                48
+              ],
+              "lineBoxes": [
+                [
+                  32.2,
+                  179.7,
+                  104.5,
+                  20
+                ]
+              ],
+              "color": "rgb(255, 250, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgb(32, 29, 40)",
+              "opacity": "1",
+              "face": "rgb(32, 29, 40)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -4026,
+                    390,
+                    4869.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -4026,
+                    390,
+                    4869.9
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "width": 768,
+    "height": 900,
+    "dark": false,
+    "viewport": [
+      768,
+      900
+    ],
+    "scrollWidth": 768,
+    "samples": [
+      {
+        "id": "writing",
+        "selectors": {
+          ".signal-notes h3": [
+            {
+              "text": "kv4-hopper: Why 4-Bit KV Caches Stall on Hopper GPUs, and How Register-Direct WGMMA Fixes Them",
+              "rect": [
+                51.7,
+                366.6,
+                361.2,
+                65.1
+              ],
+              "lineBoxes": [
+                [
+                  51.7,
+                  365.6,
+                  292.8,
+                  23
+                ],
+                [
+                  51.7,
+                  387.3,
+                  270.1,
+                  23
+                ],
+                [
+                  51.7,
+                  409,
+                  316.8,
+                  23
+                ]
+              ],
+              "color": "rgb(255, 250, 240)",
+              "font": "Bricolage, system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2446,
+                    768,
+                    3515.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2446,
+                    768,
+                    3515.9
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "Claude Fable 5.2 and Mythos 5.2 Architecture Teardown: Prefix-Checked Preserved Thinking, Effort Economics, and 1,000-Agent Formalization Benchmarks",
+              "rect": [
+                486.7,
+                161.8,
+                203.6,
+                195.2
+              ],
+              "lineBoxes": [
+                [
+                  486.7,
+                  160.8,
+                  179.2,
+                  23
+                ],
+                [
+                  486.7,
+                  182.5,
+                  97.4,
+                  23
+                ],
+                [
+                  486.7,
+                  204.2,
+                  110.6,
+                  23
+                ],
+                [
+                  486.7,
+                  225.9,
+                  152.3,
+                  23
+                ],
+                [
+                  486.7,
+                  247.6,
+                  171.6,
+                  23
+                ],
+                [
+                  486.7,
+                  269.3,
+                  134.7,
+                  23
+                ],
+                [
+                  486.7,
+                  290.9,
+                  192.6,
+                  23
+                ],
+                [
+                  486.7,
+                  312.6,
+                  176.3,
+                  23
+                ],
+                [
+                  486.7,
+                  334.3,
+                  112.2,
+                  23
+                ]
+              ],
+              "color": "rgb(255, 250, 240)",
+              "font": "Bricolage, system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(54, 56, 96)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2446,
+                    768,
+                    3515.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2446,
+                    768,
+                    3515.9
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "Fixo Flow Architecture: Zero-Cloud Desktop Dictation on Apple MLX and CTranslate2",
+              "rect": [
+                486.7,
+                432.7,
+                203.6,
+                86.8
+              ],
+              "lineBoxes": [
+                [
+                  486.7,
+                  431.7,
+                  200.6,
+                  23
+                ],
+                [
+                  486.7,
+                  453.4,
+                  174,
+                  23
+                ],
+                [
+                  486.7,
+                  475.1,
+                  160.1,
+                  23
+                ],
+                [
+                  486.7,
+                  496.8,
+                  185.5,
+                  23
+                ]
+              ],
+              "color": "rgb(255, 250, 240)",
+              "font": "Bricolage, system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(50, 54, 92)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2446,
+                    768,
+                    3515.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2446,
+                    768,
+                    3515.9
+                  ]
+                }
+              ]
+            }
+          ],
+          ".signal-notes a > svg": [
+            {
+              "text": "",
+              "rect": [
+                420.9,
+                390.1,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(255, 250, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2446,
+                    768,
+                    3515.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2446,
+                    768,
+                    3515.9
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "",
+              "rect": [
+                698.3,
+                250.4,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(255, 250, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(54, 56, 96)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2446,
+                    768,
+                    3515.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2446,
+                    768,
+                    3515.9
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "",
+              "rect": [
+                698.3,
+                467.1,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(255, 250, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(50, 54, 92)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2446,
+                    768,
+                    3515.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2446,
+                    768,
+                    3515.9
+                  ]
+                }
+              ]
+            }
+          ],
+          ".signal-notes .signal-label": [
+            {
+              "text": "2026-11-27 / 18 min",
+              "rect": [
+                51.7,
+                338.7,
+                387.2,
+                16.7
+              ],
+              "lineBoxes": [
+                [
+                  51.7,
+                  338.7,
+                  81.8,
+                  15
+                ],
+                [
+                  133.5,
+                  338.7,
+                  24.5,
+                  15
+                ],
+                [
+                  158,
+                  338.7,
+                  16.4,
+                  15
+                ],
+                [
+                  174.4,
+                  338.7,
+                  32.7,
+                  15
+                ]
+              ],
+              "color": "rgb(214, 217, 255)",
+              "font": "\"DM Mono\", ui-monospace, monospace",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2446,
+                    768,
+                    3515.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2446,
+                    768,
+                    3515.9
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "2026-11-25 / 20 min",
+              "rect": [
+                486.7,
+                133.9,
+                229.6,
+                16.7
+              ],
+              "lineBoxes": [
+                [
+                  486.7,
+                  133.9,
+                  81.8,
+                  15
+                ],
+                [
+                  568.5,
+                  133.9,
+                  24.5,
+                  15
+                ],
+                [
+                  593.1,
+                  133.9,
+                  16.4,
+                  15
+                ],
+                [
+                  609.4,
+                  133.9,
+                  32.7,
+                  15
+                ]
+              ],
+              "color": "rgb(214, 217, 255)",
+              "font": "\"DM Mono\", ui-monospace, monospace",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(54, 56, 96)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2446,
+                    768,
+                    3515.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2446,
+                    768,
+                    3515.9
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "2026-11-25 / 13 min",
+              "rect": [
+                486.7,
+                404.8,
+                229.6,
+                16.7
+              ],
+              "lineBoxes": [
+                [
+                  486.7,
+                  404.8,
+                  81.8,
+                  15
+                ],
+                [
+                  568.5,
+                  404.8,
+                  24.5,
+                  15
+                ],
+                [
+                  593.1,
+                  404.8,
+                  16.4,
+                  15
+                ],
+                [
+                  609.4,
+                  404.8,
+                  32.7,
+                  15
+                ]
+              ],
+              "color": "rgb(214, 217, 255)",
+              "font": "\"DM Mono\", ui-monospace, monospace",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(50, 54, 92)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2446,
+                    768,
+                    3515.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2446,
+                    768,
+                    3515.9
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "engineering",
+        "selectors": {
+          ".signal-bento-source a": [
+            {
+              "text": "Architecture & evidence",
+              "rect": [
+                89.5,
+                537.5,
+                194.4,
+                23.6
+              ],
+              "lineBoxes": [
+                [
+                  89.5,
+                  539.5,
+                  176.4,
+                  19
+                ]
+              ],
+              "color": "rgb(32, 29, 40)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "signal-bento-source",
+                  "overflow": "clip",
+                  "rect": [
+                    34.6,
+                    520.1,
+                    698.9,
+                    58.4
+                  ]
+                },
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1333,
+                    768,
+                    3515.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1333,
+                    768,
+                    3515.9
+                  ]
+                }
+              ]
+            }
+          ],
+          ".signal-bento-source a svg": [
+            {
+              "text": "",
+              "rect": [
+                265.9,
+                541.6,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(32, 29, 40)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "signal-bento-source",
+                  "overflow": "clip",
+                  "rect": [
+                    34.6,
+                    520.1,
+                    698.9,
+                    58.4
+                  ]
+                },
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1333,
+                    768,
+                    3515.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1333,
+                    768,
+                    3515.9
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "about-me",
+        "selectors": {
+          ".signal-profile-inset .signal-handwriting": [
+            {
+              "text": "I care about how it feels to use.",
+              "rect": [
+                555.6,
+                80.2,
+                143.1,
+                55
+              ],
+              "lineBoxes": [
+                [
+                  555.3,
+                  78.2,
+                  131.4,
+                  35.5
+                ],
+                [
+                  557.3,
+                  102.2,
+                  87,
+                  30.8
+                ]
+              ],
+              "color": "rgb(83, 86, 112)",
+              "font": "Schoolbell, cursive",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(247, 189, 196)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2002,
+                    768,
+                    3515.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2002,
+                    768,
+                    3515.9
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "contact",
+        "selectors": {
+          ".signal-home-contact a.signal-button": [
+            {
+              "text": "Work with me",
+              "rect": [
+                565,
+                485.6,
+                168.5,
+                48
+              ],
+              "lineBoxes": [
+                [
+                  581.1,
+                  499.2,
+                  104.5,
+                  20
+                ]
+              ],
+              "color": "rgb(255, 250, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgb(32, 29, 40)",
+              "opacity": "1",
+              "face": "rgb(32, 29, 40)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2616,
+                    768,
+                    3515.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2616,
+                    768,
+                    3515.9
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "width": 1024,
+    "height": 768,
+    "dark": false,
+    "viewport": [
+      1024,
+      768
+    ],
+    "scrollWidth": 1024,
+    "samples": [
+      {
+        "id": "writing",
+        "selectors": {
+          ".signal-notes h3": [
+            {
+              "text": "kv4-hopper: Why 4-Bit KV Caches Stall on Hopper GPUs, and How Register-Direct WGMMA Fixes Them",
+              "rect": [
+                68.6,
+                480.9,
+                493.7,
+                76.4
+              ],
+              "lineBoxes": [
+                [
+                  68.6,
+                  479.9,
+                  343.5,
+                  27
+                ],
+                [
+                  68.6,
+                  505.4,
+                  316.8,
+                  27
+                ],
+                [
+                  68.6,
+                  530.8,
+                  371.6,
+                  27
+                ]
+              ],
+              "color": "rgb(255, 250, 240)",
+              "font": "Bricolage, system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2875,
+                    1024,
+                    4115.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2875,
+                    1024,
+                    4115.9
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "Claude Fable 5.2 and Mythos 5.2 Architecture Teardown: Prefix-Checked Preserved Thinking, Effort Economics, and 1,000-Agent Formalization Benchmarks",
+              "rect": [
+                646.9,
+                209.9,
+                282.5,
+                178.2
+              ],
+              "lineBoxes": [
+                [
+                  646.9,
+                  208.9,
+                  210.1,
+                  27
+                ],
+                [
+                  646.9,
+                  234.3,
+                  248.3,
+                  27
+                ],
+                [
+                  646.9,
+                  259.8,
+                  269.5,
+                  27
+                ],
+                [
+                  646.9,
+                  285.2,
+                  268.6,
+                  27
+                ],
+                [
+                  646.9,
+                  310.7,
+                  225.9,
+                  27
+                ],
+                [
+                  646.9,
+                  336.1,
+                  206.8,
+                  27
+                ],
+                [
+                  646.9,
+                  361.6,
+                  131.5,
+                  27
+                ]
+              ],
+              "color": "rgb(255, 250, 240)",
+              "font": "Bricolage, system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(54, 56, 96)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2875,
+                    1024,
+                    4115.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2875,
+                    1024,
+                    4115.9
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "Fixo Flow Architecture: Zero-Cloud Desktop Dictation on Apple MLX and CTranslate2",
+              "rect": [
+                646.9,
+                474.5,
+                282.5,
+                101.8
+              ],
+              "lineBoxes": [
+                [
+                  646.9,
+                  473.5,
+                  235.3,
+                  27
+                ],
+                [
+                  646.9,
+                  499,
+                  204.1,
+                  27
+                ],
+                [
+                  646.9,
+                  524.4,
+                  187.7,
+                  27
+                ],
+                [
+                  646.9,
+                  549.9,
+                  217.6,
+                  27
+                ]
+              ],
+              "color": "rgb(255, 250, 240)",
+              "font": "Bricolage, system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(50, 54, 92)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2875,
+                    1024,
+                    4115.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2875,
+                    1024,
+                    4115.9
+                  ]
+                }
+              ]
+            }
+          ],
+          ".signal-notes a > svg": [
+            {
+              "text": "",
+              "rect": [
+                570.3,
+                510.1,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(255, 250, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2875,
+                    1024,
+                    4115.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2875,
+                    1024,
+                    4115.9
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "",
+              "rect": [
+                937.4,
+                290,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(255, 250, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(54, 56, 96)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2875,
+                    1024,
+                    4115.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2875,
+                    1024,
+                    4115.9
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "",
+              "rect": [
+                937.4,
+                516.4,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(255, 250, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(50, 54, 92)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2875,
+                    1024,
+                    4115.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2875,
+                    1024,
+                    4115.9
+                  ]
+                }
+              ]
+            }
+          ],
+          ".signal-notes .signal-label": [
+            {
+              "text": "2026-11-27 / 18 min",
+              "rect": [
+                68.6,
+                453,
+                519.7,
+                16.7
+              ],
+              "lineBoxes": [
+                [
+                  68.6,
+                  453,
+                  81.8,
+                  15
+                ],
+                [
+                  150.4,
+                  453,
+                  24.5,
+                  15
+                ],
+                [
+                  174.9,
+                  453,
+                  16.4,
+                  15
+                ],
+                [
+                  191.3,
+                  453,
+                  32.7,
+                  15
+                ]
+              ],
+              "color": "rgb(214, 217, 255)",
+              "font": "\"DM Mono\", ui-monospace, monospace",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2875,
+                    1024,
+                    4115.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2875,
+                    1024,
+                    4115.9
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "2026-11-25 / 20 min",
+              "rect": [
+                646.9,
+                182,
+                308.5,
+                16.7
+              ],
+              "lineBoxes": [
+                [
+                  646.9,
+                  182,
+                  81.8,
+                  15
+                ],
+                [
+                  728.7,
+                  182,
+                  24.5,
+                  15
+                ],
+                [
+                  753.2,
+                  182,
+                  16.4,
+                  15
+                ],
+                [
+                  769.6,
+                  182,
+                  32.7,
+                  15
+                ]
+              ],
+              "color": "rgb(214, 217, 255)",
+              "font": "\"DM Mono\", ui-monospace, monospace",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(54, 56, 96)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2875,
+                    1024,
+                    4115.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2875,
+                    1024,
+                    4115.9
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "2026-11-25 / 13 min",
+              "rect": [
+                646.9,
+                446.6,
+                308.5,
+                16.7
+              ],
+              "lineBoxes": [
+                [
+                  646.9,
+                  446.6,
+                  81.8,
+                  15
+                ],
+                [
+                  728.7,
+                  446.6,
+                  24.5,
+                  15
+                ],
+                [
+                  753.2,
+                  446.6,
+                  16.4,
+                  15
+                ],
+                [
+                  769.6,
+                  446.6,
+                  32.7,
+                  15
+                ]
+              ],
+              "color": "rgb(214, 217, 255)",
+              "font": "\"DM Mono\", ui-monospace, monospace",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(50, 54, 92)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2875,
+                    1024,
+                    4115.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2875,
+                    1024,
+                    4115.9
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "engineering",
+        "selectors": {
+          ".signal-bento-source a": [
+            {
+              "text": "Architecture & evidence",
+              "rect": [
+                848.8,
+                585.1,
+                112.9,
+                50.8
+              ],
+              "lineBoxes": [
+                [
+                  848.8,
+                  587.1,
+                  98.1,
+                  20
+                ],
+                [
+                  848.8,
+                  612.5,
+                  88.8,
+                  20
+                ]
+              ],
+              "color": "rgb(32, 29, 40)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "signal-bento-source",
+                  "overflow": "clip",
+                  "rect": [
+                    832.6,
+                    378.7,
+                    145.3,
+                    273.4
+                  ]
+                },
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1597,
+                    1024,
+                    4115.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1597,
+                    1024,
+                    4115.9
+                  ]
+                }
+              ]
+            }
+          ],
+          ".signal-bento-source a svg": [
+            {
+              "text": "",
+              "rect": [
+                937.6,
+                615.3,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(32, 29, 40)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "signal-bento-source",
+                  "overflow": "clip",
+                  "rect": [
+                    832.6,
+                    378.7,
+                    145.3,
+                    273.4
+                  ]
+                },
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1597,
+                    1024,
+                    4115.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1597,
+                    1024,
+                    4115.9
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "about-me",
+        "selectors": {
+          ".signal-profile-inset .signal-handwriting": [
+            {
+              "text": "I care about how it feels to use.",
+              "rect": [
+                744.6,
+                123.5,
+                190.1,
+                60.3
+              ],
+              "lineBoxes": [
+                [
+                  744.3,
+                  122.4,
+                  170.3,
+                  39.5
+                ],
+                [
+                  746.3,
+                  154.5,
+                  53.3,
+                  27.2
+                ]
+              ],
+              "color": "rgb(83, 86, 112)",
+              "font": "Schoolbell, cursive",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(247, 189, 196)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2357,
+                    1024,
+                    4115.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2357,
+                    1024,
+                    4115.9
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "contact",
+        "selectors": {
+          ".signal-home-contact a.signal-button": [
+            {
+              "text": "Work with me",
+              "rect": [
+                809.4,
+                282,
+                168.5,
+                48
+              ],
+              "lineBoxes": [
+                [
+                  825.6,
+                  295.6,
+                  104.5,
+                  20
+                ]
+              ],
+              "color": "rgb(255, 250, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgb(32, 29, 40)",
+              "opacity": "1",
+              "face": "rgb(32, 29, 40)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3348,
+                    1024,
+                    4115.9
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3348,
+                    1024,
+                    4115.9
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "width": 1440,
+    "height": 900,
+    "dark": false,
+    "viewport": [
+      1440,
+      900
+    ],
+    "scrollWidth": 1440,
+    "samples": [
+      {
+        "id": "writing",
+        "selectors": {
+          ".signal-notes h3": [
+            {
+              "text": "kv4-hopper: Why 4-Bit KV Caches Stall on Hopper GPUs, and How Register-Direct WGMMA Fixes Them",
+              "rect": [
+                93,
+                658.1,
+                715.1,
+                107.4
+              ],
+              "lineBoxes": [
+                [
+                  93,
+                  656.1,
+                  483.2,
+                  38
+                ],
+                [
+                  93,
+                  691.9,
+                  445.6,
+                  38
+                ],
+                [
+                  93,
+                  727.7,
+                  522.7,
+                  38
+                ]
+              ],
+              "color": "rgb(255, 250, 240)",
+              "font": "Bricolage, system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "Claude Fable 5.2 and Mythos 5.2 Architecture Teardown: Prefix-Checked Preserved Thinking, Effort Economics, and 1,000-Agent Formalization Benchmarks",
+              "rect": [
+                904.1,
+                276.4,
+                416.9,
+                214.8
+              ],
+              "lineBoxes": [
+                [
+                  904.1,
+                  274.4,
+                  295.6,
+                  38
+                ],
+                [
+                  904.1,
+                  310.2,
+                  349.3,
+                  38
+                ],
+                [
+                  904.1,
+                  346,
+                  379.1,
+                  38
+                ],
+                [
+                  904.1,
+                  381.8,
+                  377.9,
+                  38
+                ],
+                [
+                  904.1,
+                  417.6,
+                  403.5,
+                  38
+                ],
+                [
+                  904.1,
+                  453.4,
+                  389.9,
+                  38
+                ]
+              ],
+              "color": "rgb(255, 250, 240)",
+              "font": "Bricolage, system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(54, 56, 96)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "Fixo Flow Architecture: Zero-Cloud Desktop Dictation on Apple MLX and CTranslate2",
+              "rect": [
+                904.1,
+                623.6,
+                416.9,
+                107.4
+              ],
+              "lineBoxes": [
+                [
+                  904.1,
+                  621.6,
+                  412.6,
+                  38
+                ],
+                [
+                  904.1,
+                  657.4,
+                  391.4,
+                  38
+                ],
+                [
+                  904.1,
+                  693.2,
+                  396.3,
+                  38
+                ]
+              ],
+              "color": "rgb(255, 250, 240)",
+              "font": "Bricolage, system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(50, 54, 92)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                }
+              ]
+            }
+          ],
+          ".signal-notes a > svg": [
+            {
+              "text": "",
+              "rect": [
+                816.1,
+                702.8,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(255, 250, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "",
+              "rect": [
+                1329,
+                374.8,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(255, 250, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(54, 56, 96)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "",
+              "rect": [
+                1329,
+                668.3,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(255, 250, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(50, 54, 92)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                }
+              ]
+            }
+          ],
+          ".signal-notes .signal-label": [
+            {
+              "text": "2026-11-27 / 18 min",
+              "rect": [
+                93,
+                630.3,
+                741.1,
+                16.7
+              ],
+              "lineBoxes": [
+                [
+                  93,
+                  630.3,
+                  81.8,
+                  15
+                ],
+                [
+                  174.8,
+                  630.3,
+                  24.5,
+                  15
+                ],
+                [
+                  199.3,
+                  630.3,
+                  16.4,
+                  15
+                ],
+                [
+                  215.7,
+                  630.3,
+                  32.7,
+                  15
+                ]
+              ],
+              "color": "rgb(214, 217, 255)",
+              "font": "\"DM Mono\", ui-monospace, monospace",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "2026-11-25 / 20 min",
+              "rect": [
+                904.1,
+                248.5,
+                442.9,
+                16.7
+              ],
+              "lineBoxes": [
+                [
+                  904.1,
+                  248.5,
+                  81.8,
+                  15
+                ],
+                [
+                  985.9,
+                  248.5,
+                  24.5,
+                  15
+                ],
+                [
+                  1010.4,
+                  248.5,
+                  16.4,
+                  15
+                ],
+                [
+                  1026.8,
+                  248.5,
+                  32.7,
+                  15
+                ]
+              ],
+              "color": "rgb(214, 217, 255)",
+              "font": "\"DM Mono\", ui-monospace, monospace",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(54, 56, 96)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "2026-11-25 / 13 min",
+              "rect": [
+                904.1,
+                595.7,
+                442.9,
+                16.7
+              ],
+              "lineBoxes": [
+                [
+                  904.1,
+                  595.7,
+                  81.8,
+                  15
+                ],
+                [
+                  985.9,
+                  595.7,
+                  24.5,
+                  15
+                ],
+                [
+                  1010.4,
+                  595.7,
+                  16.4,
+                  15
+                ],
+                [
+                  1026.8,
+                  595.7,
+                  32.7,
+                  15
+                ]
+              ],
+              "color": "rgb(214, 217, 255)",
+              "font": "\"DM Mono\", ui-monospace, monospace",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(50, 54, 92)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "engineering",
+        "selectors": {
+          ".signal-bento-source a": [
+            {
+              "text": "Architecture & evidence",
+              "rect": [
+                1183,
+                757.5,
+                176,
+                62
+              ],
+              "lineBoxes": [
+                [
+                  1183,
+                  760.5,
+                  139,
+                  24
+                ],
+                [
+                  1183,
+                  791.5,
+                  89.2,
+                  24
+                ]
+              ],
+              "color": "rgb(32, 29, 40)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "signal-bento-source",
+                  "overflow": "clip",
+                  "rect": [
+                    1166.8,
+                    487.1,
+                    208.4,
+                    348.6
+                  ]
+                },
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1895,
+                    1440,
+                    5149.5
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1895,
+                    1440,
+                    5149.5
+                  ]
+                }
+              ]
+            }
+          ],
+          ".signal-bento-source a svg": [
+            {
+              "text": "",
+              "rect": [
+                1272.2,
+                796.4,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(32, 29, 40)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "signal-bento-source",
+                  "overflow": "clip",
+                  "rect": [
+                    1166.8,
+                    487.1,
+                    208.4,
+                    348.6
+                  ]
+                },
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1895,
+                    1440,
+                    5149.5
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1895,
+                    1440,
+                    5149.5
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "about-me",
+        "selectors": {
+          ".signal-profile-inset .signal-handwriting": [
+            {
+              "text": "I care about how it feels to use.",
+              "rect": [
+                1044.3,
+                181.1,
+                276.9,
+                72.8
+              ],
+              "lineBoxes": [
+                [
+                  1043.9,
+                  182,
+                  228.7,
+                  50.6
+                ],
+                [
+                  1046.1,
+                  222.9,
+                  39.9,
+                  30.8
+                ]
+              ],
+              "color": "rgb(83, 86, 112)",
+              "font": "Schoolbell, cursive",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(247, 189, 196)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2866,
+                    1440,
+                    5149.5
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2866,
+                    1440,
+                    5149.5
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "contact",
+        "selectors": {
+          ".signal-home-contact a.signal-button": [
+            {
+              "text": "Work with me",
+              "rect": [
+                1206.7,
+                292,
+                168.5,
+                48
+              ],
+              "lineBoxes": [
+                [
+                  1222.9,
+                  305.6,
+                  104.5,
+                  20
+                ]
+              ],
+              "color": "rgb(255, 250, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgb(32, 29, 40)",
+              "opacity": "1",
+              "face": "rgb(32, 29, 40)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -4250,
+                    1440,
+                    5149.5
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -4250,
+                    1440,
+                    5149.5
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "width": 1920,
+    "height": 1000,
+    "dark": false,
+    "viewport": [
+      1920,
+      1000
+    ],
+    "scrollWidth": 1920,
+    "samples": [
+      {
+        "id": "writing",
+        "selectors": {
+          ".signal-notes h3": [
+            {
+              "text": "kv4-hopper: Why 4-Bit KV Caches Stall on Hopper GPUs, and How Register-Direct WGMMA Fixes Them",
+              "rect": [
+                308.2,
+                694,
+                745.7,
+                119.3
+              ],
+              "lineBoxes": [
+                [
+                  308.2,
+                  692,
+                  536.9,
+                  43
+                ],
+                [
+                  308.2,
+                  731.8,
+                  495.1,
+                  43
+                ],
+                [
+                  308.2,
+                  771.5,
+                  580.8,
+                  43
+                ]
+              ],
+              "color": "rgb(255, 250, 240)",
+              "font": "Bricolage, system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3648,
+                    1920,
+                    5397.2
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3648,
+                    1920,
+                    5397.2
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "Claude Fable 5.2 and Mythos 5.2 Architecture Teardown: Prefix-Checked Preserved Thinking, Effort Economics, and 1,000-Agent Formalization Benchmarks",
+              "rect": [
+                1149.8,
+                297,
+                436,
+                278.4
+              ],
+              "lineBoxes": [
+                [
+                  1149.8,
+                  295,
+                  328.5,
+                  43
+                ],
+                [
+                  1149.8,
+                  334.8,
+                  388.1,
+                  43
+                ],
+                [
+                  1149.8,
+                  374.5,
+                  421.2,
+                  43
+                ],
+                [
+                  1149.8,
+                  414.3,
+                  419.9,
+                  43
+                ],
+                [
+                  1149.8,
+                  454,
+                  353.2,
+                  43
+                ],
+                [
+                  1149.8,
+                  493.8,
+                  323.3,
+                  43
+                ],
+                [
+                  1149.8,
+                  533.6,
+                  205.6,
+                  43
+                ]
+              ],
+              "color": "rgb(255, 250, 240)",
+              "font": "Bricolage, system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(54, 56, 96)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3648,
+                    1920,
+                    5397.2
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3648,
+                    1920,
+                    5397.2
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "Fixo Flow Architecture: Zero-Cloud Desktop Dictation on Apple MLX and CTranslate2",
+              "rect": [
+                1149.8,
+                673.2,
+                436,
+                159.1
+              ],
+              "lineBoxes": [
+                [
+                  1149.8,
+                  671.2,
+                  367.8,
+                  43
+                ],
+                [
+                  1149.8,
+                  711,
+                  319,
+                  43
+                ],
+                [
+                  1149.8,
+                  750.7,
+                  293.4,
+                  43
+                ],
+                [
+                  1149.8,
+                  790.5,
+                  340.1,
+                  43
+                ]
+              ],
+              "color": "rgb(255, 250, 240)",
+              "font": "Bricolage, system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(50, 54, 92)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3648,
+                    1920,
+                    5397.2
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3648,
+                    1920,
+                    5397.2
+                  ]
+                }
+              ]
+            }
+          ],
+          ".signal-notes a > svg": [
+            {
+              "text": "",
+              "rect": [
+                1061.8,
+                744.6,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(255, 250, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3648,
+                    1920,
+                    5397.2
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3648,
+                    1920,
+                    5397.2
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "",
+              "rect": [
+                1593.8,
+                427.2,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(255, 250, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(54, 56, 96)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3648,
+                    1920,
+                    5397.2
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3648,
+                    1920,
+                    5397.2
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "",
+              "rect": [
+                1593.8,
+                743.7,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(255, 250, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(50, 54, 92)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3648,
+                    1920,
+                    5397.2
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3648,
+                    1920,
+                    5397.2
+                  ]
+                }
+              ]
+            }
+          ],
+          ".signal-notes .signal-label": [
+            {
+              "text": "2026-11-27 / 18 min",
+              "rect": [
+                308.2,
+                666.1,
+                771.7,
+                16.7
+              ],
+              "lineBoxes": [
+                [
+                  308.2,
+                  666.1,
+                  81.8,
+                  15
+                ],
+                [
+                  390,
+                  666.1,
+                  24.5,
+                  15
+                ],
+                [
+                  414.5,
+                  666.1,
+                  16.4,
+                  15
+                ],
+                [
+                  430.9,
+                  666.1,
+                  32.7,
+                  15
+                ]
+              ],
+              "color": "rgb(214, 217, 255)",
+              "font": "\"DM Mono\", ui-monospace, monospace",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3648,
+                    1920,
+                    5397.2
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3648,
+                    1920,
+                    5397.2
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "2026-11-25 / 20 min",
+              "rect": [
+                1149.8,
+                269.1,
+                462,
+                16.7
+              ],
+              "lineBoxes": [
+                [
+                  1149.8,
+                  269.1,
+                  81.8,
+                  15
+                ],
+                [
+                  1231.6,
+                  269.1,
+                  24.5,
+                  15
+                ],
+                [
+                  1256.2,
+                  269.1,
+                  16.4,
+                  15
+                ],
+                [
+                  1272.5,
+                  269.1,
+                  32.7,
+                  15
+                ]
+              ],
+              "color": "rgb(214, 217, 255)",
+              "font": "\"DM Mono\", ui-monospace, monospace",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(54, 56, 96)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3648,
+                    1920,
+                    5397.2
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3648,
+                    1920,
+                    5397.2
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "2026-11-25 / 13 min",
+              "rect": [
+                1149.8,
+                645.3,
+                462,
+                16.7
+              ],
+              "lineBoxes": [
+                [
+                  1149.8,
+                  645.3,
+                  81.8,
+                  15
+                ],
+                [
+                  1231.6,
+                  645.3,
+                  24.5,
+                  15
+                ],
+                [
+                  1256.2,
+                  645.3,
+                  16.4,
+                  15
+                ],
+                [
+                  1272.5,
+                  645.3,
+                  32.7,
+                  15
+                ]
+              ],
+              "color": "rgb(214, 217, 255)",
+              "font": "\"DM Mono\", ui-monospace, monospace",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(50, 54, 92)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3648,
+                    1920,
+                    5397.2
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3648,
+                    1920,
+                    5397.2
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "engineering",
+        "selectors": {
+          ".signal-bento-source a": [
+            {
+              "text": "Architecture & evidence",
+              "rect": [
+                1439.5,
+                787.8,
+                184.3,
+                62
+              ],
+              "lineBoxes": [
+                [
+                  1439.5,
+                  790.8,
+                  139,
+                  24
+                ],
+                [
+                  1439.5,
+                  821.8,
+                  89.2,
+                  24
+                ]
+              ],
+              "color": "rgb(32, 29, 40)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "signal-bento-source",
+                  "overflow": "clip",
+                  "rect": [
+                    1423.3,
+                    512.5,
+                    216.7,
+                    353.5
+                  ]
+                },
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1955,
+                    1920,
+                    5397.2
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1955,
+                    1920,
+                    5397.2
+                  ]
+                }
+              ]
+            }
+          ],
+          ".signal-bento-source a svg": [
+            {
+              "text": "",
+              "rect": [
+                1528.7,
+                826.7,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(32, 29, 40)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "signal-bento-source",
+                  "overflow": "clip",
+                  "rect": [
+                    1423.3,
+                    512.5,
+                    216.7,
+                    353.5
+                  ]
+                },
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1955,
+                    1920,
+                    5397.2
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1955,
+                    1920,
+                    5397.2
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "about-me",
+        "selectors": {
+          ".signal-profile-inset .signal-handwriting": [
+            {
+              "text": "I care about how it feels to use.",
+              "rect": [
+                1297.2,
+                201.3,
+                288.8,
+                74.1
+              ],
+              "lineBoxes": [
+                [
+                  1296.8,
+                  203.4,
+                  228.7,
+                  50.6
+                ],
+                [
+                  1299,
+                  244.3,
+                  39.9,
+                  30.8
+                ]
+              ],
+              "color": "rgb(83, 86, 112)",
+              "font": "Schoolbell, cursive",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(247, 189, 196)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2957,
+                    1920,
+                    5397.2
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2957,
+                    1920,
+                    5397.2
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "contact",
+        "selectors": {
+          ".signal-home-contact a.signal-button": [
+            {
+              "text": "Work with me",
+              "rect": [
+                1471.5,
+                337.4,
+                168.5,
+                48
+              ],
+              "lineBoxes": [
+                [
+                  1487.7,
+                  351,
+                  104.5,
+                  20
+                ]
+              ],
+              "color": "rgb(255, 250, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgb(32, 29, 40)",
+              "opacity": "1",
+              "face": "rgb(32, 29, 40)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -4397,
+                    1920,
+                    5397.2
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -4397,
+                    1920,
+                    5397.2
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "dark": false,
+    "viewport": [
+      844,
+      390
+    ],
+    "scrollWidth": 844,
+    "samples": [
+      {
+        "id": "writing",
+        "selectors": {
+          ".signal-notes h3": [
+            {
+              "text": "kv4-hopper: Why 4-Bit KV Caches Stall on Hopper GPUs, and How Register-Direct WGMMA Fixes Them",
+              "rect": [
+                56.7,
+                400.9,
+                400.5,
+                65.1
+              ],
+              "lineBoxes": [
+                [
+                  56.7,
+                  399.9,
+                  292.8,
+                  23
+                ],
+                [
+                  56.7,
+                  421.6,
+                  270.1,
+                  23
+                ],
+                [
+                  56.7,
+                  443.3,
+                  316.8,
+                  23
+                ]
+              ],
+              "color": "rgb(255, 250, 240)",
+              "font": "Bricolage, system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2516,
+                    844,
+                    3610.5
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2516,
+                    844,
+                    3610.5
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "Claude Fable 5.2 and Mythos 5.2 Architecture Teardown: Prefix-Checked Preserved Thinking, Effort Economics, and 1,000-Agent Formalization Benchmarks",
+              "rect": [
+                534.3,
+                176.5,
+                227,
+                173.5
+              ],
+              "lineBoxes": [
+                [
+                  534.3,
+                  175.5,
+                  179.2,
+                  23
+                ],
+                [
+                  534.3,
+                  197.1,
+                  211.7,
+                  23
+                ],
+                [
+                  534.3,
+                  218.8,
+                  152.3,
+                  23
+                ],
+                [
+                  534.3,
+                  240.5,
+                  171.6,
+                  23
+                ],
+                [
+                  534.3,
+                  262.2,
+                  134.7,
+                  23
+                ],
+                [
+                  534.3,
+                  283.9,
+                  192.6,
+                  23
+                ],
+                [
+                  534.3,
+                  305.6,
+                  176.3,
+                  23
+                ],
+                [
+                  534.3,
+                  327.3,
+                  112.2,
+                  23
+                ]
+              ],
+              "color": "rgb(255, 250, 240)",
+              "font": "Bricolage, system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(54, 56, 96)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2516,
+                    844,
+                    3610.5
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2516,
+                    844,
+                    3610.5
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "Fixo Flow Architecture: Zero-Cloud Desktop Dictation on Apple MLX and CTranslate2",
+              "rect": [
+                534.3,
+                452.9,
+                227,
+                86.8
+              ],
+              "lineBoxes": [
+                [
+                  534.3,
+                  451.9,
+                  200.6,
+                  23
+                ],
+                [
+                  534.3,
+                  473.5,
+                  174,
+                  23
+                ],
+                [
+                  534.3,
+                  495.2,
+                  160.1,
+                  23
+                ],
+                [
+                  534.3,
+                  516.9,
+                  185.5,
+                  23
+                ]
+              ],
+              "color": "rgb(255, 250, 240)",
+              "font": "Bricolage, system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(50, 54, 92)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2516,
+                    844,
+                    3610.5
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2516,
+                    844,
+                    3610.5
+                  ]
+                }
+              ]
+            }
+          ],
+          ".signal-notes a > svg": [
+            {
+              "text": "",
+              "rect": [
+                465.2,
+                424.4,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(255, 250, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2516,
+                    844,
+                    3610.5
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2516,
+                    844,
+                    3610.5
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "",
+              "rect": [
+                769.3,
+                254.2,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(255, 250, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(54, 56, 96)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2516,
+                    844,
+                    3610.5
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2516,
+                    844,
+                    3610.5
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "",
+              "rect": [
+                769.3,
+                487.2,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(255, 250, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(50, 54, 92)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2516,
+                    844,
+                    3610.5
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2516,
+                    844,
+                    3610.5
+                  ]
+                }
+              ]
+            }
+          ],
+          ".signal-notes .signal-label": [
+            {
+              "text": "2026-11-27 / 18 min",
+              "rect": [
+                56.7,
+                373,
+                426.5,
+                16.7
+              ],
+              "lineBoxes": [
+                [
+                  56.7,
+                  373,
+                  81.8,
+                  15
+                ],
+                [
+                  138.5,
+                  373,
+                  24.5,
+                  15
+                ],
+                [
+                  163,
+                  373,
+                  16.4,
+                  15
+                ],
+                [
+                  179.4,
+                  373,
+                  32.7,
+                  15
+                ]
+              ],
+              "color": "rgb(214, 217, 255)",
+              "font": "\"DM Mono\", ui-monospace, monospace",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2516,
+                    844,
+                    3610.5
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2516,
+                    844,
+                    3610.5
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "2026-11-25 / 20 min",
+              "rect": [
+                534.3,
+                148.6,
+                253,
+                16.7
+              ],
+              "lineBoxes": [
+                [
+                  534.3,
+                  148.6,
+                  81.8,
+                  15
+                ],
+                [
+                  616.1,
+                  148.6,
+                  24.5,
+                  15
+                ],
+                [
+                  640.6,
+                  148.6,
+                  16.4,
+                  15
+                ],
+                [
+                  657,
+                  148.6,
+                  32.7,
+                  15
+                ]
+              ],
+              "color": "rgb(214, 217, 255)",
+              "font": "\"DM Mono\", ui-monospace, monospace",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(54, 56, 96)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2516,
+                    844,
+                    3610.5
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2516,
+                    844,
+                    3610.5
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "2026-11-25 / 13 min",
+              "rect": [
+                534.3,
+                425,
+                253,
+                16.7
+              ],
+              "lineBoxes": [
+                [
+                  534.3,
+                  425,
+                  81.8,
+                  15
+                ],
+                [
+                  616.1,
+                  425,
+                  24.5,
+                  15
+                ],
+                [
+                  640.6,
+                  425,
+                  16.4,
+                  15
+                ],
+                [
+                  657,
+                  425,
+                  32.7,
+                  15
+                ]
+              ],
+              "color": "rgb(214, 217, 255)",
+              "font": "\"DM Mono\", ui-monospace, monospace",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(50, 54, 92)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2516,
+                    844,
+                    3610.5
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2516,
+                    844,
+                    3610.5
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "engineering",
+        "selectors": {
+          ".signal-bento-source a": [
+            {
+              "text": "Architecture & evidence",
+              "rect": [
+                93,
+                567.7,
+                194.4,
+                23.6
+              ],
+              "lineBoxes": [
+                [
+                  93,
+                  569.7,
+                  176.4,
+                  19
+                ]
+              ],
+              "color": "rgb(32, 29, 40)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "signal-bento-source",
+                  "overflow": "clip",
+                  "rect": [
+                    38,
+                    550.3,
+                    768,
+                    58.4
+                  ]
+                },
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1349,
+                    844,
+                    3610.5
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1349,
+                    844,
+                    3610.5
+                  ]
+                }
+              ]
+            }
+          ],
+          ".signal-bento-source a svg": [
+            {
+              "text": "",
+              "rect": [
+                269.4,
+                571.9,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(32, 29, 40)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "signal-bento-source",
+                  "overflow": "clip",
+                  "rect": [
+                    38,
+                    550.3,
+                    768,
+                    58.4
+                  ]
+                },
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1349,
+                    844,
+                    3610.5
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1349,
+                    844,
+                    3610.5
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "about-me",
+        "selectors": {
+          ".signal-profile-inset .signal-handwriting": [
+            {
+              "text": "I care about how it feels to use.",
+              "rect": [
+                611.3,
+                89.5,
+                157,
+                56.5
+              ],
+              "lineBoxes": [
+                [
+                  611,
+                  89,
+                  131.4,
+                  35.5
+                ],
+                [
+                  613.1,
+                  113,
+                  87,
+                  30.8
+                ]
+              ],
+              "color": "rgb(83, 86, 112)",
+              "font": "Schoolbell, cursive",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(247, 189, 196)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2053,
+                    844,
+                    3610.5
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2053,
+                    844,
+                    3610.5
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "contact",
+        "selectors": {
+          ".signal-home-contact a.signal-button": [
+            {
+              "text": "Work with me",
+              "rect": [
+                637.5,
+                11.2,
+                168.5,
+                48
+              ],
+              "lineBoxes": [
+                [
+                  653.7,
+                  24.8,
+                  104.5,
+                  20
+                ]
+              ],
+              "color": "rgb(255, 250, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgb(32, 29, 40)",
+              "opacity": "1",
+              "face": "rgb(32, 29, 40)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3166,
+                    844,
+                    3610.5
+                  ]
+                },
+                {
+                  "className": "light",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3166,
+                    844,
+                    3610.5
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "dark": true,
+    "viewport": [
+      390,
+      844
+    ],
+    "scrollWidth": 390,
+    "samples": [
+      {
+        "id": "writing",
+        "selectors": {
+          ".signal-notes h3": [
+            {
+              "text": "kv4-hopper: Why 4-Bit KV Caches Stall on Hopper GPUs, and How Register-Direct WGMMA Fixes Them",
+              "rect": [
+                33,
+                364,
+                298,
+                86.8
+              ],
+              "lineBoxes": [
+                [
+                  33,
+                  363,
+                  224.1,
+                  23
+                ],
+                [
+                  33,
+                  384.6,
+                  202.8,
+                  23
+                ],
+                [
+                  33,
+                  406.3,
+                  214.9,
+                  23
+                ],
+                [
+                  33,
+                  428,
+                  237.9,
+                  23
+                ]
+              ],
+              "color": "rgb(247, 247, 240)",
+              "font": "Bricolage, system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                },
+                {
+                  "className": "dark",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "Claude Fable 5.2 and Mythos 5.2 Architecture Teardown: Prefix-Checked Preserved Thinking, Effort Economics, and 1,000-Agent Formalization Benchmarks",
+              "rect": [
+                33,
+                526.2,
+                298,
+                108.4
+              ],
+              "lineBoxes": [
+                [
+                  33,
+                  525.2,
+                  280.3,
+                  23
+                ],
+                [
+                  33,
+                  546.9,
+                  266.6,
+                  23
+                ],
+                [
+                  33,
+                  568.5,
+                  254.7,
+                  23
+                ],
+                [
+                  33,
+                  590.2,
+                  248,
+                  23
+                ],
+                [
+                  33,
+                  611.9,
+                  292.2,
+                  23
+                ]
+              ],
+              "color": "rgb(247, 247, 240)",
+              "font": "Bricolage, system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(54, 56, 96)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                },
+                {
+                  "className": "dark",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "Fixo Flow Architecture: Zero-Cloud Desktop Dictation on Apple MLX and CTranslate2",
+              "rect": [
+                33,
+                710.1,
+                298,
+                65.1
+              ],
+              "lineBoxes": [
+                [
+                  33,
+                  709.1,
+                  250.1,
+                  23
+                ],
+                [
+                  33,
+                  730.8,
+                  237.2,
+                  23
+                ],
+                [
+                  33,
+                  752.5,
+                  240.2,
+                  23
+                ]
+              ],
+              "color": "rgb(247, 247, 240)",
+              "font": "Bricolage, system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(50, 54, 92)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                },
+                {
+                  "className": "dark",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                }
+              ]
+            }
+          ],
+          ".signal-notes a > svg": [
+            {
+              "text": "",
+              "rect": [
+                339,
+                398.3,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(247, 247, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                },
+                {
+                  "className": "dark",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "",
+              "rect": [
+                339,
+                571.4,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(247, 247, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(54, 56, 96)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                },
+                {
+                  "className": "dark",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "",
+              "rect": [
+                339,
+                733.6,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(247, 247, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(50, 54, 92)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                },
+                {
+                  "className": "dark",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                }
+              ]
+            }
+          ],
+          ".signal-notes .signal-label": [
+            {
+              "text": "2026-11-27 / 18 min",
+              "rect": [
+                33,
+                336.1,
+                324,
+                16.7
+              ],
+              "lineBoxes": [
+                [
+                  33,
+                  336.1,
+                  81.8,
+                  15
+                ],
+                [
+                  114.8,
+                  336.1,
+                  24.5,
+                  15
+                ],
+                [
+                  139.3,
+                  336.1,
+                  16.4,
+                  15
+                ],
+                [
+                  155.7,
+                  336.1,
+                  32.7,
+                  15
+                ]
+              ],
+              "color": "rgb(214, 217, 255)",
+              "font": "\"DM Mono\", ui-monospace, monospace",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                },
+                {
+                  "className": "dark",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "2026-11-25 / 20 min",
+              "rect": [
+                33,
+                498.3,
+                324,
+                16.7
+              ],
+              "lineBoxes": [
+                [
+                  33,
+                  498.3,
+                  81.8,
+                  15
+                ],
+                [
+                  114.8,
+                  498.3,
+                  24.5,
+                  15
+                ],
+                [
+                  139.3,
+                  498.3,
+                  16.4,
+                  15
+                ],
+                [
+                  155.7,
+                  498.3,
+                  32.7,
+                  15
+                ]
+              ],
+              "color": "rgb(214, 217, 255)",
+              "font": "\"DM Mono\", ui-monospace, monospace",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(54, 56, 96)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                },
+                {
+                  "className": "dark",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "2026-11-25 / 13 min",
+              "rect": [
+                33,
+                682.2,
+                324,
+                16.7
+              ],
+              "lineBoxes": [
+                [
+                  33,
+                  682.2,
+                  81.8,
+                  15
+                ],
+                [
+                  114.8,
+                  682.2,
+                  24.5,
+                  15
+                ],
+                [
+                  139.3,
+                  682.2,
+                  16.4,
+                  15
+                ],
+                [
+                  155.7,
+                  682.2,
+                  32.7,
+                  15
+                ]
+              ],
+              "color": "rgb(214, 217, 255)",
+              "font": "\"DM Mono\", ui-monospace, monospace",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(50, 54, 92)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                },
+                {
+                  "className": "dark",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3221,
+                    390,
+                    4869.9
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "engineering",
+        "selectors": {
+          ".signal-bento-source a": [
+            {
+              "text": "Architecture & evidence",
+              "rect": [
+                71,
+                603.8,
+                194.4,
+                23.6
+              ],
+              "lineBoxes": [
+                [
+                  71,
+                  605.8,
+                  176.4,
+                  19
+                ]
+              ],
+              "color": "rgb(32, 29, 40)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "signal-bento-source",
+                  "overflow": "clip",
+                  "rect": [
+                    16,
+                    586.4,
+                    358,
+                    58.4
+                  ]
+                },
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1823,
+                    390,
+                    4869.9
+                  ]
+                },
+                {
+                  "className": "dark",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1823,
+                    390,
+                    4869.9
+                  ]
+                }
+              ]
+            }
+          ],
+          ".signal-bento-source a svg": [
+            {
+              "text": "",
+              "rect": [
+                247.4,
+                607.9,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(32, 29, 40)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "signal-bento-source",
+                  "overflow": "clip",
+                  "rect": [
+                    16,
+                    586.4,
+                    358,
+                    58.4
+                  ]
+                },
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1823,
+                    390,
+                    4869.9
+                  ]
+                },
+                {
+                  "className": "dark",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1823,
+                    390,
+                    4869.9
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "about-me",
+        "selectors": {
+          ".signal-profile-inset .signal-handwriting": [
+            {
+              "text": "I care about how it feels to use.",
+              "rect": [
+                43.5,
+                373.9,
+                293.1,
+                54.4
+              ],
+              "lineBoxes": [
+                [
+                  43.5,
+                  381.2,
+                  221.1,
+                  44.9
+                ]
+              ],
+              "color": "rgb(196, 199, 228)",
+              "font": "Schoolbell, cursive",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(247, 189, 196)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2553,
+                    390,
+                    4869.9
+                  ]
+                },
+                {
+                  "className": "dark",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2553,
+                    390,
+                    4869.9
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "contact",
+        "selectors": {
+          ".signal-home-contact a.signal-button": [
+            {
+              "text": "Work with me",
+              "rect": [
+                16,
+                166.1,
+                168.5,
+                48
+              ],
+              "lineBoxes": [
+                [
+                  32.2,
+                  179.7,
+                  104.5,
+                  20
+                ]
+              ],
+              "color": "rgb(255, 250, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgb(32, 29, 40)",
+              "opacity": "1",
+              "face": "rgb(32, 29, 40)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -4026,
+                    390,
+                    4869.9
+                  ]
+                },
+                {
+                  "className": "dark",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -4026,
+                    390,
+                    4869.9
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "width": 1440,
+    "height": 900,
+    "dark": true,
+    "viewport": [
+      1440,
+      900
+    ],
+    "scrollWidth": 1440,
+    "samples": [
+      {
+        "id": "writing",
+        "selectors": {
+          ".signal-notes h3": [
+            {
+              "text": "kv4-hopper: Why 4-Bit KV Caches Stall on Hopper GPUs, and How Register-Direct WGMMA Fixes Them",
+              "rect": [
+                93,
+                658.1,
+                715.1,
+                107.4
+              ],
+              "lineBoxes": [
+                [
+                  93,
+                  656.1,
+                  483.2,
+                  38
+                ],
+                [
+                  93,
+                  691.9,
+                  445.6,
+                  38
+                ],
+                [
+                  93,
+                  727.7,
+                  522.7,
+                  38
+                ]
+              ],
+              "color": "rgb(247, 247, 240)",
+              "font": "Bricolage, system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                },
+                {
+                  "className": "dark",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "Claude Fable 5.2 and Mythos 5.2 Architecture Teardown: Prefix-Checked Preserved Thinking, Effort Economics, and 1,000-Agent Formalization Benchmarks",
+              "rect": [
+                904.1,
+                276.4,
+                416.9,
+                214.8
+              ],
+              "lineBoxes": [
+                [
+                  904.1,
+                  274.4,
+                  295.6,
+                  38
+                ],
+                [
+                  904.1,
+                  310.2,
+                  349.3,
+                  38
+                ],
+                [
+                  904.1,
+                  346,
+                  379.1,
+                  38
+                ],
+                [
+                  904.1,
+                  381.8,
+                  377.9,
+                  38
+                ],
+                [
+                  904.1,
+                  417.6,
+                  403.5,
+                  38
+                ],
+                [
+                  904.1,
+                  453.4,
+                  389.9,
+                  38
+                ]
+              ],
+              "color": "rgb(247, 247, 240)",
+              "font": "Bricolage, system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(54, 56, 96)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                },
+                {
+                  "className": "dark",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "Fixo Flow Architecture: Zero-Cloud Desktop Dictation on Apple MLX and CTranslate2",
+              "rect": [
+                904.1,
+                623.6,
+                416.9,
+                107.4
+              ],
+              "lineBoxes": [
+                [
+                  904.1,
+                  621.6,
+                  412.6,
+                  38
+                ],
+                [
+                  904.1,
+                  657.4,
+                  391.4,
+                  38
+                ],
+                [
+                  904.1,
+                  693.2,
+                  396.3,
+                  38
+                ]
+              ],
+              "color": "rgb(247, 247, 240)",
+              "font": "Bricolage, system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(50, 54, 92)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                },
+                {
+                  "className": "dark",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                }
+              ]
+            }
+          ],
+          ".signal-notes a > svg": [
+            {
+              "text": "",
+              "rect": [
+                816.1,
+                702.8,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(247, 247, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                },
+                {
+                  "className": "dark",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "",
+              "rect": [
+                1329,
+                374.8,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(247, 247, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(54, 56, 96)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                },
+                {
+                  "className": "dark",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "",
+              "rect": [
+                1329,
+                668.3,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(247, 247, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(50, 54, 92)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                },
+                {
+                  "className": "dark",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                }
+              ]
+            }
+          ],
+          ".signal-notes .signal-label": [
+            {
+              "text": "2026-11-27 / 18 min",
+              "rect": [
+                93,
+                630.3,
+                741.1,
+                16.7
+              ],
+              "lineBoxes": [
+                [
+                  93,
+                  630.3,
+                  81.8,
+                  15
+                ],
+                [
+                  174.8,
+                  630.3,
+                  24.5,
+                  15
+                ],
+                [
+                  199.3,
+                  630.3,
+                  16.4,
+                  15
+                ],
+                [
+                  215.7,
+                  630.3,
+                  32.7,
+                  15
+                ]
+              ],
+              "color": "rgb(214, 217, 255)",
+              "font": "\"DM Mono\", ui-monospace, monospace",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                },
+                {
+                  "className": "dark",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "2026-11-25 / 20 min",
+              "rect": [
+                904.1,
+                248.5,
+                442.9,
+                16.7
+              ],
+              "lineBoxes": [
+                [
+                  904.1,
+                  248.5,
+                  81.8,
+                  15
+                ],
+                [
+                  985.9,
+                  248.5,
+                  24.5,
+                  15
+                ],
+                [
+                  1010.4,
+                  248.5,
+                  16.4,
+                  15
+                ],
+                [
+                  1026.8,
+                  248.5,
+                  32.7,
+                  15
+                ]
+              ],
+              "color": "rgb(214, 217, 255)",
+              "font": "\"DM Mono\", ui-monospace, monospace",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(54, 56, 96)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                },
+                {
+                  "className": "dark",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "2026-11-25 / 13 min",
+              "rect": [
+                904.1,
+                595.7,
+                442.9,
+                16.7
+              ],
+              "lineBoxes": [
+                [
+                  904.1,
+                  595.7,
+                  81.8,
+                  15
+                ],
+                [
+                  985.9,
+                  595.7,
+                  24.5,
+                  15
+                ],
+                [
+                  1010.4,
+                  595.7,
+                  16.4,
+                  15
+                ],
+                [
+                  1026.8,
+                  595.7,
+                  32.7,
+                  15
+                ]
+              ],
+              "color": "rgb(214, 217, 255)",
+              "font": "\"DM Mono\", ui-monospace, monospace",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(50, 54, 92)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                },
+                {
+                  "className": "dark",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -3526,
+                    1440,
+                    5149.5
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "engineering",
+        "selectors": {
+          ".signal-bento-source a": [
+            {
+              "text": "Architecture & evidence",
+              "rect": [
+                1183,
+                757.5,
+                176,
+                62
+              ],
+              "lineBoxes": [
+                [
+                  1183,
+                  760.5,
+                  139,
+                  24
+                ],
+                [
+                  1183,
+                  791.5,
+                  89.2,
+                  24
+                ]
+              ],
+              "color": "rgb(32, 29, 40)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "signal-bento-source",
+                  "overflow": "clip",
+                  "rect": [
+                    1166.8,
+                    487.1,
+                    208.4,
+                    348.6
+                  ]
+                },
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1895,
+                    1440,
+                    5149.5
+                  ]
+                },
+                {
+                  "className": "dark",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1895,
+                    1440,
+                    5149.5
+                  ]
+                }
+              ]
+            }
+          ],
+          ".signal-bento-source a svg": [
+            {
+              "text": "",
+              "rect": [
+                1272.2,
+                796.4,
+                18,
+                18
+              ],
+              "lineBoxes": [],
+              "color": "rgb(32, 29, 40)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgba(0, 0, 0, 0)",
+              "clips": [
+                {
+                  "className": "signal-bento-source",
+                  "overflow": "clip",
+                  "rect": [
+                    1166.8,
+                    487.1,
+                    208.4,
+                    348.6
+                  ]
+                },
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1895,
+                    1440,
+                    5149.5
+                  ]
+                },
+                {
+                  "className": "dark",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -1895,
+                    1440,
+                    5149.5
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "about-me",
+        "selectors": {
+          ".signal-profile-inset .signal-handwriting": [
+            {
+              "text": "I care about how it feels to use.",
+              "rect": [
+                1044.3,
+                181.1,
+                276.9,
+                72.8
+              ],
+              "lineBoxes": [
+                [
+                  1043.9,
+                  182,
+                  228.7,
+                  50.6
+                ],
+                [
+                  1046.1,
+                  222.9,
+                  39.9,
+                  30.8
+                ]
+              ],
+              "color": "rgb(196, 199, 228)",
+              "font": "Schoolbell, cursive",
+              "background": "rgba(0, 0, 0, 0)",
+              "opacity": "1",
+              "face": "rgb(247, 189, 196)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2866,
+                    1440,
+                    5149.5
+                  ]
+                },
+                {
+                  "className": "dark",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -2866,
+                    1440,
+                    5149.5
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "contact",
+        "selectors": {
+          ".signal-home-contact a.signal-button": [
+            {
+              "text": "Work with me",
+              "rect": [
+                1206.7,
+                292,
+                168.5,
+                48
+              ],
+              "lineBoxes": [
+                [
+                  1222.9,
+                  305.6,
+                  104.5,
+                  20
+                ]
+              ],
+              "color": "rgb(255, 250, 240)",
+              "font": "\"Instrument Sans\", system-ui, sans-serif",
+              "background": "rgb(32, 29, 40)",
+              "opacity": "1",
+              "face": "rgb(32, 29, 40)",
+              "clips": [
+                {
+                  "className": "",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -4250,
+                    1440,
+                    5149.5
+                  ]
+                },
+                {
+                  "className": "dark",
+                  "overflow": "clip visible",
+                  "rect": [
+                    0,
+                    -4250,
+                    1440,
+                    5149.5
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

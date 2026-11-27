@@ -1,0 +1,46 @@
+{
+  "path": "/",
+  "status": 200,
+  "title": "Abrar Akhunji — AI & Full-Stack Engineer in Ahmedabad",
+  "h1": [
+    "ABRAR AKHUNJI"
+  ],
+  "headings": [
+    "Selected work.",
+    "How it works.",
+    "From model to interface.",
+    "The Neural Log.",
+    "Have a role in mind?"
+  ],
+  "width": 390,
+  "scrollWidth": 390,
+  "height": 844,
+  "scrollHeight": 4870,
+  "canvases": [
+    "signal-ink-canvas"
+  ],
+  "markers": [
+    "signal-shell"
+  ],
+  "aboveFold": [
+    "AA",
+    "Résumé",
+    "ABRAR AKHUNJI",
+    "Explore my work",
+    "Résumé"
+  ],
+  "vitals": {
+    "lcpMs": 88,
+    "cls": 0,
+    "longTaskBlockingMs": 0
+  },
+  "domContentLoadedMs": 46,
+  "bytesByType": {
+    "woff2": 94720,
+    "js": 740028,
+    "css": 117855,
+    "webp": 147772,
+    "svg": 202
+  },
+  "notes": []
+}

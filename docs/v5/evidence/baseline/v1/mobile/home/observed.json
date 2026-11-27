@@ -1,0 +1,46 @@
+{
+  "path": "/versions/serif/",
+  "status": 200,
+  "title": "Abrar Akhunji Portfolio",
+  "h1": [
+    "Engineer of Intelligent Systems."
+  ],
+  "headings": [
+    "I speak Code & Algorithms.",
+    "Selected Works",
+    "Experience, Education & Skills",
+    "Let's build the future."
+  ],
+  "width": 390,
+  "scrollWidth": 390,
+  "height": 844,
+  "scrollHeight": 10022,
+  "canvases": [],
+  "markers": [
+    "portfolio-archive"
+  ],
+  "aboveFold": [
+    "Home",
+    "About",
+    "Work",
+    "Exp",
+    "Resume",
+    "Contact",
+    "Hire Me",
+    "Contact Abrar",
+    "Engineer of Intelligent Systems."
+  ],
+  "vitals": {
+    "lcpMs": 236,
+    "cls": 0,
+    "longTaskBlockingMs": 0
+  },
+  "domContentLoadedMs": 185,
+  "bytesByType": {
+    "css": 79389,
+    "js": 495335,
+    "jpg": 2275022,
+    "svg": 491
+  },
+  "notes": []
+}

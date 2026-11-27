@@ -1,0 +1,41 @@
+{
+  "path": "/versions/halide/blog/2026-07-20-ponytail-ai-agent-lazy-senior-dev/",
+  "status": 200,
+  "title": "The Ponytail Effect: How One GitHub Repo Stops Claude Code From Over-Building Everything | Abrar Akhunji",
+  "h1": [
+    "The Ponytail Effect: How One GitHub Repo Stops Claude Code From Over-Building Everything"
+  ],
+  "headings": [
+    "Your Claude Code Workforce: 42 Skills Across 7 Departments",
+    "Tabs, Ship: OpenCode Desktop Just Landed",
+    "Kimi K3: The 2.8T Parameter Multimodal Giant"
+  ],
+  "width": 1440,
+  "scrollWidth": 1440,
+  "height": 900,
+  "scrollHeight": 6647,
+  "canvases": [],
+  "markers": [
+    "portfolio-archive"
+  ],
+  "aboveFold": [
+    "The Neural Log",
+    "WORK WITH ME",
+    "The Ponytail Effect: How One GitHub Repo Stops Claude Code From Over-Building Everything",
+    "1x",
+    "👩 👩 👨"
+  ],
+  "vitals": {
+    "lcpMs": 1304,
+    "cls": 0.00014074074074074073,
+    "longTaskBlockingMs": 0
+  },
+  "domContentLoadedMs": 113,
+  "bytesByType": {
+    "css": 84425,
+    "js": 2094682,
+    "svg": 620,
+    "jpg": 465186
+  },
+  "notes": []
+}

@@ -1,0 +1,64 @@
+{
+  "path": "/versions/zero-to-built/",
+  "status": 200,
+  "title": "Abrar Akhunji — AI & Full-Stack Engineer in Ahmedabad",
+  "h1": [
+    "Zero to built."
+  ],
+  "headings": [
+    "Three problems. A place to start.",
+    "Meet the builds.",
+    "The screen is only the start.",
+    "Engineer. Builder. Still curious.",
+    "Before the workbench.",
+    "Thinking out loud.",
+    "AI, product, and the parts between.",
+    "Small steps. A city of work.",
+    "Got a good “what if”?",
+    "Abrar Akhunji"
+  ],
+  "width": 390,
+  "scrollWidth": 390,
+  "height": 844,
+  "scrollHeight": 12101,
+  "canvases": [
+    "workshop-creatures",
+    "",
+    "",
+    "",
+    ""
+  ],
+  "markers": [
+    "workshop-creatures",
+    "portfolio-archive"
+  ],
+  "aboveFold": [
+    "abrar .",
+    "Home",
+    "Idea",
+    "Builds",
+    "About",
+    "Activity",
+    "Contact",
+    "Watch agents build a showcase ↗",
+    "Pause",
+    "Zero to built.",
+    "Explore my work",
+    "Resume",
+    "Pull up a chair"
+  ],
+  "vitals": {
+    "lcpMs": 172,
+    "cls": 0,
+    "longTaskBlockingMs": 7
+  },
+  "domContentLoadedMs": 69,
+  "bytesByType": {
+    "css": 156116,
+    "woff2": 143368,
+    "js": 780241,
+    "webp": 98976,
+    "svg": 552
+  },
+  "notes": []
+}

@@ -1,0 +1,62 @@
+{
+  "path": "/versions/halide/",
+  "status": 200,
+  "title": "Abrar Akhunji — AI/ML & Full-Stack Engineer in Ahmedabad",
+  "h1": [
+    "Engineer of Intelligent Systems."
+  ],
+  "headings": [
+    "Selected works",
+    "The practice",
+    "Record",
+    "Field notes",
+    "Work with me",
+    "Let's build the future."
+  ],
+  "width": 1440,
+  "scrollWidth": 1440,
+  "height": 900,
+  "scrollHeight": 10085,
+  "canvases": [
+    "",
+    "absolute inset-0 h-full w-full"
+  ],
+  "markers": [
+    "portfolio-archive"
+  ],
+  "aboveFold": [
+    "ABRAR.",
+    "GH",
+    "LI",
+    "IG",
+    "BLOG",
+    "HIRE",
+    "Home",
+    "Work",
+    "Practice",
+    "Record",
+    "About",
+    "Notes",
+    "Resume",
+    "Contact",
+    "Mute SFX",
+    "Hire Me",
+    "Engineer of Intelligent Systems.",
+    "Selected works",
+    "Resume",
+    "Contact"
+  ],
+  "vitals": {
+    "lcpMs": 424,
+    "cls": 0.0032623915935249487,
+    "longTaskBlockingMs": 158
+  },
+  "domContentLoadedMs": 200,
+  "bytesByType": {
+    "css": 84425,
+    "js": 1227241,
+    "svg": 2464,
+    "webp": 153480
+  },
+  "notes": []
+}

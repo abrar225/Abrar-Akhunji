@@ -1,0 +1,3513 @@
+{
+  "browser": "158.0.8127.37",
+  "viewports": {
+    "desktop": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    "mobile": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "hasTouch": true,
+      "isMobile": true
+    }
+  },
+  "mode": "initial",
+  "results": {
+    "v4": {
+      "desktop": [
+        {
+          "path": "/versions/zero-to-built/",
+          "status": 200,
+          "title": "Abrar Akhunji — AI & Full-Stack Engineer in Ahmedabad",
+          "h1": [
+            "Zero to built."
+          ],
+          "headings": [
+            "Three problems. A place to start.",
+            "Meet the builds.",
+            "The screen is only the start.",
+            "Engineer. Builder. Still curious.",
+            "Before the workbench.",
+            "Thinking out loud.",
+            "AI, product, and the parts between.",
+            "Small steps. A city of work.",
+            "Got a good “what if”?",
+            "Abrar Akhunji"
+          ],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 10514,
+          "canvases": [
+            "workshop-creatures",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "markers": [
+            "workshop-creatures",
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "abrar . The build room",
+            "Work",
+            "About",
+            "Writing",
+            "Hire",
+            "Contact",
+            "Resume",
+            "01 Hello",
+            "02 The idea",
+            "03 The builds",
+            "04 The builder",
+            "05 GitHub",
+            "06 Say hello",
+            "Watch agents build a showcase ↗",
+            "Zero to built.",
+            "Explore my work",
+            "Resume"
+          ],
+          "vitals": {
+            "lcpMs": 244,
+            "cls": 0,
+            "longTaskBlockingMs": 728
+          },
+          "domContentLoadedMs": 104,
+          "bytesByType": {
+            "css": 156116,
+            "woff2": 143368,
+            "js": 1337561,
+            "webp": 180336,
+            "svg": 552
+          },
+          "notes": []
+        },
+        {
+          "path": "/versions/zero-to-built/blog/",
+          "status": 200,
+          "title": "The Neural Log — AI & Systems Engineering Blog | Abrar Akhunji",
+          "h1": [
+            "The Neural Log."
+          ],
+          "headings": [
+            "H-Spec: Why Block-Parallel Drafters Waste 30% of VRAM on Shadow KV Caches, and How Hybrid Context Injection Eliminates Them",
+            "MiniCache: Why Evicting Tokens Destroys Long Contexts, and How Depth-Dimension Merging Squeezes KV Caches by 5x",
+            "CacheBlend: Why Prefix Caching Collapses in Real-World RAG, and How Cached Knowledge Fusion Reclaims 3.3x TTFT Speedups",
+            "SparseSpec: Why Reasoning Chains Choke on KV Cache Bandwidth, and How PillarAttn Reuses Verification Attention for 2.1x Lossless Speedups",
+            "AgentSpec: Why Speculative Decoding Collapses in Agent Batches, and How Structure-Isolated Drafting Recovers 2.4x Throughput",
+            "Google Willow and the Multiverse Myth: Inside the 10-Septillion-Year Quantum Supremacy Benchmark",
+            "The AI Bubble: Inside the $600B CapEx Chasm, Tech Layoffs, and the Enterprise ROI Crisis",
+            "RTP-LLM: Building an Evolvable and Reliable LLM Inference Engine at Alibaba Scale",
+            "FluidPD: In-Place Elasticity for SLO-Aware Prefill-Decode Disaggregated LLM Serving",
+            "SARIA: Persistence-Aware KV Caching with Coordinated DRAM-SSD Reload for Multi-Turn LLM Agents",
+            "AKV: Cache Engineering for Autonomous Agents and State-Preserving Prefix Invalidation Bypass",
+            "HAWK: Heterogeneity-Aware KV Cache Transfer for GPU-NPU Phase-Disaggregated LLM Inference",
+            "UlaCache: Unified Logical Addressing for Sparse LLM Serving",
+            "Adaptive DHiSparse: Speculative Decoding over a Load-Adaptive KV Hierarchy",
+            "DLite: History-Free Speculative Decoding and the Elimination of Drafter-Side KV Cache Bottlenecks in Agentic AI",
+            "Gemini 4 Carbon: The Frontier Architecture of Defensive Cybersecurity, 0.0% Prompt Injection Vulnerability, and Verified Agentic Reasoning",
+            "FlashMap: Flow Map Speculative Decoding and the Mathematical Elimination of Suffix Decay",
+            "llm-d 1.0: Dissecting the CNCF Distributed Inference Engine for Prefill-Decode Disaggregation and Prefix-Aware Routing"
+          ],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 19521,
+          "canvases": [
+            "workshop-creatures",
+            ""
+          ],
+          "markers": [
+            "workshop-creatures",
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "abrar . The build room",
+            "Work",
+            "About",
+            "Writing",
+            "Hire",
+            "Contact",
+            "Resume",
+            "Abrar Akhunji",
+            "The Neural Log.",
+            "List",
+            "Tech Tree",
+            "All posts 75",
+            "Systems Engineering 28",
+            "AI 27",
+            "Agentic AI 23",
+            "vLLM 21",
+            "LLM Inference 18",
+            "KV Cache 16",
+            "CUDA 15",
+            "Mixture of Experts 13",
+            "Systems Architecture 13",
+            "Inference Optimization 11",
+            "H-Spec: Why Block-Parallel Drafters Waste 30% of VRAM on Shadow KV Caches, and How Hybrid Context Injection Eliminates Them A systems engineering deep dive into H-Spec, detailing why block-parallel drafters suffer severe memory fragmentation in high-concurrency serving, and how hybrid Mamba-attention eliminates drafter KV caches entirely. Read the note"
+          ],
+          "vitals": {
+            "lcpMs": 460,
+            "cls": 0.016094827559357316,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 105,
+          "bytesByType": {
+            "css": 156116,
+            "woff2": 121112,
+            "js": 900408,
+            "svg": 310
+          },
+          "notes": []
+        },
+        {
+          "path": "/versions/zero-to-built/hire/",
+          "status": 200,
+          "title": "Hire an AI/ML & Full-Stack Engineer in Ahmedabad | Abrar Akhunji",
+          "h1": [
+            "AI/ML and full-stack engineering, built to ship."
+          ],
+          "headings": [
+            "What I build",
+            "Where I work",
+            "How an engagement runs",
+            "Ways to work together",
+            "Before you email",
+            "Tell me what you are trying to ship.",
+            "Abrar Akhunji"
+          ],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 4230,
+          "canvases": [
+            "workshop-creatures",
+            ""
+          ],
+          "markers": [
+            "workshop-creatures",
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "abrar . The build room",
+            "Work",
+            "About",
+            "Writing",
+            "Hire",
+            "Contact",
+            "Resume",
+            "Portfolio",
+            "THE NEURAL LOG",
+            "AI/ML and full-stack engineering, built to ship.",
+            "Start a conversation",
+            "See selected work"
+          ],
+          "vitals": {
+            "lcpMs": 396,
+            "cls": 0.000004818512088477365,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 51,
+          "bytesByType": {
+            "css": 156116,
+            "woff2": 95900,
+            "js": 790015,
+            "svg": 310
+          },
+          "notes": []
+        },
+        {
+          "path": "/versions/zero-to-built/work/",
+          "status": 200,
+          "title": "Engineering projects | Abrar Akhunji",
+          "h1": [
+            "Useful things. Different kinds of hard."
+          ],
+          "headings": [
+            "Fixo Flow",
+            "PacketLark",
+            "Framecast Studio",
+            "FixO CLI",
+            "GourmetGo",
+            "Library Management System",
+            "Real vs AI Image Detector",
+            "Cattle Breed Identification System",
+            "Brain Tumor Detection (MRI)",
+            "Kid's Space (Android App)",
+            "Abrar Akhunji"
+          ],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 4478,
+          "canvases": [
+            "workshop-creatures",
+            ""
+          ],
+          "markers": [
+            "workshop-creatures",
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "abrar . The build room",
+            "Work",
+            "About",
+            "Writing",
+            "Hire",
+            "Contact",
+            "Resume",
+            "Useful things. Different kinds of hard.",
+            "Preview LOCAL AI Fixo Flow Your voice, in the apps you already use. Python / Whisper / MLX / SQLite",
+            "Released DEVELOPER TOOLS PacketLark A local workbench for requests, tests and API discovery. TypeScript / Node.js / QuickJS / MCP"
+          ],
+          "vitals": {
+            "lcpMs": 404,
+            "cls": 0.000004818512088477365,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 51,
+          "bytesByType": {
+            "css": 156116,
+            "woff2": 95900,
+            "js": 781778,
+            "svg": 2464,
+            "webp": 335618
+          },
+          "notes": []
+        },
+        {
+          "path": "/versions/zero-to-built/about/",
+          "status": 200,
+          "title": "About Abrar Akhunji | AI & Full-Stack Engineer",
+          "h1": [
+            "Abrar Akhunji"
+          ],
+          "headings": [
+            "Location & Hub",
+            "Specialization",
+            "The Journey",
+            "Experience & Milestones",
+            "Education & Credentials",
+            "Get in Touch",
+            "Abrar Akhunji"
+          ],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 2916,
+          "canvases": [
+            "workshop-creatures",
+            ""
+          ],
+          "markers": [
+            "workshop-creatures",
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "abrar . The build room",
+            "Work",
+            "About",
+            "Writing",
+            "Hire",
+            "Contact",
+            "Resume",
+            "Back to home",
+            "Abrar Akhunji"
+          ],
+          "vitals": {
+            "lcpMs": 388,
+            "cls": 0.000004818512088477365,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 49,
+          "bytesByType": {
+            "css": 156116,
+            "woff2": 95900,
+            "js": 787368,
+            "svg": 310
+          },
+          "notes": []
+        },
+        {
+          "path": "/versions/zero-to-built/contact/",
+          "status": 200,
+          "title": "Contact Abrar Akhunji | AI & Full-Stack Engineer",
+          "h1": [
+            "Contact & Collaboration"
+          ],
+          "headings": [
+            "Direct Email",
+            "Response SLA & Hours",
+            "Locations Served",
+            "Verified Public Channels",
+            "Abrar Akhunji"
+          ],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 2143,
+          "canvases": [
+            "workshop-creatures",
+            ""
+          ],
+          "markers": [
+            "workshop-creatures",
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "abrar . The build room",
+            "Work",
+            "About",
+            "Writing",
+            "Hire",
+            "Contact",
+            "Resume",
+            "Back to home",
+            "Contact & Collaboration",
+            "abrar@abrarakhunji.com"
+          ],
+          "vitals": {
+            "lcpMs": 400,
+            "cls": 0.000004818512088477365,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 53,
+          "bytesByType": {
+            "css": 156116,
+            "woff2": 95900,
+            "js": 786614,
+            "svg": 310
+          },
+          "notes": []
+        },
+        {
+          "path": "/versions/zero-to-built/privacy/",
+          "status": 200,
+          "title": "Privacy Policy | Abrar Akhunji",
+          "h1": [
+            "Privacy Policy"
+          ],
+          "headings": [
+            "1. Overview & Commitment",
+            "2. Information We Collect",
+            "3. Cookies & Tracking",
+            "4. Data Retention & Rights",
+            "Abrar Akhunji"
+          ],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 1855,
+          "canvases": [
+            "workshop-creatures",
+            ""
+          ],
+          "markers": [
+            "workshop-creatures",
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "abrar . The build room",
+            "Work",
+            "About",
+            "Writing",
+            "Hire",
+            "Contact",
+            "Resume",
+            "Back to home",
+            "Privacy Policy",
+            "abrar@abrarakhunji.com"
+          ],
+          "vitals": {
+            "lcpMs": 396,
+            "cls": 0.000004818512088477365,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 54,
+          "bytesByType": {
+            "css": 156116,
+            "woff2": 95900,
+            "js": 785225,
+            "svg": 310
+          },
+          "notes": []
+        },
+        {
+          "path": "/versions/zero-to-built/terms/",
+          "status": 200,
+          "title": "Terms of Service | Abrar Akhunji",
+          "h1": [
+            "Terms of Service"
+          ],
+          "headings": [
+            "1. Agreement to Terms",
+            "2. Automated Agent Access & Content Signals",
+            "3. Intellectual Property Rights",
+            "4. Disclaimer & Limitation of Liability",
+            "5. Governing Law & Jurisdiction",
+            "6. Contact & Questions",
+            "Abrar Akhunji"
+          ],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 2325,
+          "canvases": [
+            "workshop-creatures",
+            ""
+          ],
+          "markers": [
+            "workshop-creatures",
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "abrar . The build room",
+            "Work",
+            "About",
+            "Writing",
+            "Hire",
+            "Contact",
+            "Resume",
+            "Back to home",
+            "Terms of Service",
+            "/llms.txt",
+            "/llms-full.txt"
+          ],
+          "vitals": {
+            "lcpMs": 396,
+            "cls": 0.000004818512088477365,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 53,
+          "bytesByType": {
+            "css": 156116,
+            "woff2": 95900,
+            "js": 787040,
+            "svg": 310
+          },
+          "notes": []
+        },
+        {
+          "path": "/versions/zero-to-built/work/packetlark/",
+          "status": 200,
+          "title": "PacketLark — The build | Abrar Akhunji",
+          "h1": [
+            "PacketLark"
+          ],
+          "headings": [
+            "The problem.",
+            "My contribution.",
+            "How the parts connect.",
+            "The decisions.",
+            "Build, test, deliver.",
+            "What to keep in mind.",
+            "Abrar Akhunji"
+          ],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 4367,
+          "canvases": [
+            "workshop-creatures",
+            ""
+          ],
+          "markers": [
+            "workshop-creatures",
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "abrar . The build room",
+            "Work",
+            "About",
+            "Writing",
+            "Hire",
+            "Contact",
+            "Resume",
+            "Back to the build line",
+            "PacketLark",
+            "Product website",
+            "Source on GitHub"
+          ],
+          "vitals": {
+            "lcpMs": 376,
+            "cls": 0.000004818512088477365,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 50,
+          "bytesByType": {
+            "css": 156116,
+            "woff2": 95900,
+            "js": 785050,
+            "svg": 310,
+            "webp": 25334
+          },
+          "notes": []
+        },
+        {
+          "path": "/versions/zero-to-built/missing-route-audit/",
+          "status": 404,
+          "title": "Page unavailable",
+          "h1": [
+            "Page unavailable in this version"
+          ],
+          "headings": [],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 900,
+          "canvases": [],
+          "markers": [
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "Page unavailable in this version",
+            "Back to Build Room"
+          ],
+          "vitals": {
+            "lcpMs": 32,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 18,
+          "bytesByType": {
+            "css": 1116,
+            "js": 388,
+            "ico": 0
+          },
+          "notes": [
+            {
+              "kind": "error",
+              "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+            }
+          ]
+        },
+        {
+          "path": "/versions/zero-to-built/blog/2026-07-20-ponytail-ai-agent-lazy-senior-dev/",
+          "status": 200,
+          "title": "The Ponytail Effect: How One GitHub Repo Stops Claude Code From Over-Building Everything | Abrar Akhunji",
+          "h1": [
+            "The Ponytail Effect: How One GitHub Repo Stops Claude Code From Over-Building Everything"
+          ],
+          "headings": [
+            "Listen to this note",
+            "Related notes",
+            "Abrar Akhunji"
+          ],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 9250,
+          "canvases": [
+            "workshop-creatures",
+            ""
+          ],
+          "markers": [
+            "workshop-creatures",
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "abrar . The build room",
+            "Work",
+            "About",
+            "Writing",
+            "Hire",
+            "Contact",
+            "Resume",
+            "The Neural Log",
+            "AI",
+            "Claude Code",
+            "Ponytail",
+            "Coding Assistants",
+            "YAGNI",
+            "Tech Debt",
+            "The Ponytail Effect: How One GitHub Repo Stops Claude Code From Over-Building Everything"
+          ],
+          "vitals": {
+            "lcpMs": 380,
+            "cls": 0.000004818512088477365,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 50,
+          "bytesByType": {
+            "css": 156116,
+            "woff2": 121112,
+            "js": 1383472,
+            "svg": 862,
+            "jpg": 465186
+          },
+          "notes": []
+        }
+      ],
+      "mobile": [
+        {
+          "path": "/versions/zero-to-built/",
+          "status": 200,
+          "title": "Abrar Akhunji — AI & Full-Stack Engineer in Ahmedabad",
+          "h1": [
+            "Zero to built."
+          ],
+          "headings": [
+            "Three problems. A place to start.",
+            "Meet the builds.",
+            "The screen is only the start.",
+            "Engineer. Builder. Still curious.",
+            "Before the workbench.",
+            "Thinking out loud.",
+            "AI, product, and the parts between.",
+            "Small steps. A city of work.",
+            "Got a good “what if”?",
+            "Abrar Akhunji"
+          ],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 12101,
+          "canvases": [
+            "workshop-creatures",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "markers": [
+            "workshop-creatures",
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "abrar .",
+            "Home",
+            "Idea",
+            "Builds",
+            "About",
+            "Activity",
+            "Contact",
+            "Watch agents build a showcase ↗",
+            "Pause",
+            "Zero to built.",
+            "Explore my work",
+            "Resume",
+            "Pull up a chair"
+          ],
+          "vitals": {
+            "lcpMs": 172,
+            "cls": 0,
+            "longTaskBlockingMs": 7
+          },
+          "domContentLoadedMs": 69,
+          "bytesByType": {
+            "css": 156116,
+            "woff2": 143368,
+            "js": 780241,
+            "webp": 98976,
+            "svg": 552
+          },
+          "notes": []
+        },
+        {
+          "path": "/versions/zero-to-built/blog/",
+          "status": 200,
+          "title": "The Neural Log — AI & Systems Engineering Blog | Abrar Akhunji",
+          "h1": [
+            "The Neural Log."
+          ],
+          "headings": [
+            "H-Spec: Why Block-Parallel Drafters Waste 30% of VRAM on Shadow KV Caches, and How Hybrid Context Injection Eliminates Them",
+            "MiniCache: Why Evicting Tokens Destroys Long Contexts, and How Depth-Dimension Merging Squeezes KV Caches by 5x",
+            "CacheBlend: Why Prefix Caching Collapses in Real-World RAG, and How Cached Knowledge Fusion Reclaims 3.3x TTFT Speedups",
+            "SparseSpec: Why Reasoning Chains Choke on KV Cache Bandwidth, and How PillarAttn Reuses Verification Attention for 2.1x Lossless Speedups",
+            "AgentSpec: Why Speculative Decoding Collapses in Agent Batches, and How Structure-Isolated Drafting Recovers 2.4x Throughput",
+            "Google Willow and the Multiverse Myth: Inside the 10-Septillion-Year Quantum Supremacy Benchmark",
+            "The AI Bubble: Inside the $600B CapEx Chasm, Tech Layoffs, and the Enterprise ROI Crisis",
+            "RTP-LLM: Building an Evolvable and Reliable LLM Inference Engine at Alibaba Scale",
+            "FluidPD: In-Place Elasticity for SLO-Aware Prefill-Decode Disaggregated LLM Serving",
+            "SARIA: Persistence-Aware KV Caching with Coordinated DRAM-SSD Reload for Multi-Turn LLM Agents",
+            "AKV: Cache Engineering for Autonomous Agents and State-Preserving Prefix Invalidation Bypass",
+            "HAWK: Heterogeneity-Aware KV Cache Transfer for GPU-NPU Phase-Disaggregated LLM Inference",
+            "UlaCache: Unified Logical Addressing for Sparse LLM Serving",
+            "Adaptive DHiSparse: Speculative Decoding over a Load-Adaptive KV Hierarchy",
+            "DLite: History-Free Speculative Decoding and the Elimination of Drafter-Side KV Cache Bottlenecks in Agentic AI",
+            "Gemini 4 Carbon: The Frontier Architecture of Defensive Cybersecurity, 0.0% Prompt Injection Vulnerability, and Verified Agentic Reasoning",
+            "FlashMap: Flow Map Speculative Decoding and the Mathematical Elimination of Suffix Decay",
+            "llm-d 1.0: Dissecting the CNCF Distributed Inference Engine for Prefill-Decode Disaggregation and Prefix-Aware Routing"
+          ],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 26001,
+          "canvases": [
+            "workshop-creatures",
+            ""
+          ],
+          "markers": [
+            "workshop-creatures",
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "abrar .",
+            "Abrar Akhunji",
+            "The Neural Log.",
+            "List",
+            "Tech Tree",
+            "All posts 75",
+            "Systems Engineering 28",
+            "AI 27",
+            "Agentic AI 23",
+            "vLLM 21",
+            "LLM Inference 18",
+            "KV Cache 16",
+            "CUDA 15",
+            "Mixture of Experts 13",
+            "Systems Architecture 13",
+            "Inference Optimization 11",
+            "H-Spec: Why Block-Parallel Drafters Waste 30% of VRAM on Shadow KV Caches, and How Hybrid Context Injection Eliminates Them A systems engineering deep dive into H-Spec, detailing why block-parallel drafters suffer severe memory fragmentation in high-concurrency serving, and how hybrid Mamba-attention eliminates drafter KV caches entirely. Read the note"
+          ],
+          "vitals": {
+            "lcpMs": 412,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 67,
+          "bytesByType": {
+            "css": 156116,
+            "woff2": 121112,
+            "js": 900408,
+            "svg": 310
+          },
+          "notes": []
+        },
+        {
+          "path": "/versions/zero-to-built/hire/",
+          "status": 200,
+          "title": "Hire an AI/ML & Full-Stack Engineer in Ahmedabad | Abrar Akhunji",
+          "h1": [
+            "AI/ML and full-stack engineering, built to ship."
+          ],
+          "headings": [
+            "What I build",
+            "Where I work",
+            "How an engagement runs",
+            "Ways to work together",
+            "Before you email",
+            "Tell me what you are trying to ship.",
+            "Abrar Akhunji"
+          ],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 6721,
+          "canvases": [
+            "workshop-creatures",
+            ""
+          ],
+          "markers": [
+            "workshop-creatures",
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "abrar .",
+            "Portfolio",
+            "AI/ML and full-stack engineering, built to ship.",
+            "Start a conversation",
+            "See selected work"
+          ],
+          "vitals": {
+            "lcpMs": 436,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 94,
+          "bytesByType": {
+            "css": 156116,
+            "woff2": 95900,
+            "js": 790015,
+            "svg": 310
+          },
+          "notes": []
+        },
+        {
+          "path": "/versions/zero-to-built/work/",
+          "status": 200,
+          "title": "Engineering projects | Abrar Akhunji",
+          "h1": [
+            "Useful things. Different kinds of hard."
+          ],
+          "headings": [
+            "Fixo Flow",
+            "PacketLark",
+            "Framecast Studio",
+            "FixO CLI",
+            "GourmetGo",
+            "Library Management System",
+            "Real vs AI Image Detector",
+            "Cattle Breed Identification System",
+            "Brain Tumor Detection (MRI)",
+            "Kid's Space (Android App)",
+            "Abrar Akhunji"
+          ],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 5985,
+          "canvases": [
+            "workshop-creatures",
+            ""
+          ],
+          "markers": [
+            "workshop-creatures",
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "abrar .",
+            "Useful things. Different kinds of hard.",
+            "Preview LOCAL AI Fixo Flow Your voice, in the apps you already use. Python / Whisper / MLX / SQLite"
+          ],
+          "vitals": {
+            "lcpMs": 404,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 69,
+          "bytesByType": {
+            "css": 156116,
+            "woff2": 95900,
+            "js": 781778,
+            "svg": 2464,
+            "webp": 97510
+          },
+          "notes": []
+        },
+        {
+          "path": "/versions/zero-to-built/about/",
+          "status": 200,
+          "title": "About Abrar Akhunji | AI & Full-Stack Engineer",
+          "h1": [
+            "Abrar Akhunji"
+          ],
+          "headings": [
+            "Location & Hub",
+            "Specialization",
+            "The Journey",
+            "Experience & Milestones",
+            "Education & Credentials",
+            "Get in Touch",
+            "Abrar Akhunji"
+          ],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 3798,
+          "canvases": [
+            "workshop-creatures",
+            ""
+          ],
+          "markers": [
+            "workshop-creatures",
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "abrar .",
+            "Back to home",
+            "Abrar Akhunji"
+          ],
+          "vitals": {
+            "lcpMs": 392,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 56,
+          "bytesByType": {
+            "css": 156116,
+            "woff2": 95900,
+            "js": 787368,
+            "svg": 310
+          },
+          "notes": []
+        },
+        {
+          "path": "/versions/zero-to-built/contact/",
+          "status": 200,
+          "title": "Contact Abrar Akhunji | AI & Full-Stack Engineer",
+          "h1": [
+            "Contact & Collaboration"
+          ],
+          "headings": [
+            "Direct Email",
+            "Response SLA & Hours",
+            "Locations Served",
+            "Verified Public Channels",
+            "Abrar Akhunji"
+          ],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 2982,
+          "canvases": [
+            "workshop-creatures",
+            ""
+          ],
+          "markers": [
+            "workshop-creatures",
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "abrar .",
+            "Back to home",
+            "Contact & Collaboration",
+            "abrar@abrarakhunji.com"
+          ],
+          "vitals": {
+            "lcpMs": 400,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 57,
+          "bytesByType": {
+            "css": 156116,
+            "woff2": 95900,
+            "js": 786614,
+            "svg": 310
+          },
+          "notes": []
+        },
+        {
+          "path": "/versions/zero-to-built/privacy/",
+          "status": 200,
+          "title": "Privacy Policy | Abrar Akhunji",
+          "h1": [
+            "Privacy Policy"
+          ],
+          "headings": [
+            "1. Overview & Commitment",
+            "2. Information We Collect",
+            "3. Cookies & Tracking",
+            "4. Data Retention & Rights",
+            "Abrar Akhunji"
+          ],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 2300,
+          "canvases": [
+            "workshop-creatures",
+            ""
+          ],
+          "markers": [
+            "workshop-creatures",
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "abrar .",
+            "Back to home",
+            "Privacy Policy",
+            "abrar@abrarakhunji.com"
+          ],
+          "vitals": {
+            "lcpMs": 412,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 76,
+          "bytesByType": {
+            "css": 156116,
+            "woff2": 95900,
+            "js": 785225,
+            "svg": 310
+          },
+          "notes": []
+        },
+        {
+          "path": "/versions/zero-to-built/terms/",
+          "status": 200,
+          "title": "Terms of Service | Abrar Akhunji",
+          "h1": [
+            "Terms of Service"
+          ],
+          "headings": [
+            "1. Agreement to Terms",
+            "2. Automated Agent Access & Content Signals",
+            "3. Intellectual Property Rights",
+            "4. Disclaimer & Limitation of Liability",
+            "5. Governing Law & Jurisdiction",
+            "6. Contact & Questions",
+            "Abrar Akhunji"
+          ],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 3138,
+          "canvases": [
+            "workshop-creatures",
+            ""
+          ],
+          "markers": [
+            "workshop-creatures",
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "abrar .",
+            "Back to home",
+            "Terms of Service"
+          ],
+          "vitals": {
+            "lcpMs": 436,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 78,
+          "bytesByType": {
+            "css": 156116,
+            "woff2": 95900,
+            "js": 787040,
+            "svg": 310
+          },
+          "notes": []
+        },
+        {
+          "path": "/versions/zero-to-built/work/packetlark/",
+          "status": 200,
+          "title": "PacketLark — The build | Abrar Akhunji",
+          "h1": [
+            "PacketLark"
+          ],
+          "headings": [
+            "The problem.",
+            "My contribution.",
+            "How the parts connect.",
+            "The decisions.",
+            "Build, test, deliver.",
+            "What to keep in mind.",
+            "Abrar Akhunji"
+          ],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 4369,
+          "canvases": [
+            "workshop-creatures",
+            ""
+          ],
+          "markers": [
+            "workshop-creatures",
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "abrar .",
+            "Back to the build line",
+            "PacketLark",
+            "Product website",
+            "Source on GitHub"
+          ],
+          "vitals": {
+            "lcpMs": 392,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 61,
+          "bytesByType": {
+            "css": 156116,
+            "woff2": 95900,
+            "js": 785050,
+            "svg": 310,
+            "webp": 25334
+          },
+          "notes": []
+        },
+        {
+          "path": "/versions/zero-to-built/missing-route-audit/",
+          "status": 404,
+          "title": "Page unavailable",
+          "h1": [
+            "Page unavailable in this version"
+          ],
+          "headings": [],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 844,
+          "canvases": [],
+          "markers": [
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "Page unavailable in this version",
+            "Back to Build Room"
+          ],
+          "vitals": {
+            "lcpMs": 60,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 27,
+          "bytesByType": {
+            "css": 1116,
+            "js": 388,
+            "ico": 0
+          },
+          "notes": [
+            {
+              "kind": "error",
+              "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+            }
+          ]
+        },
+        {
+          "path": "/versions/zero-to-built/blog/2026-07-20-ponytail-ai-agent-lazy-senior-dev/",
+          "status": 200,
+          "title": "The Ponytail Effect: How One GitHub Repo Stops Claude Code From Over-Building Everything | Abrar Akhunji",
+          "h1": [
+            "The Ponytail Effect: How One GitHub Repo Stops Claude Code From Over-Building Everything"
+          ],
+          "headings": [
+            "Listen to this note",
+            "Related notes",
+            "Abrar Akhunji"
+          ],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 11173,
+          "canvases": [
+            "workshop-creatures",
+            ""
+          ],
+          "markers": [
+            "workshop-creatures",
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "abrar .",
+            "The Neural Log",
+            "AI",
+            "Claude Code",
+            "Ponytail",
+            "Coding Assistants",
+            "YAGNI",
+            "Tech Debt",
+            "The Ponytail Effect: How One GitHub Repo Stops Claude Code From Over-Building Everything"
+          ],
+          "vitals": {
+            "lcpMs": 408,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 46,
+          "bytesByType": {
+            "css": 156116,
+            "woff2": 121112,
+            "js": 1383472,
+            "svg": 862,
+            "jpg": 465186
+          },
+          "notes": []
+        }
+      ]
+    },
+    "v5": {
+      "desktop": [
+        {
+          "path": "/",
+          "status": 200,
+          "title": "Abrar Akhunji — AI & Full-Stack Engineer in Ahmedabad",
+          "h1": [
+            "ABRAR AKHUNJI"
+          ],
+          "headings": [
+            "Selected work.",
+            "How it works.",
+            "From model to interface.",
+            "The Neural Log.",
+            "Have a role in mind?"
+          ],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 5150,
+          "canvases": [
+            "signal-ink-canvas"
+          ],
+          "markers": [
+            "signal-shell"
+          ],
+          "aboveFold": [
+            "AA / PORTFOLIO",
+            "Home",
+            "Work",
+            "Writing",
+            "About",
+            "Résumé",
+            "Contact",
+            "ABRAR AKHUNJI",
+            "Explore my work",
+            "Résumé"
+          ],
+          "vitals": {
+            "lcpMs": 332,
+            "cls": 9.816700866029422e-7,
+            "longTaskBlockingMs": 156
+          },
+          "domContentLoadedMs": 52,
+          "bytesByType": {
+            "woff2": 94720,
+            "js": 740028,
+            "css": 117855,
+            "webp": 183356,
+            "svg": 202
+          },
+          "notes": []
+        },
+        {
+          "path": "/blog/",
+          "status": 200,
+          "title": "The Neural Log — AI & Systems Engineering Blog | Abrar Akhunji",
+          "h1": [
+            "The Neural Log."
+          ],
+          "headings": [
+            "kv4-hopper: Why 4-Bit KV Caches Stall on Hopper GPUs, and How Register-Direct WGMMA Fixes Them",
+            "Claude Fable 5.2 and Mythos 5.2 Architecture Teardown: Prefix-Checked Preserved Thinking, Effort Economics, and 1,000-Agent Formalization Benchmarks",
+            "Fixo Flow Architecture: Zero-Cloud Desktop Dictation on Apple MLX and CTranslate2",
+            "FrameCast Studio Architecture: Native macOS Dual-Canvas Compositing, 32-Bit Float Mixing, and Crash-Safe fMP4 Recording",
+            "PacketLark Internals: QuickJS Script Isolation, DNS-Pinned Capability Grants, and OpenAPI 3.1 Inference",
+            "SkillKit Architecture: Staged MCP Skill Routing, 317-Byte Payloads, and Honest Gap Refusal Benchmarks",
+            "Gemini 4 Architecture Teardown: The Elemental Lineup (Argon, Carbon, Neon, Hydrogen), Test-Time Compute Scaling, and Benchmark Empirical Realities",
+            "H-Spec: Why Block-Parallel Drafters Waste 30% of VRAM on Shadow KV Caches, and How Hybrid Context Injection Eliminates Them",
+            "MiniCache: Why Evicting Tokens Destroys Long Contexts, and How Depth-Dimension Merging Squeezes KV Caches by 5x",
+            "CacheBlend: Why Prefix Caching Collapses in Real-World RAG, and How Cached Knowledge Fusion Reclaims 3.3x TTFT Speedups",
+            "SparseSpec: Why Reasoning Chains Choke on KV Cache Bandwidth, and How PillarAttn Reuses Verification Attention for 2.1x Lossless Speedups",
+            "AgentSpec: Why Speculative Decoding Collapses in Agent Batches, and How Structure-Isolated Drafting Recovers 2.4x Throughput",
+            "Google Willow and the Multiverse Myth: Inside the 10-Septillion-Year Quantum Supremacy Benchmark",
+            "The AI Bubble: Inside the $600B CapEx Chasm, Tech Layoffs, and the Enterprise ROI Crisis",
+            "RTP-LLM: Building an Evolvable and Reliable LLM Inference Engine at Alibaba Scale",
+            "FluidPD: In-Place Elasticity for SLO-Aware Prefill-Decode Disaggregated LLM Serving",
+            "SARIA: Persistence-Aware KV Caching with Coordinated DRAM-SSD Reload for Multi-Turn LLM Agents",
+            "AKV: Cache Engineering for Autonomous Agents and State-Preserving Prefix Invalidation Bypass"
+          ],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 25747,
+          "canvases": [],
+          "markers": [
+            "signal-shell"
+          ],
+          "aboveFold": [
+            "AA / PORTFOLIO",
+            "Home",
+            "Work",
+            "Writing",
+            "About",
+            "Résumé",
+            "Contact",
+            "The Neural Log.",
+            "List",
+            "Tech Tree",
+            "All posts 82",
+            "Systems Engineering 30",
+            "AI 27",
+            "Agentic AI 24",
+            "vLLM 22",
+            "LLM Inference 18",
+            "KV Cache 17",
+            "CUDA 16",
+            "Mixture of Experts 13",
+            "Systems Architecture 13",
+            "Inference Optimization 11",
+            "kv4-hopper: Why 4-Bit KV Caches Stall on Hopper GPUs, and How Register-Direct WGMMA Fixes Them An architectural breakdown of kv4-hopper (arXiv:2611.30027), showing why vLLM's 4-bit KV-cache paths drop to 10-20% HBM bandwidth on NVIDIA H200 and how TMA warp specialization plus operand-swapped WGMMA reaches 67-75% bandwidth. Read the note"
+          ],
+          "vitals": {
+            "lcpMs": 396,
+            "cls": 0.5000008129866526,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 58,
+          "bytesByType": {
+            "woff2": 72464,
+            "css": 117855,
+            "js": 752384,
+            "svg": 202,
+            "jpg": 874665
+          },
+          "notes": []
+        },
+        {
+          "path": "/hire/",
+          "status": 200,
+          "title": "Hire an AI/ML & Full-Stack Engineer in Ahmedabad | Abrar Akhunji",
+          "h1": [
+            "AI/ML and full-stack engineering, built to ship."
+          ],
+          "headings": [
+            "What I build",
+            "Where I work",
+            "How an engagement runs",
+            "Ways to work together",
+            "Before you email",
+            "Tell me what you are trying to ship."
+          ],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 4057,
+          "canvases": [],
+          "markers": [
+            "signal-shell"
+          ],
+          "aboveFold": [
+            "AA / PORTFOLIO",
+            "Home",
+            "Work",
+            "Writing",
+            "About",
+            "Résumé",
+            "Contact",
+            "AI/ML and full-stack engineering, built to ship.",
+            "Start a conversation",
+            "See selected work"
+          ],
+          "vitals": {
+            "lcpMs": 420,
+            "cls": 0.5000008129866526,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 97,
+          "bytesByType": {
+            "woff2": 72464,
+            "js": 752706,
+            "css": 117855,
+            "svg": 202
+          },
+          "notes": []
+        },
+        {
+          "path": "/work/",
+          "status": 200,
+          "title": "Selected work — Abrar Akhunji",
+          "h1": [
+            "A body of work."
+          ],
+          "headings": [
+            "Fixo Flow",
+            "PacketLark",
+            "Framecast Studio",
+            "FixO CLI",
+            "GourmetGo",
+            "Library Management System",
+            "Real vs AI Image Detector",
+            "Cattle Breed Identification System",
+            "Brain Tumor Detection (MRI)",
+            "Kid's Space (Android App)"
+          ],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 4645,
+          "canvases": [],
+          "markers": [
+            "signal-shell"
+          ],
+          "aboveFold": [
+            "AA / PORTFOLIO",
+            "Home",
+            "Work",
+            "Writing",
+            "About",
+            "Résumé",
+            "Contact",
+            "A body of work.",
+            "All",
+            "Featured",
+            "LOCAL AI",
+            "DEVELOPER TOOLS",
+            "NATIVE SOFTWARE",
+            "AI DEVTOOL",
+            "FULL STACK",
+            "COMPUTER VISION",
+            "AI/ML",
+            "HEALTHCARE AI",
+            "ANDROID",
+            "LOCAL AI / PREVIEW Fixo Flow Your voice, in the apps you already use.",
+            "DEVELOPER TOOLS / RELEASED PacketLark A local workbench for requests, tests and API discovery.",
+            "NATIVE SOFTWARE / IN DEVELOPMENT Framecast Studio One studio. Two formats. Your screen, composed."
+          ],
+          "vitals": {
+            "lcpMs": 424,
+            "cls": 0.5075286028207575,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 90,
+          "bytesByType": {
+            "woff2": 72464,
+            "js": 744615,
+            "css": 117855,
+            "webp": 97510,
+            "svg": 202
+          },
+          "notes": []
+        },
+        {
+          "path": "/about/",
+          "status": 200,
+          "title": "About Abrar Akhunji | AI & Full-Stack Engineer",
+          "h1": [
+            "Abrar Akhunji."
+          ],
+          "headings": [
+            "What I work on",
+            "Experience",
+            "Education & credentials"
+          ],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 2735,
+          "canvases": [],
+          "markers": [
+            "signal-shell"
+          ],
+          "aboveFold": [
+            "AA / PORTFOLIO",
+            "Home",
+            "Work",
+            "Writing",
+            "About",
+            "Résumé",
+            "Contact",
+            "Abrar Akhunji.",
+            "View résumé",
+            "Get in touch",
+            "Read my writing"
+          ],
+          "vitals": {
+            "lcpMs": 384,
+            "cls": 0.5000008129866526,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 60,
+          "bytesByType": {
+            "woff2": 72464,
+            "js": 743301,
+            "css": 117855,
+            "svg": 202,
+            "webp": 68472
+          },
+          "notes": []
+        },
+        {
+          "path": "/contact/",
+          "status": 200,
+          "title": "Contact Abrar Akhunji | AI & Full-Stack Engineer",
+          "h1": [
+            "Let’s talk."
+          ],
+          "headings": [
+            "Direct email",
+            "Find me elsewhere",
+            "Where I work"
+          ],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 1938,
+          "canvases": [],
+          "markers": [
+            "signal-shell"
+          ],
+          "aboveFold": [
+            "AA / PORTFOLIO",
+            "Home",
+            "Work",
+            "Writing",
+            "About",
+            "Résumé",
+            "Contact",
+            "Let’s talk.",
+            "Send an email",
+            "Ways to work together",
+            "abrar@abrarakhunji.com",
+            "Copy email",
+            "GitHub",
+            "LinkedIn",
+            "X"
+          ],
+          "vitals": {
+            "lcpMs": 384,
+            "cls": 0.3301223407644303,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 61,
+          "bytesByType": {
+            "woff2": 72464,
+            "js": 748106,
+            "css": 117855,
+            "svg": 202
+          },
+          "notes": []
+        },
+        {
+          "path": "/privacy/",
+          "status": 200,
+          "title": "Privacy Policy | Abrar Akhunji",
+          "h1": [
+            "Privacy policy."
+          ],
+          "headings": [
+            "1. Overview & Commitment",
+            "2. Information We Collect",
+            "3. Cookies & Tracking",
+            "4. Data Retention & Rights"
+          ],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 1873,
+          "canvases": [],
+          "markers": [
+            "signal-shell"
+          ],
+          "aboveFold": [
+            "AA / PORTFOLIO",
+            "Home",
+            "Work",
+            "Writing",
+            "About",
+            "Résumé",
+            "Contact",
+            "Privacy policy.",
+            "abrar@abrarakhunji.com"
+          ],
+          "vitals": {
+            "lcpMs": 380,
+            "cls": 0.30742811333387476,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 51,
+          "bytesByType": {
+            "woff2": 72464,
+            "js": 744380,
+            "css": 117855,
+            "svg": 202
+          },
+          "notes": []
+        },
+        {
+          "path": "/terms/",
+          "status": 200,
+          "title": "Terms of Service | Abrar Akhunji",
+          "h1": [
+            "Terms of service."
+          ],
+          "headings": [
+            "1. Agreement to Terms",
+            "2. Automated Agent Access & Content Signals",
+            "3. Intellectual Property Rights",
+            "4. Disclaimer & Limitation of Liability",
+            "5. Governing Law & Jurisdiction",
+            "6. Contact & Questions"
+          ],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 2375,
+          "canvases": [],
+          "markers": [
+            "signal-shell"
+          ],
+          "aboveFold": [
+            "AA / PORTFOLIO",
+            "Home",
+            "Work",
+            "Writing",
+            "About",
+            "Résumé",
+            "Contact",
+            "Terms of service."
+          ],
+          "vitals": {
+            "lcpMs": 384,
+            "cls": 0.48169569145887475,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 54,
+          "bytesByType": {
+            "woff2": 72464,
+            "css": 117855,
+            "js": 746207,
+            "svg": 202
+          },
+          "notes": []
+        },
+        {
+          "path": "/work/packetlark/",
+          "status": 200,
+          "title": "PacketLark — The build | Abrar Akhunji",
+          "h1": [
+            "PacketLark."
+          ],
+          "headings": [
+            "The problem",
+            "My contribution",
+            "How the parts connect",
+            "The decisions",
+            "Build evidence",
+            "Current limitations"
+          ],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 4266,
+          "canvases": [],
+          "markers": [
+            "signal-shell"
+          ],
+          "aboveFold": [
+            "AA / PORTFOLIO",
+            "Home",
+            "Work",
+            "Writing",
+            "About",
+            "Résumé",
+            "Contact",
+            "PacketLark.",
+            "Product website",
+            "Source on GitHub",
+            "Project index",
+            "Expand image"
+          ],
+          "vitals": {
+            "lcpMs": 416,
+            "cls": 0.5000008129866526,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 70,
+          "bytesByType": {
+            "woff2": 72464,
+            "js": 745259,
+            "css": 117855,
+            "webp": 25334,
+            "svg": 202
+          },
+          "notes": []
+        },
+        {
+          "path": "/agents-at-work/",
+          "status": 200,
+          "title": "Agents at work — Abrar Akhunji",
+          "h1": [
+            "Agents at work."
+          ],
+          "headings": [
+            "From friction to something useful.",
+            "The screen is only the start.",
+            "What should we build next?"
+          ],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 2388,
+          "canvases": [],
+          "markers": [],
+          "aboveFold": [
+            "Abrar Akhunji",
+            "Change theme",
+            "Agents at work.",
+            "Meet the builds ↓",
+            "Explore my full portfolio ↗",
+            "Skip",
+            "Rebuild"
+          ],
+          "vitals": {
+            "lcpMs": 80,
+            "cls": 0.017253497942386845,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 72,
+          "bytesByType": {
+            "js": 368573,
+            "webp": 97510,
+            "css": 7534,
+            "woff2": 39824,
+            "svg": 202
+          },
+          "notes": []
+        },
+        {
+          "path": "/blog/?q=browser-baseline-no-results",
+          "status": 200,
+          "title": "The Neural Log — AI & Systems Engineering Blog | Abrar Akhunji",
+          "h1": [
+            "The Neural Log."
+          ],
+          "headings": [
+            "No notes found."
+          ],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 1748,
+          "canvases": [],
+          "markers": [
+            "signal-shell"
+          ],
+          "aboveFold": [
+            "AA / PORTFOLIO",
+            "Home",
+            "Work",
+            "Writing",
+            "About",
+            "Résumé",
+            "Contact",
+            "The Neural Log.",
+            "List",
+            "Tech Tree",
+            "All posts 82",
+            "Systems Engineering 30",
+            "AI 27",
+            "Agentic AI 24",
+            "vLLM 22",
+            "LLM Inference 18",
+            "KV Cache 17",
+            "CUDA 16",
+            "Mixture of Experts 13",
+            "Systems Architecture 13",
+            "Inference Optimization 11"
+          ],
+          "vitals": {
+            "lcpMs": 400,
+            "cls": 0.26429660291720813,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 70,
+          "bytesByType": {
+            "woff2": 72464,
+            "js": 752384,
+            "css": 117855,
+            "svg": 202
+          },
+          "notes": []
+        },
+        {
+          "path": "/missing-route-audit/",
+          "status": 404,
+          "title": "Page not found | Abrar Akhunji",
+          "h1": [
+            "Signal lost."
+          ],
+          "headings": [],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 900,
+          "canvases": [],
+          "markers": [],
+          "aboveFold": [
+            "Signal lost.",
+            "Portfolio",
+            "The Neural Log",
+            "Work with me",
+            "Email"
+          ],
+          "vitals": {
+            "lcpMs": 44,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 15,
+          "bytesByType": {
+            "woff2": 23004,
+            "ico": 0
+          },
+          "notes": [
+            {
+              "kind": "error",
+              "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+            }
+          ]
+        },
+        {
+          "path": "/blog/kv4-hopper-4bit-kv-cache-decoding-cuda-kernels/",
+          "status": 200,
+          "title": "kv4-hopper: Why 4-Bit KV Caches Stall on Hopper GPUs, and How Register-Direct WGMMA Fixes Them | Abrar Akhunji",
+          "h1": [
+            "kv4-hopper: Why 4-Bit KV Caches Stall on Hopper GPUs, and How Register-Direct WGMMA Fixes Them"
+          ],
+          "headings": [
+            "Listen to this note",
+            "Related notes"
+          ],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 6640,
+          "canvases": [],
+          "markers": [
+            "signal-shell"
+          ],
+          "aboveFold": [
+            "AA / PORTFOLIO",
+            "Home",
+            "Work",
+            "Writing",
+            "About",
+            "Résumé",
+            "Contact",
+            "The Neural Log",
+            "CUDA",
+            "Hopper",
+            "KV Cache",
+            "Quantization",
+            "vLLM",
+            "Inference Systems",
+            "WGMMA",
+            "kv4-hopper: Why 4-Bit KV Caches Stall on Hopper GPUs, and How Register-Direct WGMMA Fixes Them"
+          ],
+          "vitals": {
+            "lcpMs": 408,
+            "cls": 0.5000008129866526,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 63,
+          "bytesByType": {
+            "woff2": 97676,
+            "js": 1247251,
+            "css": 117855,
+            "jpg": 874665,
+            "svg": 202
+          },
+          "notes": []
+        }
+      ],
+      "mobile": [
+        {
+          "path": "/",
+          "status": 200,
+          "title": "Abrar Akhunji — AI & Full-Stack Engineer in Ahmedabad",
+          "h1": [
+            "ABRAR AKHUNJI"
+          ],
+          "headings": [
+            "Selected work.",
+            "How it works.",
+            "From model to interface.",
+            "The Neural Log.",
+            "Have a role in mind?"
+          ],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 4870,
+          "canvases": [
+            "signal-ink-canvas"
+          ],
+          "markers": [
+            "signal-shell"
+          ],
+          "aboveFold": [
+            "AA",
+            "Résumé",
+            "ABRAR AKHUNJI",
+            "Explore my work",
+            "Résumé"
+          ],
+          "vitals": {
+            "lcpMs": 88,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 46,
+          "bytesByType": {
+            "woff2": 94720,
+            "js": 740028,
+            "css": 117855,
+            "webp": 147772,
+            "svg": 202
+          },
+          "notes": []
+        },
+        {
+          "path": "/blog/",
+          "status": 200,
+          "title": "The Neural Log — AI & Systems Engineering Blog | Abrar Akhunji",
+          "h1": [
+            "The Neural Log."
+          ],
+          "headings": [
+            "kv4-hopper: Why 4-Bit KV Caches Stall on Hopper GPUs, and How Register-Direct WGMMA Fixes Them",
+            "Claude Fable 5.2 and Mythos 5.2 Architecture Teardown: Prefix-Checked Preserved Thinking, Effort Economics, and 1,000-Agent Formalization Benchmarks",
+            "Fixo Flow Architecture: Zero-Cloud Desktop Dictation on Apple MLX and CTranslate2",
+            "FrameCast Studio Architecture: Native macOS Dual-Canvas Compositing, 32-Bit Float Mixing, and Crash-Safe fMP4 Recording",
+            "PacketLark Internals: QuickJS Script Isolation, DNS-Pinned Capability Grants, and OpenAPI 3.1 Inference",
+            "SkillKit Architecture: Staged MCP Skill Routing, 317-Byte Payloads, and Honest Gap Refusal Benchmarks",
+            "Gemini 4 Architecture Teardown: The Elemental Lineup (Argon, Carbon, Neon, Hydrogen), Test-Time Compute Scaling, and Benchmark Empirical Realities",
+            "H-Spec: Why Block-Parallel Drafters Waste 30% of VRAM on Shadow KV Caches, and How Hybrid Context Injection Eliminates Them",
+            "MiniCache: Why Evicting Tokens Destroys Long Contexts, and How Depth-Dimension Merging Squeezes KV Caches by 5x",
+            "CacheBlend: Why Prefix Caching Collapses in Real-World RAG, and How Cached Knowledge Fusion Reclaims 3.3x TTFT Speedups",
+            "SparseSpec: Why Reasoning Chains Choke on KV Cache Bandwidth, and How PillarAttn Reuses Verification Attention for 2.1x Lossless Speedups",
+            "AgentSpec: Why Speculative Decoding Collapses in Agent Batches, and How Structure-Isolated Drafting Recovers 2.4x Throughput",
+            "Google Willow and the Multiverse Myth: Inside the 10-Septillion-Year Quantum Supremacy Benchmark",
+            "The AI Bubble: Inside the $600B CapEx Chasm, Tech Layoffs, and the Enterprise ROI Crisis",
+            "RTP-LLM: Building an Evolvable and Reliable LLM Inference Engine at Alibaba Scale",
+            "FluidPD: In-Place Elasticity for SLO-Aware Prefill-Decode Disaggregated LLM Serving",
+            "SARIA: Persistence-Aware KV Caching with Coordinated DRAM-SSD Reload for Multi-Turn LLM Agents",
+            "AKV: Cache Engineering for Autonomous Agents and State-Preserving Prefix Invalidation Bypass"
+          ],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 24513,
+          "canvases": [],
+          "markers": [
+            "signal-shell"
+          ],
+          "aboveFold": [
+            "AA",
+            "Résumé",
+            "The Neural Log.",
+            "List",
+            "Tech Tree",
+            "All posts 82",
+            "Systems Engineering 30",
+            "AI 27",
+            "Agentic AI 24",
+            "vLLM 22",
+            "LLM Inference 18",
+            "KV Cache 17",
+            "CUDA 16",
+            "Mixture of Experts 13",
+            "Systems Architecture 13",
+            "Inference Optimization 11"
+          ],
+          "vitals": {
+            "lcpMs": 400,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 55,
+          "bytesByType": {
+            "woff2": 72464,
+            "js": 752384,
+            "css": 117855,
+            "svg": 202,
+            "jpg": 874665
+          },
+          "notes": []
+        },
+        {
+          "path": "/hire/",
+          "status": 200,
+          "title": "Hire an AI/ML & Full-Stack Engineer in Ahmedabad | Abrar Akhunji",
+          "h1": [
+            "AI/ML and full-stack engineering, built to ship."
+          ],
+          "headings": [
+            "What I build",
+            "Where I work",
+            "How an engagement runs",
+            "Ways to work together",
+            "Before you email",
+            "Tell me what you are trying to ship."
+          ],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 6021,
+          "canvases": [],
+          "markers": [
+            "signal-shell"
+          ],
+          "aboveFold": [
+            "AA",
+            "Résumé",
+            "AI/ML and full-stack engineering, built to ship.",
+            "Start a conversation",
+            "See selected work"
+          ],
+          "vitals": {
+            "lcpMs": 380,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 59,
+          "bytesByType": {
+            "woff2": 72464,
+            "js": 752706,
+            "css": 117855,
+            "svg": 202
+          },
+          "notes": []
+        },
+        {
+          "path": "/work/",
+          "status": 200,
+          "title": "Selected work — Abrar Akhunji",
+          "h1": [
+            "A body of work."
+          ],
+          "headings": [
+            "Fixo Flow",
+            "PacketLark",
+            "Framecast Studio",
+            "FixO CLI",
+            "GourmetGo",
+            "Library Management System",
+            "Real vs AI Image Detector",
+            "Cattle Breed Identification System",
+            "Brain Tumor Detection (MRI)",
+            "Kid's Space (Android App)"
+          ],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 2947,
+          "canvases": [],
+          "markers": [
+            "signal-shell"
+          ],
+          "aboveFold": [
+            "AA",
+            "Résumé",
+            "A body of work.",
+            "All",
+            "Featured",
+            "LOCAL AI",
+            "DEVELOPER TOOLS",
+            "NATIVE SOFTWARE",
+            "AI DEVTOOL",
+            "FULL STACK",
+            "COMPUTER VISION",
+            "AI/ML",
+            "HEALTHCARE AI",
+            "ANDROID",
+            "LOCAL AI / PREVIEW Fixo Flow Your voice, in the apps you already use.",
+            "DEVELOPER TOOLS / RELEASED PacketLark A local workbench for requests, tests and API discovery.",
+            "NATIVE SOFTWARE / IN DEVELOPMENT Framecast Studio One studio. Two formats. Your screen, composed."
+          ],
+          "vitals": {
+            "lcpMs": 412,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 68,
+          "bytesByType": {
+            "woff2": 72464,
+            "css": 117855,
+            "js": 744615,
+            "webp": 546786,
+            "svg": 2356
+          },
+          "notes": []
+        },
+        {
+          "path": "/about/",
+          "status": 200,
+          "title": "About Abrar Akhunji | AI & Full-Stack Engineer",
+          "h1": [
+            "Abrar Akhunji."
+          ],
+          "headings": [
+            "What I work on",
+            "Experience",
+            "Education & credentials"
+          ],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 3039,
+          "canvases": [],
+          "markers": [
+            "signal-shell"
+          ],
+          "aboveFold": [
+            "AA",
+            "Résumé",
+            "Abrar Akhunji.",
+            "View résumé",
+            "Get in touch"
+          ],
+          "vitals": {
+            "lcpMs": 376,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 53,
+          "bytesByType": {
+            "woff2": 72464,
+            "js": 743301,
+            "css": 117855,
+            "svg": 202,
+            "webp": 68472
+          },
+          "notes": []
+        },
+        {
+          "path": "/contact/",
+          "status": 200,
+          "title": "Contact Abrar Akhunji | AI & Full-Stack Engineer",
+          "h1": [
+            "Let’s talk."
+          ],
+          "headings": [
+            "Direct email",
+            "Find me elsewhere",
+            "Where I work"
+          ],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 2260,
+          "canvases": [],
+          "markers": [
+            "signal-shell"
+          ],
+          "aboveFold": [
+            "AA",
+            "Résumé",
+            "Let’s talk.",
+            "Send an email",
+            "Ways to work together",
+            "abrar@abrarakhunji.com",
+            "Copy email",
+            "GitHub"
+          ],
+          "vitals": {
+            "lcpMs": 372,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 49,
+          "bytesByType": {
+            "woff2": 72464,
+            "js": 748106,
+            "css": 117855,
+            "svg": 202
+          },
+          "notes": []
+        },
+        {
+          "path": "/privacy/",
+          "status": 200,
+          "title": "Privacy Policy | Abrar Akhunji",
+          "h1": [
+            "Privacy policy."
+          ],
+          "headings": [
+            "1. Overview & Commitment",
+            "2. Information We Collect",
+            "3. Cookies & Tracking",
+            "4. Data Retention & Rights"
+          ],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 2063,
+          "canvases": [],
+          "markers": [
+            "signal-shell"
+          ],
+          "aboveFold": [
+            "AA",
+            "Résumé",
+            "Privacy policy.",
+            "abrar@abrarakhunji.com"
+          ],
+          "vitals": {
+            "lcpMs": 396,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 64,
+          "bytesByType": {
+            "woff2": 72464,
+            "js": 744380,
+            "css": 117855,
+            "svg": 202
+          },
+          "notes": []
+        },
+        {
+          "path": "/terms/",
+          "status": 200,
+          "title": "Terms of Service | Abrar Akhunji",
+          "h1": [
+            "Terms of service."
+          ],
+          "headings": [
+            "1. Agreement to Terms",
+            "2. Automated Agent Access & Content Signals",
+            "3. Intellectual Property Rights",
+            "4. Disclaimer & Limitation of Liability",
+            "5. Governing Law & Jurisdiction",
+            "6. Contact & Questions"
+          ],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 2846,
+          "canvases": [],
+          "markers": [
+            "signal-shell"
+          ],
+          "aboveFold": [
+            "AA",
+            "Résumé",
+            "Terms of service."
+          ],
+          "vitals": {
+            "lcpMs": 392,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 62,
+          "bytesByType": {
+            "woff2": 72464,
+            "css": 117855,
+            "js": 746207,
+            "svg": 202
+          },
+          "notes": []
+        },
+        {
+          "path": "/work/packetlark/",
+          "status": 200,
+          "title": "PacketLark — The build | Abrar Akhunji",
+          "h1": [
+            "PacketLark."
+          ],
+          "headings": [
+            "The problem",
+            "My contribution",
+            "How the parts connect",
+            "The decisions",
+            "Build evidence",
+            "Current limitations"
+          ],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 3698,
+          "canvases": [],
+          "markers": [
+            "signal-shell"
+          ],
+          "aboveFold": [
+            "AA",
+            "Résumé",
+            "PacketLark.",
+            "Product website",
+            "Source on GitHub",
+            "Project index",
+            "Expand image"
+          ],
+          "vitals": {
+            "lcpMs": 392,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 64,
+          "bytesByType": {
+            "woff2": 72464,
+            "js": 745259,
+            "css": 117855,
+            "webp": 25334,
+            "svg": 202
+          },
+          "notes": []
+        },
+        {
+          "path": "/agents-at-work/",
+          "status": 200,
+          "title": "Agents at work — Abrar Akhunji",
+          "h1": [
+            "Agents at work."
+          ],
+          "headings": [
+            "From friction to something useful.",
+            "The screen is only the start.",
+            "What should we build next?"
+          ],
+          "width": 426,
+          "scrollWidth": 426,
+          "height": 922,
+          "scrollHeight": 3391,
+          "canvases": [],
+          "markers": [],
+          "aboveFold": [
+            "Abrar Akhunji",
+            "Change theme",
+            "Agents at work.",
+            "Meet the builds ↓",
+            "Explore my full portfolio ↗",
+            "Skip",
+            "Rebuild"
+          ],
+          "vitals": {
+            "lcpMs": 88,
+            "cls": 0.00021123755557014582,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 72,
+          "bytesByType": {
+            "js": 368573,
+            "webp": 97510,
+            "css": 7534,
+            "woff2": 39824,
+            "svg": 202
+          },
+          "notes": []
+        },
+        {
+          "path": "/blog/?q=browser-baseline-no-results",
+          "status": 200,
+          "title": "The Neural Log — AI & Systems Engineering Blog | Abrar Akhunji",
+          "h1": [
+            "The Neural Log."
+          ],
+          "headings": [
+            "No notes found."
+          ],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 1710,
+          "canvases": [],
+          "markers": [
+            "signal-shell"
+          ],
+          "aboveFold": [
+            "AA",
+            "Résumé",
+            "The Neural Log.",
+            "List",
+            "Tech Tree",
+            "All posts 82",
+            "Systems Engineering 30",
+            "AI 27",
+            "Agentic AI 24",
+            "vLLM 22",
+            "LLM Inference 18",
+            "KV Cache 17",
+            "CUDA 16",
+            "Mixture of Experts 13",
+            "Systems Architecture 13",
+            "Inference Optimization 11",
+            "Show all notes"
+          ],
+          "vitals": {
+            "lcpMs": 400,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 69,
+          "bytesByType": {
+            "woff2": 72464,
+            "js": 752384,
+            "css": 117855,
+            "svg": 202
+          },
+          "notes": []
+        },
+        {
+          "path": "/missing-route-audit/",
+          "status": 404,
+          "title": "Page not found | Abrar Akhunji",
+          "h1": [
+            "Signal lost."
+          ],
+          "headings": [],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 844,
+          "canvases": [],
+          "markers": [],
+          "aboveFold": [
+            "Signal lost.",
+            "Portfolio",
+            "The Neural Log",
+            "Work with me",
+            "Email"
+          ],
+          "vitals": {
+            "lcpMs": 48,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 18,
+          "bytesByType": {
+            "woff2": 23004,
+            "ico": 0
+          },
+          "notes": [
+            {
+              "kind": "error",
+              "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+            }
+          ]
+        },
+        {
+          "path": "/blog/kv4-hopper-4bit-kv-cache-decoding-cuda-kernels/",
+          "status": 200,
+          "title": "kv4-hopper: Why 4-Bit KV Caches Stall on Hopper GPUs, and How Register-Direct WGMMA Fixes Them | Abrar Akhunji",
+          "h1": [
+            "kv4-hopper: Why 4-Bit KV Caches Stall on Hopper GPUs, and How Register-Direct WGMMA Fixes Them"
+          ],
+          "headings": [
+            "Listen to this note",
+            "Related notes"
+          ],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 7824,
+          "canvases": [],
+          "markers": [
+            "signal-shell"
+          ],
+          "aboveFold": [
+            "AA",
+            "Résumé",
+            "The Neural Log",
+            "CUDA",
+            "Hopper",
+            "KV Cache",
+            "Quantization",
+            "vLLM",
+            "Inference Systems",
+            "WGMMA",
+            "kv4-hopper: Why 4-Bit KV Caches Stall on Hopper GPUs, and How Register-Direct WGMMA Fixes Them"
+          ],
+          "vitals": {
+            "lcpMs": 392,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 48,
+          "bytesByType": {
+            "woff2": 97676,
+            "js": 1247251,
+            "css": 117855,
+            "jpg": 874665,
+            "svg": 202
+          },
+          "notes": []
+        }
+      ]
+    },
+    "v1": {
+      "desktop": [
+        {
+          "path": "/versions/serif/",
+          "status": 200,
+          "title": "Abrar Akhunji Portfolio",
+          "h1": [
+            "Engineer of Intelligent Systems."
+          ],
+          "headings": [
+            "I speak Code & Algorithms.",
+            "Selected Works",
+            "Experience, Education & Skills",
+            "Let's build the future."
+          ],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 8887,
+          "canvases": [
+            ""
+          ],
+          "markers": [
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "GH",
+            "LI",
+            "IG",
+            "Home",
+            "About",
+            "Work",
+            "Exp",
+            "Resume",
+            "Contact",
+            "Hire Me",
+            "Contact Abrar",
+            "Engineer of Intelligent Systems."
+          ],
+          "vitals": {
+            "lcpMs": 672,
+            "cls": 0,
+            "longTaskBlockingMs": 13
+          },
+          "domContentLoadedMs": 221,
+          "bytesByType": {
+            "css": 79389,
+            "js": 983664,
+            "jpg": 2275022,
+            "png": 6239281,
+            "svg": 491
+          },
+          "notes": []
+        },
+        {
+          "path": "/versions/serif/missing-route-audit/",
+          "status": 404,
+          "title": "Page unavailable",
+          "h1": [
+            "Page unavailable in this version"
+          ],
+          "headings": [],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 900,
+          "canvases": [],
+          "markers": [
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "Page unavailable in this version",
+            "Back to Serif Studio"
+          ],
+          "vitals": {
+            "lcpMs": 32,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 19,
+          "bytesByType": {
+            "css": 1116,
+            "js": 388,
+            "ico": 0
+          },
+          "notes": [
+            {
+              "kind": "error",
+              "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+            }
+          ]
+        }
+      ],
+      "mobile": [
+        {
+          "path": "/versions/serif/",
+          "status": 200,
+          "title": "Abrar Akhunji Portfolio",
+          "h1": [
+            "Engineer of Intelligent Systems."
+          ],
+          "headings": [
+            "I speak Code & Algorithms.",
+            "Selected Works",
+            "Experience, Education & Skills",
+            "Let's build the future."
+          ],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 10022,
+          "canvases": [],
+          "markers": [
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "Home",
+            "About",
+            "Work",
+            "Exp",
+            "Resume",
+            "Contact",
+            "Hire Me",
+            "Contact Abrar",
+            "Engineer of Intelligent Systems."
+          ],
+          "vitals": {
+            "lcpMs": 236,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 185,
+          "bytesByType": {
+            "css": 79389,
+            "js": 495335,
+            "jpg": 2275022,
+            "svg": 491
+          },
+          "notes": []
+        },
+        {
+          "path": "/versions/serif/missing-route-audit/",
+          "status": 404,
+          "title": "Page unavailable",
+          "h1": [
+            "Page unavailable in this version"
+          ],
+          "headings": [],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 844,
+          "canvases": [],
+          "markers": [
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "Page unavailable in this version",
+            "Back to Serif Studio"
+          ],
+          "vitals": {
+            "lcpMs": 28,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 21,
+          "bytesByType": {
+            "css": 1116,
+            "js": 388,
+            "ico": 0
+          },
+          "notes": [
+            {
+              "kind": "error",
+              "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+            }
+          ]
+        }
+      ]
+    },
+    "v2": {
+      "desktop": [
+        {
+          "path": "/versions/cyberterminal/",
+          "status": 200,
+          "title": "Abrar Akhunji — AI/ML Engineer & Full-Stack Developer Portfolio",
+          "h1": [
+            "Engineer of Intelligent Systems."
+          ],
+          "headings": [
+            "Selected Works",
+            "The Stack",
+            "Path & Recognition",
+            "The Neural Log"
+          ],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 16071,
+          "canvases": [
+            ""
+          ],
+          "markers": [
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "ABRAR.",
+            "GH",
+            "LI",
+            "IG",
+            "BLOG",
+            "Home",
+            "About",
+            "Work",
+            "Path",
+            "Resume",
+            "Contact",
+            "About the archived terminal",
+            "Mute SFX",
+            "Blog",
+            "Hire Me",
+            "Contact Abrar",
+            "Engineer of Intelligent Systems."
+          ],
+          "vitals": {
+            "lcpMs": 448,
+            "cls": 0.04829037483121142,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 216,
+          "bytesByType": {
+            "css": 65621,
+            "js": 1094794,
+            "svg": 491
+          },
+          "notes": []
+        },
+        {
+          "path": "/versions/cyberterminal/blog/",
+          "status": 200,
+          "title": "Blog | Abrar Akhunji",
+          "h1": [
+            "The Neural Log."
+          ],
+          "headings": [
+            "Google Ships Gemini 3.6 Flash While 3.5 Pro Keeps Waiting",
+            "2.4 Trillion Parameters, Zero Benchmarks: Inside Qwen3.8-Max",
+            "The Ponytail Effect: How One GitHub Repo Stops Claude Code From Over-Building Everything",
+            "Tabs, Ship: OpenCode Desktop Just Landed",
+            "Kimi K3: The 2.8T Parameter Multimodal Giant",
+            "The Agent Awakens: Meta Unleashes Muse Spark 1.1 and the Model API"
+          ],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 1786,
+          "canvases": [],
+          "markers": [
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "The Neural Log.",
+            "Portfolio",
+            "List",
+            "Tech Tree",
+            "2026-07-22 11 min AI GEMINI 3.6 FLASH GOOGLE LLM AGENTIC AI ANTIGRAVITY Google Ships Gemini 3.6 Flash While 3.5 Pro Keeps Waiting Google's Gemini 3.6 Flash cuts output tokens 17%, drops pricing to $7.50/1M output, and ships alongside 3.5 Flash-Lite and a restricted Flash Cyber. Full breakdown. Written by Abrar Akhunji 🎧 AUDIO 🧒 ELI5 🎮 INTERACTIVE",
+            "2026-07-22 12 min AI QWEN3.8-MAX ALIBABA LLM AI BENCHMARKS FRONTIER MODELS 2.4 Trillion Parameters, Zero Benchmarks: Inside Qwen3.8-Max Alibaba's Qwen3.8-Max previewed at 2.4T parameters with a bold 'second only to Fable 5' claim — but no benchmarks exist yet. Here is everything confirmed so far. Written by Abrar Akhunji 🎧 AUDIO 🧒 ELI5 🎮 INTERACTIVE",
+            "2026-07-20 10 min AI CLAUDE CODE PONYTAIL CODING ASSISTANTS YAGNI TECH DEBT The Ponytail Effect: How One GitHub Repo Stops Claude Code From Over-Building Everything Ponytail is the open-source tool that makes Claude Code, Codex, and Copilot CLI write the minimum code that actually works. Here's how it works and how to run it safely. Written by Abrar Akhunji 🎧 AUDIO 🧒 ELI5 🎮 INTERACTIVE"
+          ],
+          "vitals": {
+            "lcpMs": 612,
+            "cls": 0.000007037144204389574,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 203,
+          "bytesByType": {
+            "css": 65621,
+            "js": 672969,
+            "svg": 491
+          },
+          "notes": []
+        },
+        {
+          "path": "/versions/cyberterminal/missing-route-audit/",
+          "status": 404,
+          "title": "Page unavailable",
+          "h1": [
+            "Page unavailable in this version"
+          ],
+          "headings": [],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 900,
+          "canvases": [],
+          "markers": [
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "Page unavailable in this version",
+            "Back to Terminal Pulse"
+          ],
+          "vitals": {
+            "lcpMs": 32,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 20,
+          "bytesByType": {
+            "css": 1116,
+            "js": 388,
+            "ico": 0
+          },
+          "notes": [
+            {
+              "kind": "error",
+              "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+            }
+          ]
+        },
+        {
+          "path": "/versions/cyberterminal/blog/2026-07-20-ponytail-ai-agent-lazy-senior-dev/",
+          "status": 200,
+          "title": "The Ponytail Effect: How One GitHub Repo Stops Claude Code From Over-Building Everything | Abrar Akhunji",
+          "h1": [
+            "The Ponytail Effect: How One GitHub Repo Stops Claude Code From Over-Building Everything"
+          ],
+          "headings": [],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 6346,
+          "canvases": [],
+          "markers": [
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "Posts",
+            "The Ponytail Effect: How One GitHub Repo Stops Claude Code From Over-Building Everything",
+            "1x",
+            "👩 👩 👨",
+            "🧒 Simple",
+            "👨‍💻 Developer"
+          ],
+          "vitals": {
+            "lcpMs": 1188,
+            "cls": 0.000007037144204389574,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 126,
+          "bytesByType": {
+            "css": 65621,
+            "js": 1964840,
+            "svg": 491
+          },
+          "notes": []
+        }
+      ],
+      "mobile": [
+        {
+          "path": "/versions/cyberterminal/",
+          "status": 200,
+          "title": "Abrar Akhunji — AI/ML Engineer & Full-Stack Developer Portfolio",
+          "h1": [
+            "Engineer of Intelligent Systems."
+          ],
+          "headings": [
+            "Selected Works",
+            "The Stack",
+            "Path & Recognition",
+            "The Neural Log"
+          ],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 15325,
+          "canvases": [],
+          "markers": [
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "ABRAR.",
+            "Contact Abrar",
+            "Engineer of Intelligent Systems."
+          ],
+          "vitals": {
+            "lcpMs": 268,
+            "cls": 0,
+            "longTaskBlockingMs": 5
+          },
+          "domContentLoadedMs": 194,
+          "bytesByType": {
+            "css": 65621,
+            "js": 606140,
+            "svg": 491
+          },
+          "notes": []
+        },
+        {
+          "path": "/versions/cyberterminal/blog/",
+          "status": 200,
+          "title": "Blog | Abrar Akhunji",
+          "h1": [
+            "The Neural Log."
+          ],
+          "headings": [
+            "Google Ships Gemini 3.6 Flash While 3.5 Pro Keeps Waiting",
+            "2.4 Trillion Parameters, Zero Benchmarks: Inside Qwen3.8-Max",
+            "The Ponytail Effect: How One GitHub Repo Stops Claude Code From Over-Building Everything",
+            "Tabs, Ship: OpenCode Desktop Just Landed",
+            "Kimi K3: The 2.8T Parameter Multimodal Giant",
+            "The Agent Awakens: Meta Unleashes Muse Spark 1.1 and the Model API"
+          ],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 2503,
+          "canvases": [],
+          "markers": [
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "The Neural Log.",
+            "List",
+            "Tech Tree",
+            "2026-07-22 11 min AI GEMINI 3.6 FLASH GOOGLE LLM AGENTIC AI ANTIGRAVITY Google Ships Gemini 3.6 Flash While 3.5 Pro Keeps Waiting Google's Gemini 3.6 Flash cuts output tokens 17%, drops pricing to $7.50/1M output, and ships alongside 3.5 Flash-Lite and a restricted Flash Cyber. Full breakdown. Written by Abrar Akhunji 🎧 AUDIO 🧒 ELI5 🎮 INTERACTIVE",
+            "2026-07-22 12 min AI QWEN3.8-MAX ALIBABA LLM AI BENCHMARKS FRONTIER MODELS 2.4 Trillion Parameters, Zero Benchmarks: Inside Qwen3.8-Max Alibaba's Qwen3.8-Max previewed at 2.4T parameters with a bold 'second only to Fable 5' claim — but no benchmarks exist yet. Here is everything confirmed so far. Written by Abrar Akhunji 🎧 AUDIO 🧒 ELI5 🎮 INTERACTIVE"
+          ],
+          "vitals": {
+            "lcpMs": 544,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 187,
+          "bytesByType": {
+            "css": 65621,
+            "js": 672969,
+            "svg": 491
+          },
+          "notes": []
+        },
+        {
+          "path": "/versions/cyberterminal/missing-route-audit/",
+          "status": 404,
+          "title": "Page unavailable",
+          "h1": [
+            "Page unavailable in this version"
+          ],
+          "headings": [],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 844,
+          "canvases": [],
+          "markers": [
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "Page unavailable in this version",
+            "Back to Terminal Pulse"
+          ],
+          "vitals": {
+            "lcpMs": 56,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 48,
+          "bytesByType": {
+            "css": 1116,
+            "js": 388,
+            "ico": 0
+          },
+          "notes": [
+            {
+              "kind": "error",
+              "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+            }
+          ]
+        },
+        {
+          "path": "/versions/cyberterminal/blog/2026-07-20-ponytail-ai-agent-lazy-senior-dev/",
+          "status": 200,
+          "title": "The Ponytail Effect: How One GitHub Repo Stops Claude Code From Over-Building Everything | Abrar Akhunji",
+          "h1": [
+            "The Ponytail Effect: How One GitHub Repo Stops Claude Code From Over-Building Everything"
+          ],
+          "headings": [],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 9186,
+          "canvases": [],
+          "markers": [
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "Posts",
+            "The Ponytail Effect: How One GitHub Repo Stops Claude Code From Over-Building Everything",
+            "1x",
+            "👩 👩 👨",
+            "🧒 Simple",
+            "👨‍💻 Developer"
+          ],
+          "vitals": {
+            "lcpMs": 1216,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 150,
+          "bytesByType": {
+            "css": 65621,
+            "js": 1964840,
+            "svg": 491
+          },
+          "notes": []
+        }
+      ]
+    },
+    "v3": {
+      "desktop": [
+        {
+          "path": "/versions/halide/",
+          "status": 200,
+          "title": "Abrar Akhunji — AI/ML & Full-Stack Engineer in Ahmedabad",
+          "h1": [
+            "Engineer of Intelligent Systems."
+          ],
+          "headings": [
+            "Selected works",
+            "The practice",
+            "Record",
+            "Field notes",
+            "Work with me",
+            "Let's build the future."
+          ],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 10085,
+          "canvases": [
+            "",
+            "absolute inset-0 h-full w-full"
+          ],
+          "markers": [
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "ABRAR.",
+            "GH",
+            "LI",
+            "IG",
+            "BLOG",
+            "HIRE",
+            "Home",
+            "Work",
+            "Practice",
+            "Record",
+            "About",
+            "Notes",
+            "Resume",
+            "Contact",
+            "Mute SFX",
+            "Hire Me",
+            "Engineer of Intelligent Systems.",
+            "Selected works",
+            "Resume",
+            "Contact"
+          ],
+          "vitals": {
+            "lcpMs": 424,
+            "cls": 0.0032623915935249487,
+            "longTaskBlockingMs": 158
+          },
+          "domContentLoadedMs": 200,
+          "bytesByType": {
+            "css": 84425,
+            "js": 1227241,
+            "svg": 2464,
+            "webp": 153480
+          },
+          "notes": []
+        },
+        {
+          "path": "/versions/halide/blog/",
+          "status": 200,
+          "title": "The Neural Log — AI & Systems Engineering Blog | Abrar Akhunji",
+          "h1": [
+            "The Neural Log."
+          ],
+          "headings": [
+            "Hy-Memory 2.0 and Hy-Memory-30B-A3B: Tencent Open-Sources a 3B-Active Cognitive Memory Architecture",
+            "DeepInfer: DeepSeek Open-Sources Its Production Blackwell Inference Stack with FlashMLA, DeepEP, and DSpark Confidence Scheduling",
+            "Headroom and Claude-Mem: Taming Coding Agent Token Burn, KV-Cache Invalidation, and Cross-Session Amnesia",
+            "Spark-X2.6-4B: The Pocket-Sized 4B Frontier Agent Outperforming 9B Models with 1M Hybrid Context and Controllable Thinking Budgets",
+            "NVIDIA Nemotron 3.5 Bolt: Inside the 74B-A9B Hybrid Mamba-2 LatentMoE Architecture, 24GB VRAM Quantization, Star Elastic NAS, and 84 Tok/s Local Inference",
+            "LongCat 2.5 Preview: Inside the 1.6T Sparse MoE Architecture, LongCat Sparse Attention (LSA), Hierarchical Cross-Layer Indexing, and Domestic ASIC Superpod Inference",
+            "Meta Muse-Spark-Open-816B-A42B: Inside Meta's 816B Sparse MoE Titan, NVFP4 Quantization, Dual-Channel Reasoning, and Running Local Clusters on Apple Silicon M5 Ultra",
+            "Second Thought Architecture: Asynchronous Speculative Reasoning in Parallel with Agent Tool Execution and How Hiding Observation Latency Cuts Decoding by 43%",
+            "NVIDIA AVO Deep Dive: Agentic Variation Operators, Blackwell CUDA Kernel Synthesis, and How Agent Harnesses Conquered ARC-AGI-3 with 100% Completion",
+            "Kolibri 1 Deep Dive: Aleph Alpha’s 78.1B Apache 2.0 MoE, 3.46B Active Parameters, 384 Micro-Experts, Hybrid Attention, and Sovereign European Intelligence",
+            "Ling 3.1 Flash Deep Dive: 560B Sparse MoE, 25B Active Parameters, Hybrid Test-Time Reasoning, and Ant Group’s Enterprise Agent Engine",
+            "Claude Haiku 5.5 Deep Dive: 72.4% OSWorld, 39.2% Terminal-Bench, $0.10/MTok, and the Subagent Swarm Economics of Anthropic's Speed King",
+            "Mistral Large 4 ('Le Chonk') Deep Dive: 1.05T Open-Weights Granular MoE, 49B Active Parameters, 1.6B Vision Backbone, and Sovereign Cyber-Agentic Intelligence",
+            "The Rise of Overfit Inference Engines: Why DwarfStar (ds4), Strata & ninfer are Replacing vLLM and llama.cpp for Frontier Local LLMs",
+            "MiMo-V2.6-Pro Deep Dive: 1.02T Open-Weights Omnimodal MoE, Execution-Trace Agentic Graders (GAGAR), and MOPD Policy Distillation",
+            "Reflection AI Beam Deep Dive: 501B Open-Weights MoE, Intelligence-per-Token Scaling, 100M RL Rollouts, and 1M Context",
+            "Gemini 4 Argon Deep Dive: 1-Million Autoregressive Output Tokens, DeepSWE 77.9%, and the Architecture of Unbounded Code Generation",
+            "Percepta Spotlight Deep Dive: Decoupling Intelligence from Memory with 2D Lattice Recurrent States and O(1) Token-Time Compute"
+          ],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 14516,
+          "canvases": [],
+          "markers": [
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "The Neural Log.",
+            "WORK WITH ME",
+            "Portfolio",
+            "List",
+            "Tech Tree",
+            "All posts",
+            "AI 27",
+            "Agentic AI 18",
+            "Systems Engineering 14",
+            "Mixture of Experts 13",
+            "Systems Architecture 13",
+            "Inference Optimization 11",
+            "LLM 11",
+            "LLM Inference 10",
+            "Cybersecurity 7",
+            "vLLM 7",
+            "01 2026-10-24 14 MIN Hy-Memory 2.0 and Hy-Memory-30B-A3B: Tencent Open-Sources a 3B-Active Cognitive Memory Architecture An architectural teardown of Tencent Hunyuan's Hy-Memory 2.0 and Hy-Memory-30B-A3B: dedicated MoE memory write-path specialization, Attributed Memory Reinforcement Learning (AMRL), and tripartite cognitive persistence across chat, working, and code memory. Abrar Akhunji Tencent Hunyuan Hy-Memory",
+            "02 2026-10-22 13 MIN DeepInfer: DeepSeek Open-Sources Its Production Blackwell Inference Stack with FlashMLA, DeepEP, and DSpark Confidence Scheduling An architectural deep dive into DeepSeek's open-source DeepInfer engine: FlashMLA latent attention kernels, DeepEP communication-computation overlap for MoE expert parallelism, DSpark confidence-scheduled speculative decoding, and Blackwell SM100 optimization. Abrar Akhunji DeepSeek DeepInfer DSpark"
+          ],
+          "vitals": {
+            "lcpMs": 564,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 205,
+          "bytesByType": {
+            "css": 84425,
+            "js": 747105,
+            "svg": 310
+          },
+          "notes": []
+        },
+        {
+          "path": "/versions/halide/hire/",
+          "status": 200,
+          "title": "Hire an AI/ML & Full-Stack Engineer in Ahmedabad | Abrar Akhunji",
+          "h1": [
+            "AI/ML and full-stack engineering, built to ship."
+          ],
+          "headings": [
+            "What I build",
+            "Where I work",
+            "How an engagement runs",
+            "Ways to work together",
+            "Before you email",
+            "Tell me what you are trying to ship."
+          ],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 3451,
+          "canvases": [],
+          "markers": [
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "Portfolio",
+            "THE NEURAL LOG",
+            "AI/ML and full-stack engineering, built to ship.",
+            "Start a conversation",
+            "See selected work"
+          ],
+          "vitals": {
+            "lcpMs": 456,
+            "cls": 0.00688844280478395,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 120,
+          "bytesByType": {
+            "css": 84425,
+            "js": 741518,
+            "svg": 310
+          },
+          "notes": []
+        },
+        {
+          "path": "/versions/halide/missing-route-audit/",
+          "status": 404,
+          "title": "Page unavailable",
+          "h1": [
+            "Page unavailable in this version"
+          ],
+          "headings": [],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 900,
+          "canvases": [],
+          "markers": [
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "Page unavailable in this version",
+            "Back to Halide Signal"
+          ],
+          "vitals": {
+            "lcpMs": 32,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 19,
+          "bytesByType": {
+            "css": 1116,
+            "js": 388,
+            "ico": 0
+          },
+          "notes": [
+            {
+              "kind": "error",
+              "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+            }
+          ]
+        },
+        {
+          "path": "/versions/halide/blog/2026-07-20-ponytail-ai-agent-lazy-senior-dev/",
+          "status": 200,
+          "title": "The Ponytail Effect: How One GitHub Repo Stops Claude Code From Over-Building Everything | Abrar Akhunji",
+          "h1": [
+            "The Ponytail Effect: How One GitHub Repo Stops Claude Code From Over-Building Everything"
+          ],
+          "headings": [
+            "Your Claude Code Workforce: 42 Skills Across 7 Departments",
+            "Tabs, Ship: OpenCode Desktop Just Landed",
+            "Kimi K3: The 2.8T Parameter Multimodal Giant"
+          ],
+          "width": 1440,
+          "scrollWidth": 1440,
+          "height": 900,
+          "scrollHeight": 6647,
+          "canvases": [],
+          "markers": [
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "The Neural Log",
+            "WORK WITH ME",
+            "The Ponytail Effect: How One GitHub Repo Stops Claude Code From Over-Building Everything",
+            "1x",
+            "👩 👩 👨"
+          ],
+          "vitals": {
+            "lcpMs": 1304,
+            "cls": 0.00014074074074074073,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 113,
+          "bytesByType": {
+            "css": 84425,
+            "js": 2094682,
+            "svg": 620,
+            "jpg": 465186
+          },
+          "notes": []
+        }
+      ],
+      "mobile": [
+        {
+          "path": "/versions/halide/",
+          "status": 200,
+          "title": "Abrar Akhunji — AI/ML & Full-Stack Engineer in Ahmedabad",
+          "h1": [
+            "Engineer of Intelligent Systems."
+          ],
+          "headings": [
+            "Selected works",
+            "The practice",
+            "Record",
+            "Field notes",
+            "Work with me",
+            "Let's build the future."
+          ],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 15302,
+          "canvases": [
+            "",
+            "absolute inset-0 h-full w-full"
+          ],
+          "markers": [
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "ABRAR.",
+            "BLOG",
+            "Engineer of Intelligent Systems.",
+            "Selected works",
+            "Resume",
+            "Contact"
+          ],
+          "vitals": {
+            "lcpMs": 276,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 176,
+          "bytesByType": {
+            "css": 84425,
+            "js": 1227241,
+            "svg": 2464,
+            "webp": 153480
+          },
+          "notes": []
+        },
+        {
+          "path": "/versions/halide/blog/",
+          "status": 200,
+          "title": "The Neural Log — AI & Systems Engineering Blog | Abrar Akhunji",
+          "h1": [
+            "The Neural Log."
+          ],
+          "headings": [
+            "Hy-Memory 2.0 and Hy-Memory-30B-A3B: Tencent Open-Sources a 3B-Active Cognitive Memory Architecture",
+            "DeepInfer: DeepSeek Open-Sources Its Production Blackwell Inference Stack with FlashMLA, DeepEP, and DSpark Confidence Scheduling",
+            "Headroom and Claude-Mem: Taming Coding Agent Token Burn, KV-Cache Invalidation, and Cross-Session Amnesia",
+            "Spark-X2.6-4B: The Pocket-Sized 4B Frontier Agent Outperforming 9B Models with 1M Hybrid Context and Controllable Thinking Budgets",
+            "NVIDIA Nemotron 3.5 Bolt: Inside the 74B-A9B Hybrid Mamba-2 LatentMoE Architecture, 24GB VRAM Quantization, Star Elastic NAS, and 84 Tok/s Local Inference",
+            "LongCat 2.5 Preview: Inside the 1.6T Sparse MoE Architecture, LongCat Sparse Attention (LSA), Hierarchical Cross-Layer Indexing, and Domestic ASIC Superpod Inference",
+            "Meta Muse-Spark-Open-816B-A42B: Inside Meta's 816B Sparse MoE Titan, NVFP4 Quantization, Dual-Channel Reasoning, and Running Local Clusters on Apple Silicon M5 Ultra",
+            "Second Thought Architecture: Asynchronous Speculative Reasoning in Parallel with Agent Tool Execution and How Hiding Observation Latency Cuts Decoding by 43%",
+            "NVIDIA AVO Deep Dive: Agentic Variation Operators, Blackwell CUDA Kernel Synthesis, and How Agent Harnesses Conquered ARC-AGI-3 with 100% Completion",
+            "Kolibri 1 Deep Dive: Aleph Alpha’s 78.1B Apache 2.0 MoE, 3.46B Active Parameters, 384 Micro-Experts, Hybrid Attention, and Sovereign European Intelligence",
+            "Ling 3.1 Flash Deep Dive: 560B Sparse MoE, 25B Active Parameters, Hybrid Test-Time Reasoning, and Ant Group’s Enterprise Agent Engine",
+            "Claude Haiku 5.5 Deep Dive: 72.4% OSWorld, 39.2% Terminal-Bench, $0.10/MTok, and the Subagent Swarm Economics of Anthropic's Speed King",
+            "Mistral Large 4 ('Le Chonk') Deep Dive: 1.05T Open-Weights Granular MoE, 49B Active Parameters, 1.6B Vision Backbone, and Sovereign Cyber-Agentic Intelligence",
+            "The Rise of Overfit Inference Engines: Why DwarfStar (ds4), Strata & ninfer are Replacing vLLM and llama.cpp for Frontier Local LLMs",
+            "MiMo-V2.6-Pro Deep Dive: 1.02T Open-Weights Omnimodal MoE, Execution-Trace Agentic Graders (GAGAR), and MOPD Policy Distillation",
+            "Reflection AI Beam Deep Dive: 501B Open-Weights MoE, Intelligence-per-Token Scaling, 100M RL Rollouts, and 1M Context",
+            "Gemini 4 Argon Deep Dive: 1-Million Autoregressive Output Tokens, DeepSWE 77.9%, and the Architecture of Unbounded Code Generation",
+            "Percepta Spotlight Deep Dive: Decoupling Intelligence from Memory with 2D Lattice Recurrent States and O(1) Token-Time Compute"
+          ],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 21749,
+          "canvases": [],
+          "markers": [
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "The Neural Log.",
+            "List",
+            "Tech Tree",
+            "All posts",
+            "AI 27",
+            "Agentic AI 18",
+            "Systems Engineering 14",
+            "Mixture of Experts 13",
+            "Systems Architecture 13",
+            "Inference Optimization 11",
+            "LLM 11",
+            "LLM Inference 10",
+            "Cybersecurity 7",
+            "vLLM 7",
+            "01 2026-10-24 14 MIN Hy-Memory 2.0 and Hy-Memory-30B-A3B: Tencent Open-Sources a 3B-Active Cognitive Memory Architecture An architectural teardown of Tencent Hunyuan's Hy-Memory 2.0 and Hy-Memory-30B-A3B: dedicated MoE memory write-path specialization, Attributed Memory Reinforcement Learning (AMRL), and tripartite cognitive persistence across chat, working, and code memory. Abrar Akhunji Tencent Hunyuan Hy-Memory"
+          ],
+          "vitals": {
+            "lcpMs": 1036,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 174,
+          "bytesByType": {
+            "css": 84425,
+            "js": 747105,
+            "svg": 310
+          },
+          "notes": []
+        },
+        {
+          "path": "/versions/halide/hire/",
+          "status": 200,
+          "title": "Hire an AI/ML & Full-Stack Engineer in Ahmedabad | Abrar Akhunji",
+          "h1": [
+            "AI/ML and full-stack engineering, built to ship."
+          ],
+          "headings": [
+            "What I build",
+            "Where I work",
+            "How an engagement runs",
+            "Ways to work together",
+            "Before you email",
+            "Tell me what you are trying to ship."
+          ],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 5748,
+          "canvases": [],
+          "markers": [
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "Portfolio",
+            "AI/ML and full-stack engineering, built to ship.",
+            "Start a conversation",
+            "See selected work"
+          ],
+          "vitals": {
+            "lcpMs": 456,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 126,
+          "bytesByType": {
+            "css": 84425,
+            "js": 741518,
+            "svg": 310
+          },
+          "notes": []
+        },
+        {
+          "path": "/versions/halide/missing-route-audit/",
+          "status": 404,
+          "title": "Page unavailable",
+          "h1": [
+            "Page unavailable in this version"
+          ],
+          "headings": [],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 844,
+          "canvases": [],
+          "markers": [
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "Page unavailable in this version",
+            "Back to Halide Signal"
+          ],
+          "vitals": {
+            "lcpMs": 32,
+            "cls": 0,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 22,
+          "bytesByType": {
+            "css": 1116,
+            "js": 388,
+            "ico": 0
+          },
+          "notes": [
+            {
+              "kind": "error",
+              "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+            }
+          ]
+        },
+        {
+          "path": "/versions/halide/blog/2026-07-20-ponytail-ai-agent-lazy-senior-dev/",
+          "status": 200,
+          "title": "The Ponytail Effect: How One GitHub Repo Stops Claude Code From Over-Building Everything | Abrar Akhunji",
+          "h1": [
+            "The Ponytail Effect: How One GitHub Repo Stops Claude Code From Over-Building Everything"
+          ],
+          "headings": [
+            "Your Claude Code Workforce: 42 Skills Across 7 Departments",
+            "Tabs, Ship: OpenCode Desktop Just Landed",
+            "Kimi K3: The 2.8T Parameter Multimodal Giant"
+          ],
+          "width": 390,
+          "scrollWidth": 390,
+          "height": 844,
+          "scrollHeight": 8860,
+          "canvases": [],
+          "markers": [
+            "portfolio-archive"
+          ],
+          "aboveFold": [
+            "The Neural Log",
+            "The Ponytail Effect: How One GitHub Repo Stops Claude Code From Over-Building Everything",
+            "1x",
+            "👩 👩 👨",
+            "01 / 010 • ANALYSIS What is Ponytail?"
+          ],
+          "vitals": {
+            "lcpMs": 1332,
+            "cls": 0.00001870336038481408,
+            "longTaskBlockingMs": 0
+          },
+          "domContentLoadedMs": 138,
+          "bytesByType": {
+            "css": 84425,
+            "js": 2094682,
+            "svg": 620,
+            "jpg": 465186
+          },
+          "notes": []
+        }
+      ]
+    }
+  }
+}

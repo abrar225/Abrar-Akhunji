@@ -1,0 +1,43 @@
+{
+  "path": "/versions/halide/hire/",
+  "status": 200,
+  "title": "Hire an AI/ML & Full-Stack Engineer in Ahmedabad | Abrar Akhunji",
+  "h1": [
+    "AI/ML and full-stack engineering, built to ship."
+  ],
+  "headings": [
+    "What I build",
+    "Where I work",
+    "How an engagement runs",
+    "Ways to work together",
+    "Before you email",
+    "Tell me what you are trying to ship."
+  ],
+  "width": 1440,
+  "scrollWidth": 1440,
+  "height": 900,
+  "scrollHeight": 3451,
+  "canvases": [],
+  "markers": [
+    "portfolio-archive"
+  ],
+  "aboveFold": [
+    "Portfolio",
+    "THE NEURAL LOG",
+    "AI/ML and full-stack engineering, built to ship.",
+    "Start a conversation",
+    "See selected work"
+  ],
+  "vitals": {
+    "lcpMs": 456,
+    "cls": 0.00688844280478395,
+    "longTaskBlockingMs": 0
+  },
+  "domContentLoadedMs": 120,
+  "bytesByType": {
+    "css": 84425,
+    "js": 741518,
+    "svg": 310
+  },
+  "notes": []
+}

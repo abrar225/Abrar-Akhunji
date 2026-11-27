@@ -1,0 +1,296 @@
+{
+  "widths": [
+    {
+      "width": 360,
+      "height": 800,
+      "path": "ascent.html",
+      "rest": 0,
+      "anchor": 800
+    },
+    {
+      "width": 360,
+      "height": 800,
+      "path": "ascent.html?scroll=reverse",
+      "rest": 0,
+      "anchor": 800
+    },
+    {
+      "width": 360,
+      "height": 800,
+      "path": "folio.html",
+      "rest": 0,
+      "anchor": 800
+    },
+    {
+      "width": 360,
+      "height": 800,
+      "path": "patchbay.html",
+      "rest": 0,
+      "anchor": 690
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "path": "ascent.html",
+      "rest": 0,
+      "anchor": 844
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "path": "ascent.html?scroll=reverse",
+      "rest": 0,
+      "anchor": 844
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "path": "folio.html",
+      "rest": 0,
+      "anchor": 844
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "path": "patchbay.html",
+      "rest": 0,
+      "anchor": 709
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "path": "ascent.html",
+      "rest": 0,
+      "anchor": 1024
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "path": "ascent.html?scroll=reverse",
+      "rest": 0,
+      "anchor": 1024
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "path": "folio.html",
+      "rest": 0,
+      "anchor": 1024
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "path": "patchbay.html",
+      "rest": 0,
+      "anchor": 860
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "path": "ascent.html",
+      "rest": 0,
+      "anchor": 768
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "path": "ascent.html?scroll=reverse",
+      "rest": 768,
+      "anchor": 0
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "path": "folio.html",
+      "rest": 0,
+      "anchor": 768
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "path": "patchbay.html",
+      "rest": 0,
+      "anchor": 768
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "path": "ascent.html",
+      "rest": 0,
+      "anchor": 900
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "path": "ascent.html?scroll=reverse",
+      "rest": 900,
+      "anchor": 0
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "path": "folio.html",
+      "rest": 0,
+      "anchor": 900
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "path": "patchbay.html",
+      "rest": 0,
+      "anchor": 900
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "path": "ascent.html",
+      "rest": 0,
+      "anchor": 1080
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "path": "ascent.html?scroll=reverse",
+      "rest": 1080,
+      "anchor": 0
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "path": "folio.html",
+      "rest": 0,
+      "anchor": 1080
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "path": "patchbay.html",
+      "rest": 0,
+      "anchor": 1080
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "path": "ascent.html",
+      "rest": 0,
+      "anchor": 688
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "path": "ascent.html?scroll=reverse",
+      "rest": 0,
+      "anchor": 688
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "path": "folio.html",
+      "rest": 0,
+      "anchor": 758
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "path": "patchbay.html",
+      "rest": 0,
+      "anchor": 690
+    }
+  ],
+  "reverse": {
+    "open": {
+      "y": 900,
+      "hero": 900,
+      "scene": 0,
+      "overflow": 0,
+      "reverse": true,
+      "active": "",
+      "p": 0
+    },
+    "keyboard": {
+      "y": 0,
+      "hero": 900,
+      "scene": 0,
+      "overflow": 0,
+      "reverse": true,
+      "active": "capture",
+      "p": 0
+    },
+    "refresh": {
+      "y": 430,
+      "hero": 900,
+      "scene": 0,
+      "overflow": 0,
+      "reverse": true,
+      "active": "",
+      "p": 0.0991
+    },
+    "back": {
+      "y": 430,
+      "hero": 900,
+      "scene": 0,
+      "overflow": 0,
+      "reverse": true,
+      "active": "",
+      "p": 0.0991
+    },
+    "forward": true,
+    "deepLink": {
+      "y": 0,
+      "hero": 900,
+      "scene": 0,
+      "overflow": 0,
+      "reverse": true,
+      "active": "capture",
+      "p": 0
+    },
+    "resize": {
+      "y": 470,
+      "hero": 0,
+      "scene": 900,
+      "overflow": 0,
+      "reverse": false,
+      "active": "arrival",
+      "p": 0.5141
+    },
+    "programmaticFind": {
+      "found": true,
+      "y": 169
+    }
+  },
+  "reducedMotion": [
+    {
+      "path": "ascent.html",
+      "status": "ordinary flow, static evidence"
+    },
+    {
+      "path": "ascent.html?scroll=reverse",
+      "status": "ordinary flow, static evidence"
+    },
+    {
+      "path": "folio.html",
+      "status": "ordinary flow, static evidence"
+    },
+    {
+      "path": "patchbay.html",
+      "status": "ordinary flow, static evidence"
+    }
+  ],
+  "interaction": [
+    {
+      "key": "packet",
+      "name": "PacketLark",
+      "status": "keyboard selection updates case in reduced motion"
+    },
+    {
+      "key": "frame",
+      "name": "Framecast Studio",
+      "status": "keyboard selection updates case in reduced motion"
+    },
+    {
+      "key": "fixo",
+      "name": "Fixo Flow",
+      "status": "keyboard selection updates case in reduced motion"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex"><link rel="icon" href="data:,"><title>The patchbay / Abrar Akhunji</title>
+  <link rel="stylesheet" href="./prototype.css">
+</head>
+<body class="patch" data-project="fixo">
+  <a class="skip" href="#output">Skip to project</a>
+  <main>
+    <section id="arrival" class="c-hero" data-arrival aria-labelledby="c-name">
+      <header class="c-header c-wrap">
+        <a class="back" href="./index.html">← Directions</a>
+        <nav aria-label="Portfolio"><a href="#output">Work</a><a href="https://drive.google.com/file/d/1dV5ukxF-i-9JcWCaxsbQljNwL7Dni8Jc/view?usp=sharing">Résumé</a><a href="mailto:abrar@abrarakhunji.com">Contact</a></nav>
+      </header>
+      <div class="c-wrap c-opening">
+        <div class="c-copy">
+          <h1 id="c-name">Abrar Akhunji</h1>
+          <p>AI &amp; full-stack engineer</p>
+          <p class="c-title">Follow<br>the signal.</p>
+          <p>I build local AI tools, developer software, and native apps.</p>
+        </div>
+        <div class="c-board">
+          <h2>Choose a signal</h2>
+          <div class="c-ports" role="group" aria-label="Choose a project">
+            <button type="button" data-port="fixo" aria-pressed="true"><span>Voice</span><small>Fixo Flow</small><i aria-hidden="true"></i></button>
+            <button type="button" data-port="packet" aria-pressed="false"><span>Request</span><small>PacketLark</small><i aria-hidden="true"></i></button>
+            <button type="button" data-port="frame" aria-pressed="false"><span>Screen</span><small>Framecast Studio</small><i aria-hidden="true"></i></button>
+          </div>
+          <svg viewBox="0 0 180 216" preserveAspectRatio="none" class="c-traces" aria-hidden="true" fill="none">
+            <path d="M0 29C76 29 47 107 172 108"/><path d="M0 108C76 108 92 109 172 108"/><path d="M0 187C76 187 47 109 172 108"/>
+            <path class="c-trace-live" data-line="fixo" d="M0 29C76 29 47 107 172 108"/><path class="c-trace-live" data-line="packet" d="M0 108C76 108 92 109 172 108"/><path class="c-trace-live" data-line="frame" d="M0 187C76 187 47 109 172 108"/>
+            <circle cx="172" cy="108" r="5" fill="currentColor"/>
+          </svg>
+          <div class="c-destination" aria-live="polite"><span>Output</span><strong data-c-output>Local text</strong><a href="#output">View project ↓</a></div>
+        </div>
+        <p class="c-status"><span class="status-dot" aria-hidden="true"></span> Open to engineering roles &amp; collaborations <span>Ahmedabad, India</span></p>
+      </div>
+    </section>
+    <section id="output" class="c-output" data-next aria-labelledby="c-project" tabindex="-1">
+      <div class="c-blades" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="c-wrap c-result">
+        <header class="c-result-bar"><a class="back" href="#arrival">← Change signal</a><p class="case-tag" data-c-tag>Voice / Desktop preview</p></header>
+        <div class="c-inspector">
+          <div class="c-details">
+            <h2 id="c-project" data-c-name>Fixo Flow</h2>
+            <p data-c-info>English dictation with local speech recognition, writing styles and recoverable history.</p>
+            <div class="c-decision">
+              <h3 data-c-decision>Recognition stays local</h3>
+              <p data-c-reason>Local inference avoids a cloud transcription dependency.</p>
+            </div>
+            <a class="case-link" data-c-link href="https://github.com/abrar225/FixoFlow">Fixo Flow source ↗</a>
+          </div>
+          <figure><img data-c-image src="/assets/build-room/products/fixo-flow.webp" alt="Fixo Flow’s macOS writing styles interface" width="1040" height="768"><figcaption data-c-caption>Fixo Flow / Writing styles</figcaption></figure>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="./motion.js"></script>
+</body>
+</html>

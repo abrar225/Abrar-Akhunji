@@ -1,0 +1,47 @@
+{
+  "path": "/versions/zero-to-built/terms/",
+  "status": 200,
+  "title": "Terms of Service | Abrar Akhunji",
+  "h1": [
+    "Terms of Service"
+  ],
+  "headings": [
+    "1. Agreement to Terms",
+    "2. Automated Agent Access & Content Signals",
+    "3. Intellectual Property Rights",
+    "4. Disclaimer & Limitation of Liability",
+    "5. Governing Law & Jurisdiction",
+    "6. Contact & Questions",
+    "Abrar Akhunji"
+  ],
+  "width": 390,
+  "scrollWidth": 390,
+  "height": 844,
+  "scrollHeight": 3138,
+  "canvases": [
+    "workshop-creatures",
+    ""
+  ],
+  "markers": [
+    "workshop-creatures",
+    "portfolio-archive"
+  ],
+  "aboveFold": [
+    "abrar .",
+    "Back to home",
+    "Terms of Service"
+  ],
+  "vitals": {
+    "lcpMs": 436,
+    "cls": 0,
+    "longTaskBlockingMs": 0
+  },
+  "domContentLoadedMs": 78,
+  "bytesByType": {
+    "css": 156116,
+    "woff2": 95900,
+    "js": 787040,
+    "svg": 310
+  },
+  "notes": []
+}

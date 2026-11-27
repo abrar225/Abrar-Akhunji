@@ -1,0 +1,38 @@
+{
+  "path": "/versions/serif/missing-route-audit/",
+  "status": 404,
+  "title": "Page unavailable",
+  "h1": [
+    "Page unavailable in this version"
+  ],
+  "headings": [],
+  "width": 1440,
+  "scrollWidth": 1440,
+  "height": 900,
+  "scrollHeight": 900,
+  "canvases": [],
+  "markers": [
+    "portfolio-archive"
+  ],
+  "aboveFold": [
+    "Page unavailable in this version",
+    "Back to Serif Studio"
+  ],
+  "vitals": {
+    "lcpMs": 32,
+    "cls": 0,
+    "longTaskBlockingMs": 0
+  },
+  "domContentLoadedMs": 19,
+  "bytesByType": {
+    "css": 1116,
+    "js": 388,
+    "ico": 0
+  },
+  "notes": [
+    {
+      "kind": "error",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "path": "/privacy/",
+  "status": 200,
+  "title": "Privacy Policy | Abrar Akhunji",
+  "h1": [
+    "Privacy policy."
+  ],
+  "headings": [
+    "1. Overview & Commitment",
+    "2. Information We Collect",
+    "3. Cookies & Tracking",
+    "4. Data Retention & Rights"
+  ],
+  "width": 1440,
+  "scrollWidth": 1440,
+  "height": 900,
+  "scrollHeight": 1873,
+  "canvases": [],
+  "markers": [
+    "signal-shell"
+  ],
+  "aboveFold": [
+    "AA / PORTFOLIO",
+    "Home",
+    "Work",
+    "Writing",
+    "About",
+    "Résumé",
+    "Contact",
+    "Privacy policy.",
+    "abrar@abrarakhunji.com"
+  ],
+  "vitals": {
+    "lcpMs": 380,
+    "cls": 0.30742811333387476,
+    "longTaskBlockingMs": 0
+  },
+  "domContentLoadedMs": 51,
+  "bytesByType": {
+    "woff2": 72464,
+    "js": 744380,
+    "css": 117855,
+    "svg": 202
+  },
+  "notes": []
+}
