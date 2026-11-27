@@ -2,12 +2,12 @@
 
 ## HANDOFF
 
-- Last good checkpoint: `git log -1 --format=%h -- docs/v5/STATE.md` (depth and hardening code).
-- Done: backup, extraction, route inventory and Gate 1. Final build rules imported. Verified 333 extracted files against the tag. V5 shell, menu, app 404 and production Home slice captured at 1440 and 390 px. Gate 2 critic and rescore recorded. Rebuilt every live route archetype and the static SEO shell. The production archetype run has 30 loads, zero page findings and zero additional local link failures.
-- In progress: the depth pass is implemented and browser-checked. The breadth crawl passed 218 loads; depth archetypes passed 30. The first behavior audit pass for depth fixed its locators and all eight behavior groups subsequently passed. Hardening is in progress. Browser route, performance and final-blind evidence jobs have separate output directories or a production-final capture set.
-- Next: finish final Chromium/WebKit/Firefox, E2E and Lighthouse evidence from the optimized production build. Then submit the two final independent reviews and write the section 14 report.
-- Open: paper-cutout image and animation profile URL missing; depth initial 4/4/4/4/3/4/5/4. Interaction fix evidence exists. Firefox launch under host restrictions and mobile lab LCP target still open; real phone performance is untested.
-- Run: `npm run dev -- --host 127.0.0.1 --port 5181` or `npm run build && npm run preview -- --host 127.0.0.1 --port 5183`.
+- Last good checkpoint: `git log -1 --format=%h -- docs/v5/STATE.md` (final production audit).
+- Done: foundation, production slice, native route breadth, route depth, hardening and both final reviews. Current build has 218 passing Chromium loads, 30 passing WebKit archetype loads, 69 passing E2E checks and 58 passing unit tests. [Final checklist and verdict](FINAL_REVIEW.md)
+- In progress: none. Gate 1 approved normal scroll. Gate 2 finished and work continued under FINAL_BUILD.md. The local build is **NOT READY** for release review under that file's checklist.
+- Next: isolate LCP, replace the retained reader presentation controls, protect the mobile cue, resolve standalone type checking, and complete Firefox, external-link and hosting checks. Revisit first-screen specificity and visible progress for the comparison gap before another release audit.
+- Open: paper-cutout image and GitHub animation profile URL missing. Physical phone performance and live hosting remain untested. No deployment took place.
+- Run: [Production preview](http://127.0.0.1:5183/) via `npm run build && npm run preview -- --host 127.0.0.1 --port 5183`. Run `npm run dev -- --host 127.0.0.1 --port 5181` for development.
 
 ## Checkpoint
 

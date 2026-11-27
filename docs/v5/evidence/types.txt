@@ -1,0 +1,453 @@
+node_modules/gsap/utils/VelocityTracker.js(11,5): error TS7034: Variable 'gsap' implicitly has type 'any' in some locations where its type cannot be determined.
+node_modules/gsap/utils/VelocityTracker.js(12,5): error TS7034: Variable '_coreInitted' implicitly has type 'any' in some locations where its type cannot be determined.
+node_modules/gsap/utils/VelocityTracker.js(13,5): error TS7034: Variable '_toArray' implicitly has type 'any' in some locations where its type cannot be determined.
+node_modules/gsap/utils/VelocityTracker.js(14,5): error TS7034: Variable '_getUnit' implicitly has type 'any' in some locations where its type cannot be determined.
+node_modules/gsap/utils/VelocityTracker.js(15,5): error TS7034: Variable '_first' implicitly has type 'any' in some locations where its type cannot be determined.
+node_modules/gsap/utils/VelocityTracker.js(16,5): error TS7034: Variable '_ticker' implicitly has type 'any' in some locations where its type cannot be determined.
+node_modules/gsap/utils/VelocityTracker.js(17,5): error TS7034: Variable '_time1' implicitly has type 'any' in some locations where its type cannot be determined.
+node_modules/gsap/utils/VelocityTracker.js(19,5): error TS7034: Variable '_getCache' implicitly has type 'any' in some locations where its type cannot be determined.
+node_modules/gsap/utils/VelocityTracker.js(21,10): error TS7005: Variable 'gsap' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(24,30): error TS7006: Parameter 'value' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(27,30): error TS7006: Parameter 'target' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(28,10): error TS7005: Variable '_getCache' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(30,42): error TS7006: Parameter 'target' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(31,10): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+node_modules/gsap/utils/VelocityTracker.js(31,54): error TS7005: Variable '_toArray' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(33,32): error TS7006: Parameter 'time' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(34,12): error TS7005: Variable '_first' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(37,14): error TS7005: Variable '_time1' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(38,14): error TS7005: Variable '_time1' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(72,40): error TS7006: Parameter 'target' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(72,48): error TS7006: Parameter 'property' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(72,58): error TS7006: Parameter 'type' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(72,64): error TS7006: Parameter 'next' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(76,15): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ deg: number; rad: number; }'.
+node_modules/gsap/utils/VelocityTracker.js(76,30): error TS7005: Variable '_getUnit' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(79,23): error TS7005: Variable '_ticker' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(88,28): error TS7006: Parameter 'target' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(88,36): error TS7006: Parameter 'property' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(89,5): error TS7005: Variable '_coreInitted' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(90,19): error TS7005: Variable '_toArray' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(91,5): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+node_modules/gsap/utils/VelocityTracker.js(93,22): error TS2339: Property 'add' does not exist on type 'VelocityTracker'.
+node_modules/gsap/utils/VelocityTracker.js(96,48): error TS7006: Parameter 'core' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(104,29): error TS7006: Parameter 'property' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(104,39): error TS7006: Parameter 'skipRecentTick' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(122,52): error TS7005: Variable '_ticker' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(131,7): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+  No index signature with a parameter of type 'string' was found on type '{}'.
+node_modules/gsap/utils/VelocityTracker.js(137,43): error TS7006: Parameter 'property' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(141,29): error TS7006: Parameter 'property' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(141,39): error TS7006: Parameter 'type' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(147,23): error TS7005: Variable '_ticker' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(149,12): error TS7005: Variable '_first' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(150,9): error TS7005: Variable '_ticker' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(152,27): error TS7005: Variable '_ticker' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(155,85): error TS7005: Variable '_first' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(159,35): error TS7006: Parameter 'property' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(174,18): error TS7005: Variable '_first' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(175,9): error TS7005: Variable '_ticker' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(184,31): error TS7006: Parameter 'shallow' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(190,14): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+node_modules/gsap/utils/VelocityTracker.js(194,42): error TS7006: Parameter 'targets' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(194,51): error TS7006: Parameter 'properties' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(194,63): error TS7006: Parameter 'types' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(195,5): error TS7005: Variable '_coreInitted' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(198,17): error TS7005: Variable '_toArray' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(219,46): error TS7006: Parameter 'targets' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(219,55): error TS7006: Parameter 'properties' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(222,5): error TS7005: Variable '_toArray' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(222,41): error TS7006: Parameter 'target' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(226,41): error TS7006: Parameter 'p' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(233,52): error TS7006: Parameter 'target' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(233,60): error TS7006: Parameter 'property' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(239,54): error TS7006: Parameter 'target' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(239,62): error TS7006: Parameter 'property' implicitly has an 'any' type.
+node_modules/gsap/utils/VelocityTracker.js(247,17): error TS2339: Property 'getByTarget' does not exist on type 'typeof VelocityTracker'.
+node_modules/gsap/utils/VelocityTracker.js(248,15): error TS18048: 'gsap' is possibly 'undefined'.
+src/lib/blogUtils.js(11,35): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(iterable?: Iterable<readonly [any, any]> | null | undefined): Map<any, any>', gave the following error.
+    Argument of type '(string | { slug: string; legacySlug: string; sourceFile: string; title: string; date: string; updated: string; description: string; tags: string[]; author: string; heroImage: string; techTree: { branch: string; level: number; prerequisites: string[]; }; readingTime: number; hasDualMode: boolean; })[][]' is not assignable to parameter of type 'Iterable<readonly [any, any]>'.
+      The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
+        Type 'IteratorResult<(string | { slug: string; legacySlug: string; sourceFile: string; title: string; date: string; updated: string; description: string; tags: string[]; author: string; heroImage: string; techTree: { ...; }; readingTime: number; hasDualMode: boolean; })[], undefined>' is not assignable to type 'IteratorResult<readonly [any, any], any>'.
+          Type 'IteratorYieldResult<(string | { slug: string; legacySlug: string; sourceFile: string; title: string; date: string; updated: string; description: string; tags: string[]; author: string; heroImage: string; techTree: { ...; }; readingTime: number; hasDualMode: boolean; })[]>' is not assignable to type 'IteratorResult<readonly [any, any], any>'.
+            Type 'IteratorYieldResult<(string | { slug: string; legacySlug: string; sourceFile: string; title: string; date: string; updated: string; description: string; tags: string[]; author: string; heroImage: string; techTree: { ...; }; readingTime: number; hasDualMode: boolean; })[]>' is not assignable to type 'IteratorYieldResult<readonly [any, any]>'.
+              Type '(string | { slug: string; legacySlug: string; sourceFile: string; title: string; date: string; updated: string; description: string; tags: string[]; author: string; heroImage: string; techTree: { branch: string; level: number; prerequisites: string[]; }; readingTime: number; hasDualMode: boolean; })[]' is not assignable to type 'readonly [any, any]'.
+                Target requires 2 element(s) but source may have fewer.
+  Overload 2 of 4, '(entries?: readonly (readonly [any, any])[] | null | undefined): Map<any, any>', gave the following error.
+    Argument of type '(string | { slug: string; legacySlug: string; sourceFile: string; title: string; date: string; updated: string; description: string; tags: string[]; author: string; heroImage: string; techTree: { branch: string; level: number; prerequisites: string[]; }; readingTime: number; hasDualMode: boolean; })[][]' is not assignable to parameter of type 'readonly (readonly [any, any])[]'.
+      Type '(string | { slug: string; legacySlug: string; sourceFile: string; title: string; date: string; updated: string; description: string; tags: string[]; author: string; heroImage: string; techTree: { branch: string; level: number; prerequisites: string[]; }; readingTime: number; hasDualMode: boolean; })[]' is not assignable to type 'readonly [any, any]'.
+        Target requires 2 element(s) but source may have fewer.
+src/lib/blogUtils.js(18,31): error TS2339: Property 'glob' does not exist on type 'ImportMeta'.
+src/lib/blogUtils.js(27,15): error TS7006: Parameter 'message' implicitly has an 'any' type.
+src/lib/blogUtils.js(27,26): error TS2339: Property 'cause' does not exist on type '{}'.
+src/lib/blogUtils.js(39,31): error TS7006: Parameter 'slug' implicitly has an 'any' type.
+src/lib/blogUtils.js(44,33): error TS7006: Parameter 'post' implicitly has an 'any' type.
+src/lib/blogUtils.js(84,32): error TS7006: Parameter 'postOrSlug' implicitly has an 'any' type.
+src/lib/blogUtils.js(103,21): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+src/lib/blogUtils.js(111,26): error TS2339: Property 'updated' does not exist on type '{}'.
+src/lib/blogUtils.js(114,29): error TS2339: Property 'faq' does not exist on type '{}'.
+src/lib/blogUtils.js(115,14): error TS2339: Property 'faq' does not exist on type '{}'.
+src/lib/blogUtils.js(115,26): error TS7006: Parameter 'item' implicitly has an 'any' type.
+src/lib/blogUtils.js(122,22): error TS7006: Parameter 'key' implicitly has an 'any' type.
+src/lib/blogUtils.js(131,28): error TS7006: Parameter 'slug' implicitly has an 'any' type.
+src/lib/blogUtils.js(137,32): error TS7006: Parameter 'slug' implicitly has an 'any' type.
+src/lib/content/frontmatter.js(12,34): error TS7006: Parameter 'raw' implicitly has an 'any' type.
+src/lib/content/frontmatter.js(24,26): error TS7006: Parameter 'yaml' implicitly has an 'any' type.
+src/lib/content/frontmatter.js(49,9): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+  No index signature with a parameter of type 'string' was found on type '{}'.
+src/lib/content/frontmatter.js(54,9): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+  No index signature with a parameter of type 'string' was found on type '{}'.
+src/lib/content/frontmatter.js(58,7): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+  No index signature with a parameter of type 'string' was found on type '{}'.
+src/lib/content/frontmatter.js(66,26): error TS7006: Parameter 'lines' implicitly has an 'any' type.
+src/lib/content/frontmatter.js(66,33): error TS7006: Parameter 'startIdx' implicitly has an 'any' type.
+src/lib/content/frontmatter.js(89,28): error TS7006: Parameter 'lines' implicitly has an 'any' type.
+src/lib/content/frontmatter.js(93,16): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+src/lib/content/frontmatter.js(98,24): error TS7006: Parameter 'lines' implicitly has an 'any' type.
+src/lib/content/frontmatter.js(110,9): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+src/lib/content/frontmatter.js(124,21): error TS7006: Parameter 'raw' implicitly has an 'any' type.
+src/lib/content/frontmatter.js(146,36): error TS7006: Parameter 'rawMarkdown' implicitly has an 'any' type.
+src/lib/content/frontmatter.js(147,9): error TS7034: Variable 'sections' implicitly has type 'any[]' in some locations where its type cannot be determined.
+src/lib/content/frontmatter.js(150,7): error TS7034: Variable 'current' implicitly has type 'any' in some locations where its type cannot be determined.
+src/lib/content/frontmatter.js(152,7): error TS7034: Variable 'currentContent' implicitly has type 'any[]' in some locations where its type cannot be determined.
+src/lib/content/frontmatter.js(153,7): error TS7034: Variable 'neutralContent' implicitly has type 'any[]' in some locations where its type cannot be determined.
+src/lib/content/frontmatter.js(158,18): error TS7005: Variable 'neutralContent' implicitly has an 'any[]' type.
+src/lib/content/frontmatter.js(163,24): error TS7006: Parameter 'closed' implicitly has an 'any' type.
+src/lib/content/frontmatter.js(164,10): error TS7005: Variable 'current' implicitly has an 'any' type.
+src/lib/content/frontmatter.js(165,18): error TS7005: Variable 'currentContent' implicitly has an 'any[]' type.
+src/lib/content/frontmatter.js(173,90): error TS18046: 'error' is of type 'unknown'.
+src/lib/content/frontmatter.js(248,12): error TS7005: Variable 'sections' implicitly has an 'any[]' type.
+src/lib/content/frontmatter.js(251,38): error TS7006: Parameter 'text' implicitly has an 'any' type.
+src/lib/content/frontmatter.js(267,36): error TS7006: Parameter 'source' implicitly has an 'any' type.
+src/lib/content/frontmatter.js(276,17): error TS2339: Property 'test' does not exist on type 'string | RegExp'.
+  Property 'test' does not exist on type 'string'.
+src/lib/content/urls.js(24,26): error TS7006: Parameter 'slug' implicitly has an 'any' type.
+src/lib/content/urls.js(28,25): error TS7006: Parameter 'slug' implicitly has an 'any' type.
+src/lib/projects.js(7,29): error TS7006: Parameter 'slug' implicitly has an 'any' type.
+src/lib/projects.js(8,29): error TS7006: Parameter 'slug' implicitly has an 'any' type.
+src/lib/projects.js(9,33): error TS7006: Parameter 'slug' implicitly has an 'any' type.
+src/lib/useTheme.js(1,38): error TS7016: Could not find a declaration file for module 'react'. '/Users/abrarakhunji/Desktop/Abrar-Portfolio/abrar-portfolio-web/node_modules/react/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/react` if it exists or add a new declaration (.d.ts) file containing `declare module 'react';`
+src/lib/useTheme.js(2,20): error TS7006: Parameter 'callback' implicitly has an 'any' type.
+src/patchbay/Assembly.jsx(1,35): error TS7016: Could not find a declaration file for module 'react'. '/Users/abrarakhunji/Desktop/Abrar-Portfolio/abrar-portfolio-web/node_modules/react/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/react` if it exists or add a new declaration (.d.ts) file containing `declare module 'react';`
+src/patchbay/Assembly.jsx(5,8): error TS7016: Could not find a declaration file for module 'three'. '/Users/abrarakhunji/Desktop/Abrar-Portfolio/abrar-portfolio-web/node_modules/three/build/three.module.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/three` if it exists or add a new declaration (.d.ts) file containing `declare module 'three';`
+src/patchbay/Assembly.jsx(7,36): error TS7031: Binding element 'active' implicitly has an 'any' type.
+src/patchbay/Assembly.jsx(64,9): error TS7034: Variable 'drag' implicitly has type 'any' in some locations where its type cannot be determined.
+src/patchbay/Assembly.jsx(69,21): error TS7006: Parameter 'now' implicitly has an 'any' type.
+src/patchbay/Assembly.jsx(101,20): error TS7006: Parameter 'event' implicitly has an 'any' type.
+src/patchbay/Assembly.jsx(106,19): error TS7006: Parameter 'event' implicitly has an 'any' type.
+src/patchbay/Assembly.jsx(107,11): error TS7005: Variable 'drag' implicitly has an 'any' type.
+src/patchbay/Assembly.jsx(144,10): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Assembly.jsx(144,10): error TS7016: Could not find a declaration file for module 'react/jsx-runtime'. '/Users/abrarakhunji/Desktop/Abrar-Portfolio/abrar-portfolio-web/node_modules/react/jsx-runtime.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/react` if it exists or add a new declaration (.d.ts) file containing `declare module 'react/jsx-runtime';`
+src/patchbay/Assembly.jsx(144,72): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Assembly.jsx(144,82): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(1,35): error TS7016: Could not find a declaration file for module 'react'. '/Users/abrarakhunji/Desktop/Abrar-Portfolio/abrar-portfolio-web/node_modules/react/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/react` if it exists or add a new declaration (.d.ts) file containing `declare module 'react';`
+src/patchbay/Chrome.jsx(14,10): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(14,10): error TS7016: Could not find a declaration file for module 'react/jsx-runtime'. '/Users/abrarakhunji/Desktop/Abrar-Portfolio/abrar-portfolio-web/node_modules/react/jsx-runtime.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/react` if it exists or add a new declaration (.d.ts) file containing `declare module 'react/jsx-runtime';`
+src/patchbay/Chrome.jsx(14,89): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(14,170): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(30,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(31,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(32,87): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(32,95): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(33,9): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(37,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(37,34): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(39,9): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(40,9): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(41,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(43,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(44,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(46,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(47,9): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(48,22): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+src/patchbay/Chrome.jsx(48,56): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(49,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(49,28): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(49,38): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(49,112): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(49,135): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(49,312): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(49,316): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(49,323): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(50,9): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(51,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(52,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(53,9): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(54,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(54,111): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(55,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(58,17): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(58,47): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(60,13): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(60,72): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(61,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(62,9): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(63,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(64,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(71,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(72,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(73,9): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(74,20): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(74,116): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(75,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(75,78): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(76,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(76,92): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(77,20): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(77,151): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(78,9): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(79,9): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(79,96): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(79,128): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(79,177): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(80,9): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(81,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(81,55): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(81,59): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(81,120): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(81,124): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(81,147): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(83,9): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(84,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(85,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(89,31): error TS7031: Binding element 'error' implicitly has an 'any' type.
+src/patchbay/Chrome.jsx(89,38): error TS7031: Binding element 'reset' implicitly has an 'any' type.
+src/patchbay/Chrome.jsx(90,10): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(92,16): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(92,44): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(92,49): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(92,101): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(92,105): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(92,138): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(92,178): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(92,194): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Chrome.jsx(93,3): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(1,61): error TS7016: Could not find a declaration file for module 'react'. '/Users/abrarakhunji/Desktop/Abrar-Portfolio/abrar-portfolio-web/node_modules/react/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/react` if it exists or add a new declaration (.d.ts) file containing `declare module 'react';`
+src/patchbay/HomeSections.jsx(14,24): error TS7031: Binding element 'project' implicitly has an 'any' type.
+src/patchbay/HomeSections.jsx(28,10): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(28,10): error TS7016: Could not find a declaration file for module 'react/jsx-runtime'. '/Users/abrarakhunji/Desktop/Abrar-Portfolio/abrar-portfolio-web/node_modules/react/jsx-runtime.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/react` if it exists or add a new declaration (.d.ts) file containing `declare module 'react/jsx-runtime';`
+src/patchbay/HomeSections.jsx(29,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(29,59): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(29,66): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(29,73): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(29,80): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(30,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(31,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(31,50): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(31,55): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(31,97): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(31,101): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(31,148): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(31,153): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(31,159): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(31,202): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(31,206): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(32,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(33,41): error TS7006: Parameter 'layer' implicitly has an 'any' type.
+src/patchbay/HomeSections.jsx(33,47): error TS7006: Parameter 'index' implicitly has an 'any' type.
+src/patchbay/HomeSections.jsx(35,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(35,81): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(35,100): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(35,107): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(35,156): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(35,163): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(36,30): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(36,47): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(38,9): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(39,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(39,71): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(39,75): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(39,79): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(39,83): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(41,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(41,98): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(42,9): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(43,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(44,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(44,172): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(45,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(46,3): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(49,40): error TS7031: Binding element 'project' implicitly has an 'any' type.
+src/patchbay/HomeSections.jsx(52,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(53,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(53,15): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(53,54): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(53,148): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(54,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(54,81): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(54,137): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(54,158): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(54,167): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(54,188): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(54,246): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(54,253): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(55,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(56,18): error TS2322: Type '{ key: any; project: any; }' is not assignable to type '{ project: any; }'.
+  Property 'key' does not exist on type '{ project: any; }'.
+src/patchbay/HomeSections.jsx(57,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(58,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(58,35): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(58,43): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(58,62): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(58,148): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(59,9): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(59,30): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(59,81): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(59,119): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(59,126): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(59,142): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(59,147): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(59,175): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(59,189): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(59,196): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(60,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(61,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(62,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(63,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(64,9): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(64,17): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(64,31): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(64,49): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(64,54): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(64,244): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(64,346): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(65,9): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(65,58): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(65,103): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(65,116): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(65,121): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(65,168): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(65,175): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(65,184): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(65,188): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(65,197): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(65,201): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(65,207): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(66,9): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(66,53): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(66,98): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(66,199): error TS2532: Object is possibly 'undefined'.
+src/patchbay/HomeSections.jsx(66,225): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(67,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/HomeSections.jsx(68,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(1,34): error TS7016: Could not find a declaration file for module 'react'. '/Users/abrarakhunji/Desktop/Abrar-Portfolio/abrar-portfolio-web/node_modules/react/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/react` if it exists or add a new declaration (.d.ts) file containing `declare module 'react';`
+src/patchbay/Interior.jsx(5,28): error TS7031: Binding element 'label' implicitly has an 'any' type.
+src/patchbay/Interior.jsx(5,35): error TS7031: Binding element 'title' implicitly has an 'any' type.
+src/patchbay/Interior.jsx(5,42): error TS7031: Binding element 'description' implicitly has an 'any' type.
+src/patchbay/Interior.jsx(5,55): error TS7031: Binding element 'children' implicitly has an 'any' type.
+src/patchbay/Interior.jsx(5,65): error TS7031: Binding element 'aside' implicitly has an 'any' type.
+src/patchbay/Interior.jsx(6,10): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(6,10): error TS7016: Could not find a declaration file for module 'react/jsx-runtime'. '/Users/abrarakhunji/Desktop/Abrar-Portfolio/abrar-portfolio-web/node_modules/react/jsx-runtime.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/react` if it exists or add a new declaration (.d.ts) file containing `declare module 'react/jsx-runtime';`
+src/patchbay/Interior.jsx(7,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(8,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(9,19): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(9,53): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(10,9): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(10,20): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(11,25): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(11,69): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(12,22): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(12,63): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(13,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(15,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(16,3): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(19,26): error TS7031: Binding element 'children' implicitly has an 'any' type.
+src/patchbay/Interior.jsx(19,36): error TS7031: Binding element 'to' implicitly has an 'any' type.
+src/patchbay/Interior.jsx(19,40): error TS7031: Binding element 'href' implicitly has an 'any' type.
+src/patchbay/Interior.jsx(21,74): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(21,124): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(24,30): error TS7031: Binding element 'project' implicitly has an 'any' type.
+src/patchbay/Interior.jsx(32,10): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(33,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(34,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(35,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(35,72): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(36,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(36,154): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(37,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(38,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(39,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(39,15): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(39,77): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(39,86): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(39,108): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(39,175): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(39,184): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(39,191): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(40,18): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(40,52): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(41,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(42,9): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(43,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(44,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Interior.jsx(45,3): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Ribbon.jsx(1,52): error TS7016: Could not find a declaration file for module 'react'. '/Users/abrarakhunji/Desktop/Abrar-Portfolio/abrar-portfolio-web/node_modules/react/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/react` if it exists or add a new declaration (.d.ts) file containing `declare module 'react';`
+src/patchbay/Ribbon.jsx(20,17): error TS7006: Parameter 'points' implicitly has an 'any' type.
+src/patchbay/Ribbon.jsx(22,46): error TS7006: Parameter 'point' implicitly has an 'any' type.
+src/patchbay/Ribbon.jsx(25,34): error TS7031: Binding element 'story' implicitly has an 'any' type.
+src/patchbay/Ribbon.jsx(25,41): error TS7031: Binding element 'hero' implicitly has an 'any' type.
+src/patchbay/Ribbon.jsx(25,47): error TS7031: Binding element 'work' implicitly has an 'any' type.
+src/patchbay/Ribbon.jsx(25,53): error TS7031: Binding element 'proof' implicitly has an 'any' type.
+src/patchbay/Ribbon.jsx(25,60): error TS7031: Binding element 'route' implicitly has an 'any' type.
+src/patchbay/Ribbon.jsx(25,67): error TS7031: Binding element 'image' implicitly has an 'any' type.
+src/patchbay/Ribbon.jsx(50,11): error TS7034: Variable 'release' implicitly has type 'any' in some locations where its type cannot be determined.
+src/patchbay/Ribbon.jsx(51,11): error TS7034: Variable 'bounds' implicitly has type 'any' in some locations where its type cannot be determined.
+src/patchbay/Ribbon.jsx(69,14): error TS7005: Variable 'bounds' implicitly has an 'any' type.
+src/patchbay/Ribbon.jsx(70,24): error TS7006: Parameter 'a' implicitly has an 'any' type.
+src/patchbay/Ribbon.jsx(70,26): error TS7006: Parameter 'b' implicitly has an 'any' type.
+src/patchbay/Ribbon.jsx(70,28): error TS7006: Parameter 't' implicitly has an 'any' type.
+src/patchbay/Ribbon.jsx(113,13): error TS7005: Variable 'release' implicitly has an 'any' type.
+src/patchbay/Ribbon.jsx(126,13): error TS7034: Variable 'halo' implicitly has type 'any' in some locations where its type cannot be determined.
+src/patchbay/Ribbon.jsx(126,19): error TS7034: Variable 'moveX' implicitly has type 'any' in some locations where its type cannot be determined.
+src/patchbay/Ribbon.jsx(126,26): error TS7034: Variable 'moveY' implicitly has type 'any' in some locations where its type cannot be determined.
+src/patchbay/Ribbon.jsx(127,27): error TS7006: Parameter 'event' implicitly has an 'any' type.
+src/patchbay/Ribbon.jsx(132,16): error TS7005: Variable 'halo' implicitly has an 'any' type.
+src/patchbay/Ribbon.jsx(141,11): error TS7005: Variable 'moveX' implicitly has an 'any' type.
+src/patchbay/Ribbon.jsx(142,11): error TS7005: Variable 'moveY' implicitly has an 'any' type.
+src/patchbay/Ribbon.jsx(147,15): error TS7005: Variable 'halo' implicitly has an 'any' type.
+src/patchbay/Ribbon.jsx(168,9): error TS7005: Variable 'release' implicitly has an 'any' type.
+src/patchbay/Ribbon.jsx(183,10): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Ribbon.jsx(183,10): error TS7016: Could not find a declaration file for module 'react/jsx-runtime'. '/Users/abrarakhunji/Desktop/Abrar-Portfolio/abrar-portfolio-web/node_modules/react/jsx-runtime.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/react` if it exists or add a new declaration (.d.ts) file containing `declare module 'react/jsx-runtime';`
+src/patchbay/Ribbon.jsx(184,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Ribbon.jsx(185,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Ribbon.jsx(185,44): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Ribbon.jsx(185,72): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Ribbon.jsx(186,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Ribbon.jsx(186,61): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Ribbon.jsx(186,99): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Ribbon.jsx(186,151): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Ribbon.jsx(186,202): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Ribbon.jsx(186,252): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Ribbon.jsx(187,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Ribbon.jsx(188,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Ribbon.jsx(189,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Ribbon.jsx(190,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Ribbon.jsx(191,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Ribbon.jsx(192,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/Ribbon.jsx(193,3): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+src/patchbay/useInitialProof.js(1,37): error TS7016: Could not find a declaration file for module 'react'. '/Users/abrarakhunji/Desktop/Abrar-Portfolio/abrar-portfolio-web/node_modules/react/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/react` if it exists or add a new declaration (.d.ts) file containing `declare module 'react';`
+src/patchbay/useInitialProof.js(3,33): error TS7006: Parameter 'image' implicitly has an 'any' type.
+src/patchbay/useRouteArrival.js(1,41): error TS7016: Could not find a declaration file for module 'react'. '/Users/abrarakhunji/Desktop/Abrar-Portfolio/abrar-portfolio-web/node_modules/react/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/react` if it exists or add a new declaration (.d.ts) file containing `declare module 'react';`
+src/patchbay/useRouteArrival.js(3,33): error TS7006: Parameter 'location' implicitly has an 'any' type.
+src/patchbay/useRouteArrival.js(3,43): error TS7006: Parameter 'type' implicitly has an 'any' type.
+src/patchbay/useRouteArrival.js(3,49): error TS7006: Parameter 'content' implicitly has an 'any' type.
+src/patchbay/useRouteArrival.js(19,9): error TS7034: Variable 'watcher' implicitly has type 'any' in some locations where its type cannot be determined.
+src/patchbay/useRouteArrival.js(20,9): error TS7034: Variable 'cancelTimer' implicitly has type 'any' in some locations where its type cannot be determined.
+src/patchbay/useRouteArrival.js(42,47): error TS7005: Variable 'watcher' implicitly has an 'any' type.
+src/patchbay/useRouteArrival.js(56,7): error TS7005: Variable 'watcher' implicitly has an 'any' type.
+src/patchbay/useRouteArrival.js(57,20): error TS7005: Variable 'cancelTimer' implicitly has an 'any' type.

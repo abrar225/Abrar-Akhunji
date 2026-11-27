@@ -1,0 +1,34 @@
+{
+  "tag": "v5-signal-field-before-rebuild",
+  "unchanged": [
+    "versions/",
+    "scripts/build-versions.mjs"
+  ],
+  "reconstruction": "npm run build:versions",
+  "archives": [
+    {
+      "version": 1,
+      "slug": "serif",
+      "commit": "b6a6217e2aa1b52a6900ecddac41568cbd3fc8cc",
+      "built": true
+    },
+    {
+      "version": 2,
+      "slug": "cyberterminal",
+      "commit": "2c3376d68aacfdbf0a266ed370afa02083570d30",
+      "built": true
+    },
+    {
+      "version": 3,
+      "slug": "halide",
+      "commit": "8bffe4b75356cbc34c836bebeffdb057a3e4a062",
+      "built": true
+    },
+    {
+      "version": 4,
+      "slug": "zero-to-built",
+      "commit": "32300307da910a03a97e289a81a142d172e033fc",
+      "built": true
+    }
+  ]
+}

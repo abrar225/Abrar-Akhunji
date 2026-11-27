@@ -1,0 +1,24 @@
+node_modules/gsap/utils/VelocityTracker.js(93,22): error TS2339: Property 'add' does not exist on type 'VelocityTracker'.
+node_modules/gsap/utils/VelocityTracker.js(247,17): error TS2339: Property 'getByTarget' does not exist on type 'typeof VelocityTracker'.
+node_modules/gsap/utils/VelocityTracker.js(248,15): error TS18048: 'gsap' is possibly 'undefined'.
+src/lib/blogUtils.js(11,35): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(iterable?: Iterable<readonly [any, any]>): Map<any, any>', gave the following error.
+    Argument of type '(string | { slug: string; legacySlug: string; sourceFile: string; title: string; date: string; updated: string; description: string; tags: string[]; author: string; heroImage: string; techTree: { branch: string; level: number; prerequisites: string[]; }; readingTime: number; hasDualMode: boolean; })[][]' is not assignable to parameter of type 'Iterable<readonly [any, any]>'.
+      The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
+        Type 'IteratorResult<(string | { slug: string; legacySlug: string; sourceFile: string; title: string; date: string; updated: string; description: string; tags: string[]; author: string; heroImage: string; techTree: { ...; }; readingTime: number; hasDualMode: boolean; })[], any>' is not assignable to type 'IteratorResult<readonly [any, any], any>'.
+          Type 'IteratorYieldResult<(string | { slug: string; legacySlug: string; sourceFile: string; title: string; date: string; updated: string; description: string; tags: string[]; author: string; heroImage: string; techTree: { ...; }; readingTime: number; hasDualMode: boolean; })[]>' is not assignable to type 'IteratorResult<readonly [any, any], any>'.
+            Type 'IteratorYieldResult<(string | { slug: string; legacySlug: string; sourceFile: string; title: string; date: string; updated: string; description: string; tags: string[]; author: string; heroImage: string; techTree: { ...; }; readingTime: number; hasDualMode: boolean; })[]>' is not assignable to type 'IteratorYieldResult<readonly [any, any]>'.
+              Type '(string | { slug: string; legacySlug: string; sourceFile: string; title: string; date: string; updated: string; description: string; tags: string[]; author: string; heroImage: string; techTree: { branch: string; level: number; prerequisites: string[]; }; readingTime: number; hasDualMode: boolean; })[]' is not assignable to type 'readonly [any, any]'.
+                Target requires 2 element(s) but source may have fewer.
+  Overload 2 of 4, '(entries?: readonly (readonly [any, any])[]): Map<any, any>', gave the following error.
+    Argument of type '(string | { slug: string; legacySlug: string; sourceFile: string; title: string; date: string; updated: string; description: string; tags: string[]; author: string; heroImage: string; techTree: { branch: string; level: number; prerequisites: string[]; }; readingTime: number; hasDualMode: boolean; })[][]' is not assignable to parameter of type 'readonly (readonly [any, any])[]'.
+      Type '(string | { slug: string; legacySlug: string; sourceFile: string; title: string; date: string; updated: string; description: string; tags: string[]; author: string; heroImage: string; techTree: { branch: string; level: number; prerequisites: string[]; }; readingTime: number; hasDualMode: boolean; })[]' is not assignable to type 'readonly [any, any]'.
+        Target requires 2 element(s) but source may have fewer.
+src/lib/blogUtils.js(18,31): error TS2339: Property 'glob' does not exist on type 'ImportMeta'.
+src/lib/blogUtils.js(27,26): error TS2339: Property 'cause' does not exist on type '{}'.
+src/lib/blogUtils.js(103,21): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+src/lib/content/frontmatter.js(276,17): error TS2339: Property 'test' does not exist on type 'string | RegExp'.
+  Property 'test' does not exist on type 'string'.
+src/patchbay/Chrome.jsx(48,22): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+src/patchbay/HomeSections.jsx(56,18): error TS2322: Type '{ key: any; project: any; }' is not assignable to type '{ project: any; }'.
+  Property 'key' does not exist on type '{ project: any; }'.

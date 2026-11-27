@@ -1,0 +1,71 @@
+PASS  home renders the V5 identity
+PASS  home title targets Ahmedabad
+PASS  home canonical is the root URL
+PASS  home description mentions Ahmedabad
+PASS  home has the services section
+PASS  home links to the hire page
+PASS  every home image has an alt attribute
+PASS  the desktop ink responds to pointer movement
+PASS  home presents three direct article links
+PASS  home article link is keyboard reachable
+PASS  home internal links resolve
+PASS  blog list uses the Neural Log brand
+PASS  blog list canonical has a trailing slash
+PASS  blog list renders at least 50 posts
+PASS  tech tree renders branches
+PASS  tech tree expands and shows node states
+PASS  post canonical uses the trailing-slash URL
+PASS  post is indexable
+PASS  post emits structured data
+PASS  post includes FAQ schema
+PASS  post has a reading-mode toggle
+PASS  post renders article content
+PASS  developer mode can be selected
+PASS  hire page loads
+PASS  hire canonical is /hire/
+PASS  hire page covers every target location
+PASS  hire page has an FAQ
+PASS  unknown route shows the custom 404
+PASS  404 is noindex
+PASS  theme toggle updates the document
+PASS  theme choice is persisted
+PASS  mobile home has no horizontal overflow
+PASS  touch devices mount no custom cursor
+PASS  mobile navigation trigger exists
+PASS  Escape closes the mobile navigation and restores focus
+PASS  mobile hire navigation works
+PASS  mobile can filter projects in the document flow
+PASS  archive exposes all ten case studies
+PASS  desktop project preview follows keyboard focus
+PASS  project image can be expanded and dismissed with focus restored
+PASS  fixo-flow case study loads directly
+PASS  fixo-flow has the canonical URL
+PASS  packetlark case study loads directly
+PASS  packetlark has the canonical URL
+PASS  framecast-studio case study loads directly
+PASS  framecast-studio has the canonical URL
+PASS  cattle-breed case study loads directly
+PASS  cattle-breed has the canonical URL
+PASS  unknown project is noindex
+PASS  project query selects PacketLark
+PASS  keyboard selection updates the evidence and selected state
+PASS  selection preserves the work fragment
+PASS  featured work retains a direct case study link
+PASS  unknown project query uses the default
+PASS  page transition focuses the new content and leaves one route
+PASS  returning home after a transition restores focus to the route
+PASS  /work/ shares V5 chrome
+PASS  /work/packetlark/ shares V5 chrome
+PASS  /blog/ shares V5 chrome
+PASS  /about/ shares V5 chrome
+PASS  /hire/ shares V5 chrome
+PASS  /contact/ shares V5 chrome
+PASS  /terms/ shares V5 chrome
+PASS  /privacy/ shares V5 chrome
+PASS  /missing-page/ shares V5 chrome
+PASS  reduced motion keeps projects selectable
+PASS  reduced motion keeps the printed portrait visible
+PASS  no uncaught page errors
+PASS  no console errors
+
+69/69 checks passed.

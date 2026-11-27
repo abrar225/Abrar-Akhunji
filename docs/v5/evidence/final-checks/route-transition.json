@@ -1,0 +1,22 @@
+[
+  {
+    "size": {
+      "width": 1440,
+      "height": 900
+    },
+    "capturedFrames": 15,
+    "savedFrames": 6,
+    "location": "http://127.0.0.1:5183/work/packetlark/",
+    "focus": "route-content"
+  },
+  {
+    "size": {
+      "width": 390,
+      "height": 844
+    },
+    "capturedFrames": 26,
+    "savedFrames": 10,
+    "location": "http://127.0.0.1:5183/work/packetlark/",
+    "focus": "route-content"
+  }
+]

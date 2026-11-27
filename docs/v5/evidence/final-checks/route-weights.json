@@ -1,0 +1,86 @@
+{
+  "note": "Bytes transferred during initial 390×844 Chromium load, fresh context. Three.js is lazy. Excludes third-party traffic and post-interaction loads.",
+  "routes": [
+    {
+      "path": "/",
+      "js": 226097,
+      "three": 0,
+      "image": 94908,
+      "video": 0,
+      "font": 99176,
+      "css": 15571
+    },
+    {
+      "path": "/work/",
+      "js": 179082,
+      "three": 0,
+      "image": 254002,
+      "video": 0,
+      "font": 99176,
+      "css": 15571
+    },
+    {
+      "path": "/work/packetlark/",
+      "js": 180800,
+      "three": 0,
+      "image": 26136,
+      "video": 0,
+      "font": 99176,
+      "css": 15571
+    },
+    {
+      "path": "/blog/",
+      "js": 183630,
+      "three": 0,
+      "image": 875467,
+      "video": 0,
+      "font": 99176,
+      "css": 15571
+    },
+    {
+      "path": "/blog/kv4-hopper-4bit-kv-cache-decoding-cuda-kernels/",
+      "js": 331970,
+      "three": 0,
+      "image": 875467,
+      "video": 0,
+      "font": 99176,
+      "css": 15571
+    },
+    {
+      "path": "/about/",
+      "js": 180542,
+      "three": 0,
+      "image": 69274,
+      "video": 0,
+      "font": 99176,
+      "css": 15571
+    },
+    {
+      "path": "/contact/",
+      "js": 183118,
+      "three": 0,
+      "image": 502,
+      "video": 0,
+      "font": 99176,
+      "css": 15571
+    },
+    {
+      "path": "/hire/",
+      "js": 184139,
+      "three": 0,
+      "image": 502,
+      "video": 0,
+      "font": 99176,
+      "css": 15571
+    },
+    {
+      "path": "/agents-at-work/",
+      "js": 100811,
+      "three": 0,
+      "image": 98912,
+      "video": 0,
+      "font": 75872,
+      "css": 12809
+    }
+  ]
+}

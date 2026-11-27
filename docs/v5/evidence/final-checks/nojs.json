@@ -1,0 +1,86 @@
+[
+  {
+    "path": "/",
+    "status": 200,
+    "version": 1,
+    "heading": "Abrar Akhunji.",
+    "canonical": "https://abrarakhunji.com/"
+  },
+  {
+    "path": "/work/",
+    "status": 200,
+    "version": 1,
+    "heading": "Useful things.\nDifferent kinds of hard.",
+    "canonical": "https://abrarakhunji.com/work/"
+  },
+  {
+    "path": "/work/packetlark/",
+    "status": 200,
+    "version": 1,
+    "heading": "PacketLark",
+    "canonical": "https://abrarakhunji.com/work/packetlark/"
+  },
+  {
+    "path": "/blog/",
+    "status": 200,
+    "version": 1,
+    "heading": "The Neural Log",
+    "canonical": "https://abrarakhunji.com/blog/"
+  },
+  {
+    "path": "/blog/kv4-hopper-4bit-kv-cache-decoding-cuda-kernels/",
+    "status": 200,
+    "version": 1,
+    "heading": "kv4-hopper: Why 4-Bit KV Caches Stall on Hopper GPUs, and How Register-Direct WGMMA Fixes Them",
+    "canonical": "https://abrarakhunji.com/blog/kv4-hopper-4bit-kv-cache-decoding-cuda-kernels/"
+  },
+  {
+    "path": "/about/",
+    "status": 200,
+    "version": 1,
+    "heading": "Abrar Akhunji",
+    "canonical": "https://abrarakhunji.com/about/"
+  },
+  {
+    "path": "/contact/",
+    "status": 200,
+    "version": 1,
+    "heading": "Contact & Collaboration",
+    "canonical": "https://abrarakhunji.com/contact/"
+  },
+  {
+    "path": "/hire/",
+    "status": 200,
+    "version": 1,
+    "heading": "AI/ML and full-stack engineering, built to ship.",
+    "canonical": "https://abrarakhunji.com/hire/"
+  },
+  {
+    "path": "/agents-at-work/",
+    "status": 200,
+    "version": 1,
+    "heading": "Agents at Work.",
+    "canonical": "https://abrarakhunji.com/agents-at-work/"
+  },
+  {
+    "path": "/terms/",
+    "status": 200,
+    "version": 1,
+    "heading": "Terms of Service",
+    "canonical": "https://abrarakhunji.com/terms/"
+  },
+  {
+    "path": "/privacy/",
+    "status": 200,
+    "version": 1,
+    "heading": "Privacy Policy",
+    "canonical": "https://abrarakhunji.com/privacy/"
+  },
+  {
+    "path": "/404.html",
+    "status": 200,
+    "version": 1,
+    "heading": "This signal ends here.",
+    "canonical": null
+  }
+]

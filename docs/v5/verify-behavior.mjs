@@ -32,14 +32,16 @@ const shot=(page,name)=>page.screenshot({path:join(target,name+'.jpg'),quality:8
 try {
   await check('Home project and scroll survive Back and Forward',()=>run(desktop,async page=>{
     await goto(page,'/?project=packetlark');
-    await page.locator('#patch-project').waitFor();
+    await page.locator('.patch-story[data-ribbon=motion]').waitFor({state:'attached'});
     await page.evaluate(()=>scrollTo(0,660));
     await page.waitForFunction(()=>scrollY===660);
+    await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
     await page.getByRole('navigation',{name:'Primary'}).getByRole('link',{name:'Work',exact:true}).click();
     await page.waitForURL('**/work/');
     await page.getByRole('heading',{name:'Work.',exact:true}).waitFor();
     await page.evaluate(()=>scrollTo(0,270));
     await page.waitForFunction(()=>scrollY===270);
+    await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
     await page.goBack();
     await page.waitForFunction(()=>Math.abs(scrollY-660)<2);
     assert.equal(await page.locator('#patch-project').textContent(),'PacketLark');
@@ -97,7 +99,7 @@ try {
   });
   await check('Mouse-only cursor changes the field and ribbon',()=>run(desktop,async page=>{
     await goto(page,'/');
-    await page.locator('#patch-name').waitFor();
+    await page.locator('.patch-story[data-ribbon=motion]').waitFor({state:'attached'});
     await page.mouse.move(1200,450);
     await page.locator('.patch-cursor-field').waitFor({state:'attached'});
     await page.waitForFunction(()=>Number(document.querySelector('.patch-hero').style.getPropertyValue('--field-current'))>.25);
