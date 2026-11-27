@@ -1,127 +1,82 @@
-import { useEffect, useRef } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ArrowUpRight } from 'lucide-react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { animate } from 'animejs';
+import { useRef } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { ArrowDown, ArrowUpRight } from 'lucide-react';
 import SEO from '../components/SEO';
-import Poster from '../components/v5/Poster';
-import { SignalLink } from '../components/v5/Primitives';
-import { featuredProjects, selectedProject, projectPath } from '../lib/projects';
-import { getAllBlogs } from '../lib/blogUtils';
-import { ContactStrip, EngineeringBento, ProfileSheet, WritingShelf } from '../components/v5/HomeFeatures';
+import { featuredProjects, projectPath } from '../lib/projects';
+import Ribbon from '../patchbay/Ribbon';
+import { useInitialProof } from '../patchbay/useInitialProof';
 
-gsap.registerPlugin(ScrollTrigger);
-
-const number = (index) => String(index + 1).padStart(2, '0');
-const latestNotes = getAllBlogs().slice(0, 3);
-
-function FeaturedWork({ project, onSelect }) {
-  const preview = useRef(null);
-  const previousProject = useRef(project.slug);
-
-  useEffect(() => {
-    const changed = previousProject.current !== project.slug;
-    previousProject.current = project.slug;
-    if (!changed || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const ticket = preview.current.querySelector('.signal-feature-copy');
-    const image = preview.current.querySelector('img');
-    const details = animate(ticket, { y: [10, 0], opacity: [.58, 1], duration: 320, ease: 'outQuad' });
-    const print = animate(image, { x: [18, 0], opacity: [.55, 1], duration: 410, ease: 'outCubic' });
-    return () => { details.revert(); print.revert(); };
-  }, [project.slug]);
-
-  return (
-    <section id="work" className="signal-home-work">
-      <div className="signal-wrap">
-        <div className="signal-section-top" data-print-reveal="">
-          <div><p className="signal-label">Software in practice</p><h2>Selected work<span>.</span></h2></div>
-          <Link className="signal-inline" to="/work/">All projects <ArrowUpRight size={18} /></Link>
-        </div>
-        <div className="signal-project-picker" role="group" aria-label="Featured projects">
-          {featuredProjects.map((item, position) => (
-            <button key={item.slug} type="button" aria-pressed={item === project} onClick={() => onSelect(item.slug)}>
-              <span className="signal-label">{number(position)}</span>{item.title}<ArrowUpRight size={17} aria-hidden="true" />
-            </button>
-          ))}
-        </div>
-        <article className="signal-feature" ref={preview} data-project={project.slug} data-print-reveal="">
-          <Link className="signal-feature-visual" to={projectPath(project.slug)} aria-label={`View ${project.title} case study`}>
-            <img src={project.image} alt={project.imageAlt} width="900" height="600" loading="lazy" />
-          </Link>
-          <div className="signal-feature-copy">
-            <p className="signal-label signal-sticker">{project.category} / {project.status}</p>
-            <h3 aria-live="polite">{project.title}</h3>
-            <p>{project.description}</p>
-            <ul className="signal-tags" aria-label="Technologies">{project.tech.slice(0, 4).map((tech) => <li key={tech}>{tech}</li>)}</ul>
-            <SignalLink to={projectPath(project.slug)}>Read the case study</SignalLink>
-          </div>
-        </article>
-      </div>
-    </section>
-  );
-}
+const inputs = [
+  { label: 'Request', name: 'PacketLark', slug: 'packetlark', shape: 0 },
+  { label: 'Voice', name: 'Fixo Flow', slug: 'fixo-flow', shape: .8 },
+  { label: 'Screen', name: 'Framecast', slug: 'framecast-studio', shape: -.7 },
+];
 
 export default function Home() {
-  const root = useRef(null);
-  const { search, hash } = useLocation();
-  const navigate = useNavigate();
-  const params = new URLSearchParams(search);
-  const project = selectedProject(params.get('project'));
+  const [params, setParams] = useSearchParams();
+  const selected = inputs.find(input => input.slug === params.get('project')) || inputs[0];
+  const project = featuredProjects.find(entry => entry.slug === selected.slug);
+  const story = useRef(null);
+  const hero = useRef(null);
+  const work = useRef(null);
+  const proof = useRef(null);
+  const [pending, skip] = useInitialProof(project.image);
 
-  useEffect(() => {
-    const media = gsap.matchMedia();
-    media.add('(prefers-reduced-motion: no-preference)', () => {
-      const intro = gsap.timeline({ defaults: { ease: 'power3.out', clearProps: 'transform,opacity' } });
-      intro.from('[data-name-line]', { yPercent: 105, duration: .66, stagger: .09 }, 0)
-        .from('[data-poster-photo]', { y: 26, opacity: .15, duration: .72 }, .1)
-        .from('.signal-hero-reveal', { y: 10, opacity: .3, duration: .38, stagger: .09 }, .28);
-
-      for (const panel of root.current.querySelectorAll('[data-print-reveal]')) {
-        gsap.from(panel, {
-          y: 24, opacity: .58, duration: .64, ease: 'power3.out', clearProps: 'transform,opacity',
-          scrollTrigger: { trigger: panel, start: 'top 92%', once: true },
-        });
-      }
-
-      const trace = root.current.querySelector('[data-circuit-path]');
-      gsap.fromTo(trace, { strokeDashoffset: 100 }, {
-        strokeDashoffset: 0, ease: 'none',
-        scrollTrigger: { trigger: '#engineering', start: 'top 85%', end: 'top 18%', scrub: true },
-      });
-
-      for (const edge of root.current.querySelectorAll('.signal-perforation')) {
-        gsap.fromTo(edge, { strokeDashoffset: 100 }, {
-          strokeDashoffset: 0, ease: 'none',
-          scrollTrigger: { trigger: edge.ownerSVGElement, start: 'top bottom', end: 'top 68%', scrub: true },
-        });
-      }
-    }, root);
-    media.add('(min-width: 881px) and (prefers-reduced-motion: no-preference)', () => {
-      gsap.to('.signal-hero-halftone', {
-        yPercent: -9, xPercent: 3, ease: 'none',
-        scrollTrigger: { trigger: '.signal-hero', start: 'top 72px', end: 'bottom 72px', scrub: .5 },
-      });
-    }, root);
-    return () => media.revert();
-  }, []);
-
-  const selectProject = (slug) => {
-    if (slug === project.slug) return;
+  function change(input) {
     const next = new URLSearchParams(params);
-    next.set('project', slug);
-    navigate({ search: next.toString(), hash }, { replace: true, preventScrollReset: true });
-  };
+    next.set('project', input.slug);
+    setParams(next, { replace: true, preventScrollReset: true });
+  }
 
-  return (
-    <main ref={root} id="main-content">
-      <SEO title="Abrar Akhunji — AI & Full-Stack Engineer in Ahmedabad" description="AI and full-stack engineer in Ahmedabad. Explore local AI tools, developer software, and native products by Abrar Akhunji." path="/" image="/assets/v5/og-home.jpg" />
-      <Poster />
-      <FeaturedWork project={project} onSelect={selectProject} />
-      <EngineeringBento project={project} />
-      <ProfileSheet />
-      <WritingShelf notes={latestNotes} />
-      <ContactStrip />
-    </main>
-  );
+  return <main id="main-content" className="patch-home">
+    <SEO title="Abrar Akhunji — AI & Full-Stack Engineer in Ahmedabad" description="AI and full-stack engineer in Ahmedabad. Explore local AI tools, developer software, and native products by Abrar Akhunji." path="/" image="/assets/v5/og-home.jpg" />
+    {pending && <div className="patch-loading" aria-label="Preparing project evidence">
+      <svg viewBox="0 0 120 48" aria-hidden="true"><path d="M4 43C49 43 36 5 60 5s12 38 56 38" /></svg>
+      <span role="status">Opening Patchbay</span><button onClick={skip}>Skip intro</button>
+    </div>}
+    <div className="patch-story" ref={story} data-input={selected.slug}>
+      <div className="patch-projection"><Ribbon story={story} hero={hero} work={work} proof={proof} route={selected.shape} image={project.image} /></div>
+      <section id="home" className="patch-hero" ref={hero} aria-labelledby="patch-name">
+        <div className="patch-wide patch-hero-grid">
+          <div className="patch-identity">
+            <p className="patch-label">AI &amp; full-stack engineer <span>Ahmedabad, India</span></p>
+            <h1 id="patch-name">Abrar<br />Akhunji<span>.</span></h1>
+            <p className="patch-bio">I build local AI tools, developer software, and native apps.</p>
+            <p className="patch-availability">Open to engineering roles &amp; collaborations</p>
+            <div className="patch-selectors" role="group" aria-label="Choose which project to follow">
+              {inputs.map(input => <button type="button" key={input.slug} aria-pressed={input === selected} onClick={() => change(input)}><span>{input.label}</span><small>{input.name}</small></button>)}
+            </div>
+            <a href="#work" className="patch-follow"><span>Follow the signal to {project.title}</span><ArrowDown size={18} aria-hidden="true" /></a>
+          </div>
+          <figure className="patch-author">
+            <img src="/assets/build-room/portrait.webp" alt="Abrar Akhunji" width="720" height="960" />
+            <figcaption>Independent engineering<br />from model to interface</figcaption>
+          </figure>
+        </div>
+        <svg viewBox="0 0 350 230" className="patch-still" aria-hidden="true"><path d="M10 187C72 242 110 179 143 90S269 10 285 105 172 166 208 108 284 85 334 69" /></svg>
+      </section>
+      <div className="patch-paper">
+        <div className="patch-sheet patch-back-sheet" aria-hidden="true" />
+        <div className="patch-sheet patch-mid-sheet" aria-hidden="true" />
+        <div className="patch-sheet patch-front-sheet" aria-hidden="true" />
+        <p className="patch-wide patch-paper-note"><span>{selected.label}</span> <span aria-hidden="true">→</span> {project.title}</p>
+      </div>
+      <section id="work" className="patch-proof" ref={work} tabIndex={-1} aria-labelledby="patch-project">
+        <div className="patch-wide patch-proof-grid">
+          <figure>
+            <img ref={proof} className="patch-proof-image" src={project.image} alt={project.imageAlt} width="1200" height="833" />
+            <figcaption className="patch-label">{project.title} · Product interface</figcaption>
+          </figure>
+          <div className="patch-proof-copy">
+            <p className="patch-label">{project.category} / {project.status}</p>
+            <h2 id="patch-project">{project.title}</h2>
+            <p>{project.description}</p>
+            <aside><strong>{project.decisions[0].title}</strong><p>{project.decisions[0].detail}</p></aside>
+            <ul className="patch-proof-stack" aria-label="Technologies">{project.tech.map(item => <li key={item}>{item}</li>)}</ul>
+            <div className="patch-actions"><Link to={projectPath(project.slug)}>Read the case study <ArrowUpRight size={16} aria-hidden="true" /></Link><Link to="/work/">All work</Link></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>;
 }

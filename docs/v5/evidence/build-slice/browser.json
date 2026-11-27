@@ -1,0 +1,80 @@
+[
+  {
+    "width": 1440,
+    "height": 900,
+    "movie": {
+      "frames": 208,
+      "destination": 1019,
+      "landing": 1019,
+      "returnY": 0
+    },
+    "stillPositions": [
+      {
+        "stage": 0,
+        "wanted": 0,
+        "actual": 0
+      },
+      {
+        "stage": 25,
+        "wanted": 254.75,
+        "actual": 255
+      },
+      {
+        "stage": 50,
+        "wanted": 509.5,
+        "actual": 510
+      },
+      {
+        "stage": 75,
+        "wanted": 764.25,
+        "actual": 764
+      },
+      {
+        "stage": 100,
+        "wanted": 1019,
+        "actual": 1019
+      }
+    ],
+    "alternate": "Fixo Flow",
+    "errors": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "movie": {
+      "frames": 181,
+      "destination": 865.1875,
+      "landing": 864,
+      "returnY": 0
+    },
+    "stillPositions": [
+      {
+        "stage": 0,
+        "wanted": 0,
+        "actual": 0
+      },
+      {
+        "stage": 25,
+        "wanted": 216.296875,
+        "actual": 216
+      },
+      {
+        "stage": 50,
+        "wanted": 432.59375,
+        "actual": 433
+      },
+      {
+        "stage": 75,
+        "wanted": 648.890625,
+        "actual": 649
+      },
+      {
+        "stage": 100,
+        "wanted": 865.1875,
+        "actual": 865
+      }
+    ],
+    "alternate": "Fixo Flow",
+    "errors": []
+  }
+]

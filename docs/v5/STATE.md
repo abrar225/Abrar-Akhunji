@@ -2,11 +2,11 @@
 
 ## HANDOFF
 
-- Last good checkpoint: `git log -1 --format=%h -- docs/v5/STATE.md` (foundation).
-- Done: backup, extraction, route inventory and Gate 1. Final build rules imported. Verified 333 extracted files against the tag. V5 shell, theme tokens, menu and app-level 404 are implemented and visually checked at 1440 and 390 px.
-- In progress: the slice will replace the old Home. Other route bodies and static SEO presentation still run through a temporary compatibility bridge.
-- Next: build production Home-into-PacketLark slice and capture milestone 1, then continue to route breadth.
-- Open: paper-cutout image and animation profile URL missing; active build audits pending.
+- Last good checkpoint: `git log -1 --format=%h -- docs/v5/STATE.md` (verified slice).
+- Done: backup, extraction, route inventory and Gate 1. Final build rules imported. Verified 333 extracted files against the tag. V5 shell, menu, app 404 and production Home slice captured at 1440 and 390 px. Gate 2 critic and rescore recorded.
+- In progress: other route bodies and static SEO presentation still run through the temporary compatibility bridge; a reusable route capture harness is prepared.
+- Next: replace interior route templates and static shell breadth first, then finish Home and deepen each route.
+- Open: paper-cutout image and animation profile URL missing; slice scored 4/4/4/4/3/4/4/4; independent 3D, physics and background interaction evidence remains open for depth.
 - Run: `npm run dev -- --host 127.0.0.1 --port 5181`.
 
 ## Checkpoint
