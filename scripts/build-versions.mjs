@@ -105,6 +105,10 @@ async function buildVersion(entry, workspace, site) {
       /^  const \[intro, setIntro\] = useState\(.*$/m,
       '  const [intro, setIntro] = useState(false);'
     ));
+    await edit(directory, homePath, source => source.replace('href="/agents-at-work/"', `href="${prefix}agents-at-work/"`));
+    await edit(directory, 'src/agents/Showcase.jsx', source => source
+      .replaceAll('href="/"', `href="${prefix}"`)
+      .replace('href={`/work/', 'href={`' + prefix + 'work/'));
   } else {
     await edit(directory, homePath, source => source.replace(
       /const \[isLoading, setIsLoading\] = useState\((?:true|\(\) => \{[\s\S]*?\n  \})\);/,
@@ -256,15 +260,15 @@ export async function getBlogBySlug(slug) {
   const policy = `connect-src ${connections}; form-action 'none'; object-src 'none'; base-uri 'none'; frame-src 'none'; script-src 'self'`;
   const head = `<meta name="robots" content="noindex, nofollow"><meta http-equiv="Content-Security-Policy" content="${policy}"><link rel="stylesheet" href="${prefix}${stylesheet}">`;
   const footer = `${archiveMarkup(entry)}<script defer src="${prefix}${script}"></script>`;
-  let index = await readFile(join(versionSite, 'index.html'), 'utf8');
-  if (buildRoom) index = index.replace(/<script>([\s\S]*?)<\/script>/gi, '');
-  const page = index
+  const decorate = html => (buildRoom ? html.replace(/<script>([\s\S]*?)<\/script>/gi, '') : html)
     .replace(/<link\b[^>]*rel=["'](?:canonical|alternate)["'][^>]*>/gi, '')
     .replace(/<meta\b[^>]*name=["'](?:robots|googlebot|bingbot)["'][^>]*>/gi, '')
     .replace(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi, '')
     .replace(/<head>/i, `<head>${head}`)
     .replace(/<\/body>/i, `${footer}</body>`);
+  const page = decorate(await readFile(join(versionSite, 'index.html'), 'utf8'));
   await writeFile(join(versionSite, 'index.html'), page);
+  if (buildRoom) await edit(versionSite, 'agents-at-work/index.html', decorate);
   const routes = buildRoom ? ['about', 'blog', 'contact', 'hire', 'privacy', 'terms', 'work']
     : slug === 'halide' ? ['blog', 'hire'] : slug === 'cyberterminal' ? ['blog'] : [];
   if (buildRoom) {

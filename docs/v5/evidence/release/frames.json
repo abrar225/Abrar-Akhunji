@@ -1,0 +1,7 @@
+{
+  "environment": "Chromium desktop, 1440x900, no CPU throttle",
+  "effect": "Footer Replay",
+  "fps": 60,
+  "p95FrameMs": 16.7,
+  "framesOver25Ms": 0
+}

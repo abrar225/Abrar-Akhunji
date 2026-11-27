@@ -126,8 +126,13 @@ try {
         }
       }
       if (slug === 'zero-to-built') {
-        assert.equal((await page.goto(base + 'agents-at-work/')).status(), 200);
-        await page.getByRole('heading', { name: /Agents at Work/ }).waitFor();
+        await page.goto(base);
+        const showcase = page.getByRole('link', { name: /Watch agents build a showcase/ });
+        assert.equal(await showcase.getAttribute('href'), '/versions/zero-to-built/agents-at-work/');
+        await showcase.click();
+        await page.waitForURL(base + 'agents-at-work/');
+        await page.getByRole('heading', { name: 'Good ideas deserve to be built.' }).waitFor();
+        await checkDisclosure(marker, version);
       }
       assert.equal((await page.goto(base + 'missing-route/')).status(), 404);
       await marker.locator('summary').click();

@@ -2,6 +2,7 @@
 
 ## HANDOFF
 
+- Release follow-up: mobile page links moved into the menu, the Versions control links all five versions in release builds, Writing preserves the full cover, and the footer has a click-origin ripple and Replay. The standalone showcase is retired in V5 and remains accessible in archived V4. [Release checks](evidence/release/README.md)
 - Follow-up motion and contrast pass: the shared chrome, Home, Work, About, and Contact were updated. Local production preview runs at [localhost:4173](http://localhost:4173/). [Motion pass, desktop and phone evidence](evidence/motion-pass/README.md)
 - Last good checkpoint: `git log -1 --format=%h -- docs/v5/STATE.md` (final production audit).
 - Done: foundation, production slice, native route breadth, route depth, hardening and both final reviews. Current build has 218 passing Chromium loads, 30 passing WebKit archetype loads, 69 passing E2E checks and 58 passing unit tests. [Final checklist and verdict](FINAL_REVIEW.md)

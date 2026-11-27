@@ -1,0 +1,74 @@
+{
+  "result": [
+    {
+      "name": "Writing masthead contrast, rapid theme changes and reload persistence",
+      "status": "PASS",
+      "detail": {
+        "light": [
+          14.55728077553612,
+          14.55728077553612,
+          14.55728077553612
+        ],
+        "dark": [
+          14.425667568111109,
+          14.425667568111109,
+          14.425667568111109
+        ]
+      }
+    },
+    {
+      "name": "Work preview follows scroll first and supports mouse and keyboard overrides",
+      "status": "PASS",
+      "detail": {
+        "initial": "fixo-flow",
+        "scroll": "framecast-studio",
+        "hover": "packetlark"
+      }
+    },
+    {
+      "name": "About trace draws and reverses with scrolling",
+      "status": "PASS",
+      "detail": {
+        "start": 359,
+        "middle": 97
+      }
+    },
+    {
+      "name": "Hero rotates Request, Voice, and Screen and pauses on request",
+      "status": "PASS"
+    },
+    {
+      "name": "First-visit loader responds to a pending asset, skips and stays dismissed",
+      "status": "PASS"
+    },
+    {
+      "name": "Menu, cursor, click-origin ripple and favicon",
+      "status": "PASS"
+    },
+    {
+      "name": "Contact retains a usable email link and copy action",
+      "status": "PASS"
+    },
+    {
+      "name": "Phone layout and reduced motion fallbacks",
+      "status": "PASS"
+    },
+    {
+      "name": "Writing cover preserves its intrinsic size ratio at 1440px",
+      "status": "PASS",
+      "detail": {
+        "error": 0.011991279069775374,
+        "gap": 0
+      }
+    },
+    {
+      "name": "Writing cover preserves its intrinsic size ratio at 390px",
+      "status": "PASS",
+      "detail": {
+        "error": 0.000726744186039241,
+        "gap": 0
+      }
+    }
+  ],
+  "errors": []
+}

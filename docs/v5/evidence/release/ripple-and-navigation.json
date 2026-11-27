@@ -1,0 +1,44 @@
+[
+  {
+    "engine": "chromium",
+    "device": "phone",
+    "centerReplay": "PASS",
+    "pointerOrigin": "PASS",
+    "versionSwitcher": true
+  },
+  {
+    "engine": "chromium",
+    "device": "landscape",
+    "centerReplay": "PASS",
+    "pointerOrigin": "PASS",
+    "versionSwitcher": true
+  },
+  {
+    "engine": "chromium",
+    "device": "desktop",
+    "centerReplay": "PASS",
+    "pointerOrigin": "PASS",
+    "versionSwitcher": true
+  },
+  {
+    "engine": "webkit",
+    "device": "phone",
+    "centerReplay": "PASS",
+    "pointerOrigin": "PASS",
+    "versionSwitcher": true
+  },
+  {
+    "engine": "webkit",
+    "device": "landscape",
+    "centerReplay": "PASS",
+    "pointerOrigin": "PASS",
+    "versionSwitcher": true
+  },
+  {
+    "engine": "webkit",
+    "device": "desktop",
+    "centerReplay": "PASS",
+    "pointerOrigin": "PASS",
+    "versionSwitcher": true
+  }
+]

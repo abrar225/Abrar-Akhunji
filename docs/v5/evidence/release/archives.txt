@@ -1,0 +1,24 @@
+
+> abrar-portfolio@1.0.0 test:versions
+> node tests/e2e/versions.mjs
+
+Checking serif at 320px
+Checking cyberterminal at 320px
+Checking halide at 320px
+Checking zero-to-built at 320px
+Archive routes and version switchers passed at 320px
+Checking serif at 390px
+Checking cyberterminal at 390px
+Checking halide at 390px
+Checking zero-to-built at 390px
+Archive routes and version switchers passed at 390px
+Checking serif at 768px
+Checking cyberterminal at 768px
+Checking halide at 768px
+Checking zero-to-built at 768px
+Archive routes and version switchers passed at 768px
+Checking serif at 1440px
+Checking cyberterminal at 1440px
+Checking halide at 1440px
+Checking zero-to-built at 1440px
+Archive routes and version switchers passed at 1440px

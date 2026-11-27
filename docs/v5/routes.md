@@ -12,7 +12,7 @@ Baseline: `abb86caf65f3b06c4a9c369759b2519c42cedde9`, tagged `v5-signal-field-be
 | `/about/` | [About](../../src/pages/About.jsx); generated static profile. | `#experience` and external résumé/credentials. Check experience, education, qualifications, and contact links. |
 | `/hire/` | [Hire](../../src/pages/Hire.jsx); generated static services and FAQ. | Services, locations, engagement process, FAQ disclosures and enquiry mailto with subject. The page has heading anchors `#services-heading`, `#locations-heading`, `#process-heading`, `#engagements-heading`, `#faq-heading`. |
 | `/contact/` | [Contact](../../src/pages/Contact.jsx); generated static contact information. | Mailto, clipboard success/failure announcement, external social profiles and Hire link. No form submission or contact API in this implementation. |
-| `/agents-at-work/` | Separate [Vite multipage entry](../../agents-at-work/index.html), with its own [Showcase](../../src/agents/Showcase.jsx) and [SSR hydration](../../src/agents/entry.jsx). | `#projects`, `?play` for forced assembly, links to featured case studies, theme toggle, assembly progress, skip/rebuild, reduced-motion/static state. Header and footer are separate from the React Router shell and need independent V5 visual verification. |
+| `/agents-at-work/` | Retired from V5. The root hosting rule returns HTTP 410. | The [V4 showcase](/versions/zero-to-built/agents-at-work/) keeps its project links and gains the archive’s version selector. |
 | `/privacy/` | [Privacy](../../src/pages/Privacy.jsx); generated static policy. | Policy copy, contact and cross-links. |
 | `/terms/` | [Terms](../../src/pages/Terms.jsx); generated static terms. | Policy copy and discovery/contact links. |
 
